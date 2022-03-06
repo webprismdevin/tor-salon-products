@@ -1,0 +1,23 @@
+.storename {
+    transition: opacity 200ms ease;
+}
+
+.storename:hover {
+    opacity: 0.6;
+}
+
+.menuItem {
+    transition: opacity 200ms ease;
+}
+
+.menuItem:hover {
+    opacity: 0.6;
+}
+
+.menu {
+    transition: left 600ms ease-in-out;
+}
+
+.cart {
+    transition: right 600ms ease-in-out;
+}

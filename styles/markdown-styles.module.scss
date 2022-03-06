@@ -1,0 +1,35 @@
+.markdown {
+  font-size: 1.05em;
+}
+
+.markdown p,
+.markdown ul,
+.markdown ol,
+.markdown blockquote {
+  margin: 18px 0px 9px 0px;
+  font-family: 'Merriweather', serif;
+  line-height: calc(1.15em * 1.5);
+}
+
+.markdown h1, .markdown h2, .markdown h3 {
+  font-weight: bold;
+  margin: 1.5em 0em 0.75em 0em;
+}
+
+.markdown blockquote {
+  padding-left: 2em;
+  border-left: 2px solid grey;
+  font-style: italic;
+}
+
+.markdown h1 {
+  font-size: 3.5em;
+}
+
+.markdown h2 {
+  font-size: 2.5em;
+}
+
+.markdown h3 {
+  font-size: 1.5em;
+}

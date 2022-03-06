@@ -6,6 +6,10 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
+body {
+  overscroll-behavior-y: none;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -13,4 +17,14 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  display: none;
+  width: 0px;
+}
+
+div[data-framer-component-type='Text'] span {
+  font-size: var(--framer-font-size) !important;
+  line-height: var(--framer-line-height) !important;
 }

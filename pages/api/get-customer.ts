@@ -1,0 +1,54 @@
+import graphClient from "../../lib/graph-client";
+import { gql } from "graphql-request";
+import type { NextApiRequest, NextApiResponse } from "next";
+
+type Data = {};
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<Data>
+) {
+  console.log(req.query)
+
+  const mutation = gql`
+    query {
+      customer(customerAccessToken: "${req.query.accessToken}") {
+        id
+        firstName
+        orders(first: 100, reverse: true) {
+          edges {
+            node {
+              id
+              currentTotalPrice {
+								amount
+              }
+              processedAt
+              lineItems (first: 100) {
+                edges {
+                  node {
+                    title
+                    quantity
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const response = await graphClient.request(mutation);
+
+  if (response.errors) {
+    console.log(JSON.stringify(response.errors, null, 2));
+    res.send({
+      error: response.errors,
+    });
+    throw Error("There was a problem creating the user. Please check logs");
+  }
+
+  res.send({
+     data: response,
+  });
+}
