@@ -52,6 +52,11 @@ function MyApp({ Component, pageProps }: AppProps) {
           }}();`,
         }}
       />
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-54F8GD7JSQ"
+        //@ts-ignore
+        onLoad={() => {window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-54F8GD7JSQ');}}
+      />
     </ChakraProvider>
   );
 }
