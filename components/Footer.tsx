@@ -36,7 +36,9 @@ const Footer = () => {
           </Stack>
           <Stack>
             <Text fontSize="lg">Communicate</Text>
-            <Link fontSize="sm">Help &amp; FAQ</Link>
+            <NextLink href="/help" passHref>
+              <Link fontSize="sm">Help &amp; FAQ</Link>
+            </NextLink>
             <Link fontSize="sm">Contact Us</Link>
             <Link fontSize="sm">Our Friends</Link>
           </Stack>
