@@ -5,7 +5,7 @@ const nextConfig = {
     // need to change first domain to project domain
     domains: [
       "torsalonproducts.com",
-      "tor.vercel.app",
+      "tor-salon-products.vercel.app",
       "cdn.sanity.io",
       "localhost",
       "s.gravatar.com",
