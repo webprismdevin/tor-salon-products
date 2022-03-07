@@ -1,38 +1,54 @@
 import {
-  Flex,
-  HStack,
   Container,
   Text,
-  useColorMode,
-  Icon,
   Link,
+  Stack,
+  AspectRatio,
+  Image
 } from "@chakra-ui/react";
-import { FaSun, FaMoon } from "react-icons/fa";
-import NextLink from 'next/link'
+import NextLink from "next/link";
 import { useContext } from "react";
 import ShopContext from "../lib/shop-context";
 
 const Footer = () => {
-  const { colorMode, toggleColorMode } = useColorMode();
-  const { shop } = useContext(ShopContext)
+  const { shop } = useContext(ShopContext);
 
   return (
-    <Flex
-      w="full"
-      p={16}
-      justifyContent={"space-between"}
-    >
-      <HStack>
-        <Text>© {shop.name}. 2022. Crafted by <NextLink href="https://webprism.co" passHref><Link>WEBPRISM</Link></NextLink></Text>
-      </HStack>
-      <Icon
-        onClick={toggleColorMode}
-        as={colorMode === "dark" ? FaMoon : FaSun}
-        h={4}
-        w={4}
-        cursor={"pointer"}
-      />
-    </Flex>
+    <Container maxW="container.xl" py={10}>
+      <Stack spacing={8}>
+        <Stack direction="row" spacing={20}>
+          <AspectRatio ratio={8/10} w={"126px"}>
+            <Image src="tor-gif.gif" alt="TOR brand hairtypes gif" />
+          </AspectRatio>
+          <Stack>
+            <Text fontSize="lg">Shop</Text>
+            <Link fontSize="sm">Shampoo</Link>
+            <Link fontSize="sm">Conditioners</Link>
+            <Link fontSize="sm">Co-washes</Link>
+            <Link fontSize="sm">Styling Products</Link>
+          </Stack>
+          <Stack>
+            <Text fontSize="lg">Learn</Text>
+            <Link fontSize="sm">Salon Finder</Link>
+            <Link fontSize="sm">Salon Professionals</Link>
+            <Link fontSize="sm">Blog</Link>
+            <Link fontSize="sm">About TOR</Link>
+          </Stack>
+          <Stack>
+            <Text fontSize="lg">Communicate</Text>
+            <Link fontSize="sm">Help &amp; FAQ</Link>
+            <Link fontSize="sm">Contact Us</Link>
+            <Link fontSize="sm">Our Friends</Link>
+          </Stack>
+        </Stack>
+        <Text w="full" textAlign={"center"}>
+          © {shop.name}. 2022. Crafted by{" "}
+          <NextLink href="https://webprism.co" passHref>
+            <Link>WEBPRISM</Link>
+          </NextLink>
+        </Text>
+      </Stack>
+    </Container>
   );
 };
 

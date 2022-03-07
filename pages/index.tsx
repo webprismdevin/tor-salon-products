@@ -36,9 +36,9 @@ function HomePage({ homepageData, collection }: any) {
           content=""
         />
       </Head>
-      <main style={{ position: "relative" }}>
+      <Container py={20}>
 
-      </main>
+      </Container>
     </>
   );
 }

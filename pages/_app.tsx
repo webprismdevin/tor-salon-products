@@ -3,8 +3,8 @@ import { extendTheme, ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import Head from "next/head";
-import CartContext from "../lib/CartContext";
 import { useState } from "react";
+import CartContext from "../lib/CartContext";
 import ShopContext from "../lib/shop-context";
 import Tawk from "../lib/tawk";
 import "../styles/globals.css";
@@ -20,7 +20,7 @@ const customTheme = extendTheme({ config });
 function MyApp({ Component, pageProps }: AppProps) {
   const [cart, setCart] = useState<any>({ id: null, lines: [] });
   const shop = {
-    name: "Tor Salon Products",
+    name: "TOR Salon Products",
   };
 
   return (
@@ -38,6 +38,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ColorModeScript initialColorMode={customTheme.initialColorMode} />
       <Tawk src="https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu" />
       <Script
+        strategy="lazyOnload"
         id="yotpo reviews"
         dangerouslySetInnerHTML={{
           __html: `(function e(){var e=document.createElement("script");e.type="text/javascript",e.async=true,e.src="//staticw2.yotpo.com/bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l/widget.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})();`,

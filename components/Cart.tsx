@@ -16,8 +16,11 @@ import {
   DrawerContent,
   DrawerCloseButton,
   Image,
+  useNumberInput,
+  HStack,
+  Input,
 } from "@chakra-ui/react";
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import {
   AiOutlineShopping,
   AiOutlineDelete,
@@ -28,14 +31,37 @@ import formatter from "../lib/formatter";
 
 const Cart = () => {
   const { cart, setCart } = useContext(CartContext);
+  const [cartQty, setCartQty] = useState<number | null>(null)
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const cartQty = cart.lines.length;
+  useEffect(() => {
+    if(cart.lines.length > 1) {
+      const cartQtyCalc = cart.lines.reduce((prev:any, next:any) => { 
+        console.log(prev, next)
+
+        return prev.node.quantity + next.node.quantity 
+      });
+      setCartQty(cartQtyCalc)
+    }
+
+    if(cart.lines.length === 1){
+      setCartQty(cart.lines[0].node.quantity)
+    }
+  }, [cart])
+
+  useEffect(() => {
+    getCart();
+  }, []);
+
+  useEffect(() => {
+    if (cart.status === "dirty") getCart();
+  }, [cart]);
 
   async function getCart() {
-    let localCartData = await JSON.parse(window.localStorage.getItem(
-      `${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:cart`
+    let localCartData = await JSON.parse(
+      window.localStorage.getItem(
+        `${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:cart`
       ) as any
     );
 
@@ -43,8 +69,6 @@ const Cart = () => {
       const existingCart = await fetch(
         `/api/load-cart?cartId=${localCartData.id}`
       ).then((res) => res.json());
-
-      console.log(existingCart);
 
       if (existingCart.cart !== null) {
         if (
@@ -82,14 +106,6 @@ const Cart = () => {
     );
   }
 
-  useEffect(() => {
-    getCart();
-  }, []);
-
-  useEffect(() => {
-    if (cart.status === "dirty") getCart();
-  }, [cart]);
-
   async function emptyCart() {
     window.localStorage.removeItem(
       `${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:cart`
@@ -113,15 +129,15 @@ const Cart = () => {
   }
 
   async function removeItem(id: string) {
-    const resp = await fetch("/api/remove-cart-item", 
-    {
+
+    const resp = await fetch("/api/remove-cart-item", {
       method: "POST",
       body: JSON.stringify({
         cartId: cart.id,
-        lineItemId: id
-      })
-    }).then(res => res.json())
-    
+        lineItemId: id,
+      }),
+    }).then((res) => res.json());
+
     setCart({
       id: resp.cart.id,
       checkoutUrl: resp.cart.checkoutUrl,
@@ -190,7 +206,11 @@ const Cart = () => {
               {cart.lines.length > 0 && (
                 <>
                   {cart.lines.map((l: any) => (
-                    <CartLineItem key={l.node.id} product={l} removeItem={removeItem} />
+                    <CartLineItem
+                      key={l.node.id}
+                      product={l}
+                      removeItem={removeItem}
+                    />
                   ))}
                 </>
               )}
@@ -218,41 +238,95 @@ const Cart = () => {
   );
 };
 
-function CartLineItem({ product, removeItem }: { product: any, removeItem: any}) {
+function CartLineItem({
+  product,
+  removeItem,
+}: {
+  product: any;
+  removeItem: any;
+}) {
+  return (
+    <VStack borderBottom={"1px solid"} borderColor={"gray.300"} py={4}>
+      <Flex w="full" justifyContent="space-between" alignItems={"flex-start"}>
+        <Image
+          boxSize={"120px"}
+          borderRadius={6}
+          src={product.node.merchandise.product.images.edges[0].node.url}
+          alt={product.node.merchandise.product.title}
+        />
+        <VStack spacing={2} alignItems={"flex-start"} mr={2}>
+          <Text fontSize={20} fontWeight="bold">
+            {product.node.merchandise.product.title}
+          </Text>
+          <Text mt={1} fontSize={12}>
+            {product.node.merchandise.title}
+          </Text>
+          <ItemQty product={product} />
+        </VStack>
+        <VStack align={"flex-end"} spacing={1}>
+          <Text>{formatter.format(product.node.estimatedCost.subtotalAmount.amount)}</Text>
+          <Text
+            fontSize="xs"
+            cursor={"pointer"}
+            onClick={() => removeItem(product.node.id)}
+          >
+            Remove
+          </Text>
+        </VStack>
+      </Flex>
+    </VStack>
+  );
+}
 
+function ItemQty({ product }: { product: any }) {
+  const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
+    useNumberInput({
+      step: 1,
+      min: 1,
+      defaultValue: product.node.quantity,
+    });
+  const { cart, setCart } = useContext(CartContext);
+
+  const inc = getIncrementButtonProps();
+  const dec = getDecrementButtonProps();
+  const input = getInputProps({ readOnly: true });
+
+  async function handleQtyUpdate(newQty: string) {
+    const resp = await fetch("/api/update-cart-item-qty", {
+      method: "POST",
+      body: JSON.stringify({
+        cartId: cart.id,
+        lines: {
+          id: product.node.id,
+          quantity: newQty,
+        },
+      }),
+    }).then((res) => res.json());
+
+    setCart({
+      id: resp.cart.id,
+      checkoutUrl: resp.cart.checkoutUrl,
+      status: "clean",
+      estimatedCost: resp.cart.estimatedCost,
+      lines: resp.cart.lines.edges,
+    });
+  }
 
   return (
-    <Flex w="full" justifyContent="space-between" alignItems={"flex-start"} borderBottom={'1px solid'} borderColor={'gray.300'} pb={4}>
-      <Image
-        boxSize={"88px"}
-        borderRadius={6}
-        src={product.node.merchandise.product.images.edges[0].node.url}
-        alt={product.node.merchandise.product.title}
+    <HStack>
+      <Button size="sm" {...inc}>
+        +
+      </Button>
+      <Input
+        size="sm"
+        w={20}
+        {...input}
+        onBlur={(e) => handleQtyUpdate(e.target.value)}
       />
-      <Box mr={2}>
-        <Text fontSize={24} fontWeight="bold">
-          {product.node.merchandise.product.title}
-        </Text>
-        <Text mt={1} fontSize={12}>
-          Details: {product.node.merchandise.title}
-        </Text>
-        <Text fontSize={12} fontWeight="bold">
-          Qty: {product.node.quantity}
-        </Text>
-      </Box>
-      <Box textAlign={"right"}>
-        <Text>
-          {formatter.format(product.node.estimatedCost.subtotalAmount.amount)}
-        </Text>
-        <Text
-          fontSize="xs"
-          cursor={"pointer"}
-          onClick={() => removeItem(product.node.id)}
-        >
-          Remove
-        </Text>
-      </Box>
-    </Flex>
+      <Button size="sm" {...dec}>
+        -
+      </Button>
+    </HStack>
   );
 }
 
