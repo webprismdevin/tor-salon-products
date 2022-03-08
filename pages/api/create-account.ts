@@ -27,10 +27,7 @@ export default async function handler(
     `;
 
     const variables = {
-        input: {
-        email: requestData.email,
-        password: requestData.password,
-        },
+        input: requestData
     };
 
     const response = await graphClient.request(mutation, variables);

@@ -16,9 +16,9 @@ const Footer = () => {
   return (
     <Container maxW="container.xl" py={10}>
       <Stack spacing={8}>
-        <Stack direction="row" spacing={20}>
+        <Stack direction={["column", "row"]} spacing={20}>
           <AspectRatio ratio={8/10} w={"126px"}>
-            <Image src="tor-gif.gif" alt="TOR brand hairtypes gif" />
+            <Image src="/tor-gif.gif" alt="TOR brand hairtypes gif" />
           </AspectRatio>
           <Stack>
             <Text fontSize="lg">Shop</Text>
