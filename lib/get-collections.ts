@@ -2,7 +2,7 @@ import graphClient from "./graph-client";
 import { gql } from "graphql-request";
 
 //gets all collections and filters out homepage collections
-export default async function getCollections(ignore?: string) {
+export default async function getCollections(ignore: string) {
   const query = gql`
     {
       collections(first: 10, query: "NOT ${ignore}", sortKey: TITLE) {

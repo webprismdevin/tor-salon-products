@@ -34,7 +34,7 @@ export default function CollectionPage({ handle, data }: { handle: string, data:
 }
 
 export async function getStaticPaths() {
-  const result = await getCollections();
+  const result = await getCollections("home");
 
   return {
     paths: result.collections.edges.map((edge: any) => ({
