@@ -29,6 +29,8 @@ const NavBar = ({ isMobile } : { isMobile: boolean}) => {
   const router = useRouter();
 
   useEffect(() => {
+    console.log(isMobile, "from navbar")
+
     async function checkToken() {
       let token = JSON.parse(
         window.localStorage.getItem(
@@ -37,8 +39,6 @@ const NavBar = ({ isMobile } : { isMobile: boolean}) => {
       );
 
       if (token) setAuth(true);
-
-      console.log(token);
     }
 
     checkToken();

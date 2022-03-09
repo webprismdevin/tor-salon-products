@@ -126,8 +126,6 @@ export async function getServerSideProps(context: any) {
       ? process.env.NEXT_PUBLIC_SHOPIFY_URL
       : "http://localhost:3000";
 
-  console.log(context.params.id);
-
   const result = await fetch(
     `${base_url}/api/get-order?orderId=${context.params.id}`
   ).then((res) => res.json());

@@ -7,10 +7,8 @@ import {
   BoxProps,
   Box,
 } from "@chakra-ui/react";
-import NextLink from "next/link";
 import { AnimatePresence, motion, useAnimation } from "framer-motion";
 import { useEffect } from "react";
-import MenuLink from "./MenuLink";
 import { BodyAndSkin, ByHairType, ByProductTypes, MoreLinks } from "./MenuSections";
 
 const MotionBox = motion<BoxProps>(Box);
@@ -46,9 +44,9 @@ const DesktopMenu = () => {
       <Text onMouseEnter={() => controls.start("animate")}>Shop</Text>
       <AnimatePresence exitBeforeEnter={true}>
         <MotionBox
-          pos="absolute"
-          left={0}
-          top={20}
+          pos="fixed"
+          right={0}
+          top={16}
           w="100vw"
           bg="white"
           shadow={"md"}
