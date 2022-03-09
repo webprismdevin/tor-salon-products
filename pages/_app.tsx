@@ -1,6 +1,7 @@
 import type { AppProps } from "next/app";
 import { extendTheme, ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import Head from "next/head";
+import TagManager from "react-gtm-module";
 import { useEffect, useState } from "react";
 import CartContext from "../lib/CartContext";
 import ShopContext from "../lib/shop-context";
@@ -20,6 +21,17 @@ const config = {
 };
 
 const customTheme = extendTheme({ config });
+
+const tagManagerArgs = {
+  gtmId: "GTM-MKG7C6H",
+};
+
+if (process.env.NODE_ENV === "production" && process.browser) {
+  console.log("GTM fired");
+  TagManager.initialize(tagManagerArgs);
+} else {
+  console.log("GTM not fired");
+}
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [cart, setCart] = useState<any>({ id: null, lines: [] });
@@ -51,13 +63,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         dangerouslySetInnerHTML={{
           __html: `(function e(){var e=document.createElement("script");e.type="text/javascript",e.async=true,e.src="//staticw2.yotpo.com/bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l/widget.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})();`,
         }}
-      />
-      <Script
-        id="GA4"
-        strategy="lazyOnload"
-        src="https://www.googletagmanager.com/gtag/js?id=G-L3HEMBXVC3"
-        //@ts-ignore
-        onLoad={() => {window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-L3HEMBXVC3');}}
       />
     </ChakraProvider>
   );
