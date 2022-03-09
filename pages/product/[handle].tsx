@@ -105,7 +105,7 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
         </Container>
       </Flex>
       <Container maxW="container.lg" py={20}>
-      <div className="embedsocial-product-reviews" data-shop="tor-salon-products.myshopify.com" data-product={btoa(product.id)} data-handle={handle}></div>
+      <div className="embedsocial-product-reviews" data-shop="tor-salon-products.myshopify.com" data-product={Buffer.from(product.id).toString('base64')} data-handle={handle}></div>
       <Script
         id="embed-social-script"
         dangerouslySetInnerHTML={{
