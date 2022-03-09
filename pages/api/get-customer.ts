@@ -15,6 +15,8 @@ export default async function handler(
       customer(customerAccessToken: "${req.query.accessToken}") {
         id
         firstName
+        lastName
+        email
         orders(first: 100, reverse: true) {
           edges {
             node {
@@ -23,6 +25,8 @@ export default async function handler(
 								amount
               }
               processedAt
+              orderNumber
+              fulfillmentStatus
               lineItems (first: 100) {
                 edges {
                   node {

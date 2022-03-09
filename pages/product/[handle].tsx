@@ -52,11 +52,7 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
   }
 
   function checkPrice(id: string) {
-    console.log(id);
-
     const cv = variants.filter((v: any) => v.node.id === id);
-
-    console.log(cv);
 
     return formatter.format(cv[0].node.priceV2.amount);
   }

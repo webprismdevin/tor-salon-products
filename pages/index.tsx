@@ -33,7 +33,7 @@ function HomePage({ homepageData, collection }: any) {
         />
       </Head>
       <Container py={20}>
-
+        <Text>Homepage</Text>
       </Container>
     </>
   );

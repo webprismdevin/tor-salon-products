@@ -17,12 +17,11 @@ import { AiOutlineUser } from "react-icons/ai";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import { Search } from "./Search";
-// import { isBrowser, isMobile } from "react-device-detect";
 import MobileMenu from "./Menu/MobileMenu";
 import DesktopMenu from "./Menu/DesktopMenu";
+import MenuLink from "./Menu/MenuLink";
 
 const Cart = dynamic(() => import("../components/Cart"));
-
 
 const NavBar = ({ isMobile } : { isMobile: boolean}) => {
   const [auth, setAuth] = useState(false);
@@ -65,8 +64,8 @@ const NavBar = ({ isMobile } : { isMobile: boolean}) => {
                   <Menu>
                     <MenuButton>Salons</MenuButton>
                     <MenuList>
-                      <MenuItem>Salon Finder</MenuItem>
-                      <MenuItem>Salon Professionals</MenuItem>
+                      <MenuItem><MenuLink href="/salon-finder" text="Salon Finder"/></MenuItem>
+                      <MenuItem><MenuLink href="/professional" text="Salon Professionals" /></MenuItem>
                     </MenuList>
                   </Menu>
                 </Box>

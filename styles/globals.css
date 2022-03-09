@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'Futura';
+  src: url("/fonts/futura-medium-bt.ttf");
+}
+
 html,
 body {
   padding: 0;

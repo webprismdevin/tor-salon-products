@@ -59,7 +59,7 @@ const DesktopMenu = () => {
           <Container maxW="container.xl">
             <Stack direction="row" spacing={24}>
               <Stack>
-                <Text fontSize={"xl"}>Hair Care</Text>
+                <Text fontSize={"xl"} fontFamily={'Futura'}>Hair Care</Text>
                 <Divider />
                 <Stack direction="row" spacing={12}>
                   <Stack>
@@ -73,12 +73,12 @@ const DesktopMenu = () => {
                 </Stack>
               </Stack>
               <Stack>
-                <Text fontSize={"xl"}>Body + Skin</Text>
+                <Text fontSize={"xl"} fontFamily={'Futura'}>Body + Skin</Text>
                 <Divider />
                 <BodyAndSkin />
               </Stack>
               <Stack>
-                <Text fontSize={"xl"}>More</Text>
+                <Text fontSize={"xl"} fontFamily={'Futura'}>More</Text>
                 <Divider />
                 <MoreLinks />
               </Stack>

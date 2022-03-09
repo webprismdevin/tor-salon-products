@@ -10,25 +10,38 @@ import {
   EditablePreview,
   Flex,
   Button,
-  Link
+  Link,
+  HStack,
+  SimpleGrid,
+  GridItem,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import formatter from "../lib/formatter";
-import NextLink from 'next/link'
-import Head from 'next/head'
+import NextLink from "next/link";
+import Head from "next/head";
+import Loader from "../components/Loader";
 
-export default function Account({}) {
+declare interface CustData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  displayAddress: any;
+}
+
+export default function Account() {
   const [authenticated, setAuth] = useState(false);
   const router = useRouter();
-  const [userData, setUserData] = useState(null);
-  const [userAccess, setUserAccess] = useState({})
+  const [userData, setUserData] = useState<CustData | null>(null);
+  const [userAccess, setUserAccess] = useState({});
 
   useEffect(() => {
     async function checkToken() {
       let token = JSON.parse(
         //@ts-ignore
-        window.localStorage.getItem(`${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:accessToken`)
+        window.localStorage.getItem(
+          `${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:accessToken`
+        )
       );
 
       if (token) setAuth(true);
@@ -49,37 +62,57 @@ export default function Account({}) {
   }
 
   async function getUser(accessToken: string) {
-    const user = await fetch(`/api/get-customer?accessToken=${accessToken}`).then((res) => res.json());
+    const user = await fetch(
+      `/api/get-customer?accessToken=${accessToken}`
+    ).then((res) => res.json());
     setUserData({ ...user.data.customer });
   }
 
   useEffect(() => {
-
     if (authenticated) {
       let token = JSON.parse(
         //@ts-ignore
-        window.localStorage.getItem(`${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:accessToken`)
+        window.localStorage.getItem(
+          `${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:accessToken`
+        )
       );
 
       getUser(token.customerAccessToken.accessToken);
     }
   }, [authenticated]);
 
-  if (!authenticated) return <Text>loading your account data...</Text>;
+  if (!authenticated) return <Loader />;
 
   if (userData)
     return (
-      <Box pt={40} pb={20}>
+      <Box pt={20} pb={40}>
         <Head>
-          <title>{process.env.NEXT_PUBLIC_SHOP_NAME} | Your Account</title>
+          <title>{process.env.NEXT_PUBLIC_SHOP_NAME} | My Account</title>
         </Head>
-        <Container centerContent>
+        <Container maxW="container.xl" centerContent>
           <Stack spacing={10} w="full">
             <Flex justify={"space-between"}>
-              <Heading size="2xl">Account</Heading>
+              <Heading>My Account</Heading>
               <Button onClick={logout}>Logout</Button>
             </Flex>
-            <Orders userData={userData} />
+            <Divider />
+            <SimpleGrid templateColumns={"repeat(3, 1fr)"}>
+              <GridItem colSpan={1}>
+                <Stack>
+                  <Text fontWeight={500}>
+                    {userData.firstName} {userData.lastName}
+                  </Text>
+                  <Text>
+                    {userData.displayAddress
+                      ? userData.displayAddress
+                      : "No default address"}
+                  </Text>
+                </Stack>
+              </GridItem>
+              <GridItem colSpan={2}>
+                <Orders userData={userData} />
+              </GridItem>
+            </SimpleGrid>
           </Stack>
         </Container>
       </Box>
@@ -87,9 +120,9 @@ export default function Account({}) {
 
   if (!userData)
     return (
-      <Box pt={40} pb={20}>
+      <Box py={60}>
         <Container maxW="container.sm" centerContent>
-          <Text>loading your account data...</Text>
+          <Loader />
         </Container>
       </Box>
     );
@@ -118,7 +151,7 @@ function Name({ firstName }: { firstName: string }) {
 }
 
 function Orders({ userData }: any) {
-  if(!userData) return null
+  if (!userData) return null;
 
   if (userData.orders.edges.length === 0)
     return <Box>You haven&apos;t made any purchases yet.</Box>;
@@ -126,22 +159,47 @@ function Orders({ userData }: any) {
   if (userData.orders.edges.length > 0)
     return (
       <Box>
-        <Heading mb={8} size="xl">
+        <Heading mb={8} size="lg">
           Orders
         </Heading>
         <Stack spacing={4}>
+          <SimpleGrid templateColumns={"repeat(4, 1fr)"} fontWeight={600}>
+            <GridItem>Order Date</GridItem>
+            <GridItem>Status</GridItem>
+            <GridItem>Order #</GridItem>
+            <GridItem>Order Confirmation</GridItem>
+          </SimpleGrid>
           {userData.orders.edges.map((o: any, i: number) => (
-            <>
-              <Box key={i}>
-                <Flex justifyContent={"space-between"} mb={4}>
+            <Box
+              key={i}
+              py={4}
+              borderTop={"1px solid rgba(0,0,0,0.15)"}
+              borderBottom={"1px solid rgba(0,0,0,0.15)"}
+            >
+              <SimpleGrid templateColumns={"repeat(4, 1fr)"}>
+                <GridItem>
+                  {new Date(o.node.processedAt).toLocaleDateString()}
+                </GridItem>
+                <GridItem>{o.node.fulfillmentStatus}</GridItem>
+                <GridItem>{o.node.orderNumber}</GridItem>
+                <GridItem>
+                  <NextLink href={`/order/${o.node.id}`} passHref>
+                    <Link>
+                      <Text>View</Text>
+                    </Link>
+                  </NextLink>
+                </GridItem>
+              </SimpleGrid>
+              {/* <Flex justifyContent={"space-between"} mb={4}>
                   <Text>
-                    {new Date(o.node.processedAt).toLocaleDateString()}
+                    
                   </Text>
                   <Text>
                     {formatter.format(o.node.currentTotalPrice.amount)}
                   </Text>
                 </Flex>
-                {o.node.lineItems.edges.map((l:any, i: number) => (
+                 */}
+              {/* {o.node.lineItems.edges.map((l: any, i: number) => (
                   <Flex
                     justifyContent={"flex-start"}
                     key={i}
@@ -151,15 +209,8 @@ function Orders({ userData }: any) {
                     <Text fontWeight={"bold"}>{l.node.title}</Text>
                     <Text>Qty: {l.node.quantity}</Text>
                   </Flex>
-                ))}
-              </Box>
-              <NextLink href={`/order/${o.node.id}`} passHref>
-                <Link>
-                  <Text>View Order</Text>
-                </Link>
-              </NextLink>
-              <Divider />
-            </>
+                ))} */}
+            </Box>
           ))}
         </Stack>
       </Box>

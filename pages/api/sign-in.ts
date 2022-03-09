@@ -35,11 +35,7 @@ export default async function handler(
     },
   };
 
-  console.log(requestData);
-
   const response = await graphClient.request(mutation, variables);
-
-  console.log(response)
 
   res.send({
     ...response.customerAccessTokenCreate,
