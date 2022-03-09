@@ -9,16 +9,14 @@ import {
   Image,
   Select,
   Button,
-  useDisclosure,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
 import { useState, useContext } from "react";
-import getLocalCart from "../../lib/get-cart";
 import CartContext from "../../lib/CartContext";
 import formatter from "../../lib/formatter";
 import { GetStaticProps } from "next";
-// import { getProducts } from "@supershops/get-products"
+import Script from "next/script";
 
 const Product = ({ handle, product }: { handle: string; product: any }) => {
   const { cart, setCart } = useContext(CartContext);
@@ -31,11 +29,6 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
   const variants = product?.variants.edges;
 
   async function addToCart() {
-    // console.log(getLocalCart)
-    // let cart = await getLocalCart();
-
-    console.log(cart);
-
     const response = await fetch("/api/addtocart", {
       method: "POST",
       body: JSON.stringify({
@@ -62,7 +55,8 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
   return (
     <>
       <Head>
-        <title>{product.title} | SuperShops by WEBPRISM</title>
+        <title>{product.title} | TOR Salon Products</title>
+        {/* <meta name="description" content={`${product?.description.substring(0, 200)}...`} /> */}
       </Head>
       <Flex flexDirection={["column", "row"]}>
         <AspectRatio ratio={1} maxW={["100%", "50%"]} minW={["100%", "50%"]}>
@@ -106,20 +100,18 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
             <Text fontSize={24} fontWeight={600}>
               {checkPrice(variantId)}
             </Text>
-            <Button onClick={addToCart}>Add To Cart</Button>
+            <Button onClick={addToCart} isDisabled={!product.availableForSale}>{product.availableForSale ? "Add To Cart" : "Sold Out!"}</Button>
           </Stack>
         </Container>
       </Flex>
       <Container maxW="container.lg" py={20}>
-        <Box
-          className="yotpo yotpo-main-widget"
-          data-product-id={product.id}
-          data-price="Product Price"
-          data-currency="Price Currency"
-          data-name={product.title}
-          data-url="The url of your product page"
-          data-image-url="The product image url"
-        ></Box>
+      <div className="embedsocial-product-reviews" data-shop="tor-salon-products.myshopify.com" data-product={btoa(product.id)} data-handle={handle}></div>
+      <Script
+        id="embed-social-script"
+        dangerouslySetInnerHTML={{
+          __html: `(function(d, s, id){var js; if (d.getElementById(id)) {return;} js = d.createElement(s); js.id = id; js.src = "https://embedsocial.com/cdn/ri_shopify.js?v=1.0.1"; d.getElementsByTagName("head")[0].appendChild(js);}(document, "script", "EmbedSocialShopifyReviewsScript"));`
+        }}
+      />
       </Container>
     </>
   );
@@ -143,7 +135,9 @@ export async function getStaticPaths() {
             title
             handle
             descriptionHtml
+            description
             tags
+            availableForSale
             variants(first: 100) {
               edges {
                 node {
@@ -205,6 +199,7 @@ export const  getStaticProps: GetStaticProps = async (context) => {
       id
       title
       descriptionHtml
+      availableForSale
       tags
       variants(first: 100) {
         edges {

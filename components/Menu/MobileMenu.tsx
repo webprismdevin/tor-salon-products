@@ -79,7 +79,7 @@ const MobileMenu = () => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>TOR</DrawerHeader>
+          <DrawerHeader><Text fontFamily={"Futura"}>TOR</Text></DrawerHeader>
           <DrawerBody p={8}>
             <VStack spacing={4} alignItems={"flex-start"} w="full">
               <MenuLink href={"/"} text="Home" />

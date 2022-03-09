@@ -97,7 +97,7 @@ export default function Account() {
             </Flex>
             <Divider />
             <SimpleGrid templateColumns={"repeat(3, 1fr)"}>
-              <GridItem colSpan={1}>
+              <GridItem colSpan={[3, 1]}>
                 <Stack>
                   <Text fontWeight={500}>
                     {userData.firstName} {userData.lastName}
@@ -109,7 +109,7 @@ export default function Account() {
                   </Text>
                 </Stack>
               </GridItem>
-              <GridItem colSpan={2}>
+              <GridItem colSpan={[3, 2]}>
                 <Orders userData={userData} />
               </GridItem>
             </SimpleGrid>

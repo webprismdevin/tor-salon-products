@@ -18,7 +18,9 @@ import { useState, useRef } from "react";
 import { isMobile } from 'react-device-detect'
 
 const About = ({ data }: any) => {
-  return (<></>);
+  return <Container centerContent py={20}>
+    About
+  </Container>
 };
 
 export async function getStaticProps() {

@@ -123,7 +123,7 @@ function LineItem({ product }: any) {
 export async function getServerSideProps(context: any) {
   const base_url =
     process.env.NODE_ENV === "production"
-      ? process.env.NEXT_PUBLIC_SHOPIFY_URL
+      ? process.env.NEXT_PUBLIC_SHOP_URL
       : "http://localhost:3000";
 
   const result = await fetch(
