@@ -38,8 +38,6 @@ const Cart = () => {
   useEffect(() => {
     if(cart.lines.length > 1) {
       const cartQtyCalc = cart.lines.reduce((prev:any, next:any) => { 
-        console.log(prev, next)
-
         return prev.node.quantity + next.node.quantity 
       });
       setCartQty(cartQtyCalc)
@@ -75,7 +73,6 @@ const Cart = () => {
           existingCart.cart.lines.edges.length > 0 &&
           cart.status === "dirty"
         ) {
-          console.log("should open");
           onOpen();
         }
 
@@ -171,7 +168,7 @@ const Cart = () => {
         />
         <Text
           fontSize={12}
-          mt="-8px"
+          mt={["-8px"]}
           style={{
             display: "inline",
           }}

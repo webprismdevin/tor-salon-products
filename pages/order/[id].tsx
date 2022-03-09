@@ -9,8 +9,6 @@ import {
   Image,
   Box,
 } from "@chakra-ui/react";
-import formatter from "../../lib/formatter";
-import { GetServerSideProps } from "next";
 import NextLink from "next/link";
 import Head from "next/head";
 import { useEffect, useState } from "react";
@@ -49,32 +47,33 @@ export default function ThankYou({ data }: any) {
         </Text>
       </VStack>
       <Divider />
-      <VStack align={"flex-start"} py={10}>
-        <ShippingDetails displayAddress={data.displayAddress} />
-      </VStack>
-      <Divider />
-      <VStack alignItems={"flex-start"} spacing={4} py={10}>
-        <Text fontSize="2xl" fontWeight={600}>
-          Items
-        </Text>
-        {data.lineItems.edges.map((product: any) => (
-          <LineItem key={product.node.id} product={product} />
-        ))}
-      </VStack>
+      <Stack direction={["column", "row"]} spacing={20}>
+        <VStack alignItems={"flex-start"} spacing={4} py={10}>
+          <Text fontSize="2xl" fontWeight={600}>
+            Items
+          </Text>
+          {data.lineItems.edges.map((product: any) => (
+            <LineItem key={product.node.id} product={product} />
+          ))}
+        </VStack>
+        <VStack align={"flex-start"} py={10}>
+          <ShippingDetails displayAddress={data.displayAddress} />
+        </VStack>
+      </Stack>
       {!auth && (
         <>
           <Divider />
           <VStack py={10}>
-              <Text fontWeight={600}>Want to track your order?</Text>
-              <Text>
-                <NextLink href="/login" passHref>
-                  <Link>Create an account</Link>
-                </NextLink>{" "}
-                with the same email you used for your purchase. Or{" "}
-                <NextLink href="/login" passHref>
-                  <Link>login</Link>
-                </NextLink>
-              </Text>
+            <Text fontWeight={600}>Want to track your order?</Text>
+            <Text>
+              <NextLink href="/login" passHref>
+                <Link>Create an account</Link>
+              </NextLink>{" "}
+              with the same email you used for your purchase. Or{" "}
+              <NextLink href="/login" passHref>
+                <Link>login</Link>
+              </NextLink>
+            </Text>
           </VStack>
         </>
       )}

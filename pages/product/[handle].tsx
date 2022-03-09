@@ -71,7 +71,7 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
       <Flex flexDirection={["column", "row"]}>
         <AspectRatio ratio={1} maxW={["100%", "50%"]} minW={["100%", "50%"]}>
           <Image
-            src={product.images.edges[2].node.src}
+            src={product.images.edges[0].node.src}
             alt={``}
             objectFit="cover"
             objectPosition="top center"

@@ -78,9 +78,7 @@ export default async function handler(
       quantity: parseInt(data.lines.quantity)
     },
   };
-
-  console.log(variables)
-
+  
   const response = await graphClient.request(mutation, variables);
 
   if (response.errors) {

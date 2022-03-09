@@ -17,16 +17,5 @@ export default function Product({ product }: ProductProps) {
     <NextLink href={`/product/${product.node.handle}`} passHref>
       <Link>{product.node.title}</Link>
     </NextLink>
-    // <ProductCard
-    //     // addToCart={null}
-    //     click={() => router.push(`/product/${product.node.handle}`)}
-    //     compareAt={formatter.format(product.node.compareAtPriceRange.maxVariantPrice.amount) || ""}
-    //     modelPhoto={product.node.images.edges[0].node.transformedSrc}
-    //     price={formatter.format(product.node.priceRange.maxVariantPrice.amount)}
-    //     productPhoto={product.node.images.edges[1].node.transformedSrc || null}
-    //     title={product.node.title}
-    //     variant={variant}
-    //     textColor={textColor}
-    // />
   );
 }
