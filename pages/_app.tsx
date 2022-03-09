@@ -9,6 +9,7 @@ import ShopContext from "../lib/shop-context";
 import Tawk from "../lib/tawk";
 import "../styles/globals.css";
 import Script from "next/script";
+import { isMobile } from 'react-device-detect'
 
 const config = {
   useSystemColorMode: false,
@@ -30,7 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <meta name="theme-color" content="rgba(36,36,36)" />
         </Head>
         <CartContext.Provider value={{ cart, setCart }}>
-          <NavBar />
+          <NavBar isMobile={isMobile} />
           <Component {...pageProps} />
         </CartContext.Provider>
         <Footer />

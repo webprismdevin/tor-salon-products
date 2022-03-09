@@ -18,10 +18,6 @@ import Link from "next/link";
 import { groq } from "next-sanity";
 import { getClient, imageBuilder } from "../lib/sanity";
 import { gql, GraphQLClient } from "graphql-request";
-import { isMobile } from "react-device-detect";
-import { FaCheckCircle, FaEdit, FaRunning, FaWrench } from "react-icons/fa";
-import Product from "../components/Product";
-import MailingList from "../components/MailingList";
 import ShopContext from "../lib/shop-context";
 
 function HomePage({ homepageData, collection }: any) {

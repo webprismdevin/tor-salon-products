@@ -31,7 +31,7 @@ import {
   MoreLinks,
 } from "./MenuSections";
 
-const Menu = () => {
+const MobileMenu = () => {
   const {
     isOpen: menuIsOpen,
     onOpen: menuOnOpen,
@@ -79,7 +79,7 @@ const Menu = () => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>SuperShops</DrawerHeader>
+          <DrawerHeader>TOR</DrawerHeader>
           <DrawerBody p={8}>
             <VStack spacing={4} alignItems={"flex-start"} w="full">
               <MenuLink href={"/"} text="Home" />
@@ -161,4 +161,4 @@ const Menu = () => {
   );
 };
 
-export default Menu;
+export default MobileMenu;
