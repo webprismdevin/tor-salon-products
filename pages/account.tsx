@@ -163,7 +163,7 @@ function Orders({ userData }: any) {
           Orders
         </Heading>
         <Stack spacing={4}>
-          <SimpleGrid templateColumns={"repeat(4, 1fr)"} fontWeight={600}>
+          <SimpleGrid templateColumns={"repeat(4, 1fr)"} gap={4} fontWeight={600}>
             <GridItem>Order Date</GridItem>
             <GridItem>Status</GridItem>
             <GridItem>Order #</GridItem>
@@ -176,7 +176,7 @@ function Orders({ userData }: any) {
               borderTop={"1px solid rgba(0,0,0,0.15)"}
               borderBottom={"1px solid rgba(0,0,0,0.15)"}
             >
-              <SimpleGrid templateColumns={"repeat(4, 1fr)"}>
+              <SimpleGrid templateColumns={["repeat(4, 1fr)"]} gap={4}>
                 <GridItem>
                   {new Date(o.node.processedAt).toLocaleDateString()}
                 </GridItem>
@@ -190,26 +190,6 @@ function Orders({ userData }: any) {
                   </NextLink>
                 </GridItem>
               </SimpleGrid>
-              {/* <Flex justifyContent={"space-between"} mb={4}>
-                  <Text>
-                    
-                  </Text>
-                  <Text>
-                    {formatter.format(o.node.currentTotalPrice.amount)}
-                  </Text>
-                </Flex>
-                 */}
-              {/* {o.node.lineItems.edges.map((l: any, i: number) => (
-                  <Flex
-                    justifyContent={"flex-start"}
-                    key={i}
-                    gap={2}
-                    alignItems={"center"}
-                  >
-                    <Text fontWeight={"bold"}>{l.node.title}</Text>
-                    <Text>Qty: {l.node.quantity}</Text>
-                  </Flex>
-                ))} */}
             </Box>
           ))}
         </Stack>

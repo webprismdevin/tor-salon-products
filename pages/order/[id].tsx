@@ -47,8 +47,8 @@ export default function ThankYou({ data }: any) {
         </Text>
       </VStack>
       <Divider />
-      <Stack direction={["column", "row"]} spacing={20}>
-        <VStack align={"flex-start"} py={10}>
+      <Stack direction={["column", "row"]} spacing={[0, 20]}>
+        <VStack align={"flex-start"} py={[10]}>
           <ShippingDetails displayAddress={data.displayAddress} />
         </VStack>
         <VStack alignItems={"flex-start"} spacing={4} py={10}>
@@ -63,7 +63,7 @@ export default function ThankYou({ data }: any) {
       {!auth && (
         <>
           <Divider />
-          <VStack py={10}>
+          <VStack py={[5 ,10]}>
             <Text fontWeight={600}>Want to track your order?</Text>
             <Text>
               <NextLink href="/login" passHref>

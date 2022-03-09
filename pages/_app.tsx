@@ -14,6 +14,11 @@ import dynamic from "next/dynamic";
 const NavBar = dynamic(() => import ("../components/NavBar"))
 const Footer = dynamic(() => import ("../components/Footer"))
 
+declare global {
+  interface Window {
+    Tawk_API: any;
+  }
+}
 
 const config = {
   useSystemColorMode: false,
@@ -40,7 +45,12 @@ function MyApp({ Component, pageProps }: AppProps) {
   };
 
   useEffect(() => {
-    console.log(isMobile, "from app")
+    if (process.browser) {
+      window.Tawk_API = window.Tawk_API || {};
+      window.Tawk_API.customStyle = {
+        zIndex: 1000,
+      };
+    }
   }, [])
 
   return (

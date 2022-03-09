@@ -56,7 +56,7 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
     <>
       <Head>
         <title>{product.title} | TOR Salon Products</title>
-        {/* <meta name="description" content={`${product?.description.substring(0, 200)}...`} /> */}
+        <meta name="description" content={`${product.description.substring(0, 200)}...`} />
       </Head>
       <Flex flexDirection={["column", "row"]}>
         <AspectRatio ratio={1} maxW={["100%", "50%"]} minW={["100%", "50%"]}>
@@ -81,7 +81,7 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
             ></div>
             <Box>
               <Heading as="h4" size="md" mb={3} ml={2}>
-                Select Your Size
+                Select A Size
               </Heading>
               <Select
                 value={variantId}
@@ -199,6 +199,7 @@ export const  getStaticProps: GetStaticProps = async (context) => {
       id
       title
       descriptionHtml
+      description
       availableForSale
       tags
       variants(first: 100) {
