@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import CartContext from "../../lib/CartContext";
 import formatter from "../../lib/formatter";
 import { GetStaticProps } from "next";
@@ -75,10 +75,6 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
                 __html: product.descriptionHtml
               }}
             />
-            <div
-              className="yotpo bottomLine"
-              data-yotpo-product-id={product.id}
-            ></div>
             <Box>
               <Heading as="h4" size="md" mb={3} ml={2}>
                 Select A Size
@@ -93,7 +89,7 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
                 {variants.map((v: any, i: number) => (
                   <option key={v.node.id} value={v.node.id}>
                     {v.node.title}
-                  </option>
+                  </option> 
                 ))}
               </Select>
             </Box>
@@ -105,7 +101,12 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
         </Container>
       </Flex>
       <Container maxW="container.lg" py={20}>
-      <div className="embedsocial-product-reviews" data-shop="tor-salon-products.myshopify.com" data-product={Buffer.from(product.id).toString('base64')} data-handle={handle}></div>
+      <div 
+        className="embedsocial-product-reviews"
+        data-shop="tor-salon-products.myshopify.com"
+        data-product={Buffer.from(product.id).toString('base64')}
+        data-handle={handle}
+      />
       <Script
         id="embed-social-script"
         dangerouslySetInnerHTML={{

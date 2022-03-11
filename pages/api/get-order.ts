@@ -20,6 +20,17 @@ export default async function handler(
                 zip
                 country
             }
+            billingAddressMatchesShippingAddress
+            billingAddress{
+                name
+                firstName
+                address1
+                address2
+                city
+                province
+                zip
+                country
+            }
             email
             note
             lineItems (first: 100) {
@@ -33,6 +44,19 @@ export default async function handler(
                         currentQuantity
                     }
                 }
+            }
+            shippingLines(first: 100) {
+							edges {
+								node{
+									id
+                  code
+                  requestedFulfillmentService {
+										id
+                    type
+                    callbackUrl
+                  }
+                }
+              }
             }
             currentSubtotalPriceSet {
                 shopMoney {
@@ -48,6 +72,11 @@ export default async function handler(
                 shopMoney {
                     amount
                 }
+            }
+            totalShippingPriceSet {
+							shopMoney {
+								amount
+              }
             }
         }
       }

@@ -1,5 +1,7 @@
 import type { AppProps } from "next/app";
 import { extendTheme, ChakraProvider, ColorModeScript } from "@chakra-ui/react";
+import { theme as defaultTheme, ThemeConfig } from '@chakra-ui/theme'
+import { mode } from '@chakra-ui/theme-tools'
 import Head from "next/head";
 import TagManager from "react-gtm-module";
 import { useEffect, useState } from "react";
@@ -7,7 +9,6 @@ import CartContext from "../lib/CartContext";
 import ShopContext from "../lib/shop-context";
 import Tawk from "../lib/tawk";
 import "../styles/globals.css";
-import Script from "next/script";
 import { isMobile } from 'react-device-detect'
 import dynamic from "next/dynamic";
 
@@ -23,9 +24,23 @@ declare global {
 const config = {
   useSystemColorMode: false,
   initialColorMode: "light",
+  components: {
+    Button: {
+      variants: {
+        solid: (props: any) => ({
+          bg: mode("black", "white")(props),
+          color: mode("whiteAlpha.900", "whiteAlpha.900")(props),
+          _hover: {
+            color: mode("black", "whiteAlpha.900")(props),
+            // bg: mode("brand.lightBlue", "brand.darkBlue")(props)
+          }
+        }),
+      },
+    },
+  },
 };
 
-const customTheme = extendTheme({ config });
+const customTheme: ThemeConfig = extendTheme(defaultTheme, config);
 
 const tagManagerArgs = {
   gtmId: "GTM-MKG7C6H",
