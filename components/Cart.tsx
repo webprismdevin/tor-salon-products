@@ -255,9 +255,9 @@ function CartLineItem({
           <Text fontSize={20} fontWeight="bold">
             {product.node.merchandise.product.title}
           </Text>
-          <Text mt={1} fontSize={12}>
+          {product.node.merchandise.title !== "Default Title" && <Text mt={1} fontSize={12}>
             {product.node.merchandise.title}
-          </Text>
+          </Text>}
           <ItemQty product={product} />
         </VStack>
         <VStack align={"flex-end"} spacing={1}>

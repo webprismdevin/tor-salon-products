@@ -109,6 +109,11 @@ function SignIn({
         JSON.stringify({ ...response })
       );
 
+      window.dataLayer.push({
+        'event': 'login',
+        'loginMethod': 'email'
+      })
+
       router.push("/account");
 
       return;

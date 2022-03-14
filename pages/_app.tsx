@@ -18,6 +18,7 @@ const Footer = dynamic(() => import ("../components/Footer"))
 declare global {
   interface Window {
     Tawk_API: any;
+    dataLayer: any;
   }
 }
 
@@ -46,11 +47,14 @@ const tagManagerArgs = {
   gtmId: "GTM-MKG7C6H",
 };
 
-if (process.env.NODE_ENV === "production" && process.browser) {
-  console.log("GTM fired");
-  TagManager.initialize(tagManagerArgs);
+if (
+  process.env.NODE_ENV === "production" && 
+  process.browser
+  ) {
+    console.log("GTM fired");
+    TagManager.initialize(tagManagerArgs);
 } else {
-  console.log("GTM not fired");
+    console.log("GTM not fired");
 }
 
 function MyApp({ Component, pageProps }: AppProps) {

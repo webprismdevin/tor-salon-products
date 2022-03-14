@@ -1,26 +1,32 @@
-import { Heading, Container, Box, Flex } from "@chakra-ui/react";
+import { Heading, Container, Box, Flex, SimpleGrid, GridItem } from "@chakra-ui/react";
 import { gql, GraphQLClient } from "graphql-request";
-import ProductCard from "../../components/Product";
+import ProductCard from "../components/Product";
 import Head from "next/head";
 import { GetServerSideProps } from "next";
 
-const Search = ({ results, searchTerm }: { results: any, searchTerm: string}) => {
+const Search = ({
+  results,
+  searchTerm,
+}: {
+  results: any;
+  searchTerm: string;
+}) => {
   return (
     <Box mt={20}>
       <Head>
         <title>Search results for &quot;{searchTerm}&quot;</title>
       </Head>
       <Container py={6} maxW="container.xl">
-        <Heading >Search results for &quot;{searchTerm}&quot;</Heading>
+        <Heading>Search results for &quot;{searchTerm}&quot;</Heading>
       </Container>
       <Container maxW="container.xl" pt={10} pb={20}>
-        <Flex flexDirection={["column", "row"]} justifyContent={"space-between"} gap={[4]} minW="full" flexWrap={'wrap'}>
+        <SimpleGrid templateColumns={"repeat(3, 1fr)"}>
           {results.edges.map((p: any) => (
-            <Box key={p.node.id}>
+            <GridItem key={p.node.id}>
               <ProductCard product={p} />
-            </Box>
+            </GridItem>
           ))}
-        </Flex>
+        </SimpleGrid>
       </Container>
     </Box>
   );
@@ -28,18 +34,25 @@ const Search = ({ results, searchTerm }: { results: any, searchTerm: string}) =>
 
 export default Search;
 
-export const getServerSideProps : GetServerSideProps = async (context) => {
-  const searchQuery = context.params?.query;
+export const getServerSideProps: GetServerSideProps = async ({
+  query: urlQuery,
+}) => {
+  const searchQuery = urlQuery.query;
 
-  const graphQLClient = new GraphQLClient(process.env.NEXT_PUBLIC_SHOPIFY_URL!, {
-    headers: {
-      "X-Shopify-Storefront-Access-Token": process.env.NEXT_PUBLIC_TOKEN!,
-    },
-  });
+  console.log(urlQuery, searchQuery);
+
+  const graphQLClient = new GraphQLClient(
+    process.env.NEXT_PUBLIC_SHOPIFY_URL!,
+    {
+      headers: {
+        "X-Shopify-Storefront-Access-Token": process.env.NEXT_PUBLIC_TOKEN!,
+      },
+    }
+  );
 
   // Shopify Request
   const query = gql`{
-        products(query: "${searchQuery} ", first: 100) {
+        products(query: "${searchQuery}", first: 100) {
           edges {
             node {
               id
@@ -86,7 +99,7 @@ export const getServerSideProps : GetServerSideProps = async (context) => {
   return {
     props: {
       results: res.products,
-      searchTerm: searchQuery 
+      searchTerm: searchQuery,
     },
   };
-}
+};

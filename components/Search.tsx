@@ -41,7 +41,7 @@ export function Search({ router }: { router: NextRouter }) {
       />
       <Modal isOpen={isOpen} onClose={onClose} size="lg">
         <ModalOverlay />
-        <ModalContent py={4}>
+        <ModalContent py={4} mx={4}>
           <ModalCloseButton />
           <ModalHeader>
             <Heading>Search TOR</Heading>
