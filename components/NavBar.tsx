@@ -50,7 +50,7 @@ const NavBar = ({ isMobile } : { isMobile: boolean}) => {
 
   return (
     <Box py={6} px={[4, 10]} pos="sticky" top={0} zIndex={1} bg="white">
-      <Container maxW="container.xl">
+      {/* <Container maxW="container.xl"> */}
         <Flex align={"center"} justify={"space-between"}>
           <Stack direction="row" spacing={[4, 8]} align={"center"}>
             {isMobile && <MobileMenu />}
@@ -87,7 +87,7 @@ const NavBar = ({ isMobile } : { isMobile: boolean}) => {
             <Cart />
           </Stack>
         </Flex>
-      </Container>
+      {/* </Container> */}
     </Box>
   );
 };
