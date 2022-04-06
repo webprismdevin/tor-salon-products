@@ -301,7 +301,7 @@ function HomePage({ homepageData, collection }: any) {
           />
         </Box>
       </Box>
-      <Flex pos="relative" gap={40} pt={10}>
+      <Flex pos="relative" gap={20} pt={10}>
         <Image
           height={912}
           src="/images/home/salon-stylist.png"
@@ -322,7 +322,7 @@ function HomePage({ homepageData, collection }: any) {
           <Button alignSelf={"flex-start"}>Learn More</Button>
           <Box pt={8}>
             <Heading mb={4}>Benefits</Heading>
-            <HStack spacing={12}>
+            <HStack spacing={6}>
               <Box textAlign={"center"}>
                 <Icon as={FiBookOpen} boxSize={8} />
                 <Text>Education</Text>
