@@ -9,6 +9,10 @@ import {
   Image,
   Select,
   Button,
+  Icon,
+  useNumberInput,
+  HStack,
+  Input,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
@@ -20,18 +24,34 @@ import Script from "next/script";
 
 declare interface VariantType {
   id: string;
-  price: string;
+  priceV2: {
+    amount: string;
+  };
   title: string;
   availableForSale: boolean;
 }
 
 const Product = ({ handle, product }: { handle: string; product: any }) => {
+  const [ itemQty, setItemQty ] = useState(1)
   const { cart, setCart } = useContext(CartContext);
   const [activeVariant, setActiveVariant] = useState<VariantType>(() => {
     if (!product) return null;
 
     return product.variants.edges[0].node;
   });
+
+  const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
+    useNumberInput({
+      step: 1,
+      defaultValue: itemQty,
+      min: 1,
+      precision: 0,
+      onChange: (valueAsString: string, valueAsNumber: number) => setItemQty(valueAsNumber)
+    });
+
+  const inc = getIncrementButtonProps();
+  const dec = getDecrementButtonProps();
+  const input = getInputProps();
 
   const variants = product?.variants.edges;
 
@@ -41,6 +61,7 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
       body: JSON.stringify({
         variantId: activeVariant.id,
         cartId: cart.id,
+        qty: itemQty
       }),
     }).then((res) => res.json());
 
@@ -70,7 +91,7 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
       <Flex flexDirection={["column", "row"]}>
         <AspectRatio ratio={1} maxW={["100%", "50%"]} minW={["100%", "50%"]}>
           <Image
-            src={product.images.edges[0].node.src}
+            src={product.images.edges[0].node.url}
             alt={``}
             objectFit="cover"
             objectPosition="top center"
@@ -84,33 +105,92 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
                 __html: product.descriptionHtml,
               }}
             />
+            <Stack direction={"row"} align="flex-end">
               {variants.length > 1 && (
-                <>
+                <Stack>
                   <Heading as="h4" size="md" mb={3} ml={2}>
                     Select A Size
                   </Heading>
                   <Select
+                    minW={"220px"}
                     value={activeVariant.id}
                     onChange={(e) => {
                       handleActiveVariantChange(e.target.value);
                     }}
                   >
-                    {variants.map((v: {node: VariantType}, i: number) => (
+                    {variants.map((v: { node: VariantType }, i: number) => (
                       <option key={v.node.id} value={v.node.id}>
                         {v.node.title}
                       </option>
                     ))}
                   </Select>
-                </>
+                </Stack>
               )}
+              <HStack maxW="150px">
+                <Button {...inc}>+</Button>
+                <Input {...input} textAlign="center" />
+                <Button {...dec}>-</Button>
+              </HStack>
+            </Stack>
             <Text fontSize={24} fontWeight={600}>
-              {activeVariant.price}
+              {formatter.format(parseInt(activeVariant.priceV2.amount))}
             </Text>
-            <Button onClick={addToCart} isDisabled={!activeVariant?.availableForSale}>{ activeVariant?.availableForSale ? "Add To Cart" : "Sold Out!"}</Button>
+            <Button
+              onClick={addToCart}
+              isDisabled={!activeVariant?.availableForSale}
+            >
+              {activeVariant?.availableForSale ? "Add To Cart" : "Sold Out!"}
+            </Button>
           </Stack>
         </Container>
       </Flex>
-      <Container maxW="container.lg" py={20}>
+      <Flex flexDir={"row"}>
+        <Stack
+          direction={["column"]}
+          gap={12}
+          w="50%"
+          px={20}
+          py={40}
+          bg={
+            product.collections.edges[0]?.node.color?.value
+              ? product.collections.edges[0]?.node.color?.value
+              : "white"
+          }
+          pos="relative"
+        >
+          <Image
+            src={
+              product.collections.edges[0]?.node.typeImage.reference.image?.url
+            }
+            alt=""
+            pos="absolute"
+            top={0}
+            opacity={0.1}
+            w="100%"
+            left={0}
+          />
+          <Heading>{product.collections.edges[0]?.node.title}</Heading>
+          <Text>{product.collections.edges[0]?.node.description}</Text>
+          <Stack direction={"row"} textAlign="center" spacing={6}>
+            <Box>
+              <Icon />
+              <Text>Benefit 1</Text>
+            </Box>
+            <Box>
+              <Icon />
+              <Text>Benefit 2</Text>
+            </Box>
+            <Box>
+              <Icon />
+              <Text>Benefit 3</Text>
+            </Box>
+          </Stack>
+        </Stack>
+        <AspectRatio ratio={1 / 1} w="50%">
+          <Image src={product.collections.edges[0]?.node.image?.url} alt="" />
+        </AspectRatio>
+      </Flex>
+      <Container maxW="container.xl" py={20}>
         <div
           className="embedsocial-product-reviews"
           data-shop="tor-salon-products.myshopify.com"
@@ -157,14 +237,16 @@ export async function getStaticPaths() {
                   availableForSale
                   id
                   title
-                  price
+                  priceV2 {
+                    amount
+                  }
                 }
               }
             }
             images(first: 10) {
               edges {
                 node {
-                  src
+                  url
                 }
               }
             }
@@ -206,8 +288,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
     }
   );
 
-  //7587711615222
-
   // Shopify Request
   const query = gql`{
     product(handle: "${handle}") {
@@ -216,20 +296,46 @@ export const getStaticProps: GetStaticProps = async (context) => {
       descriptionHtml
       description
       tags
+      collections(first: 1) {
+        edges {
+          node {
+            handle
+            title
+            description
+            image {
+              url
+            }
+            typeImage: metafield(namespace: "collection", key: "typeImage") {
+              reference {
+                ... on MediaImage {
+                  image {
+                    url
+                  }
+                }
+              }
+            }
+            color: metafield(namespace: "collection", key: "color") {
+              value
+            }
+          }
+        }
+      }
       variants(first: 100) {
         edges {
           node {
             availableForSale
             id
             title
-            price
+            priceV2 {
+              amount
+            }
           }
         }
       }
       images(first: 10) {
         edges {
           node {
-            src
+            url
           }
         }
       }

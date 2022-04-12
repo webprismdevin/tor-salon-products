@@ -15,12 +15,12 @@ export const ByProductTypes = () => {
 export const ByHairType = () => {
   return (
     <>
-      <MenuLink href="/collection/curly-hair-line" text="Curly" />
+      <MenuLink href="/type/curly" text="Curly" />
       <MenuLink
-        href="/collection/medium-thick-hair-line"
+        href="/type/medium-thick"
         text="Medium &amp; Thick"
       />
-      <MenuLink href="/collection/fine-thin-hair-line" text="Fine &amp; Thin" />
+      <MenuLink href="/type/fine-thin" text="Fine &amp; Thin" />
     </>
   );
 };

@@ -8,6 +8,9 @@ import {
   Divider,
   Icon,
   Box,
+  Input,
+  InputGroup,
+  InputRightElement,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useContext } from "react";
@@ -17,6 +20,7 @@ import {
   AiFillYoutube,
   AiOutlineFacebook,
 } from "react-icons/ai";
+import { FiArrowRight } from "react-icons/fi";
 import ShopContext from "../lib/shop-context";
 import {
   BodyAndSkin,
@@ -29,8 +33,23 @@ const Footer = () => {
   const { shop } = useContext(ShopContext);
 
   return (
-    <Container maxW="container.lg" py={10}>
+    <Container maxW="container.xl" py={10}>
       <Stack spacing={8}>
+        <Box maxW="500px" mb={"80px"}>
+          <InputGroup>
+            <Input
+              variant={"unstyled"}
+              fontSize={"36px"}
+              placeholder={"Join our community"}
+              _placeholder={{ color: "black" }}
+              borderBottom={"4px solid black"}
+              borderRadius={0}
+            />
+            <InputRightElement>
+              <Icon as={FiArrowRight} boxSize={8} mt={4} />
+            </InputRightElement>
+          </InputGroup>
+        </Box>
         <Stack
           w="full"
           direction={["column", "row"]}

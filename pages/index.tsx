@@ -13,20 +13,24 @@ import {
   AspectRatio,
   Image,
   ImageProps,
+  Divider,
+  GridItemProps,
+  GridItem,
 } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import NextImage from "next/image";
 import Head from "next/head";
 import NextLink from "next/link";
-import { groq } from "next-sanity";
-import { getClient, imageBuilder } from "../lib/sanity";
+// import { groq } from "next-sanity";
+// import { getClient, imageBuilder } from "../lib/sanity";
 import { gql, GraphQLClient } from "graphql-request";
 import ShopContext from "../lib/shop-context";
 import { motion } from "framer-motion";
-import { FiBookOpen, FiBox, FiCreditCard, FiGift } from 'react-icons/fi';
+import { FiBookOpen, FiBox, FiCreditCard, FiGift } from "react-icons/fi";
 
 const MotionBox = motion<BoxProps>(Box);
 const MotionImage = motion<ImageProps>(Image);
+const MotionGridItem = motion<GridItemProps>(GridItem);
 
 function HomePage({ homepageData, collection }: any) {
   const { shop } = useContext(ShopContext);
@@ -92,19 +96,19 @@ function HomePage({ homepageData, collection }: any) {
           photo={"/images/hairtypes/fine-hair-girl.jpg"}
           typeImage={"/images/hairtypes/tor-fine_thin_hair.png"}
           title="Fine/Thin"
-          link="/collection/fine-thin"
+          link="/type/fine-thin"
         />
         <HairType
           photo={"/images/hairtypes/thick-hair-girl.jpg"}
           typeImage={"/images/hairtypes/tor-thick_medium_hair.png"}
           title="Medium/Thick"
-          link="/collection/medium-thick"
+          link="/type/medium-thick"
         />
         <HairType
           photo={"/images/hairtypes/curly-hair-girl.jpg"}
           typeImage={"/images/hairtypes/tor-curly_hair.png"}
           title="Curly"
-          link="/collection/curly"
+          link="/type/curly"
         />
       </Flex>
       <Box bgColor="#000000" py={10} px={6}>
@@ -132,8 +136,8 @@ function HomePage({ homepageData, collection }: any) {
         </Container>
       </Box>
       <Container maxW="container.xl" py={20}>
-        <Stack direction={"row"} w="full">
-          <Stack maxW="360px">
+        <Stack direction={["column", "row"]} w="full">
+          <Stack maxW="360px" alignSelf={"center"}>
             <Text fontSize={22} textTransform="uppercase">
               Salon Grade -
             </Text>
@@ -190,78 +194,92 @@ function HomePage({ homepageData, collection }: any) {
           </Stack>
         </Box>
       </Box>
-      <Box py={60} bgImage="/images/home/tor-cbd-photoshoot.jpg" bgSize={"cover"} bgAttachment={["scroll", "fixed"]} borderTop="10px solid #000000">
-        <Container maxW="container.xl">
-          <Stack maxW="560px" spacing={6} p={8} bg="whiteAlpha.900" borderRadius={10}>
-            <Heading>TOR CBD</Heading>
-            <Text>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laudantium soluta voluptatibus consectetur sit natus. Pariatur obcaecati numquam aspernatur sunt corrupti veritatis voluptatum quidem sapiente modi! Labore adipisci asperiores omnis officiis.</Text>
+      <Box
+        py={60}
+        bgImage="/images/home/tor-cbd-photoshoot.jpg"
+        bgSize={"cover"}
+        backgroundPosition={["right", "right"]}
+        // bgAttachment={["scroll", "fixed"]}
+        borderTop="10px solid #000000"
+        pos="relative"
+      >
+        {/* <Container maxW="container.xl"> */}
+          <Stack
+            maxW="320px"
+            spacing={6}
+            p={8}
+            borderRadius={10}
+            pos="absolute"
+            left={0}
+            top={0}
+          >
+            <Heading size="2xl">TOR CBD</Heading>
+            <Text>
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              Laudantium soluta voluptatibus consectetur sit natus. Pariatur
+              obcaecati numquam aspernatur sunt corrupti veritatis voluptatum
+              quidem sapiente modi! Labore adipisci asperiores omnis officiis.
+            </Text>
             <Button alignSelf="flex-start">Shop CBD</Button>
           </Stack>
-        </Container>
+        {/* </Container> */}
       </Box>
       <Box pt={40}>
-        <Container centerContent mb={8}>
-          <Heading>Featured Products</Heading>
+        <Container centerContent mb={20}>
+          <Heading size="2xl" mb={8}>
+            Best Selling
+          </Heading>
+          <Divider />
         </Container>
-        <SimpleGrid templateColumns={"repeat(3, 1fr)"} mb={20} w="full">
+        <SimpleGrid templateColumns={"repeat(3, 1fr)"} mb={40} w="full">
           {/* will change to .map */}
-          <AspectRatio ratio={1 / 1} minH="100%" minW="100%">
-            <GridFeature
-              name={"Conditioner Bundle"}
-              price={"$39.99"}
-              image={"/images/hairtypes/tor-curly_hair.png"}
-            />
-          </AspectRatio>
-          <AspectRatio ratio={1 / 1}>
-            <GridFeature
-              name={"Conditioner Bundle"}
-              price={"$39.99"}
-              image={"/images/hairtypes/tor-curly_hair.png"}
-            />
-          </AspectRatio>
-          <AspectRatio ratio={1 / 1}>
-            <GridFeature
-              name={"Conditioner Bundle"}
-              price={"$39.99"}
-              image={"/images/hairtypes/tor-curly_hair.png"}
-            />
-          </AspectRatio>
-          <AspectRatio ratio={1 / 1}>
-            <GridFeature
-              name={"Conditioner Bundle"}
-              price={"$39.99"}
-              image={"/images/hairtypes/tor-curly_hair.png"}
-            />
-          </AspectRatio>
-          <AspectRatio ratio={1 / 1}>
-            <GridFeature
-              name={"Conditioner Bundle"}
-              price={"$39.99"}
-              image={"/images/hairtypes/tor-curly_hair.png"}
-            />
-          </AspectRatio>
-          <AspectRatio ratio={1 / 1}>
-            <GridFeature
-              name={"Conditioner Bundle"}
-              price={"$39.99"}
-              image={"/images/hairtypes/tor-curly_hair.png"}
-            />
-          </AspectRatio>
+          <GridFeature
+            name={"Gel 2.0"}
+            price={"$39.99"}
+            image={"/test/styled/gel_2.png"}
+          />
+          <GridFeature
+            name={"Medium/Thick \n Conditioner"}
+            price={"$39.99"}
+            image={"/test/styled/mc.png"}
+          />
+          <GridFeature
+            name={"Medium/Thick Shampoo"}
+            price={"$39.99"}
+            image={"/test/styled/ms.png"}
+          />
+          <GridFeature
+            name={"Medium/Thick Travel Shampoo"}
+            price={"$39.99"}
+            image={"/test/styled/mts.png"}
+          />
+          <GridFeature
+            name={"Medium/Thick Travel Conditioner"}
+            price={"$39.99"}
+            image={"/test/styled/mtc.png"}
+          />
+          <GridFeature
+            name={"Conditioner Bundle"}
+            price={"$39.99"}
+            image={"/images/hairtypes/tor-curly_hair.png"}
+          />
         </SimpleGrid>
       </Box>
       <Box>
-        <Flex gap={20}>
+        <Flex gap={20} flexDir={["column-reverse", "row"]}>
           <Box
-            py={40}
-            px={40}
+            py={[20, 40]}
+            px={[20, 40]}
             borderRightRadius={4}
             color="white"
             bgColor={"black"}
           >
-            <Text textTransform={"uppercase"} mb={-10}>About</Text>
-            <Heading fontSize={[48, 220]}>TOR</Heading>
+            <Text textTransform={"uppercase"} mb={[0, -10]} textAlign={["center", "left"]}>
+              About
+            </Text>
+            <Heading fontSize={[114, 220]}>TOR</Heading>
           </Box>
-          <Box maxW="300">
+          <Box maxW={["auto", "300"]} p={[8, 10]}>
             <Text fontSize={22} textTransform="uppercase">
               Testimonials
             </Text>
@@ -277,7 +295,7 @@ function HomePage({ homepageData, collection }: any) {
             </HStack>
           </Box>
         </Flex>
-        <Box py={40} height={800} pos="relative">
+        <Box py={40} height={["auto", 800]} pos="relative">
           <Container maxW="container.xl">
             <Stack maxW="560px">
               <Text fontSize={22} textTransform="uppercase">
@@ -287,28 +305,38 @@ function HomePage({ homepageData, collection }: any) {
                 Naturally derived, formulated for results.
               </Heading>
               <Text>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ut, debitis? Fugit dolorum rem impedit a ipsa odio quas nihil! Voluptatibus, ducimus sit? Asperiores repellendus quos nihil ex soluta assumenda enim?
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ut,
+                debitis? Fugit dolorum rem impedit a ipsa odio quas nihil!
+                Voluptatibus, ducimus sit? Asperiores repellendus quos nihil ex
+                soluta assumenda enim?
               </Text>
               <Button alignSelf={"flex-start"}>About Us</Button>
             </Stack>
           </Container>
           <Image
-            pos="absolute"
-            top={-280}
+            pos={["static", "absolute"]}
+            top={[0, -280]}
             right={0}
             src="/images/home/tina-shannon-about.png"
             alt="tina and shannon tor"
           />
         </Box>
       </Box>
-      <Flex pos="relative" gap={20} pt={10}>
+      <Box pos="relative" pt={10} w="full" height={1000}>
         <Image
-          height={912}
+          height={["auto", 912]}
+          pos={["static", "absolute"]}
           src="/images/home/salon-stylist.png"
           alt="a stylist curling a customers blonde hair"
         />
         {/* <Container maxW="container.xl"> */}
-        <Stack maxW="560px" py={80} spacing={4}>
+        <Stack
+          maxW="560px"
+          py={[0, 80]}
+          spacing={4}
+          pos={["static", "absolute"]}
+          right={[0, 20]}
+        >
           <Text fontSize={22} textTransform="uppercase">
             TOR Professionals
           </Text>
@@ -342,11 +370,13 @@ function HomePage({ homepageData, collection }: any) {
             </HStack>
           </Box>
         </Stack>
-      </Flex>
-      <Container maxW="container.xl" pb={40}>
-        <Box dangerouslySetInnerHTML={{
-          __html: `<div class="embedsocial-hashtag" data-ref="3da7961275f3a181f97c540d896b4353084e707f"></div><script>(function(d, s, id){var js; if (d.getElementById(id)) {return;} js = d.createElement(s); js.id = id; js.src = "https://embedsocial.com/cdn/ht.js"; d.getElementsByTagName("head")[0].appendChild(js);}(document, "script", "EmbedSocialHashtagScript"));</script>`
-        }}/>
+      </Box>
+      <Container maxW="container.xl" pb={40} mt={20}>
+        <Box
+          dangerouslySetInnerHTML={{
+            __html: `<div class="embedsocial-hashtag" data-ref="3da7961275f3a181f97c540d896b4353084e707f"></div><script>(function(d, s, id){var js; if (d.getElementById(id)) {return;} js = d.createElement(s); js.id = id; js.src = "https://embedsocial.com/cdn/ht.js"; d.getElementsByTagName("head")[0].appendChild(js);}(document, "script", "EmbedSocialHashtagScript"));</script>`,
+          }}
+        />
       </Container>
     </>
   );
@@ -363,12 +393,12 @@ const ProductFeature = ({ name, price, image }: ProductFeatureTypes) => {
     <MotionBox
       flexGrow={1}
       textAlign="center"
-      bgImage={""}
       display={"grid"}
       placeItems={"center"}
       initial="initial"
       whileHover="hover"
       pos="relative"
+      minH={[360, "auto"]}
     >
       <MotionImage
         src={image}
@@ -400,41 +430,48 @@ const GridFeature = ({
   link?: string;
 }) => {
   return (
-    <NextLink href={link ? link : ""} passHref>
-      <MotionBox
-        py={48}
-        pos="relative"
-        width={"100%"}
-        display={"grid"}
-        placeItems={"center"}
-        initial="initial"
-        whileHover="hover"
-      >
-        <MotionImage
-          src={image}
-          objectFit={"fill"}
-          pos="absolute"
-          zIndex={-1}
-          transform={"rotate(35deg)"}
-          alt=""
-          variants={{
-            initial: {
-              opacity: 0.25,
-            },
-            hover: {
-              opacity: 1,
-            },
-          }}
-        />
+    <GridItem colSpan={[3, 1]}>
+      <NextLink href={link ? link : ""} passHref>
         <MotionBox
-          textAlign={"center"}
-          variants={{ initial: { opacity: 1 }, hover: { opacity: 0 } }}
+          py={48}
+          pos="relative"
+          width={"100%"}
+          display={"grid"}
+          placeItems={"center"}
+          initial="initial"
+          whileHover="hover"
         >
-          <Heading>{name}</Heading>
-          <Text>{price}</Text>
+          <AspectRatio
+            minH={"100%"}
+            minW={"100%"}
+            ratio={1 / 1}
+            pos="absolute"
+            zIndex={-1}
+          >
+            <MotionImage
+              src={image}
+              objectFit={"fill"}
+              alt=""
+              variants={{
+                initial: {
+                  opacity: 0.25,
+                },
+                hover: {
+                  opacity: 1,
+                },
+              }}
+            />
+          </AspectRatio>
+          <MotionBox
+            textAlign={"center"}
+            variants={{ initial: { opacity: 1 }, hover: { opacity: 0 } }}
+          >
+            <Heading>{name}</Heading>
+            <Text>{price}</Text>
+          </MotionBox>
         </MotionBox>
-      </MotionBox>
-    </NextLink>
+      </NextLink>
+    </GridItem>
   );
 };
 
@@ -454,7 +491,7 @@ const HairType = ({
       <MotionBox
         py={48}
         pos="relative"
-        width={"33.33%"}
+        width={["full", "33.33%"]}
         display={"grid"}
         placeItems={"center"}
         initial="initial"

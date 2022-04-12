@@ -6,20 +6,21 @@ type Data = {
   cartId?: string;
   variantId?: any;
   error?: any;
-  response?: boolean
+  response?: boolean,
+  qty?: number
 };
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const { cartId, variantId } = JSON.parse(req.body);
+  const { cartId, variantId, qty } = JSON.parse(req.body);
 
   const query = gql`
-    mutation AddToCart($cartId: ID!, $variantId: ID!) {
+    mutation AddToCart($cartId: ID!, $variantId: ID! ) {
       cartLinesAdd(
         cartId: $cartId
-        lines: [{ quantity: 1, merchandiseId: $variantId }]
+        lines: [{ quantity: ${qty ? qty : 1}, merchandiseId: $variantId }]
       ) {
         cart {
           lines(first: 100) {

@@ -19,6 +19,8 @@ import {
   useNumberInput,
   HStack,
   Input,
+  AspectRatio,
+  IconButton
 } from "@chakra-ui/react";
 import { useEffect, useContext, useState } from "react";
 import {
@@ -31,22 +33,20 @@ import formatter from "../lib/formatter";
 
 const Cart = () => {
   const { cart, setCart } = useContext(CartContext);
-  const [cartQty, setCartQty] = useState<number | null>(null)
+  const [cartQty, setCartQty] = useState<number | null>(null);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
-    if(cart.lines.length > 1) {
-      const cartQtyCalc = cart.lines.reduce((prev:any, next:any) => { 
-        return prev.node.quantity + next.node.quantity 
-      });
-      setCartQty(cartQtyCalc)
+    if (cart.lines.length > 1) {
+      const cartQtyCalc = cart.lines.reduce((partialSum: any, current: any) => partialSum + current.node?.quantity, 0);
+      setCartQty(cartQtyCalc);
     }
 
-    if(cart.lines.length === 1){
-      setCartQty(cart.lines[0].node.quantity)
+    if (cart.lines.length === 1) {
+      setCartQty(cart.lines[0].node.quantity);
     }
-  }, [cart])
+  }, [cart]);
 
   useEffect(() => {
     getCart();
@@ -126,7 +126,6 @@ const Cart = () => {
   }
 
   async function removeItem(id: string) {
-
     const resp = await fetch("/api/remove-cart-item", {
       method: "POST",
       body: JSON.stringify({
@@ -183,12 +182,13 @@ const Cart = () => {
           <DrawerHeader>
             Cart
             {cart.lines.length > 0 && (
-              <Icon
-                ml={2}
-                height="12px"
-                as={AiOutlineDelete}
+              <IconButton
+                ml={4}
+                icon={<AiOutlineDelete />}
+                size="sm"
                 onClick={emptyCart}
-                cursor="pointer"
+                aria-label="empty cart"
+                variant={"outline"}
               />
             )}
           </DrawerHeader>
@@ -243,35 +243,45 @@ function CartLineItem({
   removeItem: any;
 }) {
   return (
-    <VStack borderBottom={"1px solid"} borderColor={"gray.300"} py={4}>
-      <Flex w="full" justifyContent="space-between" alignItems={"flex-start"}>
+    <Flex
+      borderBottom={"1px solid"}
+      borderColor={"gray.300"}
+      py={4}
+      minW="100%"
+      justifyContent="flex-start"
+      alignItems={"flex-start"}
+    >
+      <AspectRatio ratio={1 / 1} boxSize={"120px"} flexShrink={0}>
         <Image
-          boxSize={"120px"}
           borderRadius={6}
           src={product.node.merchandise.product.images.edges[0].node.url}
           alt={product.node.merchandise.product.title}
         />
-        <VStack spacing={2} alignItems={"flex-start"} mr={2}>
-          <Text fontSize={20} fontWeight="bold">
-            {product.node.merchandise.product.title}
-          </Text>
-          {product.node.merchandise.title !== "Default Title" && <Text mt={1} fontSize={12}>
+      </AspectRatio>
+      <VStack flexGrow={1} spacing={2} alignItems={"flex-start"} mr={2}>
+        <Text fontSize={20} fontWeight="bold">
+          {product.node.merchandise.product.title}
+        </Text>
+        {product.node.merchandise.title !== "Default Title" && (
+          <Text mt={1} fontSize={12}>
             {product.node.merchandise.title}
-          </Text>}
-          <ItemQty product={product} />
-        </VStack>
-        <VStack align={"flex-end"} spacing={1}>
-          <Text>{formatter.format(product.node.estimatedCost.subtotalAmount.amount)}</Text>
-          <Text
-            fontSize="xs"
-            cursor={"pointer"}
-            onClick={() => removeItem(product.node.id)}
-          >
-            Remove
           </Text>
-        </VStack>
-      </Flex>
-    </VStack>
+        )}
+        <ItemQty product={product} />
+      </VStack>
+      <VStack spacing={1}>
+        <Text>
+          {formatter.format(product.node.estimatedCost.subtotalAmount.amount)}
+        </Text>
+        <Text
+          fontSize="xs"
+          cursor={"pointer"}
+          onClick={() => removeItem(product.node.id)}
+        >
+          Remove
+        </Text>
+      </VStack>
+    </Flex>
   );
 }
 
