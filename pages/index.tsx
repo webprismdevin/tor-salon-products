@@ -51,8 +51,8 @@ function HomePage({ homepageData, collection }: any) {
           </HStack>
         </Stack>
       </Container>
-      <Box pos="relative" w="full" height={[1200, 520]}>
-        <Box pos="absolute" left={0} top={["0", "-90px"]}>
+      <Box pos="relative" w="full" height={["auto", 520]}>
+        <Box pos={["static", "absolute"]} left={0} top={["0", "-90px"]}>
           <NextImage
             src={"/images/home/img1.png"}
             height={639}
@@ -60,7 +60,12 @@ function HomePage({ homepageData, collection }: any) {
             alt="girl with curly hair"
           />
         </Box>
-        <Box pos="absolute" right="0" top={[600, 0]}>
+        <Box
+          pos="absolute"
+          right="0"
+          top={[600, 0]}
+          display={["none", "inherit"]}
+        >
           <NextImage
             src={"/images/home/img2.png"}
             height={800}
@@ -204,24 +209,24 @@ function HomePage({ homepageData, collection }: any) {
         pos="relative"
       >
         {/* <Container maxW="container.xl"> */}
-          <Stack
-            maxW="320px"
-            spacing={6}
-            p={8}
-            borderRadius={10}
-            pos="absolute"
-            left={0}
-            top={0}
-          >
-            <Heading size="2xl">TOR CBD</Heading>
-            <Text>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-              Laudantium soluta voluptatibus consectetur sit natus. Pariatur
-              obcaecati numquam aspernatur sunt corrupti veritatis voluptatum
-              quidem sapiente modi! Labore adipisci asperiores omnis officiis.
-            </Text>
-            <Button alignSelf="flex-start">Shop CBD</Button>
-          </Stack>
+        <Stack
+          maxW="520px"
+          p={8}
+          borderRadius={10}
+          pos="absolute"
+          left={0}
+          top={0}
+        >
+          <Text fontSize={22} textTransform="uppercase">
+            
+          </Text>
+          <Heading size="2xl">CBD Products</Heading>
+          <Text>
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laudantium
+            soluta voluptatibus consectetur sit natus.
+          </Text>
+          <Button alignSelf="flex-start">Shop CBD</Button>
+        </Stack>
         {/* </Container> */}
       </Box>
       <Box pt={40}>
@@ -274,7 +279,11 @@ function HomePage({ homepageData, collection }: any) {
             color="white"
             bgColor={"black"}
           >
-            <Text textTransform={"uppercase"} mb={[0, -10]} textAlign={["center", "left"]}>
+            <Text
+              textTransform={"uppercase"}
+              mb={[0, -10]}
+              textAlign={["center", "left"]}
+            >
               About
             </Text>
             <Heading fontSize={[114, 220]}>TOR</Heading>
@@ -322,7 +331,7 @@ function HomePage({ homepageData, collection }: any) {
           />
         </Box>
       </Box>
-      <Box pos="relative" pt={10} w="full" height={1000}>
+      <Box pos="relative" pt={10} w="full" height={["auto", 1000]}>
         <Image
           height={["auto", 912]}
           pos={["static", "absolute"]}
@@ -332,10 +341,11 @@ function HomePage({ homepageData, collection }: any) {
         {/* <Container maxW="container.xl"> */}
         <Stack
           maxW="560px"
-          py={[0, 80]}
+          py={[8, 80]}
           spacing={4}
           pos={["static", "absolute"]}
           right={[0, 20]}
+          px={[4, 0]}
         >
           <Text fontSize={22} textTransform="uppercase">
             TOR Professionals
@@ -430,27 +440,31 @@ const GridFeature = ({
   link?: string;
 }) => {
   return (
-    <GridItem colSpan={[3, 1]}>
+    <GridItem colSpan={[3, 1]} overflow="hidden">
       <NextLink href={link ? link : ""} passHref>
         <MotionBox
           py={48}
           pos="relative"
           width={"100%"}
-          display={"grid"}
-          placeItems={"center"}
+          // display={"grid"}
+          // placeItems={"center"}
           initial="initial"
           whileHover="hover"
         >
           <AspectRatio
-            minH={"100%"}
             minW={"100%"}
+            minH={"100%"}
             ratio={1 / 1}
             pos="absolute"
+            top={0}
+            left={0}
             zIndex={-1}
           >
             <MotionImage
               src={image}
-              objectFit={"fill"}
+              // objectFit={"cover"}
+              minW={"100%"}
+              minH={"100%"}
               alt=""
               variants={{
                 initial: {

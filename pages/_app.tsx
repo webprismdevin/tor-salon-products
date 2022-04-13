@@ -12,6 +12,7 @@ import { isMobile } from 'react-device-detect'
 import dynamic from "next/dynamic";
 import themeConfig from "../lib/theme";
 import '@fontsource/raleway/400.css'
+import Script from "next/script";
 
 const NavBar = dynamic(() => import ("../components/NavBar"))
 const Footer = dynamic(() => import ("../components/Footer"))
@@ -70,6 +71,13 @@ function MyApp({ Component, pageProps }: AppProps) {
       </ShopContext.Provider>
       <ColorModeScript initialColorMode={customTheme.initialColorMode} />
       <Tawk src="https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu" />
+      <Script 
+        strategy="afterInteractive"
+        id="mcjs"
+        dangerouslySetInnerHTML={{
+          __html: `!function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(h)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/566702352818277eb55d3447b/b32262ef64a0fff5577d6f68f.js")`
+        }}
+      />
     </ChakraProvider>
   );
 }
