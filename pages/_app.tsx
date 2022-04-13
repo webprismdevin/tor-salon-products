@@ -75,7 +75,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         strategy="afterInteractive"
         id="mcjs"
         dangerouslySetInnerHTML={{
-          __html: `!function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(h)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/566702352818277eb55d3447b/b32262ef64a0fff5577d6f68f.js")`
+          __html: `!function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(h)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/566702352818277eb55d3447b/a2735d6d81be9c69df471f6fb.js");`
         }}
       />
     </ChakraProvider>
