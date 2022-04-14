@@ -61,12 +61,13 @@ function HomePage({ products }: any) {
       <Box pos="relative" w="full" height={["auto", 520]}>
         <MotionBox
           initial={{
-            x: 0
+            opacity: 0
           }}
           animate={{
-            x: 1000
+            opacity: 1,
+            transition: {delay: 0.4}
           }}
-          left={-1000}
+          left={0}
           pos={["static", "absolute"]} 
           top={["0", "-90px"]}
         >
@@ -80,12 +81,13 @@ function HomePage({ products }: any) {
         <MotionBox
           pos="absolute"
           initial={{
-            x: 0
+            opacity: 0
           }}
           animate={{
-            x: -1000
+            opacity: 1,
+            transition: {delay: 0.8}
           }}
-          right={-1000}
+          right={0}
           top={[600, 0]}
           display={["none", "inherit"]}
         >
