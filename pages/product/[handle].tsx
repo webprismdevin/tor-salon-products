@@ -150,7 +150,7 @@ const Product = ({ handle, product, collection }: { handle: string; product: any
       >
         <Box w={["full", "50%"]} px={[8, 20]} py={40} pos="relative">
           <Image
-            src={collection.typeImage.reference.image.url}
+            src={collection.typeImage?.reference.image.url}
             alt=""
             pos="absolute"
             top={0}

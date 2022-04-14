@@ -28,12 +28,14 @@ import { gql, GraphQLClient } from "graphql-request";
 import ShopContext from "../lib/shop-context";
 import { AnimatePresence, motion, useAnimation } from "framer-motion";
 import { FiBookOpen, FiBox, FiCreditCard, FiGift } from "react-icons/fi";
+import getProducts from "../lib/get-products";
+import formatter from "../lib/formatter";
 
 const MotionBox = motion<BoxProps>(Box);
 const MotionImage = motion<ImageProps>(Image);
-const MotionText = motion<TextProps>(Text)
+const MotionText = motion<TextProps>(Text);
 
-function HomePage({ homepageData, collection }: any) {
+function HomePage({ products }: any) {
   const { shop } = useContext(ShopContext);
 
   return (
@@ -147,7 +149,7 @@ function HomePage({ homepageData, collection }: any) {
             <Text fontSize={22} textTransform="uppercase">
               Salon Grade -
             </Text>
-            <Heading size="2xl">Styling </Heading>
+            <Heading size="2xl">Styling</Heading>
             <Text>
               TOR&apos;s innovative formula let&apos;s you create amazing looks,
               while remaining soft to the touch.
@@ -202,14 +204,12 @@ function HomePage({ homepageData, collection }: any) {
       </Box>
       <Box
         py={60}
-        bgImage="/images/home/tor-cbd-photoshoot.jpg"
+        // bgImage="/images/home/tor-cbd-photoshoot.jpg"
         bgSize={"cover"}
         backgroundPosition={["right", "right"]}
-        // bgAttachment={["scroll", "fixed"]}
         borderTop="10px solid #000000"
         pos="relative"
       >
-        {/* <Container maxW="container.xl"> */}
         <Stack
           maxW="520px"
           p={8}
@@ -226,47 +226,25 @@ function HomePage({ homepageData, collection }: any) {
           </Text>
           <Button alignSelf="flex-start">Shop CBD</Button>
         </Stack>
-        {/* </Container> */}
       </Box>
       <Box pt={40}>
         <Container centerContent mb={20}>
-          <Heading size="2xl" mb={8}>
-            Best Selling
-          </Heading>
-          <Divider />
+          <Stack spacing={6} align="center">
+            <Text fontSize={22} textTransform="uppercase">- Best Selling -</Text>
+            <Heading size="2xl">Featured Items</Heading>
+          </Stack>
+          {/* <Divider /> */}
         </Container>
         <SimpleGrid templateColumns={"repeat(3, 1fr)"} mb={40} w="full">
-          {/* will change to .map */}
-          <GridFeature
-            name={"Gel 2.0"}
-            price={"$39.99"}
-            image={"/test/styled/gel_2.png"}
-          />
-          <GridFeature
-            name={"Medium/Thick \n Conditioner"}
-            price={"$39.99"}
-            image={"/test/styled/mc.png"}
-          />
-          <GridFeature
-            name={"Medium/Thick Shampoo"}
-            price={"$39.99"}
-            image={"/test/styled/ms.png"}
-          />
-          <GridFeature
-            name={"Medium/Thick Travel Shampoo"}
-            price={"$39.99"}
-            image={"/test/styled/mts.png"}
-          />
-          <GridFeature
-            name={"Medium/Thick Travel Conditioner"}
-            price={"$39.99"}
-            image={"/test/styled/mtc.png"}
-          />
-          <GridFeature
-            name={"Conditioner Bundle"}
-            price={"$39.99"}
-            image={"/images/hairtypes/tor-curly_hair.png"}
-          />
+          {products.map((product: any) => (
+            <GridFeature
+              key={product.node.id}
+              name={product.node.title}
+              price={product.node.priceRange.minVariantPrice.amount}
+              image={product.node.images.edges[0]?.node.url}
+              link={`/product/${product.node.handle}`}
+            />
+          ))}
         </SimpleGrid>
       </Box>
       <Box>
@@ -433,8 +411,6 @@ const GridFeature = ({
           py={48}
           pos="relative"
           width={"100%"}
-          // display={"grid"}
-          // placeItems={"center"}
           initial="initial"
           whileHover="hover"
         >
@@ -466,9 +442,11 @@ const GridFeature = ({
           <MotionBox
             textAlign={"center"}
             variants={{ initial: { opacity: 1 }, hover: { opacity: 0 } }}
+            maxW={340}
+            mx="auto"
           >
             <Heading>{name}</Heading>
-            <Text>{price}</Text>
+            <Text fontSize={24}>{formatter.format(parseInt(price))}</Text>
           </MotionBox>
         </MotionBox>
       </NextLink>
@@ -596,10 +574,10 @@ export async function getStaticProps() {
   // Shopify Request
   const query = gql`
     {
-      collectionByHandle(handle: "home") {
+      featured: collection(handle: "home") {
         id
         title
-        products(first: 4) {
+        products(first: 6) {
           edges {
             node {
               id
@@ -613,16 +591,59 @@ export async function getStaticProps() {
                   }
                 }
               }
-              images(first: 2) {
+              images(first: 1) {
                 edges {
                   node {
-                    altText
-                    transformedSrc
+                    url
                   }
                 }
               }
               priceRange {
                 maxVariantPrice {
+                  amount
+                }
+                minVariantPrice {
+                  amount
+                }
+              }
+              compareAtPriceRange {
+                maxVariantPrice {
+                  amount
+                }
+              }
+            }
+          }
+        }
+      }
+      styling: collection(handle: "styling") {
+        id
+        title
+        products(first: 6) {
+          edges {
+            node {
+              id
+              title
+              description
+              handle
+              variants(first: 1) {
+                edges {
+                  node {
+                    id
+                  }
+                }
+              }
+              images(first: 1) {
+                edges {
+                  node {
+                    url
+                  }
+                }
+              }
+              priceRange {
+                maxVariantPrice {
+                  amount
+                }
+                minVariantPrice {
                   amount
                 }
               }
@@ -647,8 +668,9 @@ export async function getStaticProps() {
 
   return {
     props: {
-      homepageData: null,
-      collection: res.collectionByHandle,
+      // homepageData: null,
+      collection: res.featured,
+      products: res.featured.products.edges,
     },
     revalidate: 3600,
   };
