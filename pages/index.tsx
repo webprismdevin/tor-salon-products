@@ -13,7 +13,6 @@ import {
   AspectRatio,
   Image,
   ImageProps,
-  Divider,
   GridItem,
   TextProps,
 } from "@chakra-ui/react";
@@ -27,8 +26,13 @@ import { wrap } from "@popmotion/popcorn";
 import { gql, GraphQLClient } from "graphql-request";
 import ShopContext from "../lib/shop-context";
 import { AnimatePresence, motion, useAnimation } from "framer-motion";
-import { FiBookOpen, FiBox, FiCreditCard, FiGift } from "react-icons/fi";
-import getProducts from "../lib/get-products";
+import {
+  FiArrowRight,
+  FiBookOpen,
+  FiBox,
+  FiCreditCard,
+  FiGift,
+} from "react-icons/fi";
 import formatter from "../lib/formatter";
 
 const MotionBox = motion<BoxProps>(Box);
@@ -55,17 +59,33 @@ function HomePage({ products }: any) {
         </Stack>
       </Container>
       <Box pos="relative" w="full" height={["auto", 520]}>
-        <Box pos={["static", "absolute"]} left={0} top={["0", "-90px"]}>
+        <MotionBox
+          initial={{
+            x: 0
+          }}
+          animate={{
+            x: 1000
+          }}
+          left={-1000}
+          pos={["static", "absolute"]} 
+          top={["0", "-90px"]}
+        >
           <NextImage
             src={"/images/home/img1.png"}
             height={639}
             width={555}
             alt="girl with curly hair"
           />
-        </Box>
-        <Box
+        </MotionBox>
+        <MotionBox
           pos="absolute"
-          right="0"
+          initial={{
+            x: 0
+          }}
+          animate={{
+            x: -1000
+          }}
+          right={-1000}
           top={[600, 0]}
           display={["none", "inherit"]}
         >
@@ -75,7 +95,7 @@ function HomePage({ products }: any) {
             width={555}
             alt="girl with wavy hair"
           />
-        </Box>
+        </MotionBox>
       </Box>
       <Container maxW="container.xl" pt={20} pb={40}>
         <Stack maxW="560px">
@@ -182,32 +202,49 @@ function HomePage({ products }: any) {
         </Stack>
       </Container>
       <Box
-        h={700}
         bgImage={"/images/home/skin-bg.jpg"}
         bgSize="cover"
-        bgPos="bottom"
-        pos="relative"
+        bgPos="bottom left"
       >
-        <Box pos="absolute" bottom={0} right={0} p={8}>
-          <Stack maxW="320px" align={"flex-end"} textAlign={"right"}>
+        <Container py={200} maxW="container.lg">
+          <Stack align={"center"} textAlign={"center"}>
             <Text fontSize={22} textTransform="uppercase">
-              - Results Driven
+              - Results Driven -
             </Text>
-            <Heading size="2xl">Skin + Body</Heading>
-            <Text>
-              Skin + Body products formulated for results with clean
+            <Heading size="2xl">Body + Skin</Heading>
+            <Text maxW="400px" fontSize={"xl"}>
+              Body + Skin products formulated for results with clean
               ingredients. Backed by science.
             </Text>
-            <Button>Shop Skin + Body</Button>
+            <Button>Shop Body + Skin</Button>
           </Stack>
-        </Box>
+        </Container>
       </Box>
+      <Container maxW="container.md" py={20} my={10}>
+        <Stack direction={["column", "row"]} w="full" maxH={120}>
+          <ProductFeature
+            name={"Gel 2.0"}
+            price={"$39.99"}
+            image={"/images/hairtypes/tor-curly_hair.png"}
+          />
+          <ProductFeature
+            name={"Gel 2.0"}
+            price={"$39.99"}
+            image={"/images/hairtypes/tor-curly_hair.png"}
+          />
+          <ProductFeature
+            name={"Gel 2.0"}
+            price={"$39.99"}
+            image={"/images/hairtypes/tor-curly_hair.png"}
+          />
+        </Stack>
+      </Container>
       <Box
-        py={60}
-        // bgImage="/images/home/tor-cbd-photoshoot.jpg"
+        height={700}
+        bgImage="/images/tor-cbd-2.jpg"
+        borderTop="10px solid #000000"
         bgSize={"cover"}
         backgroundPosition={["right", "right"]}
-        borderTop="10px solid #000000"
         pos="relative"
       >
         <Stack
@@ -218,22 +255,48 @@ function HomePage({ products }: any) {
           left={0}
           top={0}
         >
-          <Text fontSize={22} textTransform="uppercase"></Text>
-          <Heading size="2xl">CBD Products</Heading>
+          <Text fontSize={22} textTransform="uppercase">
+            Pro Chemistry -
+          </Text>
+          <Heading size="xl">CBD Products That Works</Heading>
           <Text>
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laudantium
             soluta voluptatibus consectetur sit natus.
           </Text>
-          <Button alignSelf="flex-start">Shop CBD</Button>
         </Stack>
+        <Stack
+          pos={["static", "absolute"]}
+          direction={["column", "row"]}
+          bottom={8}
+          left={8}
+        >
+          <Box bg="white" p={8}>
+            <Image src={"/images/750mg-tincture.png"} w={240} alt="" />
+            <Flex justify={"space-between"}>
+              <Text>CBD Tinctures</Text>
+              <Icon as={FiArrowRight} size={4} />
+            </Flex>
+          </Box>
+          <Box bg="white" p={8}>
+            <Image src={"/images/250ml-roll-on.png"} w={240} alt="" />
+            <Flex justify={"space-between"}>
+              <Text>CBD Lotions</Text>
+              <Icon as={FiArrowRight} size={4} />
+            </Flex>
+          </Box>
+        </Stack>
+        <Button pos="absolute" right={8} bottom={8}>
+          Shop All CBD
+        </Button>
       </Box>
       <Box pt={40}>
         <Container centerContent mb={20}>
           <Stack spacing={6} align="center">
-            <Text fontSize={22} textTransform="uppercase">- Best Selling -</Text>
+            <Text fontSize={22} textTransform="uppercase">
+              - Best Selling -
+            </Text>
             <Heading size="2xl">Featured Items</Heading>
           </Stack>
-          {/* <Divider /> */}
         </Container>
         <SimpleGrid templateColumns={"repeat(3, 1fr)"} mb={40} w="full">
           {products.map((product: any) => (
@@ -265,7 +328,7 @@ function HomePage({ products }: any) {
             </Text>
             <Heading fontSize={[114, 220]}>TOR</Heading>
           </Box>
-          <Box maxW={["auto", "300"]} p={[8, 10]}>
+          <Box maxW={["auto", "400"]} p={[8]}>
             <Testimonials />
           </Box>
         </Flex>
@@ -303,7 +366,6 @@ function HomePage({ products }: any) {
           src="/images/home/salon-stylist.png"
           alt="a stylist curling a customers blonde hair"
         />
-        {/* <Container maxW="container.xl"> */}
         <Stack
           maxW="560px"
           py={[8, 80]}
@@ -457,7 +519,10 @@ const GridFeature = ({
 const Testimonials = () => {
   const controls = useAnimation();
 
-  const testimonials = ["lorem ipsum", "lorem ipsum again"];
+  const testimonials = [
+    "I stopped washing my hair, for almost a year, because I wanted to feel my natural hair. TOR's Medium/Thick line are the only products that actually leave my hair feeling truly natural.", 
+    "It's literally the only conditioner I've found that actually washes out. TOR's products work great on my beard as well!"
+  ];
 
   const [[page, direction], setPage] = useState([0, 0]);
 
@@ -469,11 +534,12 @@ const Testimonials = () => {
 
   return (
     <MotionBox>
-      <Text fontSize={22} textTransform="uppercase">
+      <Text fontSize={36} textTransform="uppercase">
         Testimonials
       </Text>
       <AnimatePresence exitBeforeEnter>
         <MotionText
+          fontSize={18}
           fontStyle={"italic"}
           animate={{
             opacity: 1,
