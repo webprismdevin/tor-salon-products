@@ -31,7 +31,7 @@ declare interface VariantType {
   availableForSale: boolean;
 }
 
-const Product = ({ handle, product }: { handle: string; product: any }) => {
+const Product = ({ handle, product, collection }: { handle: string; product: any, collection: any }) => {
   const [ itemQty, setItemQty ] = useState(1)
   const { cart, setCart } = useContext(CartContext);
   const [activeVariant, setActiveVariant] = useState<VariantType>(() => {
@@ -144,50 +144,59 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
           </Stack>
         </Container>
       </Flex>
-      <Flex flexDir={"row"}>
-        <Stack
-          direction={["column"]}
-          gap={12}
-          w="50%"
-          px={20}
-          py={40}
-          bg={
-            product.collections.edges[0]?.node.color?.value
-              ? product.collections.edges[0]?.node.color?.value
-              : "white"
-          }
-          pos="relative"
-        >
+      <Flex
+        flexDir={["column-reverse", "row"]}
+        bg={collection.color?.value ? collection.color.value : "white"}
+      >
+        <Box w={["full", "50%"]} px={[8, 20]} py={40} pos="relative">
           <Image
-            src={
-              product.collections.edges[0]?.node.typeImage.reference.image?.url
-            }
+            src={collection.typeImage.reference.image.url}
             alt=""
             pos="absolute"
             top={0}
             opacity={0.1}
             w="100%"
             left={0}
+            zIndex={0}
           />
-          <Heading>{product.collections.edges[0]?.node.title}</Heading>
-          <Text>{product.collections.edges[0]?.node.description}</Text>
-          <Stack direction={"row"} textAlign="center" spacing={6}>
-            <Box>
-              <Icon />
-              <Text>Benefit 1</Text>
-            </Box>
-            <Box>
-              <Icon />
-              <Text>Benefit 2</Text>
-            </Box>
-            <Box>
-              <Icon />
-              <Text>Benefit 3</Text>
-            </Box>
+          <Stack direction={["column"]} spacing={6} pos="relative" zIndex={1}>
+            <Heading>{collection.title}</Heading>
+            <Text>{collection.description}</Text>
+            <Stack
+              direction={"row"}
+              textAlign="left"
+              justify="flex-start"
+              spacing={6}
+            >
+              <Box w="120px">
+                <Image
+                  mb={2}
+                  src={collection?.benefitOneIcon.reference.url}
+                  alt={collection?.benefitOneText.value}
+                />
+                <Text>{collection?.benefitOneText.value}</Text>
+              </Box>
+              <Box w="120px">
+                <Image
+                  mb={2}
+                  src={collection?.benefitTwoIcon.reference.url}
+                  alt={collection?.benefitTwoText.value}
+                />
+                <Text>{collection?.benefitTwoText.value}</Text>
+              </Box>
+              <Box w="120px">
+                <Image
+                  mb={2}
+                  src={collection?.benefitThreeIcon.reference.url}
+                  alt={collection?.benefitThreeText.value}
+                />
+                <Text>{collection?.benefitThreeText.value}</Text>
+              </Box>
+            </Stack>
           </Stack>
-        </Stack>
-        <AspectRatio ratio={1 / 1} w="50%">
-          <Image src={product.collections.edges[0]?.node.image?.url} alt="" />
+        </Box>
+        <AspectRatio ratio={1 / 1} w={["full", "50%"]}>
+          <Image src={collection?.image.url} alt="" />
         </AspectRatio>
       </Flex>
       <Container maxW="container.xl" py={20}>
@@ -314,7 +323,40 @@ export const getStaticProps: GetStaticProps = async (context) => {
                 }
               }
             }
-            color: metafield(namespace: "collection", key: "color") {
+            color: metafield(namespace:"collection", key:"color"){
+              value
+            }
+            benefitOneIcon: metafield(namespace: "collection", key: "benefit_1_icon") {
+              reference {
+                __typename
+                ... on GenericFile {
+                  url
+                }
+              }
+            }
+            benefitOneText: metafield(namespace: "collection", key: "benefit_1_text") {
+              value
+            }
+            benefitTwoIcon: metafield(namespace: "collection", key: "benefit_2_icon") {
+              reference {
+                __typename
+                ... on GenericFile {
+                  url
+                }
+              }
+            }
+            benefitTwoText: metafield(namespace: "collection", key: "benefit_2_text") {
+              value
+            }
+            benefitThreeIcon: metafield(namespace: "collection", key: "benefit_3_icon") {
+              reference {
+                __typename
+                ... on GenericFile {
+                  url
+                }
+              }
+            }
+            benefitThreeText: metafield(namespace: "collection", key: "benefit_3_text") {
               value
             }
           }
@@ -359,6 +401,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     props: {
       handle: handle,
       product: res.product,
+      collection: res.product.collections.edges[0].node
     },
     revalidate: 60,
   };

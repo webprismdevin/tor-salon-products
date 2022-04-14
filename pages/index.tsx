@@ -14,23 +14,24 @@ import {
   Image,
   ImageProps,
   Divider,
-  GridItemProps,
   GridItem,
+  TextProps,
 } from "@chakra-ui/react";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import NextImage from "next/image";
 import Head from "next/head";
 import NextLink from "next/link";
+import { wrap } from "@popmotion/popcorn";
 // import { groq } from "next-sanity";
 // import { getClient, imageBuilder } from "../lib/sanity";
 import { gql, GraphQLClient } from "graphql-request";
 import ShopContext from "../lib/shop-context";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion, useAnimation } from "framer-motion";
 import { FiBookOpen, FiBox, FiCreditCard, FiGift } from "react-icons/fi";
 
 const MotionBox = motion<BoxProps>(Box);
 const MotionImage = motion<ImageProps>(Image);
-const MotionGridItem = motion<GridItemProps>(GridItem);
+const MotionText = motion<TextProps>(Text)
 
 function HomePage({ homepageData, collection }: any) {
   const { shop } = useContext(ShopContext);
@@ -217,9 +218,7 @@ function HomePage({ homepageData, collection }: any) {
           left={0}
           top={0}
         >
-          <Text fontSize={22} textTransform="uppercase">
-            
-          </Text>
+          <Text fontSize={22} textTransform="uppercase"></Text>
           <Heading size="2xl">CBD Products</Heading>
           <Text>
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laudantium
@@ -289,19 +288,7 @@ function HomePage({ homepageData, collection }: any) {
             <Heading fontSize={[114, 220]}>TOR</Heading>
           </Box>
           <Box maxW={["auto", "300"]} p={[8, 10]}>
-            <Text fontSize={22} textTransform="uppercase">
-              Testimonials
-            </Text>
-            <Text fontStyle={"italic"}>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis
-              rerum dolorem dolorum a eius, nostrum facere amet facilis esse
-              iste illum, vitae ut! Incidunt labore officia voluptate
-              blanditiis, aliquam architecto!
-            </Text>
-            <HStack gap={4}>
-              <a>←</a>
-              <a>→</a>
-            </HStack>
+            <Testimonials />
           </Box>
         </Flex>
         <Box py={40} height={["auto", 800]} pos="relative">
@@ -486,6 +473,46 @@ const GridFeature = ({
         </MotionBox>
       </NextLink>
     </GridItem>
+  );
+};
+
+const Testimonials = () => {
+  const controls = useAnimation();
+
+  const testimonials = ["lorem ipsum", "lorem ipsum again"];
+
+  const [[page, direction], setPage] = useState([0, 0]);
+
+  const index = wrap(0, testimonials.length, page);
+
+  const paginate = (newDirection: number) => {
+    setPage([page + newDirection, newDirection]);
+  };
+
+  return (
+    <MotionBox>
+      <Text fontSize={22} textTransform="uppercase">
+        Testimonials
+      </Text>
+      <AnimatePresence exitBeforeEnter>
+        <MotionText
+          fontStyle={"italic"}
+          animate={{
+            opacity: 1,
+          }}
+          exit={{
+            opacity: 0,
+          }}
+          key={page}
+        >
+          {testimonials[index]}
+        </MotionText>
+      </AnimatePresence>
+      <HStack gap={4}>
+        <a onClick={() => paginate(-1)}>←</a>
+        <a onClick={() => paginate(1)}>→</a>
+      </HStack>
+    </MotionBox>
   );
 };
 

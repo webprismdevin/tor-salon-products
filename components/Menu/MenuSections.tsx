@@ -30,6 +30,7 @@ export const BodyAndSkin = () => {
     <>
       <MenuLink href="/collection/lip-balm" text="Lip Balm" />
       <MenuLink href="/collection/goat-milk-soap" text="Goat Milk Soap" />
+      <MenuLink href="/collection/cbd" text="CBD Products" />
     </>
   );
 };
@@ -38,7 +39,6 @@ export const MoreLinks = () => {
   return (
     <>
       <Link>Candles</Link>
-      <Link>CBD Products</Link>
       <Link>Gift Bundles</Link>
       <Link>Gift Cards</Link>
     </>

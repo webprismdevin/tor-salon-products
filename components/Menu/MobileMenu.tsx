@@ -9,7 +9,7 @@ import {
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
-  Divider,
+  Link,
   Stack,
   Text,
   Accordion,
@@ -153,8 +153,8 @@ const MobileMenu = () => {
               <MenuLink href={"/blog"} text="Blog" />
               <MenuLink href={"/about"} text="About" />
               <MenuLink href={"/help"} text="Help &amp; FAQ" />
-              <MenuLink href={"/contact"} text="Contact" />
-            </VStack>
+              {/* <Link onClick={() => process.browser && window.Tawk_API.maximize()}>Contact</Link> */}
+              </VStack>
           </DrawerBody>
           <DrawerFooter></DrawerFooter>
         </DrawerContent>

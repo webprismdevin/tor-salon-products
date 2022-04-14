@@ -1,6 +1,6 @@
 import { Heading, Container, Box, Flex, SimpleGrid, GridItem } from "@chakra-ui/react";
 import { gql, GraphQLClient } from "graphql-request";
-import ProductCard from "../components/Product";
+import Product from "../components/Product";
 import Head from "next/head";
 import { GetServerSideProps } from "next";
 
@@ -22,9 +22,7 @@ const Search = ({
       <Container maxW="container.xl" pt={10} pb={20}>
         <SimpleGrid templateColumns={"repeat(3, 1fr)"}>
           {results.edges.map((p: any) => (
-            <GridItem key={p.node.id}>
-              <ProductCard product={p} />
-            </GridItem>
+              <Product product={p} key={p.node.id} />
           ))}
         </SimpleGrid>
       </Container>

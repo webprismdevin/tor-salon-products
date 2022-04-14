@@ -11,9 +11,10 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Spinner
 } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import {
   AiFillFacebook,
   AiFillInstagram,
@@ -31,6 +32,34 @@ import {
 
 const Footer = () => {
   const { shop } = useContext(ShopContext);
+  const [email, setEmail] = useState("");
+  const [formStatus, setStatus] = useState("clean");
+
+  async function subscribe() {
+    setStatus("loading");
+
+    const response = await fetch("/api/addsubscriber", {
+      method: "POST",
+      body: JSON.stringify({
+        email,
+      }),
+    }).then((res) => res.json());
+
+    if (!response) {
+      setStatus("failure");
+    }
+
+    if (response) {
+      setEmail("")
+      setStatus("success");
+    }
+  }
+
+  function handleEnter(event: any) {
+    if (event.code === "Enter") {
+      subscribe();
+    }
+  }
 
   return (
     <Container maxW="container.xl" py={10}>
@@ -39,15 +68,22 @@ const Footer = () => {
           <InputGroup>
             <Input
               variant={"unstyled"}
-              fontSize={"36px"}
-              placeholder={"Join our community"}
+              fontSize={[24, 36]}
+              placeholder={formStatus === 'success' ? "Check your inbox!" : "Join our community"}
               _placeholder={{ color: "black" }}
               borderBottom={"4px solid black"}
               borderRadius={0}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              onKeyDown={handleEnter}
             />
-            <InputRightElement>
-              <Icon as={FiArrowRight} boxSize={8} mt={4} />
-            </InputRightElement>
+          <InputRightElement onClick={subscribe}>
+            {formStatus === "loading" ? (
+              <Spinner boxSize={6} mt={6}  />
+            ) : (
+              <Icon as={FiArrowRight} boxSize={6} mt={[0, 6]} />
+            )}
+          </InputRightElement>
           </InputGroup>
         </Box>
         <Stack
@@ -76,7 +112,7 @@ const Footer = () => {
               </Text>
               <Divider />
               <FooterLink href={"/help"} text={"Help & FAQ"} />
-              <FooterLink href={"/contact"} text={"Contact"} />
+              <Link fontSize="sm" onClick={() => process.browser && window.Tawk_API.maximize()}>Contact</Link>
               <FooterLink href={"/our-friends"} text={"Our Friends"} />
             </Stack>
           </Stack>

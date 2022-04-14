@@ -30,16 +30,11 @@ export default function CollectionPage({
       <Head>
         <title>{data.title}</title>
       </Head>
-      <Flex flexDir={"row"}>
-        <Stack
-          direction={["column"]}
-          gap={12}
-          w="50%"
-          px={20}
-          py={40}
-          bg={data.color?.value ? data.color.value : "white"}
-          pos="relative"
-        >
+      <Flex
+        flexDir={["column-reverse", "row"]}
+        bg={data.color?.value ? data.color.value : "white"}
+      >
+        <Box w={["full", "50%"]} px={[8, 20]} py={40} pos="relative">
           <Image
             src={data.typeImage.reference.image.url}
             alt=""
@@ -48,25 +43,45 @@ export default function CollectionPage({
             opacity={0.1}
             w="100%"
             left={0}
+            zIndex={0}
           />
-          <Heading>{data.title}</Heading>
-          <Text>{data.description}</Text>
-          <Stack direction={"row"} textAlign="center" spacing={6}>
-            <Box>
-              <Icon />
-              <Text>Benefit 1</Text>
-            </Box>
-            <Box>
-              <Icon />
-              <Text>Benefit 2</Text>
-            </Box>
-            <Box>
-              <Icon />
-              <Text>Benefit 3</Text>
-            </Box>
+          <Stack direction={["column"]} spacing={6} pos="relative" zIndex={1}>
+            <Heading>{data.title}</Heading>
+            <Text>{data.description}</Text>
+            <Stack
+              direction={"row"}
+              textAlign="left"
+              justify="flex-start"
+              spacing={6}
+            >
+              <Box w="120px">
+                <Image
+                  mb={2}
+                  src={data.benefitOneIcon?.reference.url}
+                  alt={data.benefitOneText?.value}
+                />
+                <Text>{data.benefitOneText?.value}</Text>
+              </Box>
+              <Box w="120px">
+                <Image
+                  mb={2}
+                  src={data.benefitTwoIcon?.reference.url}
+                  alt={data.benefitTwoText?.value}
+                />
+                <Text>{data.benefitTwoText?.value}</Text>
+              </Box>
+              <Box w="120px">
+                <Image
+                  mb={2}
+                  src={data.benefitThreeIcon?.reference.url}
+                  alt={data.benefitThreeText?.value}
+                />
+                <Text>{data.benefitThreeText?.value}</Text>
+              </Box>
+            </Stack>
           </Stack>
-        </Stack>
-        <AspectRatio ratio={1 / 1} w="50%">
+        </Box>
+        <AspectRatio ratio={1 / 1} w={["full", "50%"]}>
           <Image src={data.image.url} alt="" />
         </AspectRatio>
       </Flex>
@@ -88,13 +103,10 @@ export async function getStaticPaths() {
   const result = await getCollections("home");
 
   return {
-    // paths: result.collections.edges.map((edge: any) => ({
-    //   params: { handle: edge.node.handle },
-    // })),
     paths: [
       { params: { handle: "fine-thin" } },
       { params: { handle: "medium-thick" } },
-      { params: { handle: "curly" } }
+      { params: { handle: "curly" } },
     ],
     fallback: true,
   };
@@ -130,6 +142,39 @@ export async function getStaticProps(context: any) {
           }
         }
         color: metafield(namespace:"collection", key:"color"){
+          value
+        }
+        benefitOneIcon: metafield(namespace: "collection", key: "benefit_1_icon") {
+          reference {
+            __typename
+            ... on GenericFile {
+              url
+            }
+          }
+        }
+        benefitOneText: metafield(namespace: "collection", key: "benefit_1_text") {
+          value
+        }
+        benefitTwoIcon: metafield(namespace: "collection", key: "benefit_2_icon") {
+          reference {
+            __typename
+            ... on GenericFile {
+              url
+            }
+          }
+        }
+        benefitTwoText: metafield(namespace: "collection", key: "benefit_2_text") {
+          value
+        }
+        benefitThreeIcon: metafield(namespace: "collection", key: "benefit_3_icon") {
+          reference {
+            __typename
+            ... on GenericFile {
+              url
+            }
+          }
+        }
+        benefitThreeText: metafield(namespace: "collection", key: "benefit_3_text") {
           value
         }
         collectionFeature: metafield(namespace: "collection", key: "feature") {

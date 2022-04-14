@@ -22,7 +22,7 @@ export function Search({ router }: { router: NextRouter }) {
 
   const handleKeyDown = (e: any) => {
     if (e.keyCode === 13) {
-      router.push(`/search/${searchValue}`);
+      router.push(`/search?query=${searchValue}`);
       onClose();
       setSearchValue("");
     }

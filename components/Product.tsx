@@ -12,7 +12,7 @@ const Product = ({ product }: { product: any }) => {
   return (
     <NextLink href={`/product/${prod.handle}`} passHref>
       <GridItem
-        colSpan={1}
+        colSpan={[3, 1]}
         textAlign="center"
         placeItems={"center"}
         display={"grid"}

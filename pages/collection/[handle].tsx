@@ -14,8 +14,8 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import getCollections from "../../lib/get-collections";
-import NextLink from "next/link";
 import ProductFeature from "../../components/ProductFeature";
+import Product from "../../components/Product";
 
 export default function CollectionPage({
   handle,
@@ -29,42 +29,63 @@ export default function CollectionPage({
   return (
     <>
       <Head>
-        <title>{data.title}</title>
+        <title>{data.title} | TOR Salon Products</title>
       </Head>
       <Flex
-        flexDir={"row"}
-        // bgImage={data.image.url}
-        // bgPos="left"
-        // bgAttachment={["scroll"]}
-        // bgSize="cover"
+        flexDir={["column-reverse", "row"]}
+        bg={data.color?.value ? data.color.value : "white"}
       >
-        <Stack
-          direction={["column"]}
-          gap={12}
-          w="50%"
-          px={20}
-          py={40}
-          bg="white"
-        >
-          <Heading>{data.title}</Heading>
-          <Text>{data.description}</Text>
-          <Stack direction={"row"} textAlign="center" spacing={6}>
-            <Box>
-              <Icon />
-              <Text>Benefit 1</Text>
-            </Box>
-            <Box>
-              <Icon />
-              <Text>Benefit 2</Text>
-            </Box>
-            <Box>
-              <Icon />
-              <Text>Benefit 3</Text>
-            </Box>
+        <Box w={["full", "50%"]} px={[8, 20]} py={40} pos="relative">
+          {/* <Image
+            src={data.typeImage.reference.image.url}
+            alt=""
+            pos="absolute"
+            top={0}
+            opacity={0.1}
+            w="100%"
+            left={0}
+            zIndex={0}
+          /> */}
+          <Stack direction={["column"]} spacing={6} pos="relative" zIndex={1}>
+            <Heading>{data.title}</Heading>
+            <Text dangerouslySetInnerHTML={{
+              __html: data.descriptionHtml
+            }}/>
+            <Stack
+              direction={"row"}
+              textAlign="left"
+              justify="flex-start"
+              spacing={6}
+            >
+              <Box w="120px">
+                <Image
+                  mb={2}
+                  src={data.benefitOneIcon?.reference.url}
+                  alt={data.benefitOneText?.value}
+                />
+                <Text>{data.benefitOneText?.value}</Text>
+              </Box>
+              <Box w="120px">
+                <Image
+                  mb={2}
+                  src={data.benefitTwoIcon?.reference.url}
+                  alt={data.benefitTwoText?.value}
+                />
+                <Text>{data.benefitTwoText?.value}</Text>
+              </Box>
+              <Box w="120px">
+                <Image
+                  mb={2}
+                  src={data.benefitThreeIcon?.reference.url}
+                  alt={data.benefitThreeText?.value}
+                />
+                <Text>{data.benefitThreeText?.value}</Text>
+              </Box>
+            </Stack>
           </Stack>
-        </Stack>
-        <AspectRatio ratio={1 / 1} w="50%">
-          <Image src={data.image?.url} alt="" />
+        </Box>
+        <AspectRatio ratio={1 / 1} w={["full", "50%"]}>
+          <Image src={data.image.url} alt="" />
         </AspectRatio>
       </Flex>
       {data.collectionFeature && (
@@ -80,30 +101,6 @@ export default function CollectionPage({
     </>
   );
 }
-
-const Product = ({ product }: { product: any }) => {
-  const prod = product.node;
-
-  return (
-    <NextLink href={`/product/${prod.handle}`} passHref>
-      <GridItem
-        colSpan={1}
-        textAlign="center"
-        placeItems={"center"}
-        display={"grid"}
-        pos={"relative"}
-      >
-        {/* <IconButton size={"lg"} _hover={{opacity: 0.4}} aria-label="add to cart" icon={<Icon as={BsCartPlus} />} variant={"unstyled"} position={"absolute"} top={0} right={0} zIndex={1}/> */}
-        <AspectRatio ratio={1 / 1} boxSize={300}>
-          <Image src={prod.images.edges[0]?.node.url} alt={prod.title} />
-        </AspectRatio>
-        <Text fontSize="32px" maxW="300px" lineHeight={1.3}>
-          {prod.title}
-        </Text>
-      </GridItem>
-    </NextLink>
-  );
-};
 
 export async function getStaticPaths() {
   const result = await getCollections("home");
@@ -133,8 +130,45 @@ export async function getStaticProps(context: any) {
         collection(handle: "${handle}"){
         title
         description
+        descriptionHtml
         image {
           url
+        }
+        benefitOneIcon: metafield(namespace: "collection", key: "benefit_1_icon") {
+          reference {
+            __typename
+            ... on GenericFile {
+              url
+            }
+          }
+        }
+        benefitOneText: metafield(namespace: "collection", key: "benefit_1_text") {
+          value
+        }
+        benefitTwoIcon: metafield(namespace: "collection", key: "benefit_2_icon") {
+          reference {
+            __typename
+            ... on GenericFile {
+              url
+            }
+          }
+        }
+        benefitTwoText: metafield(namespace: "collection", key: "benefit_2_text") {
+          value
+        }
+        benefitThreeIcon: metafield(namespace: "collection", key: "benefit_3_icon") {
+          reference {
+            __typename
+            ... on GenericFile {
+              url
+            }
+          }
+        }
+        benefitThreeText: metafield(namespace: "collection", key: "benefit_3_text") {
+          value
+        }
+        color: metafield(namespace:"collection", key:"color"){
+          value
         }
         products(first: 100) {
                 edges{
