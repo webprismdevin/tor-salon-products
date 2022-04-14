@@ -71,8 +71,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Footer />
       </ShopContext.Provider>
       <ColorModeScript initialColorMode={customTheme.initialColorMode} />
-      {/* <Tawk src="https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu" /> */}
-      {/* <MailingList /> */}
+      <Tawk src="https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu" />
+      <MailingList />
     </ChakraProvider>
   );
 }

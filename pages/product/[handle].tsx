@@ -91,7 +91,7 @@ const Product = ({ handle, product, collection }: { handle: string; product: any
       <Flex flexDirection={["column", "row"]}>
         <AspectRatio ratio={1} maxW={["100%", "50%"]} minW={["100%", "50%"]}>
           <Image
-            src={product.images.edges[0].node.url}
+            src={product.images.edges[0]?.node.url}
             alt={``}
             objectFit="cover"
             objectPosition="top center"
@@ -171,32 +171,32 @@ const Product = ({ handle, product, collection }: { handle: string; product: any
               <Box w="120px">
                 <Image
                   mb={2}
-                  src={collection?.benefitOneIcon.reference.url}
-                  alt={collection?.benefitOneText.value}
+                  src={collection?.benefitOneIcon?.reference.url}
+                  alt={collection?.benefitOneText?.value}
                 />
-                <Text>{collection?.benefitOneText.value}</Text>
+                <Text>{collection?.benefitOneText?.value}</Text>
               </Box>
               <Box w="120px">
                 <Image
                   mb={2}
-                  src={collection?.benefitTwoIcon.reference.url}
-                  alt={collection?.benefitTwoText.value}
+                  src={collection?.benefitTwoIcon?.reference.url}
+                  alt={collection?.benefitTwoText?.value}
                 />
-                <Text>{collection?.benefitTwoText.value}</Text>
+                <Text>{collection?.benefitTwoText?.value}</Text>
               </Box>
               <Box w="120px">
                 <Image
                   mb={2}
-                  src={collection?.benefitThreeIcon.reference.url}
-                  alt={collection?.benefitThreeText.value}
+                  src={collection?.benefitThreeIcon?.reference.url}
+                  alt={collection?.benefitThreeText?.value}
                 />
-                <Text>{collection?.benefitThreeText.value}</Text>
+                <Text>{collection?.benefitThreeText?.value}</Text>
               </Box>
             </Stack>
           </Stack>
         </Box>
         <AspectRatio ratio={1 / 1} w={["full", "50%"]}>
-          <Image src={collection?.image.url} alt="" />
+          <Image src={collection?.image?.url} alt="" />
         </AspectRatio>
       </Flex>
       <Container maxW="container.xl" py={20}>

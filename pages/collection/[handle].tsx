@@ -85,7 +85,7 @@ export default function CollectionPage({
           </Stack>
         </Box>
         <AspectRatio ratio={1 / 1} w={["full", "50%"]}>
-          <Image src={data.image.url} alt="" />
+          <Image src={data.image?.url} alt="" />
         </AspectRatio>
       </Flex>
       {data.collectionFeature && (
