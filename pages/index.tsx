@@ -206,7 +206,7 @@ function HomePage({ products }: any) {
       <Box
         bgImage={"/images/home/skin-bg.jpg"}
         bgSize="cover"
-        bgPos="bottom left"
+        bgPos={["center", "bottom left"]}
       >
         <Container py={200} maxW="container.lg">
           <Stack align={"center"} textAlign={"center"}>
@@ -223,7 +223,7 @@ function HomePage({ products }: any) {
         </Container>
       </Box>
       <Container maxW="container.md" py={20} my={10}>
-        <Stack direction={["column", "row"]} w="full" maxH={120}>
+        <Stack direction={["column", "row"]} w="full" maxH={["none", 120]}>
           <ProductFeature
             name={"Gel 2.0"}
             price={"$39.99"}
@@ -242,18 +242,19 @@ function HomePage({ products }: any) {
         </Stack>
       </Container>
       <Box
-        height={700}
+        height={["auto", 700]}
         bgImage="/images/tor-cbd-2.jpg"
         borderTop="10px solid #000000"
         bgSize={"cover"}
         backgroundPosition={["right", "right"]}
         pos="relative"
+        px={[2, 0]}
       >
         <Stack
           maxW="520px"
           p={8}
           borderRadius={10}
-          pos="absolute"
+          pos={["static", "absolute"]}
           left={0}
           top={0}
         >
@@ -287,7 +288,7 @@ function HomePage({ products }: any) {
             </Flex>
           </Box>
         </Stack>
-        <Button pos="absolute" right={8} bottom={8}>
+        <Button pos={["static", "absolute"]} my={[4, 0]} right={8} bottom={8}>
           Shop All CBD
         </Button>
       </Box>
