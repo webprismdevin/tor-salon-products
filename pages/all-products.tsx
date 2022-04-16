@@ -1,9 +1,6 @@
 import { Stack, Flex, Heading, Text, Box } from "@chakra-ui/react";
-import graphClient from "../lib/graph-client";
-import { gql } from "graphql-request";
 import Product from "../components/Product";
 import Head from "next/head";
-import { isMobile } from "react-device-detect";
 import getProducts from '../lib/get-products'
 
 const Catalog = ({ collections }: any) => {
@@ -12,7 +9,7 @@ const Catalog = ({ collections }: any) => {
   return (
     <>
       <Head>
-        <title>All Products | SuperShops</title>
+        <title>All Hair Products | TOR Salon Products</title>
       </Head>
       <Box>
         {collections.edges.map((collection: any) => (

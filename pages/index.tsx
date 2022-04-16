@@ -109,7 +109,7 @@ function HomePage({ products }: any) {
           </Heading>
           <Text>
             TOR products are formulated specifically by hair type, to tackle
-            their unique challenges - not for mass appeal.
+            their unique challenges - not for mass appeal. Made in the USA.
           </Text>
         </Stack>
       </Container>
@@ -337,12 +337,12 @@ function HomePage({ products }: any) {
         </Flex>
         <Box py={40} height={["auto", 800]} pos="relative">
           <Container maxW="container.xl">
-            <Stack maxW="560px">
+            <Stack maxW="560px" spacing={4}>
               <Text fontSize={22} textTransform="uppercase">
                 Pro Innovation -
               </Text>
               <Heading size="2xl">
-                Naturally derived, formulated for results.
+                Naturally derived, backed by science.
               </Heading>
               <Text>
                 Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ut,
@@ -378,15 +378,13 @@ function HomePage({ products }: any) {
           px={[4, 0]}
         >
           <Text fontSize={22} textTransform="uppercase">
-            TOR Professionals
+            TOR Professionals -
           </Text>
           <Heading size="2xl">Salons + Stylists</Heading>
           <Text>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum ea
-            harum soluta impedit veritatis enim libero, ipsa, dolorem, eum
-            temporibus tempora. Accusamus maxime minus consectetur molestiae
-            iste tenetur dolor quasi!
+            TOR Salon Products was started by a haircare industry veteran, with a strong understanding of stylist and salons challenges, and over a decade helping salons formulate products for their clients.
           </Text>
+          <Text>Our Salon + Stylist program supports our salon partners and their stylists, with an open door, and a focus on innovative.</Text>
           <Button alignSelf={"flex-start"}>Learn More</Button>
           <Box pt={8}>
             <Heading mb={4}>Benefits</Heading>
@@ -398,10 +396,6 @@ function HomePage({ products }: any) {
               <Box textAlign={"center"}>
                 <Icon as={FiCreditCard} boxSize={8} />
                 <Text>Wholesale Pricing</Text>
-              </Box>
-              <Box textAlign={"center"}>
-                <Icon as={FiBox} boxSize={8} />
-                <Text>Priority Shipping</Text>
               </Box>
               <Box textAlign={"center"}>
                 <Icon as={FiGift} boxSize={8} />

@@ -9,10 +9,10 @@ import {
   Image,
   Select,
   Button,
-  Icon,
   useNumberInput,
   HStack,
   Input,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
@@ -20,7 +20,7 @@ import { useState, useContext, useEffect } from "react";
 import CartContext from "../../lib/CartContext";
 import formatter from "../../lib/formatter";
 import { GetStaticProps } from "next";
-import Script from "next/script";
+import Product from "../../components/Product";
 
 declare interface VariantType {
   id: string;
@@ -31,8 +31,16 @@ declare interface VariantType {
   availableForSale: boolean;
 }
 
-const Product = ({ handle, product, collection }: { handle: string; product: any, collection: any }) => {
-  const [ itemQty, setItemQty ] = useState(1)
+const ProductPage = ({
+  handle,
+  product,
+  collection,
+}: {
+  handle: string;
+  product: any;
+  collection: any;
+}) => {
+  const [itemQty, setItemQty] = useState(1);
   const { cart, setCart } = useContext(CartContext);
   const [activeVariant, setActiveVariant] = useState<VariantType>(() => {
     if (!product) return null;
@@ -46,8 +54,13 @@ const Product = ({ handle, product, collection }: { handle: string; product: any
       defaultValue: itemQty,
       min: 1,
       precision: 0,
-      onChange: (valueAsString: string, valueAsNumber: number) => setItemQty(valueAsNumber)
+      onChange: (valueAsString: string, valueAsNumber: number) =>
+        setItemQty(valueAsNumber),
     });
+
+  useEffect(() => {
+    console.log(Buffer.from(product.id).toString("base64"));
+  }, []);
 
   const inc = getIncrementButtonProps();
   const dec = getDecrementButtonProps();
@@ -61,7 +74,7 @@ const Product = ({ handle, product, collection }: { handle: string; product: any
       body: JSON.stringify({
         variantId: activeVariant.id,
         cartId: cart.id,
-        qty: itemQty
+        qty: itemQty,
       }),
     }).then((res) => res.json());
 
@@ -99,20 +112,20 @@ const Product = ({ handle, product, collection }: { handle: string; product: any
         </AspectRatio>
         <Container centerContent pt={40} pb={20}>
           <Stack direction={["column"]} spacing={4} w="full" align="flex-start">
-            <Heading>{product.title}</Heading>
+            <Heading maxW={500}>{product.title}</Heading>
             <Text
               dangerouslySetInnerHTML={{
                 __html: product.descriptionHtml,
               }}
             />
-            <Stack direction={"row"} align="flex-end">
+            <Stack direction={"row"} align="flex-end" justify={"center"} flexShrink={1}>
               {variants.length > 1 && (
                 <Stack>
                   <Heading as="h4" size="md" mb={3} ml={2}>
                     Select A Size
                   </Heading>
                   <Select
-                    minW={"220px"}
+                    minW={"200px"}
                     value={activeVariant.id}
                     onChange={(e) => {
                       handleActiveVariantChange(e.target.value);
@@ -126,7 +139,7 @@ const Product = ({ handle, product, collection }: { handle: string; product: any
                   </Select>
                 </Stack>
               )}
-              <HStack maxW="150px">
+              <HStack w="140px">
                 <Button {...inc}>+</Button>
                 <Input {...input} textAlign="center" />
                 <Button {...dec}>-</Button>
@@ -144,80 +157,95 @@ const Product = ({ handle, product, collection }: { handle: string; product: any
           </Stack>
         </Container>
       </Flex>
-      <Flex
-        flexDir={["column-reverse", "row"]}
-        bg={collection.color?.value ? collection.color.value : "white"}
-      >
-        <Box w={["full", "50%"]} px={[8, 20]} py={40} pos="relative">
-          <Image
-            src={collection.typeImage?.reference.image.url}
-            alt=""
-            pos="absolute"
-            top={0}
-            opacity={0.1}
-            w="100%"
-            left={0}
-            zIndex={0}
-          />
-          <Stack direction={["column"]} spacing={6} pos="relative" zIndex={1}>
-            <Heading>{collection.title}</Heading>
-            <Text>{collection.description}</Text>
-            <Stack
-              direction={"row"}
-              textAlign="left"
-              justify="flex-start"
-              spacing={6}
-            >
-              <Box w="120px">
-                <Image
-                  mb={2}
-                  src={collection?.benefitOneIcon?.reference.url}
-                  alt={collection?.benefitOneText?.value}
-                />
-                <Text>{collection?.benefitOneText?.value}</Text>
-              </Box>
-              <Box w="120px">
-                <Image
-                  mb={2}
-                  src={collection?.benefitTwoIcon?.reference.url}
-                  alt={collection?.benefitTwoText?.value}
-                />
-                <Text>{collection?.benefitTwoText?.value}</Text>
-              </Box>
-              <Box w="120px">
-                <Image
-                  mb={2}
-                  src={collection?.benefitThreeIcon?.reference.url}
-                  alt={collection?.benefitThreeText?.value}
-                />
-                <Text>{collection?.benefitThreeText?.value}</Text>
-              </Box>
+      <Box bg={collection.color?.value ? collection.color.value : "white"}>
+        <Flex flexDir={["column-reverse", "row"]}>
+          <Box w={["full", "50%"]} px={[8, 20]} py={40} pos="relative">
+            <Image
+              src={collection.typeImage?.reference.image.url}
+              alt=""
+              pos="absolute"
+              top={0}
+              opacity={0.1}
+              w="100%"
+              left={0}
+              zIndex={0}
+            />
+            <Stack direction={["column"]} spacing={6} pos="relative" zIndex={1}>
+              <Heading>{collection.title}</Heading>
+              <Text>{collection.description}</Text>
+              <Stack
+                direction={"row"}
+                textAlign="left"
+                justify="flex-start"
+                spacing={6}
+              >
+                <Box w="120px">
+                  <Image
+                    mb={2}
+                    src={collection?.benefitOneIcon?.reference.image.url}
+                    alt={collection?.benefitOneText?.value}
+                  />
+                  <Text>{collection?.benefitOneText?.value}</Text>
+                </Box>
+                <Box w="120px">
+                  <Image
+                    mb={2}
+                    src={collection?.benefitTwoIcon?.reference.image.url}
+                    alt={collection?.benefitTwoText?.value}
+                  />
+                  <Text>{collection?.benefitTwoText?.value}</Text>
+                </Box>
+                <Box w="120px">
+                  <Image
+                    mb={2}
+                    src={collection?.benefitThreeIcon?.reference.image.url}
+                    alt={collection?.benefitThreeText?.value}
+                  />
+                  <Text>{collection?.benefitThreeText?.value}</Text>
+                </Box>
+              </Stack>
             </Stack>
-          </Stack>
-        </Box>
-        <AspectRatio ratio={1 / 1} w={["full", "50%"]}>
-          <Image src={collection?.image?.url} alt="" />
-        </AspectRatio>
-      </Flex>
-      <Container maxW="container.xl" py={20}>
+          </Box>
+          <AspectRatio ratio={1 / 1} w={["full", "50%"]}>
+            <Image src={collection?.image?.url} alt="" />
+          </AspectRatio>
+        </Flex>
+        <Container maxW="container.xl" centerContent py={20}>
+          <Heading size="md" mb={20} textTransform="uppercase">
+            Other items in this line
+          </Heading>
+          <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
+            {collection.products.edges.map((p: any) => (
+              <Product product={p} key={p.node.id} fontSize={24} />
+            ))}
+          </SimpleGrid>
+        </Container>
+      </Box>
+      {/* <Container maxW="container.xl" py={20}>
         <div
           className="embedsocial-product-reviews"
           data-shop="tor-salon-products.myshopify.com"
           data-product={Buffer.from(product.id).toString("base64")}
           data-handle={handle}
         />
-        <Script
-          id="embed-social-script"
-          dangerouslySetInnerHTML={{
-            __html: `(function(d, s, id){var js; if (d.getElementById(id)) {return;} js = d.createElement(s); js.id = id; js.src = "https://embedsocial.com/cdn/ri_shopify.js?v=1.0.1"; d.getElementsByTagName("head")[0].appendChild(js);}(document, "script", "EmbedSocialShopifyReviewsScript"));`,
-          }}
-        />
+      </Container> */}
+      <Container maxW="container.xl" py={40} centerContent>
+        <Heading size="md">Reviews</Heading>
+        <Box
+          className="yotpo yotpo-main-widget"
+          data-product-id={Buffer.from(product.id).toString("base64")}
+          data-price={activeVariant.priceV2.amount}
+          data-currency={"USD"}
+          data-name={product.title}
+          data-url={`https://torsalonproducts.com/product/${product.handle}`}
+          data-image-url={product.images.edges[0]?.node.url}
+        ></Box>
       </Container>
     </>
   );
 };
 
-export default Product;
+export default ProductPage;
 
 export async function getStaticPaths() {
   const graphQLClient = new GraphQLClient(
@@ -305,7 +333,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       descriptionHtml
       description
       tags
-      collections(first: 1) {
+      collections(first: 2) {
         edges {
           node {
             handle
@@ -313,6 +341,26 @@ export const getStaticProps: GetStaticProps = async (context) => {
             description
             image {
               url
+            }
+            products(first: 3) {
+              edges {
+                node {
+                  handle
+                  title
+                  priceRange {
+                    minVariantPrice {
+                      amount
+                    }
+                  }
+                  images(first: 1) {
+                    edges {
+                      node {
+                        url
+                      }
+                    }
+                  }
+                }
+              }
             }
             typeImage: metafield(namespace: "collection", key: "typeImage") {
               reference {
@@ -323,14 +371,16 @@ export const getStaticProps: GetStaticProps = async (context) => {
                 }
               }
             }
-            color: metafield(namespace:"collection", key:"color"){
+            color: metafield(namespace: "collection", key: "color") {
               value
             }
             benefitOneIcon: metafield(namespace: "collection", key: "benefit_1_icon") {
               reference {
                 __typename
-                ... on GenericFile {
-                  url
+                ... on MediaImage {
+                  image {
+                    url
+                  }
                 }
               }
             }
@@ -340,8 +390,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
             benefitTwoIcon: metafield(namespace: "collection", key: "benefit_2_icon") {
               reference {
                 __typename
-                ... on GenericFile {
-                  url
+                ... on MediaImage {
+                  image {
+                    url
+                  }
                 }
               }
             }
@@ -351,8 +403,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
             benefitThreeIcon: metafield(namespace: "collection", key: "benefit_3_icon") {
               reference {
                 __typename
-                ... on GenericFile {
-                  url
+                ... on MediaImage {
+                  image {
+                    url
+                  }
                 }
               }
             }
@@ -401,7 +455,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
     props: {
       handle: handle,
       product: res.product,
-      collection: res.product.collections.edges[0].node
+      collection:
+        res.product.collections.edges[0].node.handle === "home"
+          ? res.product.collections.edges[1].node
+          : res.product.collections.edges[0].node,
     },
     revalidate: 60,
   };

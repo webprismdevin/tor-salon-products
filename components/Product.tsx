@@ -6,7 +6,7 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 
-const Product = ({ product }: { product: any }) => {
+const Product = ({ product, fontSize }: { product: any, fontSize?: number }) => {
   const prod = product.node;
 
   return (
@@ -17,11 +17,12 @@ const Product = ({ product }: { product: any }) => {
         placeItems={"center"}
         display={"grid"}
         pos={"relative"}
+        cursor={"pointer"}
       >
         <AspectRatio ratio={1 / 1} boxSize={300}>
           <Image src={prod.images.edges[0]?.node.url} alt={prod.title} />
         </AspectRatio>
-        <Text fontSize="32px" maxW="300px" lineHeight={1.3}>
+        <Text fontSize={fontSize ? fontSize : 32} maxW="300px" lineHeight={1.3}>
           {prod.title}
         </Text>
       </GridItem>

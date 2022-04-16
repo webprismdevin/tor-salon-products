@@ -36,19 +36,11 @@ export default function CollectionPage({
         bg={data.color?.value ? data.color.value : "white"}
       >
         <Box w={["full", "50%"]} px={[8, 20]} py={40} pos="relative">
-          {/* <Image
-            src={data.typeImage.reference.image.url}
-            alt=""
-            pos="absolute"
-            top={0}
-            opacity={0.1}
-            w="100%"
-            left={0}
-            zIndex={0}
-          /> */}
           <Stack direction={["column"]} spacing={6} pos="relative" zIndex={1}>
             <Heading>{data.title}</Heading>
-            <Text dangerouslySetInnerHTML={{
+            <Text 
+              maxW={600}
+              dangerouslySetInnerHTML={{
               __html: data.descriptionHtml
             }}/>
             <Stack

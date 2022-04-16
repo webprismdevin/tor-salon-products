@@ -29,6 +29,7 @@ export default function CollectionPage({
     <>
       <Head>
         <title>{data.title}</title>
+        <meta name="description" content={data.description} />
       </Head>
       <Flex
         flexDir={["column-reverse", "row"]}
@@ -47,7 +48,11 @@ export default function CollectionPage({
           />
           <Stack direction={["column"]} spacing={6} pos="relative" zIndex={1}>
             <Heading>{data.title}</Heading>
-            <Text>{data.description}</Text>
+            <Text
+            maxW={600}
+            dangerouslySetInnerHTML={{
+              __html: data.descriptionHtml
+            }} />
             <Stack
               direction={"row"}
               textAlign="left"
@@ -57,7 +62,7 @@ export default function CollectionPage({
               <Box w="120px">
                 <Image
                   mb={2}
-                  src={data.benefitOneIcon?.reference.url}
+                  src={data.benefitOneIcon?.reference.image.url}
                   alt={data.benefitOneText?.value}
                 />
                 <Text>{data.benefitOneText?.value}</Text>
@@ -65,7 +70,7 @@ export default function CollectionPage({
               <Box w="120px">
                 <Image
                   mb={2}
-                  src={data.benefitTwoIcon?.reference.url}
+                  src={data.benefitTwoIcon?.reference.image.url}
                   alt={data.benefitTwoText?.value}
                 />
                 <Text>{data.benefitTwoText?.value}</Text>
@@ -73,7 +78,7 @@ export default function CollectionPage({
               <Box w="120px">
                 <Image
                   mb={2}
-                  src={data.benefitThreeIcon?.reference.url}
+                  src={data.benefitThreeIcon?.reference.image.url}
                   alt={data.benefitThreeText?.value}
                 />
                 <Text>{data.benefitThreeText?.value}</Text>
@@ -91,7 +96,7 @@ export default function CollectionPage({
       <Container maxW="container.xl" pt={10} pb={20}>
         <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
           {data.products.edges.map((p: any) => (
-            <Product product={p} key={p.node.id} />
+            <Product product={p} key={p.node.id} fontSize={24} />
           ))}
         </SimpleGrid>
       </Container>
@@ -100,8 +105,6 @@ export default function CollectionPage({
 }
 
 export async function getStaticPaths() {
-  const result = await getCollections("home");
-
   return {
     paths: [
       { params: { handle: "fine-thin" } },
@@ -126,130 +129,138 @@ export async function getStaticProps(context: any) {
 
   // Shopify Request
   const query = gql`{
-        collection(handle: "${handle}"){
-        title
-        description
-        image {
-          url
-        }
-        typeImage: metafield(namespace: "collection", key: "typeImage") {
-          reference {
-            ... on MediaImage {
-              image {
-                url
-              }
-            }
-          }
-        }
-        color: metafield(namespace:"collection", key:"color"){
-          value
-        }
-        benefitOneIcon: metafield(namespace: "collection", key: "benefit_1_icon") {
-          reference {
-            __typename
-            ... on GenericFile {
-              url
-            }
-          }
-        }
-        benefitOneText: metafield(namespace: "collection", key: "benefit_1_text") {
-          value
-        }
-        benefitTwoIcon: metafield(namespace: "collection", key: "benefit_2_icon") {
-          reference {
-            __typename
-            ... on GenericFile {
-              url
-            }
-          }
-        }
-        benefitTwoText: metafield(namespace: "collection", key: "benefit_2_text") {
-          value
-        }
-        benefitThreeIcon: metafield(namespace: "collection", key: "benefit_3_icon") {
-          reference {
-            __typename
-            ... on GenericFile {
-              url
-            }
-          }
-        }
-        benefitThreeText: metafield(namespace: "collection", key: "benefit_3_text") {
-          value
-        }
-        collectionFeature: metafield(namespace: "collection", key: "feature") {
-          reference {
-            ... on Product {
-              id
-              title
-              description
-              handle
-              variants(first: 1) {
-                edges {
-                  node {
-                    id
-                    priceV2{
-                      amount
-                    }
-                  }
-                }
-              }
-              images(first: 2) {
-                edges {
-                  node {
-                    url
-                  }
-                }
-              }
-              priceRange {
-                maxVariantPrice {
-                  amount
-                }
-              }
-              compareAtPriceRange {
-                maxVariantPrice {
-                  amount
-                }
-              }
-            }
-          }
-        }
-        products(first: 100) {
-                edges{
-                    node {
-                      id
-                      title
-                      description
-                      handle
-                      variants(first: 1) {
-                        edges {
-                          node {
-                            id
-                          }
-                        }
-                      }
-                      images(first: 2) {
-                        edges {
-                          node {
-                            url
-                          }
-                        }
-                      }
-                      priceRange {
-                        maxVariantPrice {
-                          amount
-                        }
-                      }
-                      compareAtPriceRange {
-                        maxVariantPrice {
-                          amount
-                        }
-                      }
-                    } 
-                }
-            }
+    collection(handle: "${handle}") {
+      title
+      description
+      descriptionHtml
+      image {
+        url
       }
-    }`;
+      typeImage: metafield(namespace: "collection", key: "typeImage") {
+        reference {
+          ... on MediaImage {
+            image {
+              url
+            }
+          }
+        }
+      }
+      color: metafield(namespace: "collection", key: "color") {
+        value
+      }
+      benefitOneIcon: metafield(namespace: "collection", key: "benefit_1_icon") {
+        reference {
+          __typename
+          ... on MediaImage {
+            image {
+              url
+            }
+          }
+        }
+      }
+      benefitOneText: metafield(namespace: "collection", key: "benefit_1_text") {
+        value
+      }
+      benefitTwoIcon: metafield(namespace: "collection", key: "benefit_2_icon") {
+        reference {
+          __typename
+          ... on MediaImage {
+            image {
+              url
+            }
+          }
+        }
+      }
+      benefitTwoText: metafield(namespace: "collection", key: "benefit_2_text") {
+        value
+      }
+      benefitThreeIcon: metafield(namespace: "collection", key: "benefit_3_icon") {
+        reference {
+          __typename
+          ... on MediaImage {
+            image {
+              url
+            }
+          }
+        }
+      }
+      benefitThreeText: metafield(namespace: "collection", key: "benefit_3_text") {
+        value
+      }
+      collectionFeature: metafield(namespace: "collection", key: "feature") {
+        reference {
+          ... on Product {
+            id
+            title
+            description
+            handle
+            variants(first: 1) {
+              edges {
+                node {
+                  id
+                  priceV2 {
+                    amount
+                  }
+                }
+              }
+            }
+            images(first: 2) {
+              edges {
+                node {
+                  url
+                }
+              }
+            }
+            priceRange {
+              maxVariantPrice {
+                amount
+              }
+            }
+            compareAtPriceRange {
+              maxVariantPrice {
+                amount
+              }
+            }
+          }
+        }
+      }
+      products(first: 100) {
+        edges {
+          node {
+            id
+            title
+            description
+            handle
+            variants(first: 1) {
+              edges {
+                node {
+                  id
+                }
+              }
+            }
+            images(first: 2) {
+              edges {
+                node {
+                  url
+                }
+              }
+            }
+            priceRange {
+              maxVariantPrice {
+                amount
+              }
+            }
+            compareAtPriceRange {
+              maxVariantPrice {
+                amount
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  `;
 
   const res = await graphQLClient.request(query);
 
