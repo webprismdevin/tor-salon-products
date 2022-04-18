@@ -101,7 +101,7 @@ function HomePage({ products }: any) {
       </Box>
       <Container maxW="container.xl" pt={20} pb={40}>
         <Stack maxW="560px">
-          <Text fontSize={22} textTransform="uppercase">
+          <Text fontSize={22} textTransform="uppercase" fontFamily={"Futura"}>
             Salon Grade -
           </Text>
           <Heading size="2xl">
@@ -168,7 +168,7 @@ function HomePage({ products }: any) {
       <Container maxW="container.xl" py={20}>
         <Stack direction={["column", "row"]} w="full">
           <Stack maxW="360px" alignSelf={"center"}>
-            <Text fontSize={22} textTransform="uppercase">
+            <Text fontSize={22} textTransform="uppercase" fontFamily={"Futura"}>
               Salon Grade -
             </Text>
             <Heading size="2xl">Styling</Heading>
@@ -210,7 +210,7 @@ function HomePage({ products }: any) {
       >
         <Container py={200} maxW="container.lg">
           <Stack align={"center"} textAlign={"center"}>
-            <Text fontSize={22} textTransform="uppercase">
+            <Text fontSize={22} textTransform="uppercase" fontFamily={"Futura"}>
               - Results Driven -
             </Text>
             <Heading size="2xl">Body + Skin</Heading>
@@ -258,7 +258,7 @@ function HomePage({ products }: any) {
           left={0}
           top={0}
         >
-          <Text fontSize={22} textTransform="uppercase">
+          <Text fontSize={22} textTransform="uppercase" fontFamily={"Futura"}>
             Pro Chemistry -
           </Text>
           <Heading size="xl">CBD Products That Works</Heading>
@@ -273,20 +273,28 @@ function HomePage({ products }: any) {
           bottom={8}
           left={8}
         >
-          <Box bg="white" p={8}>
-            <Image src={"/images/750mg-tincture.png"} w={240} alt="" />
-            <Flex justify={"space-between"}>
-              <Text>CBD Tinctures</Text>
-              <Icon as={FiArrowRight} size={4} />
-            </Flex>
-          </Box>
-          <Box bg="white" p={8}>
+          <NextLink href="/collection/cdb-tinctures" passHref>
+            <MotionBox whileHover={{
+              scale: 1.02
+            }} bg="white" p={8}>
+              <Image src={"/images/750mg-tincture.png"} w={240} alt="" />
+              <Flex justify={"space-between"}>
+                <Text>CBD Tinctures</Text>
+                <Icon as={FiArrowRight} size={4} />
+              </Flex>
+            </MotionBox>
+          </NextLink>
+          <NextLink href="/collection/cdb-lotions" passHref>
+          <MotionBox whileHover={{
+              scale: 1.02
+            }} bg="white" p={8}>
             <Image src={"/images/250ml-roll-on.png"} w={240} alt="" />
             <Flex justify={"space-between"}>
               <Text>CBD Lotions</Text>
               <Icon as={FiArrowRight} size={4} />
             </Flex>
-          </Box>
+          </MotionBox>
+          </NextLink>
         </Stack>
         <Button pos={["static", "absolute"]} my={[4, 0]} right={8} bottom={8}>
           Shop All CBD
@@ -295,7 +303,7 @@ function HomePage({ products }: any) {
       <Box pt={40}>
         <Container centerContent mb={20}>
           <Stack spacing={6} align="center">
-            <Text fontSize={22} textTransform="uppercase">
+            <Text fontSize={22} textTransform="uppercase" fontFamily={"Futura"}>
               - Best Selling -
             </Text>
             <Heading size="2xl">Featured Items</Heading>
@@ -329,7 +337,7 @@ function HomePage({ products }: any) {
             >
               About
             </Text>
-            <Heading fontSize={[114, 220]}>TOR</Heading>
+            <Heading fontSize={[114, 220]} fontFamily={"Futura"}>TOR</Heading>
           </Box>
           <Box maxW={["auto", "400"]} p={[8]}>
             <Testimonials />
@@ -338,7 +346,7 @@ function HomePage({ products }: any) {
         <Box py={40} height={["auto", 800]} pos="relative">
           <Container maxW="container.xl">
             <Stack maxW="560px" spacing={4}>
-              <Text fontSize={22} textTransform="uppercase">
+              <Text fontSize={22} textTransform="uppercase" fontFamily={"Futura"}>
                 Pro Innovation -
               </Text>
               <Heading size="2xl">
@@ -377,7 +385,7 @@ function HomePage({ products }: any) {
           right={[0, 20]}
           px={[4, 0]}
         >
-          <Text fontSize={22} textTransform="uppercase">
+          <Text fontSize={22} textTransform="uppercase" fontFamily={"Futura"}>
             TOR Professionals -
           </Text>
           <Heading size="2xl">Salons + Stylists</Heading>

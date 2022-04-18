@@ -1,10 +1,7 @@
 import {
   Box,
-  Container,
-  Flex,
   Input,
   Stack,
-  Button,
   Heading,
   Text,
   BoxProps,
@@ -91,15 +88,19 @@ export default function MailingList() {
       variants={animationVariants}
       maxW={["360px", "580px"]}
     >
-      <Box
+      <MotionBox
+        whileHover={{
+          opacity: 0.6
+        }}
         onClick={() => controls.start("close")}
         pos={"absolute"}
         right={4}
         top={-2}
         fontSize={36}
+        cursor="pointer"
       >
         &times;
-      </Box>
+      </MotionBox>
       <Stack spacing={2}>
         <Heading>
           {formStatus === "success"
@@ -122,7 +123,7 @@ export default function MailingList() {
             {formStatus === "loading" ? (
               <Spinner />
             ) : (
-              <Icon as={FiArrowRight} boxSize={6} mt={2} />
+              <Icon _hover={{opacity: 0.6}} cursor="pointer" as={FiArrowRight} boxSize={6} mt={2} />
             )}
           </InputRightElement>
         </InputGroup>

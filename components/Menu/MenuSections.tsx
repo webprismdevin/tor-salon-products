@@ -30,7 +30,8 @@ export const BodyAndSkin = () => {
     <>
       <MenuLink href="/collection/lip-balm" text="Lip Balm" />
       <MenuLink href="/collection/goat-milk-soap" text="Goat Milk Soap" />
-      <MenuLink href="/collection/cbd" text="CBD Products" />
+      <MenuLink href="/collection/cbd-tinctures" text="CBD Tinctures" />
+      <MenuLink href="/collection/cbd-lotions" text="CBD Lotions" />
     </>
   );
 };
