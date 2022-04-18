@@ -259,12 +259,11 @@ function HomePage({ products }: any) {
           top={0}
         >
           <Text fontSize={22} textTransform="uppercase" fontFamily={"Futura"}>
-            Pro Chemistry -
+            Truly Effective -
           </Text>
-          <Heading size="xl">CBD Products That Works</Heading>
+          <Heading size="4xl">CBD</Heading>
           <Text>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laudantium
-            soluta voluptatibus consectetur sit natus.
+            TOR CBD products are made in the USA, from FDA approved producers, and contain significantly more CBD that typical products, making TOR CBD more effective.
           </Text>
         </Stack>
         <Stack
@@ -743,6 +742,6 @@ export async function getStaticProps() {
       collection: res.featured,
       products: res.featured.products.edges,
     },
-    revalidate: 3600,
+    revalidate: 60,
   };
 }
