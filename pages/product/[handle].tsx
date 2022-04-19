@@ -21,6 +21,7 @@ import CartContext from "../../lib/CartContext";
 import formatter from "../../lib/formatter";
 import { GetStaticProps } from "next";
 import Product from "../../components/Product";
+import Script from "next/script";
 
 declare interface VariantType {
   id: string;
@@ -118,7 +119,12 @@ const ProductPage = ({
                 __html: product.descriptionHtml,
               }}
             />
-            <Stack direction={"row"} align="flex-end" justify={"center"} flexShrink={1}>
+            <Stack
+              direction={"row"}
+              align="flex-end"
+              justify={"center"}
+              flexShrink={1}
+            >
               {variants.length > 1 && (
                 <Stack>
                   <Heading as="h4" size="md" mb={3} ml={2}>
@@ -221,17 +227,8 @@ const ProductPage = ({
           </SimpleGrid>
         </Container>
       </Box>
-      {/* <Container maxW="container.xl" py={20}>
-        <div
-          className="embedsocial-product-reviews"
-          data-shop="tor-salon-products.myshopify.com"
-          data-product={Buffer.from(product.id).toString("base64")}
-          data-handle={handle}
-        />
-      </Container> */}
       <Container maxW="container.xl" py={40} centerContent>
-        {/* <Heading size="md">Reviews</Heading> */}
-        <Box
+        <div
           className="yotpo yotpo-main-widget"
           data-product-id={Buffer.from(product.id).toString("base64")}
           data-price={activeVariant.priceV2.amount}
@@ -239,7 +236,7 @@ const ProductPage = ({
           data-name={product.title}
           data-url={`https://torsalonproducts.com/product/${product.handle}`}
           data-image-url={product.images.edges[0]?.node.url}
-        ></Box>
+        ></div>
       </Container>
     </>
   );

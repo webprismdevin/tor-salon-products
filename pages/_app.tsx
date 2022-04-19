@@ -55,6 +55,12 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <ChakraProvider theme={customTheme}>
+      <Script
+        id="yotpo reviews"
+        dangerouslySetInnerHTML={{
+          __html: `(function e(){var e=document.createElement("script");e.type="text/javascript",e.async=true,e.src="//staticw2.yotpo.com/bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l/widget.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})();`,
+        }}
+      />
       <ShopContext.Provider value={{ shop }}>
         <Head>
           <meta name="theme-color" content="#ffffff" />
@@ -67,13 +73,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       </ShopContext.Provider>
       <ColorModeScript initialColorMode={customTheme.initialColorMode} />
       <Tawk src="https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu" />
-      <Script
-        strategy="beforeInteractive"
-        id="yotpo reviews"
-        dangerouslySetInnerHTML={{
-          __html: `(function e(){var e=document.createElement("script");e.type="text/javascript",e.async=true,e.src="//staticw2.yotpo.com/bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l/widget.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})();`,
-        }}
-      />
       <MailingList />
     </ChakraProvider>
   );
