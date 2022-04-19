@@ -230,7 +230,7 @@ const ProductPage = ({
         />
       </Container> */}
       <Container maxW="container.xl" py={40} centerContent>
-        <Heading size="md">Reviews</Heading>
+        {/* <Heading size="md">Reviews</Heading> */}
         <Box
           className="yotpo yotpo-main-widget"
           data-product-id={Buffer.from(product.id).toString("base64")}
