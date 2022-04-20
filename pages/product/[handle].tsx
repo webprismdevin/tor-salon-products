@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
-import { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import CartContext from "../../lib/CartContext";
 import formatter from "../../lib/formatter";
 import { GetStaticProps } from "next";
@@ -43,6 +43,7 @@ const ProductPage = ({
 }) => {
   const [itemQty, setItemQty] = useState(1);
   const { cart, setCart } = useContext(CartContext);
+  const [yjsLoaded, setLoaded] = useState(false);
   const [activeVariant, setActiveVariant] = useState<VariantType>(() => {
     if (!product) return null;
 
@@ -95,12 +96,19 @@ const ProductPage = ({
 
   return (
     <>
+      <Script
+        id="yotpo reviews"
+        src="/yotpo.js"
+        onLoad={() => {
+          setLoaded(true);
+        }}
+      />
       <Head>
         <title>{product.title} | TOR Salon Products</title>
-        <meta
+        {/* <meta
           name="description"
           content={`${product.description.substring(0, 200)}...`}
-        />
+        /> */}
       </Head>
       <Flex flexDirection={["column", "row"]}>
         <AspectRatio ratio={1} maxW={["100%", "50%"]} minW={["100%", "50%"]}>
@@ -114,7 +122,7 @@ const ProductPage = ({
         <Container centerContent pt={40} pb={20}>
           <Stack direction={["column"]} spacing={4} w="full" align="flex-start">
             <Heading maxW={500}>{product.title}</Heading>
-            <Text
+            <Box
               dangerouslySetInnerHTML={{
                 __html: product.descriptionHtml,
               }}
@@ -222,21 +230,25 @@ const ProductPage = ({
           </Heading>
           <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
             {collection.products.edges.map((p: any) => (
-              <Product product={p} key={p.node.id} fontSize={24} />
+              <React.Fragment key={p.node.id}>
+                <Product product={p} fontSize={24} />
+              </React.Fragment>
             ))}
           </SimpleGrid>
         </Container>
       </Box>
       <Container maxW="container.xl" py={40} centerContent>
-        <div
-          className="yotpo yotpo-main-widget"
-          data-product-id={Buffer.from(product.id).toString("base64")}
-          data-price={activeVariant.priceV2.amount}
-          data-currency={"USD"}
-          data-name={product.title}
-          data-url={`https://torsalonproducts.com/product/${product.handle}`}
-          data-image-url={product.images.edges[0]?.node.url}
-        ></div>
+        {yjsLoaded && (
+          <div
+            className="yotpo yotpo-main-widget"
+            data-product-id={Buffer.from(product.id).toString("base64")}
+            data-price={activeVariant.priceV2.amount}
+            data-currency={"USD"}
+            data-name={product.title}
+            data-url={`https://torsalonproducts.com/product/${product.handle}`}
+            data-image-url={product.images.edges[0]?.node.url}
+          ></div>
+        )}
       </Container>
     </>
   );
@@ -336,6 +348,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
             handle
             title
             description
+            descriptionHtml
             image {
               url
             }

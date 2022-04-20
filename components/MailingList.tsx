@@ -82,7 +82,7 @@ export default function MailingList() {
       bottom={2}
       left={-1000}
       p={10}
-      zIndex={2}
+      zIndex={200}
       bgColor="black"
       color="white"
       animate={controls}

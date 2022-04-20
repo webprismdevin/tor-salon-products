@@ -413,9 +413,10 @@ function HomePage({ products }: any) {
         </Stack>
       </Box>
       <Container maxW="container.xl" pb={40} mt={20}>
+      <div className="embedsocial-hashtag" data-ref="3da7961275f3a181f97c540d896b4353084e707f"></div>
         <Box
           dangerouslySetInnerHTML={{
-            __html: `<div class="embedsocial-hashtag" data-ref="3da7961275f3a181f97c540d896b4353084e707f"></div><script>(function(d, s, id){var js; if (d.getElementById(id)) {return;} js = d.createElement(s); js.id = id; js.src = "https://embedsocial.com/cdn/ht.js"; d.getElementsByTagName("head")[0].appendChild(js);}(document, "script", "EmbedSocialHashtagScript"));</script>`,
+            __html: `<script>(function(d, s, id){var js; if (d.getElementById(id)) {return;} js = d.createElement(s); js.id = id; js.src = "https://embedsocial.com/cdn/ht.js"; d.getElementsByTagName("head")[0].appendChild(js);}(document, "script", "EmbedSocialHashtagScript"));</script>`,
           }}
         />
       </Container>
