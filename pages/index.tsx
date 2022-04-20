@@ -61,14 +61,14 @@ function HomePage({ products, styling }: any) {
       <Box pos="relative" w="full" height={["auto", 520]}>
         <MotionBox
           initial={{
-            opacity: 0
+            opacity: 0,
           }}
           animate={{
             opacity: 1,
-            transition: {delay: 0.4}
+            transition: { delay: 0.4 },
           }}
           left={0}
-          pos={["static", "absolute"]} 
+          pos={["static", "absolute"]}
           top={["0", "-90px"]}
         >
           <NextImage
@@ -81,11 +81,11 @@ function HomePage({ products, styling }: any) {
         <MotionBox
           pos="absolute"
           initial={{
-            opacity: 0
+            opacity: 0,
           }}
           animate={{
             opacity: 1,
-            transition: {delay: 0.8}
+            transition: { delay: 0.8 },
           }}
           right={0}
           top={[600, 0]}
@@ -177,12 +177,14 @@ function HomePage({ products, styling }: any) {
               while remaining soft to the touch.
             </Text>
           </Stack>
-          {styling.map((prod:any) => <ProductFeature
-            key={prod.node.id}
-            name={prod.node.title}
-            price={prod.node.priceRange.minVariantPrice.amount}
-            image={prod.node.images.edges[0].node.url}
-          />)}
+          {styling.map((prod: any) => (
+            <ProductFeature
+              key={prod.node.id}
+              name={prod.node.title}
+              price={prod.node.priceRange.minVariantPrice.amount}
+              image={prod.node.images.edges[0].node.url}
+            />
+          ))}
           <Box
             flexGrow={1}
             textAlign="center"
@@ -254,7 +256,9 @@ function HomePage({ products, styling }: any) {
           </Text>
           <Heading size="4xl">CBD</Heading>
           <Text>
-            TOR CBD products are made in the USA, from FDA approved producers, and contain significantly more CBD that typical products, making TOR CBD more effective.
+            TOR CBD products are made in the USA, from FDA approved producers,
+            and contain significantly more CBD that typical products, making TOR
+            CBD more effective.
           </Text>
         </Stack>
         <Stack
@@ -264,9 +268,13 @@ function HomePage({ products, styling }: any) {
           left={8}
         >
           <NextLink href="/collection/cdb-tinctures" passHref>
-            <MotionBox whileHover={{
-              scale: 1.02
-            }} bg="white" p={8}>
+            <MotionBox
+              whileHover={{
+                scale: 1.02,
+              }}
+              bg="white"
+              p={8}
+            >
               <Image src={"/images/750mg-tincture.png"} w={240} alt="" />
               <Flex justify={"space-between"}>
                 <Text>CBD Tinctures</Text>
@@ -275,15 +283,19 @@ function HomePage({ products, styling }: any) {
             </MotionBox>
           </NextLink>
           <NextLink href="/collection/cdb-lotions" passHref>
-          <MotionBox whileHover={{
-              scale: 1.02
-            }} bg="white" p={8}>
-            <Image src={"/images/250ml-roll-on.png"} w={240} alt="" />
-            <Flex justify={"space-between"}>
-              <Text>CBD Lotions</Text>
-              <Icon as={FiArrowRight} size={4} />
-            </Flex>
-          </MotionBox>
+            <MotionBox
+              whileHover={{
+                scale: 1.02,
+              }}
+              bg="white"
+              p={8}
+            >
+              <Image src={"/images/250ml-roll-on.png"} w={240} alt="" />
+              <Flex justify={"space-between"}>
+                <Text>CBD Lotions</Text>
+                <Icon as={FiArrowRight} size={4} />
+              </Flex>
+            </MotionBox>
           </NextLink>
         </Stack>
         <Button pos={["static", "absolute"]} my={[4, 0]} right={8} bottom={8}>
@@ -327,7 +339,9 @@ function HomePage({ products, styling }: any) {
             >
               About
             </Text>
-            <Heading fontSize={[114, 220]} fontFamily={"Futura"}>TOR</Heading>
+            <Heading fontSize={[114, 220]} fontFamily={"Futura"}>
+              TOR
+            </Heading>
           </Box>
           <Box maxW={["auto", "400"]} p={[8]}>
             <Testimonials />
@@ -336,17 +350,21 @@ function HomePage({ products, styling }: any) {
         <Box py={40} height={["auto", 800]} pos="relative">
           <Container maxW="container.xl">
             <Stack maxW="560px" spacing={4}>
-              <Text fontSize={22} textTransform="uppercase" fontFamily={"Futura"}>
+              <Text
+                fontSize={22}
+                textTransform="uppercase"
+                fontFamily={"Futura"}
+              >
                 Pro Innovation -
               </Text>
               <Heading size="2xl">
                 Naturally derived, backed by science.
               </Heading>
               <Text>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ut,
-                debitis? Fugit dolorum rem impedit a ipsa odio quas nihil!
-                Voluptatibus, ducimus sit? Asperiores repellendus quos nihil ex
-                soluta assumenda enim?
+                TOR is taking a different approach to hair + body products - we
+                don&apos;t compromise, and we don&apos;t ask our customers to.
+                That&apos;s why we started with 3 hair care lines based on the
+                specific challenges of each hair type.
               </Text>
               <Button alignSelf={"flex-start"}>About Us</Button>
             </Stack>
@@ -380,9 +398,14 @@ function HomePage({ products, styling }: any) {
           </Text>
           <Heading size="2xl">Salons + Stylists</Heading>
           <Text>
-            TOR Salon Products was started by a haircare industry veteran, with a strong understanding of stylist and salons challenges, and over a decade helping salons formulate products for their clients.
+            TOR Salon Products was started by a haircare industry veteran, with
+            a strong understanding of stylist and salons challenges, and over a
+            decade helping salons formulate products for their clients.
           </Text>
-          <Text>Our Salon + Stylist program supports our salon partners and their stylists, with an open door, and a focus on innovative.</Text>
+          <Text>
+            Our Salon + Stylist program supports our salon partners and their
+            stylists, with an open door, and a focus on innovative.
+          </Text>
           <Button alignSelf={"flex-start"}>Learn More</Button>
           <Box pt={8}>
             <Heading mb={4}>Benefits</Heading>
@@ -404,7 +427,10 @@ function HomePage({ products, styling }: any) {
         </Stack>
       </Box>
       <Container maxW="container.xl" pb={40} mt={20}>
-      <div className="embedsocial-hashtag" data-ref="3da7961275f3a181f97c540d896b4353084e707f"></div>
+        <div
+          className="embedsocial-hashtag"
+          data-ref="3da7961275f3a181f97c540d896b4353084e707f"
+        ></div>
         <Box
           dangerouslySetInnerHTML={{
             __html: `<script>(function(d, s, id){var js; if (d.getElementById(id)) {return;} js = d.createElement(s); js.id = id; js.src = "https://embedsocial.com/cdn/ht.js"; d.getElementsByTagName("head")[0].appendChild(js);}(document, "script", "EmbedSocialHashtagScript"));</script>`,
@@ -516,8 +542,8 @@ const Testimonials = () => {
   const controls = useAnimation();
 
   const testimonials = [
-    "I stopped washing my hair, for almost a year, because I wanted to feel my natural hair. TOR's Medium/Thick line are the only products that actually leave my hair feeling truly natural.", 
-    "It's literally the only conditioner I've found that actually washes out. TOR's products work great on my beard as well!"
+    "I stopped washing my hair, for almost a year, because I wanted to feel my natural hair. TOR's Medium/Thick line are the only products that actually leave my hair feeling truly natural.",
+    "It's literally the only conditioner I've found that actually washes out. TOR's products work great on my beard as well!",
   ];
 
   const [[page, direction], setPage] = useState([0, 0]);
