@@ -19,7 +19,14 @@ const About = ({ data }: any) => {
   return (
     <>
       <Box pos="relative" h={["auto", 1200]}>
-        <Stack spacing={6} pl={[8, 20]} pr={[8,0]} py={40} pos="relative" zIndex={1}>
+        <Stack
+          spacing={6}
+          pl={[8, 20]}
+          pr={[8, 0]}
+          py={[20, 40]}
+          pos="relative"
+          zIndex={1}
+        >
           <Heading
             as="h1"
             size="lg"
@@ -45,7 +52,15 @@ const About = ({ data }: any) => {
             TOR&apos;s philosophy is simple: “no half-measures”.
           </Text>
         </Stack>
-        <Stack spacing={6} pl={[8, 20]} pr={[8,0]} py={[0, 40]}>
+        <Image
+          pos={["static", "absolute"]}
+          right={0}
+          top={40}
+          pt={[20, 0]}
+          src="/images/about/Tor-family.png"
+          alt="Tor family"
+        />
+        <Stack spacing={6} pl={[8, 20]} pr={[8, 0]} py={[0, 40]}>
           <Heading>Hair Care</Heading>
           <Text maxW="480px">
             Our hair care product lines are driven by the ability to style,
@@ -61,20 +76,19 @@ const About = ({ data }: any) => {
             way to create results was individually.
           </Text>
         </Stack>
+      </Box>
+      <Box pos="relative" h={["auto", 1500]} py={[40, 0]}>
         <Image
           pos={["static", "absolute"]}
-          right={0}
-          top={40}
-          pt={[20, 0]}
-          src="/images/about/Tor-family.png"
+          left={0}
+          top={[0, 40]}
+          src="/images/about/about-cbd.png"
           alt="Tor family"
         />
-      </Box>
-      <Box pos="relative" h={["auto", 1500]} py={[10, 0]}>
         <Stack
           spacing={6}
           pl={[8, 20]}
-          pr={[8,0]}
+          pr={[8, 0]}
           py={[20, 480]}
           pos={["static", "absolute"]}
           right={20}
@@ -103,15 +117,8 @@ const About = ({ data }: any) => {
           </Text>
           <Button>Shop CBD</Button>
         </Stack>
-        <Image
-          pos={["static", "absolute"]}
-          left={0}
-          top={[0, 40]}
-          src="/images/about/about-cbd.png"
-          alt="Tor family"
-        />
       </Box>
-      <Container maxW="container.xl" pt={[10, 0]}>
+      <Container maxW="container.xl" mt={[-20, 0]} pt={[0]}>
         <Stack spacing={12} align="center">
           <Heading textAlign={"center"}>Who We Serve</Heading>
           <Divider maxW={400} />
@@ -189,14 +196,12 @@ const About = ({ data }: any) => {
       </Container>
       <Container maxW="container.lg" py={20}>
         <Heading textAlign={"center"}>Follow us on Instagram!</Heading>
-        <Box textAlign={"center"}  my={6}>
+        <Box textAlign={"center"} my={6}>
           <Link
             href="https://www.instagram.com/tor_salonproducts/"
             target="_blank"
           >
-            <Button>
-              Follow
-            </Button>
+            <Button>Follow</Button>
           </Link>
         </Box>
         <div

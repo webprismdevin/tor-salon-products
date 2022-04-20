@@ -39,7 +39,7 @@ const MotionBox = motion<BoxProps>(Box);
 const MotionImage = motion<ImageProps>(Image);
 const MotionText = motion<TextProps>(Text);
 
-function HomePage({ products }: any) {
+function HomePage({ products, styling }: any) {
   const { shop } = useContext(ShopContext);
 
   return (
@@ -167,7 +167,7 @@ function HomePage({ products }: any) {
       </Box>
       <Container maxW="container.xl" py={20}>
         <Stack direction={["column", "row"]} w="full">
-          <Stack maxW="360px" alignSelf={"center"}>
+          <Stack maxW="240px" alignSelf={"center"}>
             <Text fontSize={22} textTransform="uppercase" fontFamily={"Futura"}>
               Salon Grade -
             </Text>
@@ -177,21 +177,12 @@ function HomePage({ products }: any) {
               while remaining soft to the touch.
             </Text>
           </Stack>
-          <ProductFeature
-            name={"Gel 2.0"}
-            price={"$39.99"}
-            image={"/images/hairtypes/tor-curly_hair.png"}
-          />
-          <ProductFeature
-            name={"Gel 2.0"}
-            price={"$39.99"}
-            image={"/images/hairtypes/tor-curly_hair.png"}
-          />
-          <ProductFeature
-            name={"Gel 2.0"}
-            price={"$39.99"}
-            image={"/images/hairtypes/tor-curly_hair.png"}
-          />
+          {styling.map((prod:any) => <ProductFeature
+            key={prod.node.id}
+            name={prod.node.title}
+            price={prod.node.priceRange.minVariantPrice.amount}
+            image={prod.node.images.edges[0].node.url}
+          />)}
           <Box
             flexGrow={1}
             textAlign="center"
@@ -453,8 +444,8 @@ const ProductFeature = ({ name, price, image }: ProductFeatureTypes) => {
         }}
       />
       <MotionBox variants={{ initial: { opacity: 1 }, hover: { opacity: 0 } }}>
-        <Heading>{name}</Heading>
-        <Text>{price}</Text>
+        <Heading fontSize="2xl">{name}</Heading>
+        <Text>{formatter.format(parseInt(price))}</Text>
       </MotionBox>
     </MotionBox>
   );
@@ -689,7 +680,7 @@ export async function getStaticProps() {
       styling: collection(handle: "styling") {
         id
         title
-        products(first: 6) {
+        products(first: 3) {
           edges {
             node {
               id
@@ -740,6 +731,7 @@ export async function getStaticProps() {
   return {
     props: {
       // homepageData: null,
+      styling: res.styling.products.edges,
       collection: res.featured,
       products: res.featured.products.edges,
     },
