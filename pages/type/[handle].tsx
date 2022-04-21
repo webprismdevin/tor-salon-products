@@ -12,7 +12,6 @@ import {
   Flex,
   Icon,
 } from "@chakra-ui/react";
-import getCollections from "../../lib/get-collections";
 import ProductFeature from "../../components/ProductFeature";
 import Product from "../../components/Product";
 

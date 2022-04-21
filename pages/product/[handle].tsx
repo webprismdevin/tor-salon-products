@@ -105,10 +105,10 @@ const ProductPage = ({
       />
       <Head>
         <title>{product.title} | TOR Salon Products</title>
-        {/* <meta
+        <meta
           name="description"
           content={`${product.description.substring(0, 200)}...`}
-        /> */}
+        />
       </Head>
       <Flex flexDirection={["column", "row"]}>
         <AspectRatio ratio={1} maxW={["100%", "50%"]} minW={["100%", "50%"]}>

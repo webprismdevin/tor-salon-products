@@ -15,13 +15,8 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useContext, useState } from "react";
-import {
-  AiFillFacebook,
-  AiFillInstagram,
-  AiFillYoutube,
-  AiOutlineFacebook,
-} from "react-icons/ai";
 import { FiArrowRight } from "react-icons/fi";
+import { SiGooglemybusiness, SiFacebook, SiInstagram, SiYoutube } from "react-icons/si"
 import ShopContext from "../lib/shop-context";
 import {
   BodyAndSkin,
@@ -118,24 +113,36 @@ const Footer = () => {
           </Stack>
           <Stack>
             <Text>Connect &amp; Share</Text>
-            <Stack direction={["row"]}>
+            <Stack direction={["row"]} spacing={4}>
               <Link
                 href="https://www.facebook.com/torproducts"
                 target={"_blank"}
               >
-                <Icon as={AiFillFacebook} boxSize={8} />
+                <Icon as={SiFacebook} boxSize={6} />
               </Link>
               <Link
                 href="https://www.instagram.com/tor_salonproducts/"
                 target={"_blank"}
               >
-                <Icon as={AiFillInstagram} boxSize={8} />
+                <Icon as={SiInstagram} boxSize={6} />
               </Link>
               <Link
                 href="https://www.youtube.com/channel/UCb-iMkFedO5bCd7p8t6atNg"
                 target={"_blank"}
               >
-                <Icon as={AiFillYoutube} boxSize={8} />
+                <Icon as={SiYoutube} boxSize={6} />
+              </Link>
+              <Link
+                href="https://www.youtube.com/channel/UCb-iMkFedO5bCd7p8t6atNg"
+                target={"_blank"}
+              >
+                <Icon as={SiGooglemybusiness} boxSize={6} />
+              </Link>
+              <Link
+                href="https://www.gab.com/TORProducts"
+                target={"_blank"}
+              >
+                <Image src="/gs-footer-icon.jpg" alt="Gab Social Icon" boxSize={6} />
               </Link>
             </Stack>
           </Stack>

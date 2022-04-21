@@ -15,11 +15,13 @@ import {
   ImageProps,
   GridItem,
   TextProps,
+  Link
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
 import NextImage from "next/image";
 import Head from "next/head";
 import NextLink from "next/link";
+import Script from "next/script";
 import { wrap } from "@popmotion/popcorn";
 // import { groq } from "next-sanity";
 // import { getClient, imageBuilder } from "../lib/sanity";
@@ -39,13 +41,13 @@ const MotionBox = motion<BoxProps>(Box);
 const MotionImage = motion<ImageProps>(Image);
 const MotionText = motion<TextProps>(Text);
 
-function HomePage({ products, styling }: any) {
+function HomePage({ products, styling, body }: any) {
   const { shop } = useContext(ShopContext);
 
   return (
     <>
       <Head>
-        <title>{shop.name}</title>
+        <title>Uncompromised Hair + Body Products | TOR Salon Products</title>
         <meta name="description" content="" />
       </Head>
       <Container py={20} centerContent pos="relative" maxW="container.xl">
@@ -53,8 +55,12 @@ function HomePage({ products, styling }: any) {
           <Heading fontSize={[42, 144]}>Uncompromised</Heading>
           <Heading fontSize={[28, 56]}>Hair + Body Products</Heading>
           <HStack justify={"center"}>
-            <Button>Shop Hair</Button>
-            <Button>Shop Body</Button>
+            <NextLink href="/all-hair-care" passHref>
+              <Button>Shop Hair</Button>
+            </NextLink>
+            <NextLink href="/all-body-products" passHref>
+              <Button>Shop Body</Button>
+            </NextLink>
           </HStack>
         </Stack>
       </Container>
@@ -163,7 +169,11 @@ function HomePage({ products, styling }: any) {
               flexGrow={1}
               bgColor="white"
             />
-            <Button variant={"outline"} color="white">
+            <Button
+              onClick={() => window.Tawk_API.maximize()}
+              variant={"outline"}
+              color="white"
+            >
               We can help
             </Button>
           </Stack>
@@ -171,7 +181,11 @@ function HomePage({ products, styling }: any) {
       </Box>
       <Container maxW="container.xl" py={20}>
         <Stack direction={["column", "row"]} w="full">
-          <Stack maxW={["none", "240px"]} alignSelf={"center"}>
+          <Stack
+            maxW={["none", "240px"]}
+            alignSelf={"center"}
+            justify={"space-between"}
+          >
             <Text fontSize={22} textTransform="uppercase" fontFamily={"Futura"}>
               Salon Grade -
             </Text>
@@ -190,6 +204,7 @@ function HomePage({ products, styling }: any) {
             />
           ))}
           <Box
+            flexShrink={0}
             flexGrow={1}
             textAlign="center"
             minH="100%"
@@ -220,8 +235,13 @@ function HomePage({ products, styling }: any) {
         </Container>
       </Box>
       <Container maxW="container.md" py={20} my={10}>
-        <Stack direction={["column", "row"]} w="full" maxH={["none", 120]}>
-          {styling.map((prod: any) => (
+        <Stack
+          direction={["column", "row"]}
+          w="full"
+          justify="space-between"
+          maxH={["none", 120]}
+        >
+          {body.map((prod: any) => (
             <ProductFeature
               key={prod.node.id}
               name={prod.node.title}
@@ -266,7 +286,7 @@ function HomePage({ products, styling }: any) {
           left={8}
           w="full"
           p={[2, 0]}
-          spacing={[4, 0]}
+          spacing={[4]}
         >
           <NextLink href="/collection/cdb-tinctures" passHref>
             <MotionBox
@@ -437,19 +457,23 @@ function HomePage({ products, styling }: any) {
           </Box>
         </Stack>
       </Box>
-      {typeof(window) && (
-        <Container maxW="container.xl" pb={40} mt={20}>
-          <div
-            className="embedsocial-hashtag"
-            data-ref="3da7961275f3a181f97c540d896b4353084e707f"
-          ></div>
-          <Box
-            dangerouslySetInnerHTML={{
-              __html: `<script>(function(d, s, id){var js; if (d.getElementById(id)) {return;} js = d.createElement(s); js.id = id; js.src = "https://embedsocial.com/cdn/ht.js"; d.getElementsByTagName("head")[0].appendChild(js);}(document, "script", "EmbedSocialHashtagScript"));</script>`,
-            }}
-          />
-        </Container>
-      )}
+      <Container maxW="container.xl" pb={40} mt={20}>
+        <Heading textAlign={"center"}>Follow us on Instagram!</Heading>
+        <Box textAlign={"center"} my={6}>
+          <Link
+            href="https://www.instagram.com/tor_salonproducts/"
+            target="_blank"
+          >
+            <Button>Follow</Button>
+          </Link>
+        </Box>
+        {typeof window && (
+          <>
+          <div className="embedsocial-hashtag" data-ref="e809ba879b57c02fc17f2171500c0a089e3ea49f"></div>
+          <Script id="embedscript">{`(function(d, s, id){var js; if (d.getElementById(id)) {return;} js = d.createElement(s); js.id = id; js.src = "https://embedsocial.com/cdn/ht.js"; d.getElementsByTagName("head")[0].appendChild(js);}(document, "script", "EmbedSocialHashtagScript"));`}</Script>
+          </>
+        )}
+      </Container>
     </>
   );
 }
@@ -463,7 +487,7 @@ declare interface ProductFeatureTypes {
 const ProductFeature = ({ name, price, image }: ProductFeatureTypes) => {
   return (
     <MotionBox
-      flexGrow={1}
+      maxW={280}
       textAlign="center"
       display={"grid"}
       placeItems={"center"}
@@ -757,6 +781,47 @@ export async function getStaticProps() {
           }
         }
       }
+      body: collection(handle: "homepage-body") {
+        id
+        title
+        products(first: 3) {
+          edges {
+            node {
+              id
+              title
+              description
+              handle
+              variants(first: 1) {
+                edges {
+                  node {
+                    id
+                  }
+                }
+              }
+              images(first: 1) {
+                edges {
+                  node {
+                    url
+                  }
+                }
+              }
+              priceRange {
+                maxVariantPrice {
+                  amount
+                }
+                minVariantPrice {
+                  amount
+                }
+              }
+              compareAtPriceRange {
+                maxVariantPrice {
+                  amount
+                }
+              }
+            }
+          }
+        }
+      }
     }
   `;
 
@@ -773,6 +838,7 @@ export async function getStaticProps() {
       styling: res.styling.products.edges,
       collection: res.featured,
       products: res.featured.products.edges,
+      body: res.body.products.edges,
     },
     revalidate: 60,
   };

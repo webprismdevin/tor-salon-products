@@ -77,7 +77,9 @@ export default function Account() {
         )
       );
 
-      getUser(token.customerAccessToken.accessToken);
+      console.log(token);
+
+      getUser(token.accessToken);
     }
   }, [authenticated]);
 
@@ -162,38 +164,36 @@ function Orders({ userData }: any) {
         <Heading mb={8} size="lg">
           Orders
         </Heading>
-        <Stack spacing={4}>
-          <SimpleGrid templateColumns={"repeat(4, 1fr)"} gap={4} fontWeight={600}>
-            <GridItem>Order Date</GridItem>
-            <GridItem>Status</GridItem>
-            <GridItem>Order #</GridItem>
-            <GridItem>Order Confirmation</GridItem>
-          </SimpleGrid>
+        <Stack>
+          <SimpleGrid
+            templateColumns={"repeat(4, 1fr)"}
+            gap={4}
+          >
+            <GridItem fontWeight={600} pb={4}>Order Date</GridItem>
+            <GridItem fontWeight={600} pb={4}>Status</GridItem>
+            <GridItem fontWeight={600} pb={4}>Order #</GridItem>
+            <GridItem fontWeight={600} pb={4}>Confirmation</GridItem>
           {userData.orders.edges.map((o: any, i: number) => (
-            <Box
-              key={i}
-              py={4}
-              borderTop={"1px solid rgba(0,0,0,0.15)"}
-              borderBottom={"1px solid rgba(0,0,0,0.15)"}
-            >
-              <SimpleGrid templateColumns={["repeat(4, 1fr)"]} gap={4}>
-                <GridItem>
-                  {new Date(o.node.processedAt).toLocaleDateString()}
-                </GridItem>
-                <GridItem>{o.node.fulfillmentStatus}</GridItem>
-                <GridItem>{o.node.orderNumber}</GridItem>
-                <GridItem>
-                  <NextLink href={`/order/${o.node.id}`} passHref>
-                    <Link>
-                      <Text>View</Text>
-                    </Link>
-                  </NextLink>
-                </GridItem>
-              </SimpleGrid>
-            </Box>
+            <>
+              <GridItem>
+                {new Date(o.node.processedAt).toLocaleDateString()}
+              </GridItem>
+              <GridItem>{o.node.fulfillmentStatus}</GridItem>
+              <GridItem>{o.node.orderNumber}</GridItem>
+              <GridItem>
+                <NextLink href={`/order/${Buffer.from(o.node.id).toString("base64")}`} passHref>
+                  <Link>
+                    <Text>View</Text>
+                  </Link>
+                </NextLink>
+              </GridItem>
+            </>
           ))}
+          </SimpleGrid>
         </Stack>
       </Box>
     );
   else return <Box>Something&apos;s wrong.</Box>;
 }
+
+// Buffer.from(product.id).toString("base64")
