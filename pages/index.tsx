@@ -50,7 +50,7 @@ function HomePage({ products, styling }: any) {
       </Head>
       <Container py={20} centerContent pos="relative" maxW="container.xl">
         <Stack spacing={4} textAlign={"center"}>
-          <Heading fontSize={[48, 144]}>Uncompromised</Heading>
+          <Heading fontSize={[42, 144]}>Uncompromised</Heading>
           <Heading fontSize={[28, 56]}>Hair + Body Products</Heading>
           <HStack justify={"center"}>
             <Button>Shop Hair</Button>
@@ -141,15 +141,19 @@ function HomePage({ products, styling }: any) {
           link="/type/curly"
         />
       </Flex>
-      <Box bgColor="#000000" py={10} px={6}>
+      <Box bgColor="#000000" py={10} px={[2, 6]}>
         <Container maxW="container.xl">
           <Stack
             direction={["column", "row"]}
             w="full"
             align="center"
-            spacing={16}
+            spacing={[8, 16]}
           >
-            <Heading fontSize="64px" color="white">
+            <Heading
+              fontSize={[48, 64]}
+              color="white"
+              textAlign={["center", "left"]}
+            >
               Not sure where to start?
             </Heading>
             <Box
@@ -160,14 +164,14 @@ function HomePage({ products, styling }: any) {
               bgColor="white"
             />
             <Button variant={"outline"} color="white">
-              Find Your Routine
+              We can help
             </Button>
           </Stack>
         </Container>
       </Box>
       <Container maxW="container.xl" py={20}>
         <Stack direction={["column", "row"]} w="full">
-          <Stack maxW="240px" alignSelf={"center"}>
+          <Stack maxW={["none", "240px"]} alignSelf={"center"}>
             <Text fontSize={22} textTransform="uppercase" fontFamily={"Futura"}>
               Salon Grade -
             </Text>
@@ -217,21 +221,14 @@ function HomePage({ products, styling }: any) {
       </Box>
       <Container maxW="container.md" py={20} my={10}>
         <Stack direction={["column", "row"]} w="full" maxH={["none", 120]}>
-          <ProductFeature
-            name={"Gel 2.0"}
-            price={"$39.99"}
-            image={"/images/hairtypes/tor-curly_hair.png"}
-          />
-          <ProductFeature
-            name={"Gel 2.0"}
-            price={"$39.99"}
-            image={"/images/hairtypes/tor-curly_hair.png"}
-          />
-          <ProductFeature
-            name={"Gel 2.0"}
-            price={"$39.99"}
-            image={"/images/hairtypes/tor-curly_hair.png"}
-          />
+          {styling.map((prod: any) => (
+            <ProductFeature
+              key={prod.node.id}
+              name={prod.node.title}
+              price={prod.node.priceRange.minVariantPrice.amount}
+              image={prod.node.images.edges[0].node.url}
+            />
+          ))}
         </Stack>
       </Container>
       <Box
@@ -239,13 +236,14 @@ function HomePage({ products, styling }: any) {
         bgImage="/images/tor-cbd-2.jpg"
         borderTop="10px solid #000000"
         bgSize={"cover"}
-        backgroundPosition={["right", "right"]}
+        backgroundPosition={["bottom right", "right"]}
         pos="relative"
         px={[2, 0]}
       >
         <Stack
           maxW="520px"
-          p={8}
+          px={[4, 8]}
+          py={[12, 8]}
           borderRadius={10}
           pos={["static", "absolute"]}
           left={0}
@@ -266,6 +264,9 @@ function HomePage({ products, styling }: any) {
           direction={["column", "row"]}
           bottom={8}
           left={8}
+          w="full"
+          p={[2, 0]}
+          spacing={[4, 0]}
         >
           <NextLink href="/collection/cdb-tinctures" passHref>
             <MotionBox
@@ -298,9 +299,17 @@ function HomePage({ products, styling }: any) {
             </MotionBox>
           </NextLink>
         </Stack>
-        <Button pos={["static", "absolute"]} my={[4, 0]} right={8} bottom={8}>
-          Shop All CBD
-        </Button>
+        <Box py={[16, 0]}>
+          <Button
+            display="block"
+            pos={["static", "absolute"]}
+            mx={["auto", null]}
+            right={[null, 8]}
+            bottom={[null, 8]}
+          >
+            Shop All CBD
+          </Button>
+        </Box>
       </Box>
       <Box pt={40}>
         <Container centerContent mb={20}>
@@ -327,7 +336,7 @@ function HomePage({ products, styling }: any) {
         <Flex gap={20} flexDir={["column-reverse", "row"]}>
           <Box
             py={[20, 40]}
-            px={[20, 40]}
+            px={[6, 40]}
             borderRightRadius={4}
             color="white"
             bgColor={"black"}
@@ -335,7 +344,7 @@ function HomePage({ products, styling }: any) {
             <Text
               textTransform={"uppercase"}
               mb={[0, -10]}
-              textAlign={["center", "left"]}
+              textAlign={["left", "left"]}
             >
               About
             </Text>
@@ -366,7 +375,9 @@ function HomePage({ products, styling }: any) {
                 That&apos;s why we started with 3 hair care lines based on the
                 specific challenges of each hair type.
               </Text>
-              <Button alignSelf={"flex-start"}>About Us</Button>
+              <NextLink href={"/about"} passHref>
+                <Button alignSelf={"flex-start"}>About Us</Button>
+              </NextLink>
             </Stack>
           </Container>
           <Image
@@ -426,17 +437,19 @@ function HomePage({ products, styling }: any) {
           </Box>
         </Stack>
       </Box>
-      <Container maxW="container.xl" pb={40} mt={20}>
-        <div
-          className="embedsocial-hashtag"
-          data-ref="3da7961275f3a181f97c540d896b4353084e707f"
-        ></div>
-        <Box
-          dangerouslySetInnerHTML={{
-            __html: `<script>(function(d, s, id){var js; if (d.getElementById(id)) {return;} js = d.createElement(s); js.id = id; js.src = "https://embedsocial.com/cdn/ht.js"; d.getElementsByTagName("head")[0].appendChild(js);}(document, "script", "EmbedSocialHashtagScript"));</script>`,
-          }}
-        />
-      </Container>
+      {typeof(window) && (
+        <Container maxW="container.xl" pb={40} mt={20}>
+          <div
+            className="embedsocial-hashtag"
+            data-ref="3da7961275f3a181f97c540d896b4353084e707f"
+          ></div>
+          <Box
+            dangerouslySetInnerHTML={{
+              __html: `<script>(function(d, s, id){var js; if (d.getElementById(id)) {return;} js = d.createElement(s); js.id = id; js.src = "https://embedsocial.com/cdn/ht.js"; d.getElementsByTagName("head")[0].appendChild(js);}(document, "script", "EmbedSocialHashtagScript"));</script>`,
+            }}
+          />
+        </Container>
+      )}
     </>
   );
 }
