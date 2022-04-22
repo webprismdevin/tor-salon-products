@@ -67,8 +67,7 @@ export const getServerSideProps: GetServerSideProps = async ({
               images(first: 2) {
                 edges {
                   node {
-                    altText
-                    transformedSrc
+                    url
                   }
                 }
               }

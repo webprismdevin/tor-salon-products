@@ -612,8 +612,8 @@ const Testimonials = () => {
         </MotionText>
       </AnimatePresence>
       <HStack gap={4}>
-        <a onClick={() => paginate(-1)}>←</a>
-        <a onClick={() => paginate(1)}>→</a>
+        <Box cursor={"pointer"} onClick={() => paginate(-1)}>←</Box>
+        <Box cursor={"pointer"} onClick={() => paginate(1)}>→</Box>
       </HStack>
     </MotionBox>
   );
