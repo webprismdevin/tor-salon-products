@@ -1,11 +1,21 @@
-import { mode } from '@chakra-ui/theme-tools'
+import { mode } from "@chakra-ui/theme-tools";
 
 const themeConfig = {
   useSystemColorMode: false,
   initialColorMode: "light",
+  colors: {
+    brand: {
+      black: "#000000",
+      white: "#FFFFFF",
+      rose: "#E4D5D4",
+      alabaster: "#E4E2DB",
+      platinum: "#D7E1DC"
+
+    },
+  },
   fonts: {
-    heading: 'Raleway, sans-serif',
-    body: 'Raleway, sans-serif'
+    heading: "Raleway, sans-serif",
+    body: "Raleway, sans-serif",
   },
   components: {
     Button: {
@@ -22,17 +32,17 @@ const themeConfig = {
     },
     Heading: {
       baseStyle: {
-        fontWeight: "regular"
+        fontWeight: "regular",
       },
       sizes: {
         "4xl": {
-          fontSize: ['6xl', null, '120px']
+          fontSize: ["6xl", null, "120px"],
         },
         "2xl": {
-          fontSize: ['4xl', null, '56px']
-        }
-      }
-    }
+          fontSize: ["4xl", null, "56px"],
+        },
+      },
+    },
   },
 };
 

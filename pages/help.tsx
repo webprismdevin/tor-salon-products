@@ -24,13 +24,11 @@ export default function FAQ({ data }: any) {
       <Head>
         <title>Frequently Asked Questions</title>
       </Head>
-      <Box pt={[10, 20]} bg="gray.700" textColor="white" w="full">
+      <Box pt={[10, 20]} bg="brand.platinum" color="black" w="full">
           <Container maxW="container.xl" py={20} centerContent>
             <Heading size="2xl">{data.heading}</Heading>
             <Text my={4}>{data.subheading}</Text>
-            {data.heroButton !== "" && data.heroButton && (
-              <Button variant="outline" _hover={{color: 'gray.700', background: 'White'}}>{data.heroButton}</Button>
-            )}
+            <Button variant="outline" _hover={{color: 'black', background: 'white'}}>Let&apos;s Chat</Button>
           </Container>
       </Box>
       <Box w="full" py={20}>

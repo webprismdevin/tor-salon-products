@@ -7,6 +7,7 @@ import {
   Text,
   AspectRatio,
   Image,
+  ImageProps,
   Select,
   Button,
   useNumberInput,
@@ -22,6 +23,10 @@ import formatter from "../../lib/formatter";
 import { GetStaticProps } from "next";
 import Product from "../../components/Product";
 import Script from "next/script";
+import { motion, AnimatePresence, useAnimation } from "framer-motion";
+import { wrap } from "@popmotion/popcorn";
+
+const MotionImage = motion<ImageProps>(Image);
 
 declare interface VariantType {
   id: string;
@@ -111,14 +116,7 @@ const ProductPage = ({
         />
       </Head>
       <Flex flexDirection={["column", "row"]}>
-        <AspectRatio ratio={1} maxW={["100%", "50%"]} minW={["100%", "50%"]}>
-          <Image
-            src={product.images.edges[0]?.node.url}
-            alt={``}
-            objectFit="cover"
-            objectPosition="top center"
-          />
-        </AspectRatio>
+        <PhotoCarousel images={product.images.edges} />
         <Container centerContent pt={40} pb={20}>
           <Stack direction={["column"]} spacing={4} w="full" align="flex-start">
             <Heading maxW={500}>{product.title}</Heading>
@@ -196,7 +194,7 @@ const ProductPage = ({
                 <Box w="120px">
                   <Image
                     mb={2}
-                    src={collection?.benefitOneIcon?.reference.image.url}
+                    src={collection?.benefitOneIcon?.reference.image?.url}
                     alt={collection?.benefitOneText?.value}
                   />
                   <Text>{collection?.benefitOneText?.value}</Text>
@@ -237,7 +235,7 @@ const ProductPage = ({
           </SimpleGrid>
         </Container>
       </Box>
-      <Container maxW="container.xl" py={40} centerContent>
+      <Container maxW="container.xl" pt={20} pb={40} centerContent>
         {yjsLoaded && (
           <div
             className="yotpo yotpo-main-widget"
@@ -253,6 +251,46 @@ const ProductPage = ({
     </>
   );
 };
+
+function PhotoCarousel({ images }: any) {
+  const controls = useAnimation();
+
+  const [[page, direction], setPage] = useState([0, 0]);
+
+  const index = wrap(0, images.length, page);
+
+  const paginate = (newDirection: number) => {
+    setPage([page + newDirection, newDirection]);
+  };
+
+  return (
+    <Box pos="relative" maxW={["100%", "50%"]} minW={["100%", "50%"]}>
+      <AnimatePresence exitBeforeEnter>
+        <AspectRatio ratio={1}>
+          <MotionImage
+            key={images[index].node.url}
+            src={images[index].node.url}
+            alt={``}
+            objectFit="cover"
+            objectPosition="top center"
+            animate={{
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+          />
+        </AspectRatio>
+      </AnimatePresence>
+      <Box pos="absolute" left={10} top={"50%"} onClick={() => paginate(-1)}>
+        ←
+      </Box>
+      <Box pos="absolute" right={10} top={"50%"} onClick={() => paginate(1)}>
+        →
+      </Box>
+    </Box>
+  );
+}
 
 export default ProductPage;
 
@@ -342,7 +380,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       descriptionHtml
       description
       tags
-      collections(first: 2) {
+      collections(first: 5) {
         edges {
           node {
             handle
@@ -451,15 +489,16 @@ export const getStaticProps: GetStaticProps = async (context) => {
         }
       }
     }
-  }
-  `;
+  }`;
 
   const res = await graphQLClient.request(query);
 
   if (res.errors) {
     console.log(JSON.stringify(res.errors, null, 2));
-    throw Error("Unable to retrieve Shopify Products. Please check logs");
+    throw Error("Unable to retrieve product. Please check logs");
   }
+
+  console.log(res.product.collections.edges);
 
   return {
     props: {

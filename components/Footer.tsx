@@ -98,7 +98,7 @@ const Footer = () => {
               <Divider />
               <FooterLink href="/salon-finder" text={"Salon Finder"} />
               <FooterLink href="/professionals" text={"Professionals"} />
-              <FooterLink href="/blog" text={"Blog"} />
+              {/* <FooterLink href="/blog" text={"Blog"} /> */}
               <FooterLink href="/about" text={"About TOR"} />
             </Stack>
             <Stack>
@@ -108,7 +108,7 @@ const Footer = () => {
               <Divider />
               <FooterLink href={"/help"} text={"Help & FAQ"} />
               <Link fontSize="sm" onClick={() => process.browser && window.Tawk_API.maximize()}>Contact</Link>
-              <FooterLink href={"/our-friends"} text={"Our Friends"} />
+              {/* <FooterLink href={"/our-friends"} text={"Our Friends"} /> */}
             </Stack>
           </Stack>
           <Stack>

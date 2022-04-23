@@ -15,31 +15,31 @@ import {
   ImageProps,
   GridItem,
   TextProps,
-  Link
+  Link,
 } from "@chakra-ui/react";
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import NextImage from "next/image";
 import Head from "next/head";
 import NextLink from "next/link";
-import Script from "next/script";
-import { wrap } from "@popmotion/popcorn";
 // import { groq } from "next-sanity";
 // import { getClient, imageBuilder } from "../lib/sanity";
 import { gql, GraphQLClient } from "graphql-request";
 import ShopContext from "../lib/shop-context";
-import { AnimatePresence, motion, useAnimation } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   FiArrowRight,
   FiBookOpen,
-  FiBox,
   FiCreditCard,
   FiGift,
 } from "react-icons/fi";
 import formatter from "../lib/formatter";
+import dynamic from "next/dynamic";
+
+const Follow = dynamic(() => import("../components/Follow"), { ssr: false });
+const Testimonials = dynamic(() => import("../components/Home/Testimonials"))
 
 const MotionBox = motion<BoxProps>(Box);
 const MotionImage = motion<ImageProps>(Image);
-const MotionText = motion<TextProps>(Text);
 
 function HomePage({ products, styling, body }: any) {
   const { shop } = useContext(ShopContext);
@@ -211,7 +211,9 @@ function HomePage({ products, styling, body }: any) {
             display={"grid"}
             placeItems={"center"}
           >
-            <Text>See all →</Text>
+            <NextLink href="/collection/styling" passHref>
+              <Link>See all →</Link>
+            </NextLink>
           </Box>
         </Stack>
       </Container>
@@ -230,7 +232,9 @@ function HomePage({ products, styling, body }: any) {
               Body + Skin products formulated for results with clean
               ingredients. Backed by science.
             </Text>
-            <Button>Shop Body + Skin</Button>
+            <NextLink href="/all-body-products" passHref>
+              <Button>Shop Body</Button>
+            </NextLink>
           </Stack>
         </Container>
       </Box>
@@ -437,7 +441,9 @@ function HomePage({ products, styling, body }: any) {
             Our Salon + Stylist program supports our salon partners and their
             stylists, with an open door, and a focus on innovative.
           </Text>
-          <Button alignSelf={"flex-start"}>Learn More</Button>
+          <NextLink href="/professionals" passHref>
+            <Button alignSelf={"flex-start"}>Learn More</Button>
+          </NextLink>
           <Box pt={8}>
             <Heading mb={4}>Benefits</Heading>
             <HStack spacing={6}>
@@ -457,23 +463,7 @@ function HomePage({ products, styling, body }: any) {
           </Box>
         </Stack>
       </Box>
-      <Container maxW="container.xl" pb={40} mt={20}>
-        <Heading textAlign={"center"}>Follow us on Instagram!</Heading>
-        <Box textAlign={"center"} my={6}>
-          <Link
-            href="https://www.instagram.com/tor_salonproducts/"
-            target="_blank"
-          >
-            <Button>Follow</Button>
-          </Link>
-        </Box>
-        {typeof window && (
-          <>
-          <div className="embedsocial-hashtag" data-ref="e809ba879b57c02fc17f2171500c0a089e3ea49f"></div>
-          <Script id="embedscript">{`(function(d, s, id){var js; if (d.getElementById(id)) {return;} js = d.createElement(s); js.id = id; js.src = "https://embedsocial.com/cdn/ht.js"; d.getElementsByTagName("head")[0].appendChild(js);}(document, "script", "EmbedSocialHashtagScript"));`}</Script>
-          </>
-        )}
-      </Container>
+      <Follow />
     </>
   );
 }
@@ -572,50 +562,6 @@ const GridFeature = ({
         </MotionBox>
       </NextLink>
     </GridItem>
-  );
-};
-
-const Testimonials = () => {
-  const controls = useAnimation();
-
-  const testimonials = [
-    "I stopped washing my hair, for almost a year, because I wanted to feel my natural hair. TOR's Medium/Thick line are the only products that actually leave my hair feeling truly natural.",
-    "It's literally the only conditioner I've found that actually washes out. TOR's products work great on my beard as well!",
-  ];
-
-  const [[page, direction], setPage] = useState([0, 0]);
-
-  const index = wrap(0, testimonials.length, page);
-
-  const paginate = (newDirection: number) => {
-    setPage([page + newDirection, newDirection]);
-  };
-
-  return (
-    <MotionBox>
-      <Text fontSize={36} textTransform="uppercase">
-        Testimonials
-      </Text>
-      <AnimatePresence exitBeforeEnter>
-        <MotionText
-          fontSize={18}
-          fontStyle={"italic"}
-          animate={{
-            opacity: 1,
-          }}
-          exit={{
-            opacity: 0,
-          }}
-          key={page}
-        >
-          {testimonials[index]}
-        </MotionText>
-      </AnimatePresence>
-      <HStack gap={4}>
-        <Box cursor={"pointer"} onClick={() => paginate(-1)}>←</Box>
-        <Box cursor={"pointer"} onClick={() => paginate(1)}>→</Box>
-      </HStack>
-    </MotionBox>
   );
 };
 

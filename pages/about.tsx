@@ -15,6 +15,10 @@ import { groq } from "next-sanity";
 import { getClient } from "../lib/sanity";
 import Script from "next/script";
 import Head from "next/head";
+import dynamic from "next/dynamic";
+
+const Follow = dynamic(() => import("../components/Follow"), { ssr: false })
+
 
 const About = ({ data }: any) => {
   return (
@@ -198,26 +202,7 @@ const About = ({ data }: any) => {
           </Text>
         </Stack>
       </Container>
-      <Container maxW="container.xl" pb={40} mt={20}>
-        <Heading textAlign={"center"}>Follow us on Instagram!</Heading>
-        <Box textAlign={"center"} my={6}>
-          <Link
-            href="https://www.instagram.com/tor_salonproducts/"
-            target="_blank"
-          >
-            <Button>Follow</Button>
-          </Link>
-        </Box>
-        {typeof window && (
-          <>
-            <div
-              className="embedsocial-hashtag"
-              data-ref="e809ba879b57c02fc17f2171500c0a089e3ea49f"
-            ></div>
-            <Script id="embedscript">{`(function(d, s, id){var js; if (d.getElementById(id)) {return;} js = d.createElement(s); js.id = id; js.src = "https://embedsocial.com/cdn/ht.js"; d.getElementsByTagName("head")[0].appendChild(js);}(document, "script", "EmbedSocialHashtagScript"));`}</Script>
-          </>
-        )}
-      </Container>
+      <Follow />
     </>
   );
 };

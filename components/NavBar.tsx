@@ -64,7 +64,7 @@ const NavBar = ({ isMobile } : { isMobile: boolean}) => {
                     <MenuButton>Salons</MenuButton>
                     <MenuList>
                       <MenuItem><MenuLink href="/salon-finder" text="Salon Finder"/></MenuItem>
-                      <MenuItem><MenuLink href="/professional" text="Professionals" /></MenuItem>
+                      <MenuItem><MenuLink href="/professionals" text="Professionals" /></MenuItem>
                     </MenuList>
                   </Menu>
                 </Box>
