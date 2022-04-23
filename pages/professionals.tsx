@@ -66,7 +66,7 @@ export default function SalonFinder() {
             <HStack align="flex-start" spacing={4}>
               <Icon mt={1} as={FiBookOpen} boxSize={8} />
               <Box>
-                <Heading size="md" fontWeight={600}>
+                <Heading size="md" mb={2} fontWeight={600}>
                   Education
                 </Heading>
                 <Text>
@@ -81,7 +81,7 @@ export default function SalonFinder() {
               <HStack align="flex-start" spacing={4}>
                 <Icon mt={1} as={FiCreditCard} boxSize={8} />
                 <Box>
-                  <Heading size="md" fontWeight={600}>
+                  <Heading size="md" mb={2} fontWeight={600}>
                     Wholesale Pricing
                   </Heading>
                   <Text>
@@ -97,7 +97,7 @@ export default function SalonFinder() {
               <HStack align="flex-start" spacing={4}>
                 <Icon mt={1} as={FiGift} boxSize={8} />
                 <Box>
-                  <Heading size="md" fontWeight={600}>
+                  <Heading size="md" mb={2} fontWeight={600}>
                     Special Offers
                   </Heading>
                   <Text>

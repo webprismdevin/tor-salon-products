@@ -28,10 +28,10 @@ export const ByHairType = () => {
 export const BodyAndSkin = () => {
   return (
     <>
-      <MenuLink href="/collection/lip-balm" text="Lip Balm" />
-      <MenuLink href="/collection/goat-milk-soap" text="Goat Milk Soap" />
-      <MenuLink href="/collection/cbd-tinctures" text="CBD Tinctures" />
+      {/* <MenuLink href="/collection/goat-milk-soap" text="Goat Milk Soap" /> */}
+      <MenuLink href="/collection/cbd-consumables" text="CBD Consumables" />
       <MenuLink href="/collection/cbd-lotions" text="CBD Lotions" />
+      <MenuLink href="/collection/lip-balm" text="Lip Balm" />
     </>
   );
 };
@@ -39,7 +39,7 @@ export const BodyAndSkin = () => {
 export const MoreLinks = () => {
   return (
     <>
-      <Link>Candles</Link>
+      {/* <Link>Candles</Link> */}
       <Link>Gift Bundles</Link>
       <Link>Gift Cards</Link>
     </>

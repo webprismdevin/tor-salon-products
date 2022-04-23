@@ -31,6 +31,19 @@ export default function ThankYou({ data }: any) {
       if (token) setAuth(true);
     }
 
+    const urlParams = new URLSearchParams(window.location.search);
+
+    console.log(urlParams.get("event"));
+
+    if (
+      // document.referrer === "https://checkout.torsalonproducts.com/" &&
+      urlParams.get("event") === "purchase"
+    ) {
+      window.dataLayer.push({
+        event: "purchase",
+      });
+    }
+
     checkToken();
   }, []);
 
@@ -55,16 +68,31 @@ export default function ThankYou({ data }: any) {
                 </Text>
               </Box>
               <Box bg={"gray.200"} px={4} py={2} borderRadius={6}>
-                <Text>You&apos;ll receive an email shortly with your shipping and tracking details.</Text>
+                <Text>
+                  You&apos;ll receive an email shortly with your shipping and
+                  tracking details.
+                </Text>
               </Box>
-              <Stack spacing={16} justify="flex-start" direction={["column", "row"]}>
+              <Stack
+                spacing={16}
+                justify="flex-start"
+                direction={["column", "row"]}
+              >
                 <ShippingDetails displayAddress={data.displayAddress} />
                 <BillingDetails billingAddress={data.billingAddress} />
               </Stack>
-              <NextLink href="/" passHref><Button>Continue Shopping</Button></NextLink>
+              <NextLink href="/" passHref>
+                <Button>Continue Shopping</Button>
+              </NextLink>
             </Stack>
           </GridItem>
-          <GridItem colSpan={1} bg={"gray.200"} p={6} borderRadius={6} pos="sticky">
+          <GridItem
+            colSpan={1}
+            bg={"gray.200"}
+            p={6}
+            borderRadius={6}
+            pos="sticky"
+          >
             <Stack w="full" spacing={4}>
               <Text fontSize="2xl" fontWeight={600}>
                 Order Summary

@@ -9,10 +9,10 @@ const BodyCatalog = ({ products }: any) => {
   return (
     <>
       <Head>
-        <title>All Body Products | TOR Salon Products</title>
+        <title>All CBD Products | TOR Salon Products</title>
       </Head>
       <Container maxW="container.xl" py={40}>
-        <Heading mb={6}>All Body Products</Heading>
+        <Heading mb={6}>All CBD Products</Heading>
         <Divider />
         <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
           {products.map((p: any) => (
@@ -40,7 +40,7 @@ export async function getStaticProps() {
   const query = gql`
     {
       products(
-        first: 200, query: "product_type:'CBD Lotions' OR product_type:'Lip Balms'"
+        first: 200, query: "product_type:'CBD Lotions' OR product_type:'Tincture' OR product_type:Gummies OR product_type:'Gel Caps'"
       ) {
         edges {
           node {

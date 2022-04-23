@@ -52,7 +52,7 @@ export default function CollectionPage({
               <Box w="120px">
                 <Image
                   mb={2}
-                  src={data.benefitOneIcon?.reference.url}
+                  src={data.benefitOneIcon?.reference.image?.url}
                   alt={data.benefitOneText?.value}
                 />
                 <Text>{data.benefitOneText?.value}</Text>
@@ -60,7 +60,7 @@ export default function CollectionPage({
               <Box w="120px">
                 <Image
                   mb={2}
-                  src={data.benefitTwoIcon?.reference.url}
+                  src={data.benefitTwoIcon?.reference.image?.url}
                   alt={data.benefitTwoText?.value}
                 />
                 <Text>{data.benefitTwoText?.value}</Text>
@@ -68,7 +68,7 @@ export default function CollectionPage({
               <Box w="120px">
                 <Image
                   mb={2}
-                  src={data.benefitThreeIcon?.reference.url}
+                  src={data.benefitThreeIcon?.reference.image?.url}
                   alt={data.benefitThreeText?.value}
                 />
                 <Text>{data.benefitThreeText?.value}</Text>
@@ -117,6 +117,8 @@ export async function getStaticProps(context: any) {
     }
   );
 
+  console.log(handle)
+
   // Shopify Request
   const query = gql`{
         collection(handle: "${handle}"){
@@ -129,8 +131,10 @@ export async function getStaticProps(context: any) {
         benefitOneIcon: metafield(namespace: "collection", key: "benefit_1_icon") {
           reference {
             __typename
-            ... on GenericFile {
-              url
+            ... on MediaImage {
+              image {
+                url
+              }
             }
           }
         }
@@ -140,8 +144,10 @@ export async function getStaticProps(context: any) {
         benefitTwoIcon: metafield(namespace: "collection", key: "benefit_2_icon") {
           reference {
             __typename
-            ... on GenericFile {
-              url
+            ... on MediaImage {
+              image {
+                url
+              }
             }
           }
         }
@@ -151,8 +157,10 @@ export async function getStaticProps(context: any) {
         benefitThreeIcon: metafield(namespace: "collection", key: "benefit_3_icon") {
           reference {
             __typename
-            ... on GenericFile {
-              url
+            ... on MediaImage {
+              image {
+                url
+              }
             }
           }
         }
@@ -162,7 +170,7 @@ export async function getStaticProps(context: any) {
         color: metafield(namespace:"collection", key:"color"){
           value
         }
-        products(first: 100) {
+        products(first: 100, sortKey: BEST_SELLING) {
                 edges{
                     node {
                       id
@@ -205,6 +213,8 @@ export async function getStaticProps(context: any) {
     console.log(JSON.stringify(res.errors, null, 2));
     throw Error("Unable to retrieve Shopify Products. Please check logs");
   }
+
+  console.log(res.collection, " from collection query")
 
   return {
     props: {

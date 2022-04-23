@@ -55,8 +55,9 @@ const DesktopMenu = () => {
           animate={controls}
           variants={variants}
           onMouseLeave={() => controls.start("exit")}
+          px={[4, 10]}
         >
-          <Container maxW="container.xl">
+          {/* <Container maxW="container.xl"> */}
             <Stack direction="row" spacing={24}>
               <Stack>
                 <Text fontSize={"xl"} fontFamily={'Futura'}>Hair Care</Text>
@@ -83,7 +84,7 @@ const DesktopMenu = () => {
                 <MoreLinks />
               </Stack>
             </Stack>
-          </Container>
+          {/* </Container> */}
         </MotionBox>
       </AnimatePresence>
     </>

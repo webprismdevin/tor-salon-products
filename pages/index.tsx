@@ -14,7 +14,6 @@ import {
   Image,
   ImageProps,
   GridItem,
-  TextProps,
   Link,
 } from "@chakra-ui/react";
 import React, { useContext } from "react";
@@ -201,6 +200,7 @@ function HomePage({ products, styling, body }: any) {
               name={prod.node.title}
               price={prod.node.priceRange.minVariantPrice.amount}
               image={prod.node.images.edges[0].node.url}
+              link={`/product/${prod.node.handle}`}
             />
           ))}
           <Box
@@ -251,6 +251,7 @@ function HomePage({ products, styling, body }: any) {
               name={prod.node.title}
               price={prod.node.priceRange.minVariantPrice.amount}
               image={prod.node.images.edges[0].node.url}
+              link={`/product/${prod.node.handle}`}
             />
           ))}
         </Stack>
@@ -292,7 +293,7 @@ function HomePage({ products, styling, body }: any) {
           p={[2, 0]}
           spacing={[4]}
         >
-          <NextLink href="/collection/cdb-tinctures" passHref>
+          <NextLink href="/collection/cbd-consumables" passHref>
             <MotionBox
               whileHover={{
                 scale: 1.02,
@@ -302,12 +303,12 @@ function HomePage({ products, styling, body }: any) {
             >
               <Image src={"/images/750mg-tincture.png"} w={240} alt="" />
               <Flex justify={"space-between"}>
-                <Text>CBD Tinctures</Text>
+                <Text>CBD Consumables</Text>
                 <Icon as={FiArrowRight} size={4} />
               </Flex>
             </MotionBox>
           </NextLink>
-          <NextLink href="/collection/cdb-lotions" passHref>
+          <NextLink href="/collection/cbd-lotions" passHref>
             <MotionBox
               whileHover={{
                 scale: 1.02,
@@ -324,15 +325,17 @@ function HomePage({ products, styling, body }: any) {
           </NextLink>
         </Stack>
         <Box py={[16, 0]}>
-          <Button
-            display="block"
-            pos={["static", "absolute"]}
-            mx={["auto", null]}
-            right={[null, 8]}
-            bottom={[null, 8]}
-          >
-            Shop All CBD
-          </Button>
+          <NextLink href="/all-cbd" passHref>
+            <Button
+              display="block"
+              pos={["static", "absolute"]}
+              mx={["auto", null]}
+              right={[null, 8]}
+              bottom={[null, 8]}
+            >
+              Shop All CBD
+            </Button>
+          </NextLink>
         </Box>
       </Box>
       <Box pt={40}>
@@ -472,35 +475,38 @@ declare interface ProductFeatureTypes {
   name: string;
   price: string;
   image: string;
+  link: string;
 }
 
-const ProductFeature = ({ name, price, image }: ProductFeatureTypes) => {
+const ProductFeature = ({ name, price, image, link }: ProductFeatureTypes) => {
   return (
-    <MotionBox
-      maxW={280}
-      textAlign="center"
-      display={"grid"}
-      placeItems={"center"}
-      initial="initial"
-      whileHover="hover"
-      pos="relative"
-      minH={[360, "auto"]}
-    >
-      <MotionImage
-        src={image}
-        alt=""
-        pos="absolute"
-        zIndex={-1}
-        variants={{
-          initial: { opacity: 0.25 },
-          hover: { opacity: 1 },
-        }}
-      />
-      <MotionBox variants={{ initial: { opacity: 1 }, hover: { opacity: 0 } }}>
-        <Heading fontSize="2xl">{name}</Heading>
-        <Text>{formatter.format(parseInt(price))}</Text>
+    <NextLink href={link} passHref>
+      <MotionBox
+        maxW={280}
+        textAlign="center"
+        display={"grid"}
+        placeItems={"center"}
+        initial="initial"
+        whileHover="hover"
+        pos="relative"
+        minH={[360, "auto"]}
+      >
+        <MotionImage
+          src={image}
+          alt=""
+          pos="absolute"
+          zIndex={-1}
+          variants={{
+            initial: { opacity: 0.25 },
+            hover: { opacity: 1 },
+          }}
+        />
+        <MotionBox variants={{ initial: { opacity: 1 }, hover: { opacity: 0 } }}>
+          <Heading fontSize="2xl">{name}</Heading>
+          <Text>{formatter.format(parseInt(price))}</Text>
+        </MotionBox>
       </MotionBox>
-    </MotionBox>
+    </NextLink>
   );
 };
 

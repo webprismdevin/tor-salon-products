@@ -22,7 +22,6 @@ import {
   AspectRatio,
   IconButton
 } from "@chakra-ui/react";
-import { Router } from "framer/build/router";
 import { useEffect, useContext, useState } from "react";
 import {
   AiOutlineShopping,
@@ -144,13 +143,12 @@ const Cart = () => {
     });
   }
 
-  function handleCheckout(){
+  async function handleCheckout(){
     window.dataLayer.push({
-      'event': 'checkout_start'
-    })
-
-
-    window.location.href = cart.checkoutUrl;
+      "event": "begin_checkout",
+      "eventCallback": () =>  window.location.href = cart.checkoutUrl,
+      eventTimeout: 2000,
+    });
   }
 
   return (
@@ -235,7 +233,7 @@ const Cart = () => {
                 </Flex>
               )}
               {/* <Link w="full" href={cart.checkoutUrl}> */}
-                <Button onClick={() => handleCheckout} w="full">Checkout</Button>
+                <Button onClick={handleCheckout} w="full">Checkout</Button>
               {/* </Link> */}
             </VStack>
           </DrawerFooter>

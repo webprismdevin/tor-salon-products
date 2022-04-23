@@ -271,8 +271,8 @@ function PhotoCarousel({ images }: any) {
             key={images[index].node.url}
             src={images[index].node.url}
             alt={``}
-            objectFit="cover"
-            objectPosition="top center"
+            objectFit="fill"
+            // objectPosition="top center"
             animate={{
               opacity: 1,
             }}
@@ -282,12 +282,26 @@ function PhotoCarousel({ images }: any) {
           />
         </AspectRatio>
       </AnimatePresence>
-      <Box pos="absolute" left={10} top={"50%"} onClick={() => paginate(-1)}>
-        ←
-      </Box>
-      <Box pos="absolute" right={10} top={"50%"} onClick={() => paginate(1)}>
-        →
-      </Box>
+      {images.length > 1 && 
+        <>
+          <Box
+            pos="absolute"
+            left={10}
+            top={"50%"}
+            onClick={() => paginate(-1)}
+          >
+            ←
+          </Box>
+          <Box
+            pos="absolute"
+            right={10}
+            top={"50%"}
+            onClick={() => paginate(1)}
+          >
+            →
+          </Box>
+        </>
+      }
     </Box>
   );
 }

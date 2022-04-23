@@ -34,8 +34,12 @@ const tagManagerArgs = {
 if (process.env.NODE_ENV === "production" && process.browser) {
   console.log("GTM fired");
   TagManager.initialize(tagManagerArgs);
-} else {
+} 
+if(process.env.NODE_ENV === "development" && process.browser) {
   console.log("GTM not fired");
+
+  // console.log("GTM fired");
+  // TagManager.initialize(tagManagerArgs);
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
