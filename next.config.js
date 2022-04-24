@@ -17,7 +17,7 @@ const nextConfig = {
       "cdn.shopify.com",
       "images.pexels.com",
     ],
-    formats: ["image/avif", "image/webp"],
+    formats: ["image/webp", "image/avif"],
   },
   experimental: {
     // concurrentFeatures: true,

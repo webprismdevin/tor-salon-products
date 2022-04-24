@@ -216,8 +216,6 @@ export async function getStaticProps(context: any) {
     throw Error("Unable to retrieve Shopify Products. Please check logs");
   }
 
-  console.log(res.collection, " from collection query")
-
   return {
     props: {
       handle: handle,

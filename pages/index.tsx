@@ -10,39 +10,32 @@ import {
   SimpleGrid,
   Icon,
   BoxProps,
-  AspectRatio,
   Image,
-  ImageProps,
-  GridItem,
   Link,
 } from "@chakra-ui/react";
-import React, { useContext } from "react";
+import React from "react";
 import NextImage from "next/image";
 import Head from "next/head";
 import NextLink from "next/link";
-// import { groq } from "next-sanity";
-// import { getClient, imageBuilder } from "../lib/sanity";
 import { gql, GraphQLClient } from "graphql-request";
-import ShopContext from "../lib/shop-context";
 import { motion } from "framer-motion";
 import { FiArrowRight, FiBookOpen, FiCreditCard, FiGift } from "react-icons/fi";
-import formatter from "../lib/formatter";
 import dynamic from "next/dynamic";
 
-const Follow = dynamic(() => import("../components/Follow"), { ssr: false });
-const Testimonials = dynamic(() => import("../components/Home/Testimonials"));
+const Follow = dynamic(() => import("../components/Follow"), { ssr: false })
+const Testimonials = dynamic(() => import("../components/Home/Testimonials"))
+const ProductFeature = dynamic(() => import("../components/Home/HomeFeature"))
+const GridFeature = dynamic(() => import("../components/Home/GridFeature"))
+const HairType = dynamic(() => import("../components/Home/HairType"))
 
 const MotionBox = motion<BoxProps>(Box);
-const MotionImage = motion<ImageProps>(Image);
 
 function HomePage({ products, styling, body }: any) {
-  const { shop } = useContext(ShopContext);
-
   return (
     <>
       <Head>
         <title>Uncompromised Hair + Body Products | TOR Salon Products</title>
-        <meta name="description" content="" />
+        <meta name="description" content="TOR is taking a different approach to hair + body products - we don&apos;t compromise, and we don&apos;t ask our customers to. That&apos;s why we started with 3 hair care lines based on the specific needs of each hair type." />
       </Head>
       <Container py={20} centerContent pos="relative" maxW="container.xl">
         <Stack spacing={4} textAlign={"center"}>
@@ -62,13 +55,6 @@ function HomePage({ products, styling, body }: any) {
       </Container>
       <Box pos="relative" w="full" height={["auto", 520]}>
         <Box
-          // initial={{
-          //   opacity: 0,
-          // }}
-          // animate={{
-          //   opacity: 1,
-          //   transition: { delay: 0.4 },
-          // }}
           left={0}
           pos={["static", null, null, null, "absolute"]}
           top={["0", "-90px"]}
@@ -85,13 +71,6 @@ function HomePage({ products, styling, body }: any) {
         </Box>
         <Box
           pos="absolute"
-          // initial={{
-          //   opacity: 0,
-          // }}
-          // animate={{
-          //   opacity: 1,
-          //   transition: { delay: 0.8 },
-          // }}
           right={0}
           top={[600, 0]}
           display={["none", null, null, null, "inherit"]}
@@ -116,7 +95,7 @@ function HomePage({ products, styling, body }: any) {
           </Heading>
           <Text>
             TOR products are formulated specifically by hair type, to tackle
-            their unique challenges - not for mass appeal. Made in the USA.
+            their unique needs - not for mass appeal. Made in the USA.
           </Text>
         </Stack>
       </Container>
@@ -159,8 +138,6 @@ function HomePage({ products, styling, body }: any) {
               Not sure where to start?
             </Heading>
             <Box
-              // minH={"5px"}
-              // maxH="5px"
               h={["2px", "5px"]}
               minW={["50", "200"]}
               flexGrow={1}
@@ -207,7 +184,6 @@ function HomePage({ products, styling, body }: any) {
           <Box
             flexShrink={0}
             flexGrow={1}
-            // textAlign={["center", "right"]}
             minH="100%"
             display={"grid"}
             placeItems={["center", "center end"]}
@@ -219,7 +195,7 @@ function HomePage({ products, styling, body }: any) {
         </Stack>
       </Container>
       <Box
-        bgImage={"/images/home/skin-bg.jpg"}
+        bgImage={"/images/home/skin-bg.jpeg"}
         bgSize="cover"
         bgPos={["center", "bottom left"]}
       >
@@ -305,7 +281,8 @@ function HomePage({ products, styling, body }: any) {
               <Image
                 src={"/images/750mg-tincture.png"}
                 w={["auto", 240]}
-                alt=""
+                alt="a cbd tincture bottle"
+                loading="lazy"
               />
               <Flex justify={"space-between"}>
                 <Text>CBD Consumables</Text>
@@ -324,7 +301,8 @@ function HomePage({ products, styling, body }: any) {
               <Image
                 src={"/images/250ml-roll-on.png"}
                 w={["auto", 240]}
-                alt=""
+                alt="TOR 250ml CBD roll-on"
+                loading="lazy"
               />
               <Flex justify={"space-between"}>
                 <Text>CBD Lotions</Text>
@@ -413,7 +391,7 @@ function HomePage({ products, styling, body }: any) {
                 TOR is taking a different approach to hair + body products - we
                 don&apos;t compromise, and we don&apos;t ask our customers to.
                 That&apos;s why we started with 3 hair care lines based on the
-                specific challenges of each hair type.
+                specific needs of each hair type.
               </Text>
               <NextLink href={"/about"} passHref>
                 <Button alignSelf={"flex-start"}>About Us</Button>
@@ -427,6 +405,7 @@ function HomePage({ products, styling, body }: any) {
             src="/images/home/tina-shannon-about.png"
             alt="tina and shannon tor"
             pl={[4, 0]}
+            loading="lazy"
           />
         </Box>
       </Box>
@@ -443,6 +422,7 @@ function HomePage({ products, styling, body }: any) {
           src="/images/home/salon-stylist.png"
           alt="a stylist curling a customers blonde hair"
           pr={[4, 0]}
+          loading="lazy"
         />
         <Stack
           maxW="560px"
@@ -492,187 +472,9 @@ function HomePage({ products, styling, body }: any) {
   );
 }
 
-declare interface ProductFeatureTypes {
-  name: string;
-  price: string;
-  image: string;
-  link: string;
-}
-
-const ProductFeature = ({ name, price, image, link }: ProductFeatureTypes) => {
-  return (
-    <NextLink href={link} passHref>
-      <MotionBox
-        maxW={["none", 280]}
-        textAlign="center"
-        display={"grid"}
-        placeItems={"center"}
-        initial="initial"
-        whileHover="hover"
-        pos="relative"
-        minH={[360, "auto"]}
-      >
-        <MotionImage
-          src={image}
-          alt=""
-          pos="absolute"
-          zIndex={-1}
-          variants={{
-            initial: { opacity: 0.25 },
-            hover: { opacity: 1 },
-          }}
-        />
-        <MotionBox
-          variants={{ initial: { opacity: 1 }, hover: { opacity: 0 } }}
-        >
-          <Heading
-            fontSize={["2xl", "lg", null, null, "2xl"]}
-            maxW={[300, "none"]}
-          >
-            {name}
-          </Heading>
-          <Text>{formatter.format(parseInt(price))}</Text>
-        </MotionBox>
-      </MotionBox>
-    </NextLink>
-  );
-};
-
-const GridFeature = ({
-  name,
-  price,
-  image,
-  link,
-}: {
-  name: string;
-  price: string;
-  image: string;
-  link?: string;
-}) => {
-  return (
-    <GridItem colSpan={[3, 1]} overflow="hidden">
-      <NextLink href={link ? link : ""} passHref>
-        <MotionBox
-          py={48}
-          pos="relative"
-          width={"100%"}
-          initial="initial"
-          whileHover="hover"
-        >
-          <AspectRatio
-            minW={"100%"}
-            minH={"100%"}
-            ratio={1 / 1}
-            pos="absolute"
-            top={0}
-            left={0}
-            zIndex={-1}
-          >
-            <MotionImage
-              src={image}
-              // objectFit={"cover"}
-              minW={"100%"}
-              minH={"100%"}
-              alt=""
-              variants={{
-                initial: {
-                  opacity: 0.25,
-                },
-                hover: {
-                  opacity: 1,
-                },
-              }}
-            />
-          </AspectRatio>
-          <MotionBox
-            textAlign={"center"}
-            variants={{ initial: { opacity: 1 }, hover: { opacity: 0 } }}
-            mx="auto"
-            display={"grid"}
-            placeItems="center"
-          >
-            <Heading
-              fontSize={["2xl", "lg", "lg", "2xl"]}
-              maxW={[300, null, 200, 320]}
-            >
-              {name}
-            </Heading>
-            <Text fontSize={24}>{formatter.format(parseInt(price))}</Text>
-          </MotionBox>
-        </MotionBox>
-      </NextLink>
-    </GridItem>
-  );
-};
-
-const HairType = ({
-  typeImage,
-  title,
-  photo,
-  link,
-}: {
-  typeImage: string;
-  title: string;
-  photo: string;
-  link: string;
-}) => {
-  return (
-    <NextLink href={link} passHref>
-      <MotionBox
-        py={48}
-        pos="relative"
-        width={["full", "33.33%"]}
-        display={"grid"}
-        placeItems={"center"}
-        initial="initial"
-        whileHover="hover"
-      >
-        <MotionImage
-          src={photo}
-          objectFit={"fill"}
-          pos="absolute"
-          zIndex={0}
-          alt=""
-          variants={{
-            initial: {
-              opacity: 0,
-            },
-            hover: {
-              opacity: 1,
-            },
-          }}
-        />
-        <MotionImage
-          src={typeImage}
-          objectFit={"fill"}
-          pos="absolute"
-          zIndex={-1}
-          transform={"rotate(35deg)"}
-          alt=""
-          variants={{
-            initial: {
-              opacity: 0.25,
-            },
-            hover: {
-              opacity: 0,
-            },
-          }}
-        />
-        <Heading>{title}</Heading>
-      </MotionBox>
-    </NextLink>
-  );
-};
-
 export default HomePage;
 
 export async function getStaticProps() {
-  // const homepageQuery = groq`*[_type == "homepage"]{
-  //   heroTitle, heroSubtitle, heroImage, about, aboutImage
-  // }[0]`;
-
-  // const homepageData = await getClient(false).fetch(homepageQuery, {});
-
   const graphQLClient = new GraphQLClient(
     process.env.NEXT_PUBLIC_SHOPIFY_URL!,
     {

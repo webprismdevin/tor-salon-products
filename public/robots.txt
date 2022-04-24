@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://torsalonproducts.com
+
+# Sitemaps
+Sitemap: https://torsalonproducts.com/sitemap.xml

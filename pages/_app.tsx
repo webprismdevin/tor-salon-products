@@ -1,22 +1,21 @@
 import type { AppProps } from "next/app";
 import { extendTheme, ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import { theme as defaultTheme, ThemeConfig } from "@chakra-ui/theme";
-import Head from "next/head";
-import TagManager from "react-gtm-module";
 import { useEffect, useState } from "react";
 import CartContext from "../lib/CartContext";
 import ShopContext from "../lib/shop-context";
-import Tawk from "../lib/tawk";
-import "../styles/globals.css";
-import { isMobile } from "react-device-detect";
+import Head from "next/head";
+import TagManager from "react-gtm-module";
 import dynamic from "next/dynamic";
 import themeConfig from "../lib/theme";
-import "@fontsource/raleway/400.css";
-import Script from "next/script";
 import MailingList from "../components/MailingList";
+import "@fontsource/raleway/400.css";
+import "../styles/globals.css";
+
 
 const NavBar = dynamic(() => import("../components/NavBar"));
 const Footer = dynamic(() => import("../components/Footer"));
+const Tawk = dynamic(() => import("../lib/tawk"))
 
 declare global {
   interface Window {
@@ -64,7 +63,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <meta name="theme-color" content="#ffffff" />
         </Head>
         <CartContext.Provider value={{ cart, setCart }}>
-          <NavBar isMobile={isMobile} />
+          <NavBar />
           <Component {...pageProps} />
         </CartContext.Provider>
         <Footer />

@@ -10,7 +10,8 @@
     "lint": "next lint",
     "analyze": "cross-env ANALYZE=true next build",
     "analyze:server": "cross-env BUNDLE_ANALYZE=server next build",
-    "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build"
+    "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build",
+    "find:unused": "next-unused"
   },
   "dependencies": {
     "@chakra-ui/react": "^1.8.1",
@@ -47,7 +48,15 @@
     "cross-env": "^7.0.3",
     "eslint": "8.10.0",
     "eslint-config-next": "12.1.0",
+    "next-unused": "^0.0.6",
     "sass": "1.43.2",
     "typescript": "4.6.2"
+  },
+  "next-unused": {
+    "alias": {},
+    "debug": true,
+    "include": ["components", "lib", "pages"],
+    "exclude": [],
+    "entrypoints": []
   }
 }

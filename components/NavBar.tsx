@@ -19,10 +19,11 @@ import { Search } from "./Search";
 import MobileMenu from "./Menu/MobileMenu";
 import DesktopMenu from "./Menu/DesktopMenu";
 import MenuLink from "./Menu/MenuLink";
+import { isMobile } from "react-device-detect";
 
 const Cart = dynamic(() => import("../components/Cart"));
 
-const NavBar = ({ isMobile }: { isMobile: boolean }) => {
+const NavBar = () => {
   const [auth, setAuth] = useState(false);
   const router = useRouter();
 
