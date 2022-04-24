@@ -60,7 +60,7 @@ export default function NewPassword({ reset_url }: { reset_url: string}) {
   return (
     <Container py={40}>
         <Head>
-            <title>{process.env.NEXT_PUBLIC_SHOP_NAME} | Set Your New Passwords</title>
+            <title>Set Your New Passwords | TOR Salon Products</title>
         </Head>
       <Stack alignItems={"flex-start"}>
         <Heading size="lg">Reset Your Password</Heading>

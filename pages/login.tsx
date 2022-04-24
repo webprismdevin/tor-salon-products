@@ -60,7 +60,8 @@ export default function Login() {
   return (
     <Box pt={40} pb={20}>
       <Head>
-        <title>{process.env.NEXT_PUBLIC_SHOP_NAME} | Account Login</title>
+        <title>Login | TOR Salon Products</title>
+        <meta name="description" content="Sign in to view past order information." />
       </Head>
       <Container maxW="container.lg">
         {signIn ? (
@@ -68,9 +69,12 @@ export default function Login() {
         ) : (
           <SignUp shop={shop} router={router} toast={toast} />
         )}
-        <Link onClick={() => toggleSignIn(!signIn)}>
-          <Text>{signIn ? "Sign up" : "Sign in"} instead?</Text>
-        </Link>
+        <Stack direction={["column-reverse", "row"]} mt={4}>
+          <Box minW={[0, "45%"]}></Box>
+          <Link onClick={() => toggleSignIn(!signIn)}>
+            <Text>{signIn ? "Sign up" : "Sign in"} instead?</Text>
+          </Link>
+        </Stack>
       </Container>
     </Box>
   );
@@ -129,10 +133,10 @@ function SignIn({
   }
 
   return (
-    <Stack direction={["column", "row"]} minH={250}>
-      <Box minW="40%">
-        <Heading>Log In to {shop.name}</Heading>
-        <Text>See some cool stuff. Maybe.</Text>
+    <Stack direction={["column", "row"]}>
+      <Box minW="45%">
+        <Heading mb={2}>Log in to TOR</Heading>
+        <Text>Sign in to view past order information.</Text>
       </Box>
       <Stack spacing={4} w="full">
         <Input
@@ -215,10 +219,10 @@ function SignUp({
   }
 
   return (
-    <Stack direction={["column", "row"]} minH={250}>
-      <Box minW="40%">
-        <Heading>Create your {shop.name} Account</Heading>
-        <Text>See some cool stuff. Maybe.</Text>
+    <Stack direction={["column", "row"]}>
+      <Box minW="45%">
+        <Heading>Create your TOR account</Heading>
+        <Text>View past orders, and receive an exclusive offer for signing up!</Text>
       </Box>
       <Stack spacing={4} w="full">
         <Stack direction="row">

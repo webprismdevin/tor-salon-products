@@ -27,16 +27,16 @@ export default function FAQ({ data }: any) {
       <Box pt={[10, 20]} bg="brand.platinum" color="black" w="full">
           <Container maxW="container.xl" py={20} centerContent>
             <Heading size="2xl">{data.heading}</Heading>
-            <Text my={4}>{data.subheading}</Text>
-            <Button variant="outline" _hover={{color: 'black', background: 'white'}}>Let&apos;s Chat</Button>
+            <Text my={4} textAlign="center">{data.subheading}</Text>
+            <Button>Let&apos;s Chat</Button>
           </Container>
       </Box>
       <Box w="full" py={20}>
-        <Container maxW="container.xl">
-          <Stack direction={["column", "row"]} spacing={20}>
-            <Text>{data.paragraphOne}</Text>
+        <Container maxW="container.md">
+          {/* <Stack direction={["column", "row"]} spacing={20}>
+            <Text>{data.paragraphOne}</Text> */}
             <FaqAccordion faqs={data.faqs}/>
-          </Stack>
+          {/* </Stack> */}
         </Container>
       </Box>
     </>

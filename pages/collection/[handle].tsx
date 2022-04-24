@@ -30,12 +30,14 @@ export default function CollectionPage({
     <>
       <Head>
         <title>{data.title} | TOR Salon Products</title>
+        <meta name="description" content={`${data.description.substring(0, 200)}...`}
+ />
       </Head>
       <Flex
         flexDir={["column-reverse", "row"]}
         bg={data.color?.value ? data.color.value : "white"}
       >
-        <Box w={["full", "50%"]} px={[8, 20]} py={40} pos="relative">
+        <Box w={["full", "50%"]} px={[8, 20]} py={[20, 40]} pos="relative">
           <Stack direction={["column"]} spacing={6} pos="relative" zIndex={1}>
             <Heading>{data.title}</Heading>
             <Text 

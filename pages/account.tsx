@@ -161,17 +161,18 @@ function Orders({ userData }: any) {
   if (userData.orders.edges.length > 0)
     return (
       <Box>
-        <Heading mb={8} size="lg">
+        <Heading mb={8} mt={[8, 0]} size="lg">
           Orders
         </Heading>
         <Stack>
           <SimpleGrid
-            templateColumns={"repeat(4, 1fr)"}
-            gap={4}
+            templateColumns={["repeat(3, 1fr)", "repeat(4, 1fr)"]}
+            gap={[4]}
+            columnGap={[4, 0]}
           >
             <GridItem fontWeight={600} pb={4}>Order Date</GridItem>
             <GridItem fontWeight={600} pb={4}>Status</GridItem>
-            <GridItem fontWeight={600} pb={4}>Order #</GridItem>
+            <GridItem fontWeight={600} pb={4} display={["none", "inherit"]}>Order #</GridItem>
             <GridItem fontWeight={600} pb={4}>Confirmation</GridItem>
           {userData.orders.edges.map((o: any, i: number) => (
             <>
@@ -179,8 +180,8 @@ function Orders({ userData }: any) {
                 {new Date(o.node.processedAt).toLocaleDateString()}
               </GridItem>
               <GridItem>{o.node.fulfillmentStatus}</GridItem>
-              <GridItem>{o.node.orderNumber}</GridItem>
-              <GridItem>
+              <GridItem display={["none", "inherit"]}>{o.node.orderNumber}</GridItem>
+              <GridItem textAlign={["center", "left"]}>
                 <NextLink href={`/order/${Buffer.from(o.node.id).toString("base64")}`} passHref>
                   <Link>
                     <Text>View</Text>
@@ -195,5 +196,3 @@ function Orders({ userData }: any) {
     );
   else return <Box>Something&apos;s wrong.</Box>;
 }
-
-// Buffer.from(product.id).toString("base64")

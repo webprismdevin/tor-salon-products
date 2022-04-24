@@ -12,7 +12,7 @@ const BodyCatalog = ({ products }: any) => {
         <title>All CBD Products | TOR Salon Products</title>
       </Head>
       <Container maxW="container.xl" py={40}>
-        <Heading mb={6}>All CBD Products</Heading>
+        <Heading mb={6} size="2xl" textAlign="center">All CBD Products</Heading>
         <Divider />
         <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
           {products.map((p: any) => (

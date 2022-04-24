@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { groq } from "next-sanity";
 import { getClient } from "../lib/sanity";
-import Script from "next/script";
+import NextLink from 'next/link';
 import Head from "next/head";
 import dynamic from "next/dynamic";
 
@@ -25,6 +25,11 @@ const About = ({ data }: any) => {
     <>
       <Head>
         <title>About Us | TOR Salon Products</title>
+        <meta name="description" content='TOR is driven by science, not marketing - we formulate our products
+            not to work for the most people, but to work for people the most.
+            Started in 2014 by beauty industry veteran Shannon Tor, a former
+            Avon &amp; Alberto-Culver product chemist with 9 industry awards,
+            TOR&apos;s philosophy is simple: “no half-measures”.' />
       </Head>
       <Box pos="relative" h={["auto", 1200]}>
         <Stack
@@ -67,6 +72,7 @@ const About = ({ data }: any) => {
           pt={[20, 0]}
           src="/images/about/Tor-family.png"
           alt="Tor family"
+          pl={[4, 0]}
         />
         <Stack spacing={6} pl={[8, 20]} pr={[8, 0]} py={[0, 40]}>
           <Heading>Hair Care</Heading>
@@ -92,6 +98,7 @@ const About = ({ data }: any) => {
           top={[0, 40]}
           src="/images/about/about-cbd.png"
           alt="Tor family"
+          pr={[4, 0]}
         />
         <Stack
           spacing={6}
@@ -123,7 +130,7 @@ const About = ({ data }: any) => {
             and science - which is why our CBD products are on average 3-times
             the concentration of the rest of the CBD market. No half-measures.
           </Text>
-          <Button>Shop CBD</Button>
+          <NextLink href="all-cbd" passHref><Button>Shop CBD</Button></NextLink>
         </Stack>
       </Box>
       <Container maxW="container.xl" mt={[-20, 0]} pt={[0]}>
@@ -148,12 +155,12 @@ const About = ({ data }: any) => {
                 We don&apos;t touch anything that we know has a negative impact.
                 We&apos;ve been asked many times to create high-margin products
                 (both contract &amp; as product lines) that we know are
-                chemically dangerous, environmentally unsound (silicone-based
+                chemically dangerous, environmentally unsound (dimethicone-based
                 conditioners), or counter-productive. We don&apos;t touch
                 anything that conflicts with our 3 core values.
               </Text>
             </Stack>
-            <Stack maxW="560px" p={10} bgColor="#E4D5D5">
+            <Stack maxW="560px" p={[6, 10]} bgColor="#E4D5D5">
               <Heading fontFamily={"Futura"}>TOR Values</Heading>
               <Box>
                 <Text fontWeight={600}>Safety first</Text>
@@ -168,10 +175,9 @@ const About = ({ data }: any) => {
                   We don&apos;t compromise results for cost, or marketing.{" "}
                 </Text>
                 <Text>
-                  Example: we refuse to use silicone-based conditioning agents,
+                  Example: we refuse to use dimethicone-based conditioning agents,
                   such as dimethicone. Instead, we use a naturally-derived
-                  conditioning agent that cost over 20x what silicone
-                  conditioners cost. And we&apos;re still price competitive.
+                  conditioning agent that cost over 20x the cost. And we&apos;re still price competitive.
                 </Text>
               </Box>
               <Box>

@@ -19,14 +19,14 @@ export default function ProductFeature({ reference }: any) {
       <Stack direction={["column", "row"]} spacing={8} align={["center", "flex-start"]}>
         <AspectRatio ratio={1 / 1} boxSize={[320, 400]}>
           <Image
-            src={reference.images.edges[0].node.url}
-            alt={reference.title}
+            src={reference?.images.edges[0].node.url}
+            alt={reference?.title}
           />
         </AspectRatio>
         <Stack pt={12}>
           <NextLink href={`/product/${reference.handle}`} passHref>
             <Link>
-              <Heading maxW={480}>{reference.title}</Heading>
+              <Heading maxW={480}>{reference?.title}</Heading>
             </Link>
           </NextLink>
           <Text maxW={500} noOfLines={4}>{reference.description}</Text>

@@ -34,7 +34,7 @@ export default function CollectionPage({
         flexDir={["column-reverse", "row"]}
         bg={data.color?.value ? data.color.value : "white"}
       >
-        <Box w={["full", "50%"]} px={[8, 20]} py={40} pos="relative">
+        <Box w={["full", "50%"]} px={[8, 20]} py={[20, 40]} pos="relative">
           <Image
             src={data.typeImage.reference.image.url}
             alt=""
@@ -89,7 +89,7 @@ export default function CollectionPage({
           <Image src={data.image.url} alt="" />
         </AspectRatio>
       </Flex>
-      {data.collectionFeature && (
+      {data.collectionFeature?.reference && (
         <ProductFeature reference={data.collectionFeature.reference} />
       )}
       <Container maxW="container.xl" pt={10} pb={20}>

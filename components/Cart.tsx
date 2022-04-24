@@ -20,7 +20,7 @@ import {
   HStack,
   Input,
   AspectRatio,
-  IconButton
+  IconButton,
 } from "@chakra-ui/react";
 import { useEffect, useContext, useState } from "react";
 import {
@@ -39,7 +39,10 @@ const Cart = () => {
 
   useEffect(() => {
     if (cart.lines.length > 1) {
-      const cartQtyCalc = cart.lines.reduce((partialSum: any, current: any) => partialSum + current.node?.quantity, 0);
+      const cartQtyCalc = cart.lines.reduce(
+        (partialSum: any, current: any) => partialSum + current.node?.quantity,
+        0
+      );
       setCartQty(cartQtyCalc);
     }
 
@@ -143,10 +146,10 @@ const Cart = () => {
     });
   }
 
-  async function handleCheckout(){
+  async function handleCheckout() {
     window.dataLayer.push({
-      "event": "begin_checkout",
-      "eventCallback": () =>  window.location.href = cart.checkoutUrl,
+      event: "begin_checkout",
+      eventCallback: () => (window.location.href = cart.checkoutUrl),
       eventTimeout: 2000,
     });
   }
@@ -222,20 +225,22 @@ const Cart = () => {
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <VStack w="full" spacing={2}>
-              <Divider />
-              {cart.estimatedCost && (
-                <Flex w="100%" justifyContent={"space-between"}>
-                  <Text>Estimated Cost:</Text>
-                  <Text>
-                    {formatter.format(cart.estimatedCost.totalAmount.amount)}
-                  </Text>
-                </Flex>
-              )}
-              {/* <Link w="full" href={cart.checkoutUrl}> */}
-                <Button onClick={handleCheckout} w="full">Checkout</Button>
-              {/* </Link> */}
-            </VStack>
+            {cart.lines.length > 1 && (
+              <VStack w="full" spacing={2}>
+                <Divider />
+                {cart.estimatedCost && (
+                  <Flex w="100%" justifyContent={"space-between"}>
+                    <Text>Estimated Cost:</Text>
+                    <Text>
+                      {formatter.format(cart.estimatedCost.totalAmount.amount)}
+                    </Text>
+                  </Flex>
+                )}
+                <Button onClick={handleCheckout} w="full">
+                  Checkout
+                </Button>
+              </VStack>
+            )}
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
@@ -355,7 +360,7 @@ function EmptyCart() {
     >
       <Icon as={AiOutlineShoppingCart} color="gray.400" />
       <Text textAlign="center" mt={4} fontSize={12}>
-        Might be time to add some stuff to your cart &#9825;
+        Hmmm...it&apos;s pretty empty in here!
       </Text>
     </Flex>
   );

@@ -75,6 +75,7 @@ function HomePage({ products, styling, body }: any) {
           left={0}
           pos={["static", "absolute"]}
           top={["0", "-90px"]}
+          mr={[4, 0]}
         >
           <NextImage
             src={"/images/home/img1.png"}
@@ -149,29 +150,32 @@ function HomePage({ products, styling, body }: any) {
       <Box bgColor="#000000" py={10} px={[2, 6]}>
         <Container maxW="container.xl">
           <Stack
-            direction={["column", "row"]}
+            direction={["row"]}
             w="full"
             align="center"
-            spacing={[8, 16]}
+            spacing={[4, 16]}
           >
             <Heading
-              fontSize={[48, 64]}
+              fontSize={[18, 64]}
               color="white"
-              textAlign={["center", "left"]}
+              textAlign={["left", "left"]}
             >
               Not sure where to start?
             </Heading>
             <Box
-              minH={"5px"}
-              maxH="5px"
-              minW={["20", "200"]}
+              // minH={"5px"}
+              // maxH="5px"
+              h={["2px", "5px"]}
+              minW={["50", "200"]}
               flexGrow={1}
               bgColor="white"
+              display={["none", "inherit"]}
             />
             <Button
               onClick={() => window.Tawk_API.maximize()}
               variant={"outline"}
               color="white"
+              flexShrink={0}
             >
               We can help
             </Button>
@@ -301,7 +305,7 @@ function HomePage({ products, styling, body }: any) {
               bg="white"
               p={8}
             >
-              <Image src={"/images/750mg-tincture.png"} w={240} alt="" />
+              <Image src={"/images/750mg-tincture.png"} w={["auto", 240]} alt="" />
               <Flex justify={"space-between"}>
                 <Text>CBD Consumables</Text>
                 <Icon as={FiArrowRight} size={4} />
@@ -316,7 +320,7 @@ function HomePage({ products, styling, body }: any) {
               bg="white"
               p={8}
             >
-              <Image src={"/images/250ml-roll-on.png"} w={240} alt="" />
+              <Image src={"/images/250ml-roll-on.png"} w={["auto", 240]} alt="" />
               <Flex justify={"space-between"}>
                 <Text>CBD Lotions</Text>
                 <Icon as={FiArrowRight} size={4} />
@@ -413,6 +417,7 @@ function HomePage({ products, styling, body }: any) {
             right={0}
             src="/images/home/tina-shannon-about.png"
             alt="tina and shannon tor"
+            pl={[4, 0]}
           />
         </Box>
       </Box>
@@ -422,6 +427,7 @@ function HomePage({ products, styling, body }: any) {
           pos={["static", "absolute"]}
           src="/images/home/salon-stylist.png"
           alt="a stylist curling a customers blonde hair"
+          pr={[4, 0]}
         />
         <Stack
           maxW="560px"
@@ -482,7 +488,7 @@ const ProductFeature = ({ name, price, image, link }: ProductFeatureTypes) => {
   return (
     <NextLink href={link} passHref>
       <MotionBox
-        maxW={280}
+        maxW={["none", 280]}
         textAlign="center"
         display={"grid"}
         placeItems={"center"}
@@ -502,7 +508,7 @@ const ProductFeature = ({ name, price, image, link }: ProductFeatureTypes) => {
           }}
         />
         <MotionBox variants={{ initial: { opacity: 1 }, hover: { opacity: 0 } }}>
-          <Heading fontSize="2xl">{name}</Heading>
+          <Heading fontSize="2xl" maxW={[300, "none"]}>{name}</Heading>
           <Text>{formatter.format(parseInt(price))}</Text>
         </MotionBox>
       </MotionBox>
@@ -559,10 +565,11 @@ const GridFeature = ({
           <MotionBox
             textAlign={"center"}
             variants={{ initial: { opacity: 1 }, hover: { opacity: 0 } }}
-            maxW={340}
             mx="auto"
+            display={"grid"}
+            placeItems="center"
           >
-            <Heading>{name}</Heading>
+            <Heading fontSize="2xl" maxW={[300, 320]}>{name}</Heading>
             <Text fontSize={24}>{formatter.format(parseInt(price))}</Text>
           </MotionBox>
         </MotionBox>

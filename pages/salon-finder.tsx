@@ -18,6 +18,7 @@ import { useState } from "react";
 import { getClient, imageBuilder } from "../lib/sanity";
 import Search from "@smakss/search";
 import { FiDelete, FiGlobe } from "react-icons/fi";
+import Head from "next/head";
 
 declare interface SalonPageData {
   salons: any;
@@ -28,6 +29,9 @@ export default function SalonFinder({ salons }: SalonPageData) {
 
   return (
     <Container py={20} maxW="container.lg">
+      <Head>
+        <title>Salon Finder | TOR Salon Products</title>
+      </Head>
       <Stack spacing={6} align="center" w="full">
         <Heading size="lg">Salon Finder</Heading>
         <Heading size="2xl">Find TOR Products</Heading>

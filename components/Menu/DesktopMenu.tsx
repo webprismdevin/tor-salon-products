@@ -9,7 +9,12 @@ import {
 } from "@chakra-ui/react";
 import { AnimatePresence, motion, useAnimation } from "framer-motion";
 import { useEffect } from "react";
-import { BodyAndSkin, ByHairType, ByProductTypes, MoreLinks } from "./MenuSections";
+import {
+  BodyAndSkin,
+  ByHairType,
+  ByProductTypes,
+  MoreLinks,
+} from "./MenuSections";
 
 const MotionBox = motion<BoxProps>(Box);
 
@@ -21,6 +26,9 @@ const variants = {
   animate: {
     display: "inherit",
     opacity: 1,
+    transition: {
+      duration: 0.4,
+    },
   },
   exit: {
     display: "none",
@@ -58,32 +66,38 @@ const DesktopMenu = () => {
           px={[4, 10]}
         >
           {/* <Container maxW="container.xl"> */}
-            <Stack direction="row" spacing={24}>
-              <Stack>
-                <Text fontSize={"xl"} fontFamily={'Futura'}>Hair Care</Text>
-                <Divider />
-                <Stack direction="row" spacing={12}>
-                  <Stack>
-                    <Text fontWeight={600}>Shop by Product Type</Text>
-                    <ByProductTypes />
-                  </Stack>
-                  <Stack>
-                    <Text fontWeight={600}>Shop by Hair Type</Text>
-                    <ByHairType />
-                  </Stack>
+          <Stack direction="row" spacing={24}>
+            <Stack>
+              <Text fontSize={"xl"} fontFamily={"Futura"}>
+                Hair Care
+              </Text>
+              <Divider />
+              <Stack direction="row" spacing={12}>
+                <Stack>
+                  <Text fontWeight={600}>Shop by Product Type</Text>
+                  <ByProductTypes />
+                </Stack>
+                <Stack>
+                  <Text fontWeight={600}>Shop by Hair Type</Text>
+                  <ByHairType />
                 </Stack>
               </Stack>
-              <Stack>
-                <Text fontSize={"xl"} fontFamily={'Futura'}>Body + Skin</Text>
-                <Divider />
-                <BodyAndSkin />
-              </Stack>
-              <Stack>
-                <Text fontSize={"xl"} fontFamily={'Futura'}>More</Text>
-                <Divider />
-                <MoreLinks />
-              </Stack>
             </Stack>
+            <Stack>
+              <Text fontSize={"xl"} fontFamily={"Futura"}>
+                Body + Skin
+              </Text>
+              <Divider />
+              <BodyAndSkin />
+            </Stack>
+            <Stack>
+              <Text fontSize={"xl"} fontFamily={"Futura"}>
+                More
+              </Text>
+              <Divider />
+              <MoreLinks />
+            </Stack>
+          </Stack>
           {/* </Container> */}
         </MotionBox>
       </AnimatePresence>

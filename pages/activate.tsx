@@ -1,4 +1,5 @@
 import { Container, Flex, Box, Input, Text, Heading, InputGroup, InputRightElement, Button, Stack, useToast } from '@chakra-ui/react'
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
@@ -48,6 +49,9 @@ export default function Activate({activationUrl}:{ activationUrl: string}) {
 
     return (
         <Container py={20} maxW="container.lg">
+            <Head>
+                <title>Activate Your Account</title>
+            </Head>
         <Flex direction={['column', 'row']}>
             <Box minW={'40%'}>
             <Heading>Activate Your Account</Heading>

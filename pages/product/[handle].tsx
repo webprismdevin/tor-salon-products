@@ -117,7 +117,7 @@ const ProductPage = ({
       </Head>
       <Flex flexDirection={["column", "row"]}>
         <PhotoCarousel images={product.images.edges} />
-        <Container centerContent pt={40} pb={20}>
+        <Container centerContent pt={[0, 40]} pb={20}>
           <Stack direction={["column"]} spacing={4} w="full" align="flex-start">
             <Heading maxW={500}>{product.title}</Heading>
             <Box
@@ -171,7 +171,7 @@ const ProductPage = ({
       </Flex>
       <Box bg={collection.color?.value ? collection.color.value : "white"}>
         <Flex flexDir={["column-reverse", "row"]}>
-          <Box w={["full", "50%"]} px={[8, 20]} py={40} pos="relative">
+          <Box w={["full", "50%"]} px={[8, 20]} py={[20, 40]} pos="relative">
             <Image
               src={collection.typeImage?.reference.image.url}
               alt=""
@@ -265,8 +265,8 @@ function PhotoCarousel({ images }: any) {
 
   return (
     <Box pos="relative" maxW={["100%", "50%"]} minW={["100%", "50%"]}>
-      <AnimatePresence exitBeforeEnter>
-        <AspectRatio ratio={1}>
+      <AspectRatio ratio={1}>
+        <AnimatePresence exitBeforeEnter>
           <MotionImage
             key={images[index].node.url}
             src={images[index].node.url}
@@ -280,9 +280,9 @@ function PhotoCarousel({ images }: any) {
               opacity: 0,
             }}
           />
-        </AspectRatio>
-      </AnimatePresence>
-      {images.length > 1 && 
+        </AnimatePresence>
+      </AspectRatio>
+      {images.length > 1 && (
         <>
           <Box
             pos="absolute"
@@ -301,7 +301,7 @@ function PhotoCarousel({ images }: any) {
             →
           </Box>
         </>
-      }
+      )}
     </Box>
   );
 }

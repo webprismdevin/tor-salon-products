@@ -70,10 +70,7 @@ export default function SalonFinder() {
                   Education
                 </Heading>
                 <Text>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Rem
-                  veniam sequi mollitia voluptatibus? Qui neque est laborum
-                  eaque omnis aliquid consequatur sequi vel, officiis assumenda!
-                  Assumenda vitae iure aut officiis.
+                  Get one-on-one, or group, product and hair-care sessions led by founder and head chemist, Shannon Tor.
                 </Text>
               </Box>
             </HStack>
@@ -85,10 +82,7 @@ export default function SalonFinder() {
                     Wholesale Pricing
                   </Heading>
                   <Text>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Rem veniam sequi mollitia voluptatibus? Qui neque est
-                    laborum eaque omnis aliquid consequatur sequi vel, officiis
-                    assumenda! Assumenda vitae iure aut officiis.
+                    Exclusive wholesale discounts on all salon products, both back-bar and for retail.
                   </Text>
                 </Box>
               </HStack>
@@ -101,10 +95,7 @@ export default function SalonFinder() {
                     Special Offers
                   </Heading>
                   <Text>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Rem veniam sequi mollitia voluptatibus? Qui neque est
-                    laborum eaque omnis aliquid consequatur sequi vel, officiis
-                    assumenda! Assumenda vitae iure aut officiis.
+                    Receive special offers and incentives for sharing your TOR stories, seasonal discounts, and more! Have a product idea? We&apos;ll see if we can make it specifically for your clients.
                   </Text>
                 </Box>
               </HStack>
