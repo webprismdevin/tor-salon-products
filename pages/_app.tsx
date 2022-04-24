@@ -12,10 +12,9 @@ import MailingList from "../components/MailingList";
 import "@fontsource/raleway/400.css";
 import "../styles/globals.css";
 
-
 const NavBar = dynamic(() => import("../components/NavBar"));
 const Footer = dynamic(() => import("../components/Footer"));
-const Tawk = dynamic(() => import("../lib/tawk"))
+const Tawk = dynamic(() => import("../lib/tawk"));
 
 declare global {
   interface Window {
@@ -33,8 +32,8 @@ const tagManagerArgs = {
 if (process.env.NODE_ENV === "production" && process.browser) {
   console.log("GTM fired");
   TagManager.initialize(tagManagerArgs);
-} 
-if(process.env.NODE_ENV === "development" && process.browser) {
+}
+if (process.env.NODE_ENV === "development" && process.browser) {
   console.log("GTM not fired");
 
   // console.log("GTM fired");
@@ -69,8 +68,12 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Footer />
       </ShopContext.Provider>
       <ColorModeScript initialColorMode={customTheme.initialColorMode} />
-      <Tawk src="https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu" />
-      <MailingList />
+      {process.env.NODE_ENV === "production" && (
+        <>
+          <Tawk src="https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu" />
+          <MailingList />
+        </>
+      )}
     </ChakraProvider>
   );
 }

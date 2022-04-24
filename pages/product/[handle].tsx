@@ -42,10 +42,12 @@ const ProductPage = ({
   handle,
   product,
   collection,
+  collections,
 }: {
   handle: string;
   product: any;
   collection: any;
+  collections: any;
 }) => {
   const [itemQty, setItemQty] = useState(1);
   const { cart, setCart } = useContext(CartContext);
@@ -68,6 +70,8 @@ const ProductPage = ({
 
   useEffect(() => {
     console.log(Buffer.from(product.id).toString("base64"));
+
+    window.collections = collections;
   }, []);
 
   const inc = getIncrementButtonProps();
@@ -118,9 +122,11 @@ const ProductPage = ({
       </Head>
       <Flex flexDirection={["column", "row"]}>
         <PhotoCarousel images={product.images.edges} />
-        <Container centerContent pt={[0, 40]} pb={20}>
+        <Container centerContent pt={[0, 20]} pb={20}>
           <Stack direction={["column"]} spacing={4} w="full" align="flex-start">
-            <Heading as="h1" maxW={500}>{product.title}</Heading>
+            <Heading as="h1" maxW={500}>
+              {product.title}
+            </Heading>
             <Box
               dangerouslySetInnerHTML={{
                 __html: product.descriptionHtml,
@@ -395,6 +401,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
       descriptionHtml
       description
       tags
+      collectionToPull: metafield(namespace: "product", key:"featured_collection"){
+        value
+      }
       collections(first: 5) {
         edges {
           node {
@@ -513,13 +522,108 @@ export const getStaticProps: GetStaticProps = async (context) => {
     throw Error("Unable to retrieve product. Please check logs");
   }
 
+  let collectionQuery = gql`{
+    collection(handle: "${res.product.collectionToPull?.value}") {
+        handle
+        title
+        description
+        descriptionHtml
+        image {
+          url
+        }
+        products(first: 3) {
+          edges {
+            node {
+              handle
+              title
+              priceRange {
+                minVariantPrice {
+                  amount
+                }
+              }
+              images(first: 1) {
+                edges {
+                  node {
+                    url
+                  }
+                }
+              }
+            }
+          }
+        }
+        typeImage: metafield(namespace: "collection", key: "typeImage") {
+          reference {
+            ... on MediaImage {
+              image {
+                url
+              }
+            }
+          }
+        }
+        color: metafield(namespace: "collection", key: "color") {
+          value
+        }
+        benefitOneIcon: metafield(namespace: "collection", key: "benefit_1_icon") {
+          reference {
+            __typename
+            ... on MediaImage {
+              image {
+                url
+              }
+            }
+          }
+        }
+        benefitOneText: metafield(namespace: "collection", key: "benefit_1_text") {
+          value
+        }
+        benefitTwoIcon: metafield(namespace: "collection", key: "benefit_2_icon") {
+          reference {
+            __typename
+            ... on MediaImage {
+              image {
+                url
+              }
+            }
+          }
+        }
+        benefitTwoText: metafield(namespace: "collection", key: "benefit_2_text") {
+          value
+        }
+        benefitThreeIcon: metafield(namespace: "collection", key: "benefit_3_icon") {
+          reference {
+            __typename
+            ... on MediaImage {
+              image {
+                url
+              }
+            }
+          }
+        }
+        benefitThreeText: metafield(namespace: "collection", key: "benefit_3_text") {
+          value
+        }
+      }
+    }`;
+
+  const collectionRes = await graphQLClient.request(collectionQuery);
+
+  if (collectionRes.errors) {
+    console.log(JSON.stringify(res.errors, null, 2));
+    throw Error("Unable to retrieve product. Please check logs");
+  }
+
+  function handleCollectionFilter(){
+    const filteredCollections = res.product.collections.edges.filter((n:any) => n.node.handle !== "home" && n.node.handle !== "homepage-body")
+
+    return filteredCollections[0].node
+  }
+
+
   return {
     props: {
       handle: handle,
       product: res.product,
-      collection: res.product.collections.edges[0]?.node.handle === "home"
-                    ? res.product.collections.edges[1].node
-                    : res.product.collections.edges[0]?.node || null,
+      collection: collectionRes.collection ? collectionRes.collection : handleCollectionFilter(),
     },
     revalidate: 60,
   };
