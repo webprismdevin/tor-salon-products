@@ -53,6 +53,7 @@ const NavBar = () => {
       px={[4, 10]}
       pos="sticky"
       top={0}
+      left={0}
       zIndex={2}
       bg="white"
       borderBottom={"2px solid black"}

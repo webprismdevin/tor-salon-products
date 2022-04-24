@@ -1,7 +1,5 @@
 import {
   Box,
-  Stack,
-  Flex,
   Heading,
   Text,
   Container,

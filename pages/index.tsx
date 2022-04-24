@@ -53,7 +53,7 @@ function HomePage({ products, styling, body }: any) {
           </HStack>
         </Stack>
       </Container>
-      <Box pos="relative" w="full" height={["auto", 520]}>
+      <Box pos="relative" height={["auto", 520]}>
         <Box
           left={0}
           pos={["static", null, null, null, "absolute"]}
@@ -266,7 +266,7 @@ function HomePage({ products, styling, body }: any) {
           direction={["column", "row"]}
           bottom={8}
           left={8}
-          w="full"
+          // w="full"
           p={[2, 0]}
           spacing={[4]}
         >
