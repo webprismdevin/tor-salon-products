@@ -225,7 +225,7 @@ const Cart = () => {
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            {cart.lines.length > 1 && (
+            {cart.lines.length > 0 && (
               <VStack w="full" spacing={2}>
                 <Divider />
                 {cart.estimatedCost && (
