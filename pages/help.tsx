@@ -22,13 +22,14 @@ export default function FAQ({ data }: any) {
   return (
     <>
       <Head>
-        <title>Frequently Asked Questions</title>
+        <title>Help &amp; FAQ | TOR Salon Products</title>
+        <meta name="description" content="Get support and answers to many common questions. Contact us today." />
       </Head>
       <Box pt={[10, 20]} bg="brand.platinum" color="black" w="full">
           <Container maxW="container.xl" py={20} centerContent>
             <Heading size="2xl">{data.heading}</Heading>
             <Text my={4} textAlign="center">{data.subheading}</Text>
-            <Button>Let&apos;s Chat</Button>
+            <Button onClick={() => window.Tawk_API.maximize()}>Let&apos;s Chat</Button>
           </Container>
       </Box>
       <Box w="full" py={20}>

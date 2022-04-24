@@ -7,7 +7,7 @@ export const ByProductTypes = () => {
       <MenuLink href="/collection/shampoo" text="Shampoo" />
       <MenuLink href="/collection/conditioners" text="Conditioners" />
       <MenuLink href="/collection/co-washes" text="Co-washes" />
-      <MenuLink href="/collection/styling-products" text="Styling Products" />
+      <MenuLink href="/collection/styling" text="Styling Products" />
     </>
   );
 };

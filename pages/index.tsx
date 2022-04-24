@@ -25,17 +25,12 @@ import NextLink from "next/link";
 import { gql, GraphQLClient } from "graphql-request";
 import ShopContext from "../lib/shop-context";
 import { motion } from "framer-motion";
-import {
-  FiArrowRight,
-  FiBookOpen,
-  FiCreditCard,
-  FiGift,
-} from "react-icons/fi";
+import { FiArrowRight, FiBookOpen, FiCreditCard, FiGift } from "react-icons/fi";
 import formatter from "../lib/formatter";
 import dynamic from "next/dynamic";
 
 const Follow = dynamic(() => import("../components/Follow"), { ssr: false });
-const Testimonials = dynamic(() => import("../components/Home/Testimonials"))
+const Testimonials = dynamic(() => import("../components/Home/Testimonials"));
 
 const MotionBox = motion<BoxProps>(Box);
 const MotionImage = motion<ImageProps>(Image);
@@ -51,8 +46,10 @@ function HomePage({ products, styling, body }: any) {
       </Head>
       <Container py={20} centerContent pos="relative" maxW="container.xl">
         <Stack spacing={4} textAlign={"center"}>
-          <Heading fontSize={[42, 144]}>Uncompromised</Heading>
-          <Heading fontSize={[28, 56]}>Hair + Body Products</Heading>
+          <Heading fontSize={[42, 84, null, null, 144]} as="h1">Uncompromised</Heading>
+          <Heading fontSize={[28, 48, null, null, 56]}>
+            Hair + Body Products
+          </Heading>
           <HStack justify={"center"}>
             <NextLink href="/all-hair-care" passHref>
               <Button>Shop Hair</Button>
@@ -64,16 +61,16 @@ function HomePage({ products, styling, body }: any) {
         </Stack>
       </Container>
       <Box pos="relative" w="full" height={["auto", 520]}>
-        <MotionBox
-          initial={{
-            opacity: 0,
-          }}
-          animate={{
-            opacity: 1,
-            transition: { delay: 0.4 },
-          }}
+        <Box
+          // initial={{
+          //   opacity: 0,
+          // }}
+          // animate={{
+          //   opacity: 1,
+          //   transition: { delay: 0.4 },
+          // }}
           left={0}
-          pos={["static", "absolute"]}
+          pos={["static", null, null, null, "absolute"]}
           top={["0", "-90px"]}
           mr={[4, 0]}
         >
@@ -82,31 +79,35 @@ function HomePage({ products, styling, body }: any) {
             height={639}
             width={555}
             alt="girl with curly hair"
+            priority
+            quality={100}
           />
-        </MotionBox>
-        <MotionBox
+        </Box>
+        <Box
           pos="absolute"
-          initial={{
-            opacity: 0,
-          }}
-          animate={{
-            opacity: 1,
-            transition: { delay: 0.8 },
-          }}
+          // initial={{
+          //   opacity: 0,
+          // }}
+          // animate={{
+          //   opacity: 1,
+          //   transition: { delay: 0.8 },
+          // }}
           right={0}
           top={[600, 0]}
-          display={["none", "inherit"]}
+          display={["none", null, null, null, "inherit"]}
         >
           <NextImage
             src={"/images/home/img2.png"}
             height={800}
             width={555}
             alt="girl with wavy hair"
+            priority
+            quality={100}
           />
-        </MotionBox>
+        </Box>
       </Box>
-      <Container maxW="container.xl" pt={20} pb={40}>
-        <Stack maxW="560px">
+      <Container maxW="container.xl" pt={[20, 200, null, null, 20]} pb={40}>
+        <Stack maxW="560px" px={[2, null]}>
           <Text fontSize={22} textTransform="uppercase" fontFamily={"Futura"}>
             Salon Grade -
           </Text>
@@ -149,12 +150,7 @@ function HomePage({ products, styling, body }: any) {
       </Flex>
       <Box bgColor="#000000" py={10} px={[2, 6]}>
         <Container maxW="container.xl">
-          <Stack
-            direction={["row"]}
-            w="full"
-            align="center"
-            spacing={[4, 16]}
-          >
+          <Stack direction={["row"]} w="full" align="center" spacing={[4, 16]}>
             <Heading
               fontSize={[18, 64]}
               color="white"
@@ -185,6 +181,7 @@ function HomePage({ products, styling, body }: any) {
       <Container maxW="container.xl" py={20}>
         <Stack direction={["column", "row"]} w="full">
           <Stack
+            px={[2, null]}
             maxW={["none", "240px"]}
             alignSelf={"center"}
             justify={"space-between"}
@@ -210,10 +207,10 @@ function HomePage({ products, styling, body }: any) {
           <Box
             flexShrink={0}
             flexGrow={1}
-            textAlign="center"
+            // textAlign={["center", "right"]}
             minH="100%"
             display={"grid"}
-            placeItems={"center"}
+            placeItems={["center", "center end"]}
           >
             <NextLink href="/collection/styling" passHref>
               <Link>See all →</Link>
@@ -274,7 +271,7 @@ function HomePage({ products, styling, body }: any) {
           px={[4, 8]}
           py={[12, 8]}
           borderRadius={10}
-          pos={["static", "absolute"]}
+          pos={["static", "static", "static", "static", "absolute"]}
           left={0}
           top={0}
         >
@@ -289,7 +286,7 @@ function HomePage({ products, styling, body }: any) {
           </Text>
         </Stack>
         <Stack
-          pos={["static", "absolute"]}
+          pos={["static", null, null, null, "absolute"]}
           direction={["column", "row"]}
           bottom={8}
           left={8}
@@ -305,7 +302,11 @@ function HomePage({ products, styling, body }: any) {
               bg="white"
               p={8}
             >
-              <Image src={"/images/750mg-tincture.png"} w={["auto", 240]} alt="" />
+              <Image
+                src={"/images/750mg-tincture.png"}
+                w={["auto", 240]}
+                alt=""
+              />
               <Flex justify={"space-between"}>
                 <Text>CBD Consumables</Text>
                 <Icon as={FiArrowRight} size={4} />
@@ -320,7 +321,11 @@ function HomePage({ products, styling, body }: any) {
               bg="white"
               p={8}
             >
-              <Image src={"/images/250ml-roll-on.png"} w={["auto", 240]} alt="" />
+              <Image
+                src={"/images/250ml-roll-on.png"}
+                w={["auto", 240]}
+                alt=""
+              />
               <Flex justify={"space-between"}>
                 <Text>CBD Lotions</Text>
                 <Icon as={FiArrowRight} size={4} />
@@ -364,7 +369,7 @@ function HomePage({ products, styling, body }: any) {
         </SimpleGrid>
       </Box>
       <Box>
-        <Flex gap={20} flexDir={["column-reverse", "row"]}>
+        <Flex gap={20} flexDir={["column-reverse", null, null, null, "row"]}>
           <Box
             py={[20, 40]}
             px={[6, 40]}
@@ -387,9 +392,13 @@ function HomePage({ products, styling, body }: any) {
             <Testimonials />
           </Box>
         </Flex>
-        <Box py={40} height={["auto", 800]} pos="relative">
+        <Box
+          py={40}
+          height={["auto", "auto", 1350, "auto", 800]}
+          pos="relative"
+        >
           <Container maxW="container.xl">
-            <Stack maxW="560px" spacing={4}>
+            <Stack maxW="560px" spacing={4} px={[4, null, 4, 0]}>
               <Text
                 fontSize={22}
                 textTransform="uppercase"
@@ -412,8 +421,8 @@ function HomePage({ products, styling, body }: any) {
             </Stack>
           </Container>
           <Image
-            pos={["static", "absolute"]}
-            top={[0, -280]}
+            pos={["static", null, "absolute", null, "absolute"]}
+            top={[0, null, 320, -280]}
             right={0}
             src="/images/home/tina-shannon-about.png"
             alt="tina and shannon tor"
@@ -421,21 +430,27 @@ function HomePage({ products, styling, body }: any) {
           />
         </Box>
       </Box>
-      <Box pos="relative" pt={10} w="full" height={["auto", 1000]}>
+      <Box
+        pos="relative"
+        pt={10}
+        w="full"
+        height={["auto", "auto", "auto", "auto", 1000]}
+      >
         <Image
+          display={["inherit", null, "none", "inherit"]}
           height={["auto", 912]}
-          pos={["static", "absolute"]}
+          pos={["static", "static", "static", "static", "absolute"]}
           src="/images/home/salon-stylist.png"
           alt="a stylist curling a customers blonde hair"
           pr={[4, 0]}
         />
         <Stack
           maxW="560px"
-          py={[8, 80]}
+          py={[8, 8, 16, null, 80]}
           spacing={4}
-          pos={["static", "absolute"]}
+          pos={["static", "static", "static", "static", "absolute"]}
           right={[0, 20]}
-          px={[4, 0]}
+          px={[8, null, 8, 0]}
         >
           <Text fontSize={22} textTransform="uppercase" fontFamily={"Futura"}>
             TOR Professionals -
@@ -507,8 +522,15 @@ const ProductFeature = ({ name, price, image, link }: ProductFeatureTypes) => {
             hover: { opacity: 1 },
           }}
         />
-        <MotionBox variants={{ initial: { opacity: 1 }, hover: { opacity: 0 } }}>
-          <Heading fontSize="2xl" maxW={[300, "none"]}>{name}</Heading>
+        <MotionBox
+          variants={{ initial: { opacity: 1 }, hover: { opacity: 0 } }}
+        >
+          <Heading
+            fontSize={["2xl", "lg", null, null, "2xl"]}
+            maxW={[300, "none"]}
+          >
+            {name}
+          </Heading>
           <Text>{formatter.format(parseInt(price))}</Text>
         </MotionBox>
       </MotionBox>
@@ -569,7 +591,12 @@ const GridFeature = ({
             display={"grid"}
             placeItems="center"
           >
-            <Heading fontSize="2xl" maxW={[300, 320]}>{name}</Heading>
+            <Heading
+              fontSize={["2xl", "lg", "lg", "2xl"]}
+              maxW={[300, null, 200, 320]}
+            >
+              {name}
+            </Heading>
             <Text fontSize={24}>{formatter.format(parseInt(price))}</Text>
           </MotionBox>
         </MotionBox>

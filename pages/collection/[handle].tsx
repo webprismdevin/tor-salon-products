@@ -39,7 +39,7 @@ export default function CollectionPage({
       >
         <Box w={["full", "50%"]} px={[8, 20]} py={[20, 40]} pos="relative">
           <Stack direction={["column"]} spacing={6} pos="relative" zIndex={1}>
-            <Heading>{data.title}</Heading>
+            <Heading as="h1">{data.title}</Heading>
             <Text 
               maxW={600}
               dangerouslySetInnerHTML={{

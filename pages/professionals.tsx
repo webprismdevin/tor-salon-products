@@ -12,19 +12,20 @@ import {
   SimpleGrid,
   Textarea,
   Input,
-  FormControl,
-  FormLabel,
 } from "@chakra-ui/react";
-import { FiBookOpen, FiBox, FiCreditCard, FiGift } from "react-icons/fi";
-import { useState } from "react";
+import { FiBookOpen, FiCreditCard, FiGift } from "react-icons/fi";
+import { useState, useRef } from "react";
 import { useFormik } from "formik";
 import Head from "next/head";
 
 export default function SalonFinder() {
+  const applyNowRef = useRef<null | HTMLDivElement>(null);
+
   return (
     <Box bgColor={"black"} color={"white"}>
       <Head>
         <title>Salon Professionals | TOR Salon Products</title>
+        <meta name="description"  content="TOR Salon Products was started by a haircare industry veteran, with a strong understanding of stylist and salons challenges, and over a decade helping salons formulate products for their clients." />
       </Head>
       <Box pt={[20, 40]} pb={60} pos="relative" h={["auto", 1400]}>
         <Image
@@ -37,6 +38,7 @@ export default function SalonFinder() {
         <Container maxW="container.xl">
           <Stack spacing={2} align="flex-start">
             <Heading
+              as="h1"
               fontSize={22}
               textTransform="uppercase"
               fontFamily={"Futura"}
@@ -47,13 +49,13 @@ export default function SalonFinder() {
             <Heading mixBlendMode={"difference"} fontSize={[64, 84]}>
               Become a TOR Pro
             </Heading>
-            <Button bgColor={"white"} color={"black"}>
+            <Button onClick={() => applyNowRef && applyNowRef.current && applyNowRef.current.scrollIntoView({behavior: 'smooth'})} bgColor={"white"} color={"black"}>
               Apply Now →
             </Button>
           </Stack>
         </Container>
       </Box>
-      <Container pb={40} maxW="container.xl">
+      <Container pb={[0, 40]} maxW="container.xl">
         <Stack
           spacing={8}
           p={8}
@@ -103,7 +105,7 @@ export default function SalonFinder() {
           </Stack>
         </Stack>
       </Container>
-      <Container maxW="container.sm" pb={60} textAlign={"center"}>
+      <Container maxW="container.sm" pb={60} pt={[40, null]} textAlign={"center"} ref={applyNowRef}>
         <Stack w="full" spacing={6}>
           <Heading>Apply Now!</Heading>
           <Text>Get amazing benefits as a TOR Pro!</Text>

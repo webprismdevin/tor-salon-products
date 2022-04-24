@@ -87,7 +87,7 @@ export default function MailingList() {
       color="white"
       animate={controls}
       variants={animationVariants}
-      maxW={["360px", "580px"]}
+      maxW={["370px", "580px"]}
     >
       <MotionBox
         whileHover={{

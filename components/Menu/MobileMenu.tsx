@@ -69,6 +69,7 @@ const MobileMenu = () => {
           opacity: 0.4,
         }}
         transition={"opacity 200ms ease"}
+        display={["inherit", "none"]}
       />
       <Drawer
         isOpen={menuIsOpen}

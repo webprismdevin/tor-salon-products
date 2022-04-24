@@ -87,7 +87,7 @@ const Footer = () => {
           justify={"space-between"}
           spacing={[8, 20]}
         >
-          <Stack direction={["column", "row"]} spacing={[8, 20]}>
+          <Stack direction={["column", "row"]} spacing={[12, 20]}>
             <AspectRatio ratio={8 / 10} w={"126px"}>
               <Image src="/tor-gif.gif" alt="TOR brand hairtypes gif" />
             </AspectRatio>

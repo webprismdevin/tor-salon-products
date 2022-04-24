@@ -120,7 +120,7 @@ const ProductPage = ({
         <PhotoCarousel images={product.images.edges} />
         <Container centerContent pt={[0, 40]} pb={20}>
           <Stack direction={["column"]} spacing={4} w="full" align="flex-start">
-            <Heading maxW={500}>{product.title}</Heading>
+            <Heading as="h1" maxW={500}>{product.title}</Heading>
             <Box
               dangerouslySetInnerHTML={{
                 __html: product.descriptionHtml,

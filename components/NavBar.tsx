@@ -4,7 +4,6 @@ import {
   Stack,
   Image,
   Flex,
-  Container,
   Link,
   Menu,
   MenuList,
@@ -23,12 +22,11 @@ import MenuLink from "./Menu/MenuLink";
 
 const Cart = dynamic(() => import("../components/Cart"));
 
-const NavBar = ({ isMobile } : { isMobile: boolean}) => {
+const NavBar = ({ isMobile }: { isMobile: boolean }) => {
   const [auth, setAuth] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    console.log(isMobile, "from navbar")
 
     async function checkToken() {
       let token = JSON.parse(
@@ -49,43 +47,61 @@ const NavBar = ({ isMobile } : { isMobile: boolean}) => {
   }
 
   return (
-    <Box py={6} px={[4, 10]} pos="sticky" top={0} zIndex={2} bg="white" borderBottom={"2px solid black"}>
-        <Flex align={"center"} justify={"space-between"}>
-          <Stack direction="row" spacing={[4, 8]} align={"center"}>
-            {isMobile && <MobileMenu />}
-            <StoreName />
-            {!isMobile && <DesktopMenu />}
-          </Stack>
-          <Stack direction="row" spacing={4}>
-            {!isMobile && (
-              <>
-                <Box>
-                  <Menu>
-                    <MenuButton>Salons</MenuButton>
-                    <MenuList>
-                      <MenuItem><MenuLink href="/salon-finder" text="Salon Finder"/></MenuItem>
-                      <MenuItem><MenuLink href="/professionals" text="Professionals" /></MenuItem>
-                    </MenuList>
-                  </Menu>
-                </Box>
-                <NextLink href="/about" passHref>
-                  <Link>About</Link>
-                </NextLink>
-              </>
-            )}
-            <Icon
-              as={AiOutlineUser}
-              boxSize={6}
-              onClick={handleLoginOrAccount}
-              _hover={{
-                opacity: 0.4,
-              }}
-              transition={"opacity 200ms ease"}
-            />
-            <Search router={router} />
-            <Cart />
-          </Stack>
-        </Flex>
+    <Box
+      py={6}
+      px={[4, 10]}
+      pos="sticky"
+      top={0}
+      zIndex={2}
+      bg="white"
+      borderBottom={"2px solid black"}
+    >
+      <Flex align={"center"} justify={"space-between"}>
+        <Stack direction="row" spacing={[4, 8]} align={"center"}>
+          {isMobile && 
+          <MobileMenu />
+          }
+          <StoreName />
+          {/* {!isMobile &&  */}
+          <DesktopMenu />
+          {/* } */}
+        </Stack>
+        <Stack direction="row" spacing={4}>
+          {/* {!isMobile && ( */}
+          <>
+            <Box display={["none", "inherit"]}>
+              <Menu>
+                <MenuButton>Salons</MenuButton>
+                <MenuList>
+                  <MenuItem>
+                    <MenuLink href="/salon-finder" text="Salon Finder" />
+                  </MenuItem>
+                  <MenuItem>
+                    <MenuLink href="/professionals" text="Professionals" />
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            </Box>
+            <Link display={["none", "inherit"]}>
+              <NextLink href="/about" passHref>
+                About
+              </NextLink>
+            </Link>
+          </>
+          {/* )} */}
+          <Icon
+            as={AiOutlineUser}
+            boxSize={6}
+            onClick={handleLoginOrAccount}
+            _hover={{
+              opacity: 0.4,
+            }}
+            transition={"opacity 200ms ease"}
+          />
+          <Search router={router} />
+          <Cart />
+        </Stack>
+      </Flex>
     </Box>
   );
 };
@@ -94,7 +110,7 @@ export default NavBar;
 
 const StoreName = () => {
   return (
-    <Box justifySelf={"center"}>
+    <Box>
       <NextLink href="/" passHref>
         <Image src={"/logo_800.png"} h={7} alt="TOR logo" />
       </NextLink>

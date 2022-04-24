@@ -46,7 +46,7 @@ export default function CollectionPage({
             zIndex={0}
           />
           <Stack direction={["column"]} spacing={6} pos="relative" zIndex={1}>
-            <Heading>{data.title}</Heading>
+            <Heading as="h1">{data.title}</Heading>
             <Text
             maxW={600}
             dangerouslySetInnerHTML={{

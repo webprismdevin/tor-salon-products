@@ -1,8 +1,6 @@
 import {
   Stack,
   Text,
-  Container,
-  Link,
   Divider,
   BoxProps,
   Box,
@@ -49,7 +47,7 @@ const DesktopMenu = () => {
 
   return (
     <>
-      <Text onMouseEnter={() => controls.start("animate")}>Shop</Text>
+      <Text display={["none", "inherit"]} onMouseEnter={() => controls.start("animate")}>Shop</Text>
       <AnimatePresence exitBeforeEnter={true}>
         <MotionBox
           pos="fixed"

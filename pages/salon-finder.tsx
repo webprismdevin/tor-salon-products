@@ -31,6 +31,7 @@ export default function SalonFinder({ salons }: SalonPageData) {
     <Container py={20} maxW="container.lg">
       <Head>
         <title>Salon Finder | TOR Salon Products</title>
+        <meta name="description" content="Search our directory of salon locations to purchase TOR products, or find a stylist that uses our product lines." />
       </Head>
       <Stack spacing={6} align="center" w="full">
         <Heading size="lg">Salon Finder</Heading>

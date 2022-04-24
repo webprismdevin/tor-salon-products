@@ -53,7 +53,7 @@ export function Search({ router }: { router: NextRouter }) {
               </InputLeftElement>
               <Input
                 variant="outline"
-                placeholder="Whatcha need?"
+                placeholder="What can we help you find?"
                 onKeyDown={handleKeyDown}
                 onChange={(e) => setSearchValue(e.target.value)}
                 value={searchValue}
