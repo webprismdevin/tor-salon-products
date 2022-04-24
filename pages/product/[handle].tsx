@@ -25,6 +25,7 @@ import Product from "../../components/Product";
 import Script from "next/script";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { wrap } from "@popmotion/popcorn";
+import mitt from "next/dist/shared/lib/mitt";
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -320,7 +321,7 @@ export async function getStaticPaths() {
 
   const query = gql`
     {
-      products(first: 200) {
+      products(first: 200, query: "NOT gift-cards") {
         edges {
           node {
             id
@@ -512,16 +513,13 @@ export const getStaticProps: GetStaticProps = async (context) => {
     throw Error("Unable to retrieve product. Please check logs");
   }
 
-  console.log(res.product.collections.edges);
-
   return {
     props: {
       handle: handle,
       product: res.product,
-      collection:
-        res.product.collections.edges[0].node.handle === "home"
-          ? res.product.collections.edges[1].node
-          : res.product.collections.edges[0].node,
+      collection: res.product.collections.edges[0]?.node.handle === "home"
+                    ? res.product.collections.edges[1].node
+                    : res.product.collections.edges[0]?.node || null,
     },
     revalidate: 60,
   };
