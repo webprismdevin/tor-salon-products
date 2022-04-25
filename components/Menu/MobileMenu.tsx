@@ -121,7 +121,7 @@ const MobileMenu = () => {
                     <h2>
                       <AccordionButton px={0}>
                         <Box flex="1" textAlign="left">
-                          Body + Skin
+                          CBD
                         </Box>
                         <AccordionIcon />
                       </AccordionButton>
