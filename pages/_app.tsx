@@ -60,6 +60,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ShopContext.Provider value={{ shop }}>
         <Head>
           <meta name="theme-color" content="#ffffff" />
+          <link rel="shortcut icon" href="/favicon.png" />
         </Head>
         <CartContext.Provider value={{ cart, setCart }}>
           <NavBar />

@@ -40,7 +40,7 @@ export async function getStaticProps() {
   const query = gql`
     {
       products(
-        first: 200, query: "product_type:'CBD Lotions' OR product_type:'Tincture' OR product_type:Gummies OR product_type:'Gel Caps'"
+        first: 200, query: "product_type:'CBD Lotions' OR product_type:'Tincture' OR product_type:Gummies OR product_type:'Gel Caps' OR product_type:'CBD Lip Balms'"
       ) {
         edges {
           node {

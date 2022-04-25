@@ -17,7 +17,7 @@ const Search = ({
         <title>Search results for &quot;{searchTerm}&quot;</title>
       </Head>
       <Container py={6} maxW="container.xl">
-        <Heading>Search results for &quot;{searchTerm}&quot;</Heading>
+        <Heading textTransform={"capitalize"}>{searchTerm}</Heading>
       </Container>
       <Container maxW="container.xl" pt={10} pb={20}>
         <SimpleGrid templateColumns={"repeat(3, 1fr)"}>

@@ -23,9 +23,9 @@ const Product = ({
       cursor={"pointer"}
     >
       <AspectRatio ratio={1 / 1} boxSize={300}>
-        <Image src={prod.images.edges[0]?.node.url} alt={prod.title} />
+        <Image src={prod.images.edges[0]?.node.url} alt={prod.title} borderRadius={6} />
       </AspectRatio>
-      <Text fontSize={fontSize ? fontSize : 32} maxW="300px" lineHeight={1.3}>
+      <Text fontSize={fontSize ? fontSize : 32} maxW="300px" lineHeight={1.3} minH={["none", 84]}>
         {prod.title}
       </Text>
     </GridItem>

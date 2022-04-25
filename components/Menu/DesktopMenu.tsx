@@ -83,7 +83,7 @@ const DesktopMenu = () => {
             </Stack>
             <Stack>
               <Text fontSize={"xl"} fontFamily={"Futura"}>
-                Body + Skin
+                CBD
               </Text>
               <Divider />
               <BodyAndSkin />

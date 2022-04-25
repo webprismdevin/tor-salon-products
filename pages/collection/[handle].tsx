@@ -36,8 +36,9 @@ export default function CollectionPage({
       <Flex
         flexDir={["column-reverse", "row"]}
         bg={data.color?.value ? data.color.value : "white"}
+        maxH={"600px"}
       >
-        <Box w={["full", "50%"]} px={[8, 20]} py={[20, 40]} pos="relative">
+        <Box w={["full", "50%"]} px={[8, 20]} py={[20, 20]} pos="relative">
           <Stack direction={["column"]} spacing={6} pos="relative" zIndex={1}>
             <Heading as="h1">{data.title}</Heading>
             <Text 
@@ -85,7 +86,7 @@ export default function CollectionPage({
       {data.collectionFeature && (
         <ProductFeature reference={data.collectionFeature.reference} />
       )}
-      <Container maxW="container.xl" py={40}>
+      <Container maxW="container.xl" pt={10} pb={20}>
         <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
           {data.products.edges.map((p: any) => (
             <Product product={p} key={p.node.id} />

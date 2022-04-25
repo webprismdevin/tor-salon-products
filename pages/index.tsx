@@ -43,12 +43,12 @@ function HomePage({ products, styling, body }: any) {
           <Heading fontSize={[28, 48, null, null, 56]}>
             Hair + Body Products
           </Heading>
-          <HStack justify={"center"}>
+          <HStack justify={"center"} spacing={4}>
             <NextLink href="/all-hair-care" passHref>
               <Button>Shop Hair</Button>
             </NextLink>
-            <NextLink href="/all-body-products" passHref>
-              <Button>Shop Body</Button>
+            <NextLink href="/all-cbd" passHref>
+              <Button>Shop CBD</Button>
             </NextLink>
           </HStack>
         </Stack>
