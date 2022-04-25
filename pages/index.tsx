@@ -233,7 +233,7 @@ function HomePage({ products, styling, body }: any) {
         </Stack>
       </Container>
       <Box
-        height={["auto", 700]}
+        height={["auto", 760]}
         bgImage="/images/tor-cbd-2.jpg"
         borderTop="10px solid #000000"
         bgSize={"cover"}

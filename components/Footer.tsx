@@ -122,6 +122,7 @@ const Footer = () => {
               >
                 Contact
               </Link>
+              <Link fontSize={"sm"} href="https://dovetale.com/community/apply/GhTbYLIXsL4">Ambassadors</Link>
               {/* <FooterLink href={"/our-friends"} text={"Our Friends"} /> */}
             </Stack>
           </Stack>
