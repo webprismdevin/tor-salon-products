@@ -183,7 +183,7 @@ function HomePage({ products, styling, body }: any) {
           ))}
           <Box
             flexShrink={0}
-            minH="100%"
+            minH={[20, "100%"]}
             display={"grid"}
             placeItems={["center", "center end"]}
           >
