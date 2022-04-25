@@ -86,12 +86,12 @@ function HomePage({ products, styling, body }: any) {
         </Box>
       </Box>
       <Container maxW="container.xl" pt={[20, 200, null, null, 20]} pb={40}>
-        <Stack maxW="560px" px={[2, null]}>
+        <Stack maxW="600px" px={[2, 0]}>
           <Text fontSize={22} textTransform="uppercase" fontFamily={"Futura"}>
             Salon Grade -
           </Text>
           <Heading size="2xl">
-            Hair care formulated for you. Not Everyone
+            Hair care formulated for you. Not Everyone.
           </Heading>
           <Text>
             TOR products are formulated specifically by hair type, to tackle
@@ -155,20 +155,20 @@ function HomePage({ products, styling, body }: any) {
           </Stack>
         </Container>
       </Box>
-      <Container maxW="container.xl" py={20}>
+      <Container maxW="container.xl" py={36}>
         <Stack direction={["column", "row"]} w="full" justifyContent={"space-between"}>
           <Stack
-            px={[2, null]}
+            px={[2, 0]}
             maxW={["none", "240px"]}
             alignSelf={"center"}
             justify={"space-between"}
           >
             <Text fontSize={22} textTransform="uppercase" fontFamily={"Futura"}>
-              Salon Grade -
+              Longer Lasting -
             </Text>
             <Heading size="2xl">Styling</Heading>
             <Text>
-              TOR&apos;s innovative formula let&apos;s you create amazing looks,
+              TOR&apos;s innovative formulas let&apos;s you create amazing looks,
               while remaining soft to the touch.
             </Text>
           </Stack>
@@ -214,7 +214,7 @@ function HomePage({ products, styling, body }: any) {
           </Stack>
         </Container>
       </Box>
-      <Container maxW="container.md" py={20} my={10}>
+      <Container maxW="container.md"  py={48}>
         <Stack
           direction={["column", "row"]}
           w="full"
@@ -237,6 +237,7 @@ function HomePage({ products, styling, body }: any) {
         bgImage="/images/tor-cbd-2.jpg"
         borderTop="10px solid #000000"
         bgSize={"cover"}
+        bgAttachment={["scroll", "fixed"]}
         backgroundPosition={["bottom right", "right"]}
         pos="relative"
         px={[2, 0]}
@@ -259,6 +260,13 @@ function HomePage({ products, styling, body }: any) {
             and contain significantly more CBD that typical products, making TOR
             CBD more effective.
           </Text>
+          <NextLink href="/all-cbd" passHref>
+            <Button
+              alignSelf={"flex-start"}
+            >
+              Shop All CBD
+            </Button>
+          </NextLink>
         </Stack>
         <Stack
           pos={["static", null, null, null, "absolute"]}
@@ -310,19 +318,6 @@ function HomePage({ products, styling, body }: any) {
             </MotionBox>
           </NextLink>
         </Stack>
-        <Box py={[16, 0]}>
-          <NextLink href="/all-cbd" passHref>
-            <Button
-              display="block"
-              pos={["static", "absolute"]}
-              mx={["auto", null]}
-              right={[null, 8]}
-              bottom={[null, 8]}
-            >
-              Shop All CBD
-            </Button>
-          </NextLink>
-        </Box>
       </Box>
       <Box pt={40}>
         <Container centerContent mb={10}>

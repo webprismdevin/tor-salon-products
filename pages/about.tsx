@@ -9,7 +9,6 @@ import {
   Stack,
   Button,
   Code,
-  Link,
 } from "@chakra-ui/react";
 import { groq } from "next-sanity";
 import { getClient } from "../lib/sanity";
@@ -52,17 +51,10 @@ const About = ({ data }: any) => {
             No Half Measures
           </Heading>
           <Text maxW="480px">
-            TOR is taking a different approach to hair + body products - we
-            don&apos;t compromise, and we don&apos;t ask our customers to.
-            That&apos;s why we started with 3 hair care lines based on the
-            specific challenges of each hair type.
+            TOR is taking a different approach to hair + body products - we don&apos;t compromise, and we don&apos;t ask our customers to. That&apos;s why we formulate our products to deliver the best results for your hair type, not a one-size-fits-all solution.
           </Text>
           <Text maxW="480px">
-            TOR is driven by science, not marketing - we formulate our products
-            not to work for the most people, but to work for people the most.
-            Started in 2014 by beauty industry veteran Shannon Tor, a former
-            Avon &amp; Alberto-Culver product chemist with 9 industry awards,
-            TOR&apos;s philosophy is simple: “no half-measures”.
+            TOR is driven by science, not marketing - we formulate our products not to work for the most people, but to work for people the most. Started in 2014 by beauty industry veteran Shannon Tor, a former Avon &amp; Alberto-Culver product chemist with 9 industry awards, TOR&apos;s philosophy is simple: “no half-measures”.
           </Text>
         </Stack>
         <Image
@@ -77,17 +69,10 @@ const About = ({ data }: any) => {
         <Stack spacing={6} pl={[8, 20]} pr={[8, 0]} py={[0, 40]}>
           <Heading>Hair Care</Heading>
           <Text maxW="480px">
-            Our hair care product lines are driven by the ability to style,
-            manage, and maintain a natural feel for your hair, by looking at how
-            to actually create moisture, not mimic it. Achieving these results
-            is massively different by hair type - where some hair types need
-            lots of help retaining moisture, others don&apos;t.
+          Our hair care product lines are driven by the ability to style, manage, and maintain a natural feel for your hair. Our products actually create moisture, not mimic it. Each hair type has its own unique characteristics, and some hair types need more help retaining moisture than others.
           </Text>
           <Text maxW="480px">
-            Taking a “single-sweep” approach ends up with no one getting the
-            right result - so Shannon took his 20 years of industry experience
-            creating &amp; testing products in real salons, and found the best
-            way to create results was individually.
+          Taking a “single-sweep” approach to hair care means no one gets the results their searching for - so Shannon took his 20 years of industry experience creating &amp; testing products in real salons, and found the best way to deliver results for each individual.
           </Text>
         </Stack>
       </Box>
@@ -112,7 +97,7 @@ const About = ({ data }: any) => {
           <Heading>Why CBD?</Heading>
           <Text maxW="480px">
             Shannon has a long history with CBD, going back to his grandparents,
-            but TOR Salon Products CBD emerged when co-founder & CFO Tina, who
+            but TOR Salon Products CBD emerged when co-founder &amp; CFO Tina, who
             is also Shannon&apos;s wife, was diagnosed with Crohn&apos;s
             disease.
           </Text>

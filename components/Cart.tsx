@@ -335,8 +335,8 @@ function ItemQty({ product }: { product: any }) {
 
   return (
     <HStack>
-      <Button size="sm" {...inc}>
-        +
+      <Button size="sm" {...dec}>
+        -
       </Button>
       <Input
         size="sm"
@@ -344,8 +344,8 @@ function ItemQty({ product }: { product: any }) {
         {...input}
         onBlur={(e) => handleQtyUpdate(e.target.value)}
       />
-      <Button size="sm" {...dec}>
-        -
+      <Button size="sm" {...inc}>
+        +
       </Button>
     </HStack>
   );

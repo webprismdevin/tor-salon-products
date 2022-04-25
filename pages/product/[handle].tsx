@@ -156,9 +156,9 @@ const ProductPage = ({
                 </Stack>
               )}
               <HStack w="140px">
-                <Button {...inc}>+</Button>
-                <Input {...input} textAlign="center" />
                 <Button {...dec}>-</Button>
+                <Input {...input} textAlign="center" />
+                <Button {...inc}>+</Button>
               </HStack>
             </Stack>
             <Text fontSize={24} fontWeight={600}>
@@ -233,7 +233,7 @@ const ProductPage = ({
             </AspectRatio>
           </Flex>
           <Container maxW="container.xl" centerContent py={20}>
-            <Heading size="md" mb={20} textTransform="uppercase">
+            <Heading size="md" fontWeight={600} mb={20} textTransform="uppercase">
               Other items in this line
             </Heading>
             <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>

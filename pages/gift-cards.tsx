@@ -36,28 +36,28 @@ declare interface VariantType {
 }
 
 export default function GiftCards({ product }: any) {
-  const [itemQty, setItemQty] = useState(1);
+  // const [itemQty, setItemQty] = useState(1);
   const { cart, setCart } = useContext(CartContext);
-  const [yjsLoaded, setLoaded] = useState(false);
+  // const [yjsLoaded, setLoaded] = useState(false);
   const [activeVariant, setActiveVariant] = useState<VariantType>(() => {
     if (!product) return null;
 
     return product.variants.edges[0].node;
   });
 
-  const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
-    useNumberInput({
-      step: 1,
-      defaultValue: itemQty,
-      min: 1,
-      precision: 0,
-      onChange: (valueAsString: string, valueAsNumber: number) =>
-        setItemQty(valueAsNumber),
-    });
+  // const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
+  //   useNumberInput({
+  //     step: 1,
+  //     defaultValue: itemQty,
+  //     min: 1,
+  //     precision: 0,
+  //     onChange: (valueAsString: string, valueAsNumber: number) =>
+  //       setItemQty(valueAsNumber),
+  //   });
 
-  const inc = getIncrementButtonProps();
-  const dec = getDecrementButtonProps();
-  const input = getInputProps();
+  // const inc = getIncrementButtonProps();
+  // const dec = getDecrementButtonProps();
+  // const input = getInputProps();
 
   const variants = product?.variants.edges;
 
@@ -67,7 +67,7 @@ export default function GiftCards({ product }: any) {
       body: JSON.stringify({
         variantId: activeVariant.id,
         cartId: cart.id,
-        qty: itemQty,
+        qty: 1,
       }),
     }).then((res) => res.json());
 
