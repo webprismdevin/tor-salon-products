@@ -44,7 +44,16 @@ export default function Account() {
         )
       );
 
-      if (token) setAuth(true);
+      if (token) {
+        setAuth(true);
+
+        if (process.env.NODE_ENV === "production") {
+          window.dataLayer.push({
+            event: "login",
+            loginMethod: "email",
+          });
+        }
+      }
       //todo: check expiresAt
 
       if (token === null) router.push("/login");
@@ -65,6 +74,7 @@ export default function Account() {
     const user = await fetch(
       `/api/get-customer?accessToken=${accessToken}`
     ).then((res) => res.json());
+
     setUserData({ ...user.data.customer });
   }
 
@@ -79,7 +89,7 @@ export default function Account() {
 
       console.log(token);
 
-      getUser(token.accessToken);
+      getUser(token.customerAccessToken.accessToken);
     }
   }, [authenticated]);
 
@@ -170,26 +180,41 @@ function Orders({ userData }: any) {
             gap={[4]}
             columnGap={[4, 0]}
           >
-            <GridItem fontWeight={600} pb={4}>Order Date</GridItem>
-            <GridItem fontWeight={600} pb={4}>Status</GridItem>
-            <GridItem fontWeight={600} pb={4} display={["none", "inherit"]}>Order #</GridItem>
-            <GridItem fontWeight={600} pb={4}>Confirmation</GridItem>
-          {userData.orders.edges.map((o: any, i: number) => (
-            <>
-              <GridItem>
-                {new Date(o.node.processedAt).toLocaleDateString()}
-              </GridItem>
-              <GridItem>{o.node.fulfillmentStatus}</GridItem>
-              <GridItem display={["none", "inherit"]}>{o.node.orderNumber}</GridItem>
-              <GridItem textAlign={["center", "left"]}>
-                <NextLink href={`/order/${Buffer.from(o.node.id).toString("base64")}`} passHref>
+            <GridItem fontWeight={600} pb={4}>
+              Order Date
+            </GridItem>
+            <GridItem fontWeight={600} pb={4}>
+              Status
+            </GridItem>
+            <GridItem fontWeight={600} pb={4} display={["none", "inherit"]}>
+              Order #
+            </GridItem>
+            <GridItem fontWeight={600} pb={4}>
+              Confirmation
+            </GridItem>
+            {userData.orders.edges.map((o: any, i: number) => (
+              <>
+                <GridItem>
+                  {new Date(o.node.processedAt).toLocaleDateString()}
+                </GridItem>
+                <GridItem>{o.node.fulfillmentStatus}</GridItem>
+                <GridItem display={["none", "inherit"]}>
+                  {o.node.orderNumber}
+                </GridItem>
+                <GridItem textAlign={["center", "left"]}>
                   <Link>
-                    <Text>View</Text>
+                    <NextLink
+                      href={`/order/${Buffer.from(o.node.id).toString(
+                        "base64"
+                      )}`}
+                      passHref
+                    >
+                      <Text>View</Text>
+                    </NextLink>
                   </Link>
-                </NextLink>
-              </GridItem>
-            </>
-          ))}
+                </GridItem>
+              </>
+            ))}
           </SimpleGrid>
         </Stack>
       </Box>

@@ -107,24 +107,19 @@ function SignIn({
     }).then((res) => res.json());
 
     if (response.customerAccessToken) {
-      console.log(response);
+
       window.localStorage.setItem(
         `${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:accessToken`,
         JSON.stringify({ ...response })
       );
 
-      window.dataLayer.push({
-        'event': 'login',
-        'loginMethod': 'email'
-      })
-
-      router.push("/account");
+      router.push("/account")
 
       return;
     }
 
     if (response.customerUserErrors) {
-      console.log(response);
+
       setFailed(true);
       //add toast
 

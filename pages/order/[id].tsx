@@ -204,7 +204,7 @@ function LineItem({ product }: any) {
     <Stack direction={["column", "row"]} alignItems={"flex-start"} py={4}>
       <Image
         boxSize={20}
-        src={product.node.image.url}
+        src={product.node.image?.url}
         alt={product.node.name}
       />
       <Box>
