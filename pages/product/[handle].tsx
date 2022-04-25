@@ -173,72 +173,79 @@ const ProductPage = ({
           </Stack>
         </Container>
       </Flex>
-      <Box bg={collection.color?.value ? collection.color.value : "white"}>
-        <Flex flexDir={["column-reverse", "row"]}>
-          <Box w={["full", "50%"]} px={[8, 20]} py={[20, 40]} pos="relative">
-            <Image
-              src={collection.typeImage?.reference.image.url}
-              alt=""
-              pos="absolute"
-              top={0}
-              opacity={0.1}
-              w="100%"
-              left={0}
-              zIndex={0}
-            />
-            <Stack direction={["column"]} spacing={6} pos="relative" zIndex={1}>
-              <Heading>{collection.title}</Heading>
-              <Text>{collection.description}</Text>
+      {collection && (
+        <Box bg={collection.color?.value ? collection.color.value : "white"}>
+          <Flex flexDir={["column-reverse", "row"]}>
+            <Box w={["full", "50%"]} px={[8, 20]} py={[20, 40]} pos="relative">
+              <Image
+                src={collection.typeImage?.reference.image.url}
+                alt=""
+                pos="absolute"
+                top={0}
+                opacity={0.1}
+                w="100%"
+                left={0}
+                zIndex={0}
+              />
               <Stack
-                direction={"row"}
-                textAlign="left"
-                justify="flex-start"
+                direction={["column"]}
                 spacing={6}
+                pos="relative"
+                zIndex={1}
               >
-                <Box w="120px">
-                  <Image
-                    mb={2}
-                    src={collection?.benefitOneIcon?.reference.image?.url}
-                    alt={collection?.benefitOneText?.value}
-                  />
-                  <Text>{collection?.benefitOneText?.value}</Text>
-                </Box>
-                <Box w="120px">
-                  <Image
-                    mb={2}
-                    src={collection?.benefitTwoIcon?.reference.image.url}
-                    alt={collection?.benefitTwoText?.value}
-                  />
-                  <Text>{collection?.benefitTwoText?.value}</Text>
-                </Box>
-                <Box w="120px">
-                  <Image
-                    mb={2}
-                    src={collection?.benefitThreeIcon?.reference.image.url}
-                    alt={collection?.benefitThreeText?.value}
-                  />
-                  <Text>{collection?.benefitThreeText?.value}</Text>
-                </Box>
+                <Heading>{collection.title}</Heading>
+                <Text>{collection.description}</Text>
+                <Stack
+                  direction={"row"}
+                  textAlign="left"
+                  justify="flex-start"
+                  spacing={6}
+                >
+                  <Box w="120px">
+                    <Image
+                      mb={2}
+                      src={collection?.benefitOneIcon?.reference.image?.url}
+                      alt={collection?.benefitOneText?.value}
+                    />
+                    <Text>{collection?.benefitOneText?.value}</Text>
+                  </Box>
+                  <Box w="120px">
+                    <Image
+                      mb={2}
+                      src={collection?.benefitTwoIcon?.reference.image.url}
+                      alt={collection?.benefitTwoText?.value}
+                    />
+                    <Text>{collection?.benefitTwoText?.value}</Text>
+                  </Box>
+                  <Box w="120px">
+                    <Image
+                      mb={2}
+                      src={collection?.benefitThreeIcon?.reference.image.url}
+                      alt={collection?.benefitThreeText?.value}
+                    />
+                    <Text>{collection?.benefitThreeText?.value}</Text>
+                  </Box>
+                </Stack>
               </Stack>
-            </Stack>
-          </Box>
-          <AspectRatio ratio={1 / 1} w={["full", "50%"]}>
-            <Image src={collection?.image?.url} alt="" />
-          </AspectRatio>
-        </Flex>
-        <Container maxW="container.xl" centerContent py={20}>
-          <Heading size="md" mb={20} textTransform="uppercase">
-            Other items in this line
-          </Heading>
-          <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
-            {collection.products.edges.map((p: any) => (
-              <React.Fragment key={p.node.id}>
-                <Product product={p} fontSize={24} />
-              </React.Fragment>
-            ))}
-          </SimpleGrid>
-        </Container>
-      </Box>
+            </Box>
+            <AspectRatio ratio={1 / 1} w={["full", "50%"]}>
+              <Image src={collection?.image?.url} alt="" />
+            </AspectRatio>
+          </Flex>
+          <Container maxW="container.xl" centerContent py={20}>
+            <Heading size="md" mb={20} textTransform="uppercase">
+              Other items in this line
+            </Heading>
+            <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
+              {collection.products.edges.map((p: any) => (
+                <React.Fragment key={p.node.id}>
+                  <Product product={p} fontSize={24} />
+                </React.Fragment>
+              ))}
+            </SimpleGrid>
+          </Container>
+        </Box>
+      )}
       <Container maxW="container.xl" pt={20} pb={40} centerContent>
         {yjsLoaded && (
           <div
@@ -609,18 +616,23 @@ export const getStaticProps: GetStaticProps = async (context) => {
     throw Error("Unable to retrieve product. Please check logs");
   }
 
-  function handleCollectionFilter(){
-    const filteredCollections = res.product.collections.edges.filter((n:any) => n.node.handle !== "home" && n.node.handle !== "homepage-body")
+  function handleCollectionFilter() {
+    const filteredCollections = res.product.collections.edges.filter(
+      (n: any) => n.node.handle !== "home" && n.node.handle !== "homepage-body"
+    );
 
-    return filteredCollections[0].node
+    if (filteredCollections[0]) return filteredCollections[0].node;
+
+    return null;
   }
-
 
   return {
     props: {
       handle: handle,
       product: res.product,
-      collection: collectionRes.collection ? collectionRes.collection : handleCollectionFilter(),
+      collection: collectionRes.collection
+        ? collectionRes.collection
+        : handleCollectionFilter(),
     },
     revalidate: 60,
   };
