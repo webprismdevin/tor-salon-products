@@ -25,7 +25,7 @@ export const ByHairType = () => {
 export const BodyAndSkin = () => {
   return (
     <>
-      <MenuLink href="/search?query=cbd%20bath%20bombs" text="Bath Bombs" />
+      <MenuLink href="/product/cbd-bath-bombs" text="Bath Bombs" />
       <MenuLink href="/collection/cbd-consumables" text="Consumables" />
       <MenuLink href="/product/natural-lip-balm-with-cbd" text="Lip Balm" />
       <MenuLink href="/collection/cbd-lotions" text="Lotions" />
