@@ -25,7 +25,7 @@ const ProductFeature = ({ name, price, image, link }: ProductFeatureTypes) => {
   return (
     <NextLink href={link} passHref>
       <MotionBox
-        maxW={["none", 280]}
+        maxW={["none", 240]}
         textAlign="center"
         display={"grid"}
         placeItems={"center"}

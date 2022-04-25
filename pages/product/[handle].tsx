@@ -25,7 +25,6 @@ import Product from "../../components/Product";
 import Script from "next/script";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { wrap } from "@popmotion/popcorn";
-import mitt from "next/dist/shared/lib/mitt";
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -68,11 +67,9 @@ const ProductPage = ({
         setItemQty(valueAsNumber),
     });
 
-  useEffect(() => {
-    console.log(Buffer.from(product.id).toString("base64"));
-
-    window.collections = collections;
-  }, []);
+  // useEffect(() => {
+  //   window.collections = collections;
+  // }, []);
 
   const inc = getIncrementButtonProps();
   const dec = getDecrementButtonProps();

@@ -42,7 +42,7 @@ const GridFeature = ({
             minH={"100%"}
             ratio={1 / 1}
             pos="absolute"
-            top={0}
+            top={-10}
             left={0}
             zIndex={-1}
           >
@@ -72,7 +72,7 @@ const GridFeature = ({
           >
             <Heading
               fontSize={["2xl", "lg", "lg", "2xl"]}
-              maxW={[300, null, 200, 320]}
+              maxW={[300, null, 200, 240]}
             >
               {name}
             </Heading>

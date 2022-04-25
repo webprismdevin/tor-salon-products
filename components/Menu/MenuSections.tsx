@@ -31,7 +31,7 @@ export const BodyAndSkin = () => {
       {/* <MenuLink href="/collection/goat-milk-soap" text="Goat Milk Soap" /> */}
       <MenuLink href="/collection/cbd-consumables" text="CBD Consumables" />
       <MenuLink href="/collection/cbd-lotions" text="CBD Lotions" />
-      <MenuLink href="/collection/lip-balm" text="Lip Balm" />
+      <MenuLink href="/search?query=lip%20balm" text="Lip Balm" />
     </>
   );
 };
@@ -40,8 +40,8 @@ export const MoreLinks = () => {
   return (
     <>
       {/* <Link>Candles</Link> */}
-      <Link>Gift Bundles</Link>
-      <Link>Gift Cards</Link>
+      {/* <Link>Gift Bundles</Link> */}
+      <MenuLink href="/gift-cards" text="Gift Cards" />
     </>
   );
 };

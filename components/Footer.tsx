@@ -11,12 +11,17 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  Spinner
+  Spinner,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useContext, useState } from "react";
 import { FiArrowRight } from "react-icons/fi";
-import { SiGooglemybusiness, SiFacebook, SiInstagram, SiYoutube } from "react-icons/si"
+import {
+  SiGooglemybusiness,
+  SiFacebook,
+  SiInstagram,
+  SiYoutube,
+} from "react-icons/si";
 import ShopContext from "../lib/shop-context";
 import {
   BodyAndSkin,
@@ -45,7 +50,7 @@ const Footer = () => {
     }
 
     if (response) {
-      setEmail("")
+      setEmail("");
       setStatus("success");
     }
   }
@@ -64,7 +69,11 @@ const Footer = () => {
             <Input
               variant={"unstyled"}
               fontSize={[24, 36]}
-              placeholder={formStatus === 'success' ? "Check your inbox!" : "Join our community"}
+              placeholder={
+                formStatus === "success"
+                  ? "Check your inbox!"
+                  : "Join our community"
+              }
               _placeholder={{ color: "black" }}
               borderBottom={"4px solid black"}
               borderRadius={0}
@@ -72,13 +81,13 @@ const Footer = () => {
               onChange={(e) => setEmail(e.target.value)}
               onKeyDown={handleEnter}
             />
-          <InputRightElement onClick={subscribe}>
-            {formStatus === "loading" ? (
-              <Spinner boxSize={6} mt={6}  />
-            ) : (
-              <Icon as={FiArrowRight} boxSize={6} mt={[0, 6]} />
-            )}
-          </InputRightElement>
+            <InputRightElement onClick={subscribe}>
+              {formStatus === "loading" ? (
+                <Spinner boxSize={6} mt={6} />
+              ) : (
+                <Icon as={FiArrowRight} boxSize={6} mt={[0, 6]} />
+              )}
+            </InputRightElement>
           </InputGroup>
         </Box>
         <Stack
@@ -107,13 +116,21 @@ const Footer = () => {
               </Text>
               <Divider />
               <FooterLink href={"/help"} text={"Help & FAQ"} />
-              <Link fontSize="sm" onClick={() => process.browser && window.Tawk_API.maximize()}>Contact</Link>
+              <Link
+                fontSize="sm"
+                onClick={() => process.browser && window.Tawk_API.maximize()}
+              >
+                Contact
+              </Link>
               {/* <FooterLink href={"/our-friends"} text={"Our Friends"} /> */}
             </Stack>
           </Stack>
           <Stack>
-            <Text>Connect &amp; Share</Text>
-            <Stack direction={["row"]} spacing={4}>
+            <Text fontSize="lg" fontFamily={"Futura"}>
+              Connect &amp; Share
+            </Text>
+            <Divider />
+            <Stack mt={2} direction={["row"]} spacing={4}>
               <Link
                 href="https://www.facebook.com/torproducts"
                 target={"_blank"}
@@ -138,13 +155,22 @@ const Footer = () => {
               >
                 <Icon as={SiGooglemybusiness} boxSize={6} />
               </Link>
-              <Link
-                href="https://www.gab.com/TORProducts"
-                target={"_blank"}
-              >
-                <Image src="/gs-footer-icon.jpg" alt="Gab Social Icon" boxSize={6} />
+              <Link href="https://www.gab.com/TORProducts" target={"_blank"}>
+                <Image
+                  src="/gs-footer-icon.jpg"
+                  alt="Gab Social Icon"
+                  boxSize={6}
+                />
               </Link>
             </Stack>
+            <Text maxW={[240, 180]}>
+              <Link href="https://www.google.com/maps?q=729+Main+Street,+Cañon+City,+CO+81212,+USA">
+                729 Main Street, Cañon City, CO 81212
+              </Link>
+            </Text>
+            <Text maxW={[240, 180]}>
+              Phone: <Link href="tel:719-275-2582">719-275-2582</Link>
+            </Text>
           </Stack>
         </Stack>
         <Text w="full" textAlign={"center"} fontSize="xs">

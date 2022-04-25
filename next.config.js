@@ -31,6 +31,13 @@ const nextConfig = {
       "https://cdn.jsdelivr.net/"
     ],
   },
+  async redirects(){
+    return [{
+      source: '/product/gift-cards',
+      destination: '/gift-card',
+      permanent: true
+    }]
+  }
 }
 
 module.exports = withBundleAnalyzer(nextConfig)

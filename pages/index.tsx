@@ -156,7 +156,7 @@ function HomePage({ products, styling, body }: any) {
         </Container>
       </Box>
       <Container maxW="container.xl" py={20}>
-        <Stack direction={["column", "row"]} w="full">
+        <Stack direction={["column", "row"]} w="full" justifyContent={"space-between"}>
           <Stack
             px={[2, null]}
             maxW={["none", "240px"]}
@@ -183,7 +183,6 @@ function HomePage({ products, styling, body }: any) {
           ))}
           <Box
             flexShrink={0}
-            flexGrow={1}
             minH="100%"
             display={"grid"}
             placeItems={["center", "center end"]}
@@ -326,7 +325,7 @@ function HomePage({ products, styling, body }: any) {
         </Box>
       </Box>
       <Box pt={40}>
-        <Container centerContent mb={20}>
+        <Container centerContent mb={10}>
           <Stack spacing={6} align="center">
             <Text fontSize={22} textTransform="uppercase" fontFamily={"Futura"}>
               - Best Selling -

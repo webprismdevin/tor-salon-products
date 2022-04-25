@@ -263,6 +263,7 @@ function CartLineItem({
       minW="100%"
       justifyContent="flex-start"
       alignItems={"flex-start"}
+      gap={4}
     >
       <AspectRatio ratio={1 / 1} boxSize={"120px"} flexShrink={0}>
         <Image
