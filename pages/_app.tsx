@@ -34,10 +34,10 @@ if (process.env.NODE_ENV === "production" && process.browser) {
   TagManager.initialize(tagManagerArgs);
 }
 if (process.env.NODE_ENV === "development" && process.browser) {
-  console.log("GTM not fired");
+  // console.log("GTM not fired");
 
-  // console.log("GTM fired");
-  // TagManager.initialize(tagManagerArgs);
+  console.log("GTM fired");
+  TagManager.initialize(tagManagerArgs);
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -61,6 +61,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Head>
           <meta name="theme-color" content="#ffffff" />
           <link rel="shortcut icon" href="/favicon.png" />
+          <meta name="facebook-domain-verification" content="bk02y72cdwvcwzina508gmb7xv87g6" />
         </Head>
         <CartContext.Provider value={{ cart, setCart }}>
           <NavBar />

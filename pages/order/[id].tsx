@@ -17,7 +17,7 @@ import NextLink from "next/link";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 
-export default function ThankYou({ data }: any) {
+export default function ThankYou({ data, order_id }: any) {
   const [auth, setAuth] = useState(false);
 
   useEffect(() => {
@@ -41,6 +41,11 @@ export default function ThankYou({ data }: any) {
     ) {
       window.dataLayer.push({
         event: "purchase",
+        ecommerce: {
+          value: data.currentTotalPriceSet.shopMoney.amount,
+          currency: "USD",
+          transaction_id: order_id
+        }
       });
     }
 
@@ -53,6 +58,7 @@ export default function ThankYou({ data }: any) {
     <>
       <Head>
         <title>Thank You!</title>
+        <meta name="description" content="Thank you for your purchase! You'll receive an order confirmation at the email your provided during checkout!"/>
       </Head>
       <Container py={20} maxW="container.xl">
         <SimpleGrid templateColumns={"repeat(3, 1fr)"}>
@@ -228,6 +234,7 @@ export async function getServerSideProps(context: any) {
   return {
     props: {
       data: result.response.order,
+      order_id: context.params.id
     },
   };
 }

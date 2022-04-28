@@ -30,6 +30,29 @@ export default async function handler(
 
   console.log(emailText);
 
+  const response = await fetch(
+    "https://us18.api.mailchimp.com/3.0/lists/d825e3184f/members",
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Basic ${process.env.MC_API_KEY}`,
+      },
+      body: JSON.stringify({
+        email_address: data.email,
+        merge_fields: {
+          FNAME: data.first_name,
+          LNAME: data.last_name
+        },
+        tags: ["Professional"],
+        status: "subscribed",
+      }),
+    }
+  ).then((res) => res.json());
+
+  if (response.error) {
+    throw response.error;
+  }
+
   const recipients =
     process.env.NODE_ENV === "production"
       ? [

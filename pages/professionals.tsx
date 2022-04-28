@@ -129,7 +129,7 @@ function ContactForm() {
       message: "",
     },
     onSubmit: async (values) => {
-      let response = await fetch("/api/hello", {
+      let response = await fetch("/api/pro-apply", {
         method: "POST",
         body: JSON.stringify(values),
       });
