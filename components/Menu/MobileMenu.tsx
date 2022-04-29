@@ -64,7 +64,7 @@ const MobileMenu = () => {
         style={{
           cursor: "pointer",
         }}
-        boxSize={6}
+        boxSize={[6, 0]}
         _hover={{
           opacity: 0.4,
         }}

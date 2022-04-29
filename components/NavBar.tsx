@@ -28,7 +28,6 @@ const NavBar = () => {
   const router = useRouter();
 
   useEffect(() => {
-
     async function checkToken() {
       let token = JSON.parse(
         window.localStorage.getItem(
@@ -59,17 +58,17 @@ const NavBar = () => {
       borderBottom={"2px solid black"}
     >
       <Flex align={"center"} justify={"space-between"}>
-        <Stack direction="row" spacing={[4, 8]} align={"center"}>
-          {isMobile && 
-          <MobileMenu />
-          }
+        <Stack
+          direction="row"
+          spacing={[4, 8]}
+          align={"center"}
+          justify={"flex-start"}
+        >
+          {isMobile && <MobileMenu />}
           <StoreName />
-          {/* {!isMobile &&  */}
           <DesktopMenu />
-          {/* } */}
         </Stack>
         <Stack direction="row" spacing={4}>
-          {/* {!isMobile && ( */}
           <>
             <Box display={["none", "inherit"]}>
               <Menu>
@@ -90,7 +89,6 @@ const NavBar = () => {
               </NextLink>
             </Link>
           </>
-          {/* )} */}
           <Icon
             as={AiOutlineUser}
             boxSize={6}

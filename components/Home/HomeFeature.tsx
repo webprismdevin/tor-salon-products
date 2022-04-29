@@ -40,6 +40,7 @@ const ProductFeature = ({ name, price, image, link }: ProductFeatureTypes) => {
           loading="lazy"
           alt=""
           pos="absolute"
+          borderRadius={6}
           zIndex={-1}
           variants={{
             initial: { opacity: 0.25 },

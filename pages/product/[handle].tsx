@@ -14,6 +14,12 @@ import {
   HStack,
   Input,
   SimpleGrid,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  Link
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
@@ -117,62 +123,84 @@ const ProductPage = ({
           content={`${product.description.substring(0, 200)}...`}
         />
       </Head>
-      <Flex flexDirection={["column", "row"]}>
+      <Stack flexDirection={["column", "row"]}>
         <PhotoCarousel images={product.images.edges} />
-        <Container centerContent pt={[0, 20]} pb={20}>
-          <Stack direction={["column"]} spacing={4} w="full" align="flex-start">
-            <Heading as="h1" maxW={500}>
-              {product.title}
-            </Heading>
-            <Box
-              dangerouslySetInnerHTML={{
-                __html: product.descriptionHtml,
-              }}
-            />
-            <Stack
-              direction={"row"}
-              align="flex-end"
-              justify={"center"}
-              flexShrink={1}
-            >
-              {variants.length > 1 && (
-                <Stack>
-                  <Heading as="h4" size="md" mb={3} ml={2}>
-                    Select A Size
-                  </Heading>
-                  <Select
-                    minW={"200px"}
-                    value={activeVariant.id}
-                    onChange={(e) => {
-                      handleActiveVariantChange(e.target.value);
-                    }}
-                  >
-                    {variants.map((v: { node: VariantType }, i: number) => (
-                      <option key={v.node.id} value={v.node.id}>
-                        {v.node.title}
-                      </option>
-                    ))}
-                  </Select>
-                </Stack>
-              )}
-              <HStack w="140px">
-                <Button {...dec}>-</Button>
-                <Input {...input} textAlign="center" />
-                <Button {...inc}>+</Button>
-              </HStack>
-            </Stack>
-            <Text fontSize={24} fontWeight={600}>
-              {formatter.format(parseInt(activeVariant.priceV2.amount))}
-            </Text>
-            <Button
-              onClick={addToCart}
-              isDisabled={!activeVariant?.availableForSale}
-            >
-              {activeVariant?.availableForSale ? "Add To Cart" : "Sold Out!"}
-            </Button>
+        <Stack
+          direction={["column"]}
+          spacing={4}
+          w="full"
+          align="flex-start"
+          pt={[0, 20]}
+          pb={20}
+          px={[4, 20]}
+        >
+          <Heading as="h1" maxW={500}>
+            {product.title}
+          </Heading>
+          <Box
+            dangerouslySetInnerHTML={{
+              __html: product.descriptionHtml,
+            }}
+          />
+          <Stack
+            direction={"row"}
+            align="flex-end"
+            justify={"center"}
+            flexShrink={1}
+          >
+            {variants.length > 1 && (
+              <Stack>
+                <Heading as="h4" size="md" mb={3} ml={2}>
+                  Select A Size
+                </Heading>
+                <Select
+                  minW={"200px"}
+                  value={activeVariant.id}
+                  onChange={(e) => {
+                    handleActiveVariantChange(e.target.value);
+                  }}
+                >
+                  {variants.map((v: { node: VariantType }, i: number) => (
+                    <option key={v.node.id} value={v.node.id}>
+                      {v.node.title}
+                    </option>
+                  ))}
+                </Select>
+              </Stack>
+            )}
+            <HStack w="140px">
+              <Button {...dec}>-</Button>
+              <Input {...input} textAlign="center" />
+              <Button {...inc}>+</Button>
+            </HStack>
           </Stack>
-        </Container>
-      </Flex>
+          <Text fontSize={24} fontWeight={600}>
+            {formatter.format(parseInt(activeVariant.priceV2.amount))}
+          </Text>
+          {!activeVariant?.availableForSale && <Link onClick={() => window.Tawk_API.maximize()}>Let me know when this product is back in stock!</Link>}
+          <Button
+            onClick={addToCart}
+            isDisabled={!activeVariant?.availableForSale}
+          >
+            {activeVariant?.availableForSale ? "Add To Cart" : "Sold Out!"}
+          </Button>
+          <Accordion w="full" allowToggle pt={10} >
+            <AccordionItem>
+              <h2>
+                <AccordionButton>
+                  <Box flex="1" textAlign="left">
+                    Guarantee &amp; Return Policy
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel pb={4}>
+              We believe in our products. If you&apos;re not satisfied with your first few washes, or you don&apos;t find our products work for you, we&apos;ll buy it back. No hassles. Just pay return shipping and we&apos;ll refund your purchase.
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
+        </Stack>
+      </Stack>
       {collection && (
         <Box bg={collection.color?.value ? collection.color.value : "white"}>
           <Flex flexDir={["column-reverse", "row"]}>
@@ -233,7 +261,12 @@ const ProductPage = ({
             </AspectRatio>
           </Flex>
           <Container maxW="container.xl" centerContent py={20}>
-            <Heading size="md" fontWeight={600} mb={20} textTransform="uppercase">
+            <Heading
+              size="md"
+              fontWeight={600}
+              mb={20}
+              textTransform="uppercase"
+            >
               Other items in this line
             </Heading>
             <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
@@ -283,7 +316,6 @@ function PhotoCarousel({ images }: any) {
             src={images[index].node.url}
             alt={``}
             objectFit="fill"
-            // objectPosition="top center"
             animate={{
               opacity: 1,
             }}
@@ -634,6 +666,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
         ? collectionRes.collection
         : handleCollectionFilter(),
     },
-    revalidate: 60,
+    revalidate: 10,
   };
 };

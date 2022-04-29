@@ -214,11 +214,12 @@ function HomePage({ products, styling, body }: any) {
           </Stack>
         </Container>
       </Box>
-      <Container maxW="container.md"  py={48}>
+      <Container maxW="container.lg"  py={48}>
         <Stack
           direction={["column", "row"]}
           w="full"
-          justify="space-between"
+          justify="center"
+          gap={20}
           maxH={["none", 120]}
         >
           {body.map((prod: any) => (
@@ -273,7 +274,6 @@ function HomePage({ products, styling, body }: any) {
           direction={["column", "row"]}
           bottom={8}
           left={8}
-          // w="full"
           p={[2, 0]}
           spacing={[4]}
         >
