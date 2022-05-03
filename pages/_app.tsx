@@ -30,13 +30,11 @@ const tagManagerArgs = {
 };
 
 if (process.env.NODE_ENV === "production" && process.browser) {
-  console.log("GTM fired");
+  console.log("GTM in production");
   TagManager.initialize(tagManagerArgs);
 }
 if (process.env.NODE_ENV === "development" && process.browser) {
-  // console.log("GTM not fired");
-
-  console.log("GTM fired");
+  console.log("GTM in development");
   TagManager.initialize(tagManagerArgs);
 }
 
@@ -73,6 +71,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       {process.env.NODE_ENV === "production" && (
         <>
           <Tawk src="https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu" />
+        </>
+      )}
+      {process.env.NODE_ENV === "development" && (
+        <>
           <MailingList />
         </>
       )}

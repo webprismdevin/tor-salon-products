@@ -117,7 +117,8 @@ const MobileMenu = () => {
                       </Stack>
                     </AccordionPanel>
                   </AccordionItem>
-                  <AccordionItem>
+
+                  {/* <AccordionItem>
                     <h2>
                       <AccordionButton px={0}>
                         <Box flex="1" textAlign="left">
@@ -131,7 +132,8 @@ const MobileMenu = () => {
                         <BodyAndSkin />
                       </Stack>
                     </AccordionPanel>
-                  </AccordionItem>
+                  </AccordionItem> */}
+
                   <AccordionItem>
                     <h2>
                       <AccordionButton px={0}>

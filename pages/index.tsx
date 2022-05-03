@@ -47,9 +47,9 @@ function HomePage({ products, styling, body }: any) {
             <NextLink href="/all-hair-care" passHref>
               <Button>Shop Hair</Button>
             </NextLink>
-            <NextLink href="/all-cbd" passHref>
+            <Link href="https://tor-cbd.square.site/s/shop" target="_blank">
               <Button>Shop CBD</Button>
-            </NextLink>
+            </Link>
           </HStack>
         </Stack>
       </Container>
@@ -261,13 +261,13 @@ function HomePage({ products, styling, body }: any) {
             and contain significantly more CBD that typical products, making TOR
             CBD more effective.
           </Text>
-          <NextLink href="/all-cbd" passHref>
+          <Link href="https://tor-cbd.square.site/s/shop" target="_blank">
             <Button
               alignSelf={"flex-start"}
             >
               Shop All CBD
             </Button>
-          </NextLink>
+          </Link>
         </Stack>
         <Stack
           pos={["static", null, null, null, "absolute"]}
@@ -277,7 +277,7 @@ function HomePage({ products, styling, body }: any) {
           p={[2, 0]}
           spacing={[4]}
         >
-          <NextLink href="/collection/cbd-consumables" passHref>
+          <Link href="https://tor-cbd.square.site/shop/cbd-tinctures/3" target={"_blank"}>
             <MotionBox
               whileHover={{
                 scale: 1.02,
@@ -296,8 +296,8 @@ function HomePage({ products, styling, body }: any) {
                 <Icon as={FiArrowRight} size={4} />
               </Flex>
             </MotionBox>
-          </NextLink>
-          <NextLink href="/collection/cbd-lotions" passHref>
+          </Link>
+          <Link href="https://tor-cbd.square.site/shop/cbd-lotions/2" target={"_blank"}>
             <MotionBox
               whileHover={{
                 scale: 1.02,
@@ -316,7 +316,7 @@ function HomePage({ products, styling, body }: any) {
                 <Icon as={FiArrowRight} size={4} />
               </Flex>
             </MotionBox>
-          </NextLink>
+          </Link>
         </Stack>
       </Box>
       <Box pt={40}>

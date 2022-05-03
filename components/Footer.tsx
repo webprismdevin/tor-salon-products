@@ -52,6 +52,11 @@ const Footer = () => {
     if (response) {
       setEmail("");
       setStatus("success");
+      window.dataLayer.push({
+        event: "join_email_list",
+        signUpMethod: "popup",
+        callback: () => console.log("fired join_email_list event to GTM")
+      })
     }
   }
 

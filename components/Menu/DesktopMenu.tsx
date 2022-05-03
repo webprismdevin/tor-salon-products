@@ -81,13 +81,13 @@ const DesktopMenu = () => {
                 </Stack>
               </Stack>
             </Stack>
-            <Stack>
+            {/* <Stack>
               <Text fontSize={"xl"} fontFamily={"Futura"}>
                 CBD
               </Text>
               <Divider />
               <BodyAndSkin />
-            </Stack>
+            </Stack> */}
             <Stack>
               <Text fontSize={"xl"} fontFamily={"Futura"}>
                 More

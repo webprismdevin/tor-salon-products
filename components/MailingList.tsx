@@ -61,12 +61,23 @@ export default function MailingList() {
       }),
     }).then((res) => res.json());
 
+    console.log(response)
+
     if (!response) {
       setStatus("failure");
+      // window.dataLayer.push({
+      //   event: "join_email_list",
+      //   method: "popup"
+      // })
     }
 
     if (response) {
       setStatus("success");
+      window.dataLayer.push({
+        event: "join_email_list",
+        signUpMethod: "popup",
+        callback: () => console.log("fired join_email_list event to GTM")
+      })
     }
   }
 

@@ -10,6 +10,7 @@ const BodyCatalog = ({ products }: any) => {
     <>
       <Head>
         <title>All Body Products | TOR Salon Products</title>
+        <meta name="description" content="" />
       </Head>
       <Container maxW="container.xl" py={40}>
         <Heading mb={6} size="2xl" textAlign="center">All Body Products</Heading>
