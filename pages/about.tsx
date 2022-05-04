@@ -9,7 +9,6 @@ import {
   Stack,
   Button,
   Link,
-  chakra,
 } from "@chakra-ui/react";
 import { groq } from "next-sanity";
 import { getClient } from "../lib/sanity";
@@ -18,8 +17,6 @@ import dynamic from "next/dynamic";
 import { PortableText } from "@portabletext/react";
 
 const Follow = dynamic(() => import("../components/Follow"), { ssr: false });
-
-const ChakraPT = chakra(PortableText);
 
 type AboutPageData = {
   data: {

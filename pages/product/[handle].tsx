@@ -19,7 +19,7 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
-  Link
+  Link,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
@@ -60,7 +60,7 @@ const ProductPage = ({
   const [activeVariant, setActiveVariant] = useState<VariantType>(() => {
     if (!product) return null;
 
-    return product.variants.edges[0].node;
+    return product.variants.edges.find((edge: any) => edge.node.availableForSale === true).node
   });
 
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
@@ -123,7 +123,7 @@ const ProductPage = ({
           content={`${product.description.substring(0, 200)}...`}
         />
       </Head>
-      <Stack flexDirection={["column", "row"]}>
+      <Stack flexDirection={["column", "row"]} spacing={[6, 0]}>
         <PhotoCarousel images={product.images.edges} />
         <Stack
           direction={["column"]}
@@ -177,14 +177,28 @@ const ProductPage = ({
           <Text fontSize={24} fontWeight={600}>
             {formatter.format(parseInt(activeVariant.priceV2.amount))}
           </Text>
-          {!activeVariant?.availableForSale && <Link onClick={() => window.Tawk_API.maximize()}>Let me know when this product is back in stock!</Link>}
-          <Button
-            onClick={addToCart}
-            isDisabled={!activeVariant?.availableForSale}
+          {!activeVariant?.availableForSale && (
+            <Link onClick={() => window.Tawk_API.maximize()}>
+              Let me know when this product is back in stock!
+            </Link>
+          )}
+          <Box
+            pos={["fixed", "static"]}
+            bottom={6}
+            zIndex={2}
+            left={0}
+            px={[2, 0]}
+            w={["full", "inherit"]}
           >
-            {activeVariant?.availableForSale ? "Add To Cart" : "Sold Out!"}
-          </Button>
-          <Accordion w="full" allowToggle pt={10} >
+            <Button
+              w={["full", 140]}
+              onClick={addToCart}
+              isDisabled={!activeVariant?.availableForSale}
+            >
+              {activeVariant?.availableForSale ? "Add To Cart" : "Sold Out!"}
+            </Button>
+          </Box>
+          <Accordion w="full" allowToggle pt={10}>
             <AccordionItem>
               <h2>
                 <AccordionButton>
@@ -195,7 +209,10 @@ const ProductPage = ({
                 </AccordionButton>
               </h2>
               <AccordionPanel pb={4}>
-              We believe in our products. If you&apos;re not satisfied with your first few washes, or you don&apos;t find our products work for you, we&apos;ll buy it back. No hassles. Just pay return shipping and we&apos;ll refund your purchase.
+                We believe in our products. If you&apos;re not satisfied with
+                your first few washes, or you don&apos;t find our products work
+                for you, we&apos;ll buy it back. No hassles. Just pay return
+                shipping and we&apos;ll refund your purchase.
               </AccordionPanel>
             </AccordionItem>
           </Accordion>

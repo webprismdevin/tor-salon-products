@@ -33,7 +33,7 @@ export default function CollectionPage({
       <Flex
         flexDir={["column-reverse", "row"]}
         bg={data.color?.value ? data.color.value : "white"}
-        maxH={["none", "600px"]}
+        maxH={["none", "700px"]}
         overflow={["visible", "hidden"]}
       >
         <Box w={["full", "50%"]} px={[8, 20]} py={[20, 20]} pos="relative">
@@ -43,9 +43,10 @@ export default function CollectionPage({
             pos="absolute"
             top={0}
             opacity={0.1}
-            w="100%"
-            left={0}
+            w="80%"
+            left={["10%", 0]}
             zIndex={0}
+            userSelect="none"
           />
           <Stack direction={["column"]} spacing={6} pos="relative" zIndex={1}>
             <Heading as="h1">{data.title}</Heading>
