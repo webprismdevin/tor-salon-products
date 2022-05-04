@@ -73,7 +73,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <Tawk src="https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu" />
         </>
       )}
-      {process.env.NODE_ENV === "development" && (
+      {process.env.NODE_ENV === "production" && (
         <>
           <MailingList />
         </>

@@ -184,11 +184,11 @@ const ProductPage = ({
           )}
           <Box
             pos={["fixed", "static"]}
-            bottom={6}
+            bottom={7}
             zIndex={2}
-            left={0}
+            right={2}
             px={[2, 0]}
-            w={["full", "inherit"]}
+            w={["75%", "inherit"]}
           >
             <Button
               w={["full", 140]}
