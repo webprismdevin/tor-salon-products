@@ -9,10 +9,10 @@ import {
   Stack,
   Button,
   Code,
+  Link
 } from "@chakra-ui/react";
 import { groq } from "next-sanity";
 import { getClient } from "../lib/sanity";
-import NextLink from 'next/link';
 import Head from "next/head";
 import dynamic from "next/dynamic";
 
@@ -115,7 +115,7 @@ const About = ({ data }: any) => {
             and science - which is why our CBD products are on average 3-times
             the concentration of the rest of the CBD market. No half-measures.
           </Text>
-          <NextLink href="all-cbd" passHref><Button>Shop CBD</Button></NextLink>
+          <Link href="https://tor-cbd.square.site/" target="_blank"><Button>Shop CBD</Button></Link>
         </Stack>
       </Box>
       <Container maxW="container.xl" mt={[-20, 0]} pt={[0]}>

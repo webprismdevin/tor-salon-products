@@ -26,7 +26,7 @@ const HairCatalog = ({ products }: any) => {
         <title>All Hair Products | TOR Salon Products</title>
         <meta name="description" content="" />
       </Head>
-      <Stack direction={["column", "row"]}>
+      {/* <Stack direction={["column", "row"]}>
         <Stack maxW={["full", "50%"]} px={[8, 20]} py={[20, 20]}>
           <Text fontSize={22} textTransform="uppercase" fontFamily={"Futura"}>
             Salon Grade -
@@ -42,7 +42,7 @@ const HairCatalog = ({ products }: any) => {
         <AspectRatio ratio={1/1} w={["full", "50%"]}>
           <ChakraImage src="" layout="fill" objectFit={"cover"}/>
         </AspectRatio>
-      </Stack>
+      </Stack> */}
       <Container maxW="container.xl" py={40}>
         <Heading mb={6} size="2xl" textAlign="center">
           All Hair Care
