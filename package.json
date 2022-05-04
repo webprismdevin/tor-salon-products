@@ -21,6 +21,7 @@
     "@mailchimp/mailchimp_marketing": "^3.0.74",
     "@next/bundle-analyzer": "^12.0.9",
     "@popmotion/popcorn": "^0.4.4",
+    "@portabletext/react": "^1.0.6",
     "@sanity/block-content-to-react": "^3.0.0",
     "@smakss/search": "^1.2.2",
     "formik": "^2.2.9",
@@ -55,7 +56,11 @@
   "next-unused": {
     "alias": {},
     "debug": true,
-    "include": ["components", "lib", "pages"],
+    "include": [
+      "components",
+      "lib",
+      "pages"
+    ],
     "exclude": [],
     "entrypoints": []
   }
