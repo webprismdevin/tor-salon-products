@@ -1,8 +1,9 @@
 import { GetStaticProps } from "next";
-import { Container, Box, Heading } from "@chakra-ui/react";
+import { Container, Box, Heading, AspectRatio, Image } from "@chakra-ui/react";
 import Head from "next/head";
 import BlockContent from "@sanity/block-content-to-react";
 import markdownStyles from "../../styles/markdown-styles.module.scss";
+import { imageBuilder } from "../../lib/sanity";
 
 const BlogPost = ({ post }:any) => {
   return (
@@ -10,9 +11,12 @@ const BlogPost = ({ post }:any) => {
       <Head>
         <title>{post.title}</title>
       </Head>
-      <Box py={10}>
+      <Box py={20}>
         <Container>
-          <Heading>{post.title}</Heading>
+          <AspectRatio ratio={3/2} mb={6}>
+            <Image src={imageBuilder(post.mainImage).url()!} alt={post.title}/>
+          </AspectRatio>
+          <Heading as="h1" size="2xl">{post.title}</Heading>
           <BlockContent
             blocks={post.body}
             className={markdownStyles.markdown}

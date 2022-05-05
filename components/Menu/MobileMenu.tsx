@@ -153,7 +153,7 @@ const MobileMenu = () => {
               </Box>
               <MenuLink href={"/salon-finder"} text="Salon Finder" />
               <MenuLink href={"/professionals"} text="Professionals" />
-              {/* <MenuLink href={"/blog"} text="Blog" /> */}
+              <MenuLink href={"/blog"} text="Blog" />
               <MenuLink href={"/about"} text="About" />
               <MenuLink href={"/help"} text="Help &amp; FAQ" />
               </VStack>

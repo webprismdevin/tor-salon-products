@@ -88,6 +88,11 @@ const NavBar = () => {
                 About
               </NextLink>
             </Link>
+            <Link display={["none", "inherit"]}>
+              <NextLink href="/blog" passHref>
+                Blog
+              </NextLink>
+            </Link>
           </>
           <Icon
             as={AiOutlineUser}

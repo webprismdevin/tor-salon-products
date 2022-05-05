@@ -8,6 +8,7 @@ import {
   Text,
   Box,
   Code,
+  Link
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import Head from 'next/head';
@@ -31,6 +32,7 @@ export default function Custom404() {
             If this is your first time shopping with us, use code{" "}
             <Code>imlost</Code> for 10% off your order.
           </Text>
+          <Text>If you&apos;re looking for our CBD products, they&apos;ve moved to <Link fontWeight={"bold"} href="https://cbd.torsalonproducts.com/" target="_blank">cbd.torsalonproducts.com</Link>!</Text>
           <Stack direction={["column", "row"]}>
             <Button onClick={() => window.Tawk_API.maximize()}>
               Chat with us

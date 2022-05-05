@@ -13,7 +13,7 @@ const Posts = ({ posts }: any) => {
         <title>Blog</title>
       </Head>
       <Container centerContent maxW="container.xl" p={[4, 20]} mt={20}>
-        <Heading>Blog</Heading>
+        <Heading>TOR Blog</Heading>
         <Divider my={10}/>
         <Stack
           spacing={["24px", "36px"]}
@@ -22,6 +22,7 @@ const Posts = ({ posts }: any) => {
           direction={["column"]}
           flexWrap="wrap"
           pb={16}
+          w="full"
         >
           {posts.map((post:any) => (
             <Box
@@ -30,11 +31,11 @@ const Posts = ({ posts }: any) => {
               p={8}
               maxW={["full", "80%"]}
             >
-              <Stack direction={['column', 'row']} alignItems={"flex-start"}>
+              <Stack direction={['column', 'row']} alignItems={"flex-start"} w="full">
                 <AspectRatio ratio={3/2} minH={['auto',200]} minW={['100%', 300]}>
                     <Image src={imageBuilder(post.mainImage).url()!} alt="blog post photo" objectFit="cover"/>
                 </AspectRatio>
-                <VStack pl={[0, 8]} alignItems={"flex-start"} spacing={3} minW={['auto', 300]}>
+                <VStack pl={[0, 8]} alignItems={"flex-start"} spacing={3} minW={['auto']}>
                     <Heading size="lg">
                       {post.title}
                     </Heading>
