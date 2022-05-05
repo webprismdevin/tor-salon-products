@@ -242,6 +242,7 @@ function HomePage({ products, styling, body }: any) {
         backgroundPosition={["bottom right", "right"]}
         pos="relative"
         px={[2, 0]}
+        py={[2, 0]}
       >
         <Stack
           maxW="520px"
@@ -277,7 +278,7 @@ function HomePage({ products, styling, body }: any) {
           p={[2, 0]}
           spacing={[4]}
         >
-          <Link href="https://tor-cbd.square.site/shop/cbd-tinctures/3" target={"_blank"}>
+          <Link href="https://cbd.torsalonproducts.com/shop/cbd-tinctures/3" target={"_blank"}>
             <MotionBox
               whileHover={{
                 scale: 1.02,
@@ -297,7 +298,7 @@ function HomePage({ products, styling, body }: any) {
               </Flex>
             </MotionBox>
           </Link>
-          <Link href="https://tor-cbd.square.site/shop/cbd-lotions/2" target={"_blank"}>
+          <Link href="https://cbd.torsalonproducts.com/shop/cbd-lotions/2" target={"_blank"}>
             <MotionBox
               whileHover={{
                 scale: 1.02,

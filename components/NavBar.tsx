@@ -69,31 +69,29 @@ const NavBar = () => {
           <DesktopMenu />
         </Stack>
         <Stack direction="row" spacing={4}>
-          <>
-            <Box display={["none", "inherit"]}>
-              <Menu>
-                <MenuButton>Salons</MenuButton>
-                <MenuList>
-                  <MenuItem>
-                    <MenuLink href="/salon-finder" text="Salon Finder" />
-                  </MenuItem>
-                  <MenuItem>
-                    <MenuLink href="/professionals" text="Professionals" />
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-            </Box>
-            <Link display={["none", "inherit"]}>
-              <NextLink href="/about" passHref>
-                About
-              </NextLink>
-            </Link>
-            <Link display={["none", "inherit"]}>
-              <NextLink href="/blog" passHref>
-                Blog
-              </NextLink>
-            </Link>
-          </>
+          <Box display={["none", "inherit"]}>
+            <Menu>
+              <MenuButton>Salons</MenuButton>
+              <MenuList>
+                <MenuItem>
+                  <MenuLink href="/salon-finder" text="Salon Finder" />
+                </MenuItem>
+                <MenuItem>
+                  <MenuLink href="/professionals" text="Professionals" />
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </Box>
+          <Link display={["none", "inherit"]}>
+            <NextLink href="/about" passHref>
+              About
+            </NextLink>
+          </Link>
+          <Link display={["none", "inherit"]}>
+            <NextLink href="/blog" passHref>
+              Blog
+            </NextLink>
+          </Link>
           <Icon
             as={AiOutlineUser}
             boxSize={6}
