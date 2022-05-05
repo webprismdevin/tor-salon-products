@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import Head from "next/head";
+import * as fbq from '../../lib/fpixel'
 import { useEffect, useState } from "react";
 
 export default function ThankYou({ data, order_id }: any) {
@@ -39,6 +40,8 @@ export default function ThankYou({ data, order_id }: any) {
       // document.referrer === "https://checkout.torsalonproducts.com/" &&
       urlParams.get("event") === "purchase"
     ) {
+      fbq.event('Purchase', { currency: 'USD', value: data.currentTotalPriceSet.shopMoney.amount })
+
       window.dataLayer.push({
         event: "purchase",
         ecommerce: {
