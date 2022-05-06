@@ -20,8 +20,9 @@ import MobileMenu from "./Menu/MobileMenu";
 import DesktopMenu from "./Menu/DesktopMenu";
 import MenuLink from "./Menu/MenuLink";
 import { isMobile } from "react-device-detect";
+import Cart from "./Cart";
 
-const Cart = dynamic(() => import("../components/Cart"));
+// const Cart = dynamic(() => import("../components/Cart"));
 
 const NavBar = () => {
   const [auth, setAuth] = useState(false);
@@ -83,18 +84,14 @@ const NavBar = () => {
             </Menu>
           </Box>
           <Box display={["none", "inherit"]}>
-            <Link>
-              <NextLink href="/about" passHref>
-                About
-              </NextLink>
-            </Link>
+            <NextLink href="/about" passHref>
+              <Link>About</Link>
+            </NextLink>
           </Box>
           <Box display={["none", "inherit"]}>
-            <Link>
-              <NextLink href="/blog" passHref>
-                Blog
-              </NextLink>
-            </Link>
+            <NextLink href="/blog" passHref>
+              <Link>Blog</Link>
+            </NextLink>
           </Box>
           <Icon
             as={AiOutlineUser}

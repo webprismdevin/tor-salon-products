@@ -1,7 +1,7 @@
 import type { AppProps } from "next/app";
-import { extendTheme, ChakraProvider, ColorModeScript } from "@chakra-ui/react";
+import { extendTheme, ChakraProvider, ColorModeScript, Spinner } from "@chakra-ui/react";
 import { theme as defaultTheme, ThemeConfig } from "@chakra-ui/theme";
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import CartContext from "../lib/CartContext";
 import ShopContext from "../lib/shop-context";
 import Head from "next/head";
@@ -16,7 +16,7 @@ import { useRouter } from "next/router";
 import * as fbq from '../lib/fpixel'
 
 const NavBar = dynamic(() => import("../components/NavBar"));
-const Footer = dynamic(() => import("../components/Footer"));
+const Footer = lazy(() => import("../components/Footer"));
 const Tawk = dynamic(() => import("../lib/tawk"));
 
 declare global {
@@ -86,7 +86,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           <NavBar />
           <Component {...pageProps} />
         </CartContext.Provider>
-        <Footer />
+        <Suspense fallback={<Spinner />}>
+          <Footer />
+        </Suspense>
       </ShopContext.Provider>
       <ColorModeScript initialColorMode={customTheme.initialColorMode} />
       {process.env.NODE_ENV === "production" && (
