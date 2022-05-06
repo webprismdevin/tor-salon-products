@@ -8,7 +8,6 @@ import {
 import { AnimatePresence, motion, useAnimation } from "framer-motion";
 import { useEffect } from "react";
 import {
-  BodyAndSkin,
   ByHairType,
   ByProductTypes,
   MoreLinks,
@@ -22,17 +21,17 @@ const variants = {
     opacity: 0,
   },
   animate: {
-    display: "inherit",
+    display: "block",
     opacity: 1,
     transition: {
-      duration: 0.4,
+      duration: 0.2,
     },
   },
   exit: {
     display: "none",
     opacity: 0,
     transition: {
-      display: { delay: 0.4 },
+      display: { delay: 0.2 },
       opacity: { delay: 0 },
     },
   },
@@ -81,13 +80,6 @@ const DesktopMenu = () => {
                 </Stack>
               </Stack>
             </Stack>
-            {/* <Stack>
-              <Text fontSize={"xl"} fontFamily={"Futura"}>
-                CBD
-              </Text>
-              <Divider />
-              <BodyAndSkin />
-            </Stack> */}
             <Stack>
               <Text fontSize={"xl"} fontFamily={"Futura"}>
                 More

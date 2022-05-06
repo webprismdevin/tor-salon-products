@@ -82,16 +82,20 @@ const NavBar = () => {
               </MenuList>
             </Menu>
           </Box>
-          <Link display={["none", "inherit"]}>
-            <NextLink href="/about" passHref>
-              About
-            </NextLink>
-          </Link>
-          <Link display={["none", "inherit"]}>
-            <NextLink href="/blog" passHref>
-              Blog
-            </NextLink>
-          </Link>
+          <Box display={["none", "inherit"]}>
+            <Link>
+              <NextLink href="/about" passHref>
+                About
+              </NextLink>
+            </Link>
+          </Box>
+          <Box display={["none", "inherit"]}>
+            <Link>
+              <NextLink href="/blog" passHref>
+                Blog
+              </NextLink>
+            </Link>
+          </Box>
           <Icon
             as={AiOutlineUser}
             boxSize={6}

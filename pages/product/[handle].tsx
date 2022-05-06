@@ -31,6 +31,7 @@ import Product from "../../components/Product";
 import Script from "next/script";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { wrap } from "@popmotion/popcorn";
+import NextLink from 'next/link'
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -41,6 +42,19 @@ declare interface VariantType {
   };
   title: string;
   availableForSale: boolean;
+}
+
+const returnCollection = (handle:string) => {
+  switch(handle){
+    case 'curly':
+      return '/type/curly'
+    case 'medium-thick':
+      return '/type/medium-thick'
+    case 'fine-thin':
+      return '/type/fine-thin'
+    default:
+      return `/collection/${handle}`
+  }
 }
 
 const ProductPage = ({
@@ -60,7 +74,9 @@ const ProductPage = ({
   const [activeVariant, setActiveVariant] = useState<VariantType>(() => {
     if (!product) return null;
 
-    return product.variants.edges.find((edge: any) => edge.node.availableForSale === true).node
+    return product.variants.edges.find(
+      (edge: any) => edge.node.availableForSale === true
+    ).node;
   });
 
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
@@ -293,6 +309,9 @@ const ProductPage = ({
                 </React.Fragment>
               ))}
             </SimpleGrid>
+            <NextLink href={returnCollection(collection.handle) as string} passHref>
+              <Button>See Collection</Button>
+            </NextLink>
           </Container>
         </Box>
       )}
