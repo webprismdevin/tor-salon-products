@@ -58,7 +58,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     if (typeof window) {
       window.Tawk_API = window.Tawk_API || {};
       window.Tawk_API.customStyle = {
-        zIndex: 1000,
+        zIndex: 199,
       };
     }
   }, []);
