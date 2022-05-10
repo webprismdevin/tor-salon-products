@@ -36,7 +36,7 @@ export default function CollectionPage({
       <Flex
         flexDir={["column-reverse", "row"]}
         bg={data.color?.value ? data.color.value : "white"}
-        maxH={"600px"}
+        maxH={["auto", "600px"]}
       >
         <Box w={["full", "50%"]} px={[8, 20]} py={[20, 20]} pos="relative">
           <Stack direction={["column"]} spacing={6} pos="relative" zIndex={1}>
@@ -55,6 +55,7 @@ export default function CollectionPage({
               <Box w="120px">
                 <Image
                   mb={2}
+                  boxSize={6}
                   src={data.benefitOneIcon?.reference.image?.url}
                   alt={data.benefitOneText?.value}
                 />
@@ -63,6 +64,7 @@ export default function CollectionPage({
               <Box w="120px">
                 <Image
                   mb={2}
+                  boxSize={6}
                   src={data.benefitTwoIcon?.reference.image?.url}
                   alt={data.benefitTwoText?.value}
                 />
@@ -71,6 +73,7 @@ export default function CollectionPage({
               <Box w="120px">
                 <Image
                   mb={2}
+                  boxSize={6}
                   src={data.benefitThreeIcon?.reference.image?.url}
                   alt={data.benefitThreeText?.value}
                 />

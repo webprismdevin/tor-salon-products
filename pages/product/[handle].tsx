@@ -89,9 +89,6 @@ const ProductPage = ({
         setItemQty(valueAsNumber),
     });
 
-  // useEffect(() => {
-  //   window.collections = collections;
-  // }, []);
 
   const inc = getIncrementButtonProps();
   const dec = getDecrementButtonProps();
@@ -185,9 +182,9 @@ const ProductPage = ({
               </Stack>
             )}
             <HStack w="140px">
-              <Button {...dec}>-</Button>
+              <Button fontSize="2xl" {...dec}>-</Button>
               <Input {...input} textAlign="center" />
-              <Button {...inc}>+</Button>
+              <Button fontSize="2xl" {...inc}>+</Button>
             </HStack>
           </Stack>
           <Text fontSize={24} fontWeight={600}>
@@ -304,9 +301,7 @@ const ProductPage = ({
             </Heading>
             <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
               {collection.products.edges.map((p: any) => (
-                <React.Fragment key={p.node.id}>
-                  <Product product={p} fontSize={24} />
-                </React.Fragment>
+                  <Product product={p} fontSize={24} key={p.node.id} />
               ))}
             </SimpleGrid>
             <NextLink href={returnCollection(collection.handle) as string} passHref>

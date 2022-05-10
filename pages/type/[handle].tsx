@@ -40,8 +40,8 @@ export default function CollectionPage({
           <Image
             src={data.typeImage.reference.image.url}
             alt=""
-            pos="absolute"
-            top={0}
+            pos={["absolute"]}
+            top={[20, 0]}
             opacity={0.1}
             w="80%"
             left={["10%", 0]}
@@ -50,7 +50,7 @@ export default function CollectionPage({
           />
           <Stack direction={["column"]} spacing={6} pos="relative" zIndex={1}>
             <Heading as="h1">{data.title}</Heading>
-            <Text
+            <Box
             maxW={600}
             dangerouslySetInnerHTML={{
               __html: data.descriptionHtml
@@ -64,6 +64,7 @@ export default function CollectionPage({
               <Box w="120px">
                 <Image
                   mb={2}
+                  boxSize={6}
                   src={data.benefitOneIcon?.reference.image.url}
                   alt={data.benefitOneText?.value}
                 />
@@ -72,6 +73,7 @@ export default function CollectionPage({
               <Box w="120px">
                 <Image
                   mb={2}
+                  boxSize={6}
                   src={data.benefitTwoIcon?.reference.image.url}
                   alt={data.benefitTwoText?.value}
                 />
@@ -80,6 +82,7 @@ export default function CollectionPage({
               <Box w="120px">
                 <Image
                   mb={2}
+                  boxSize={6}
                   src={data.benefitThreeIcon?.reference.image.url}
                   alt={data.benefitThreeText?.value}
                 />

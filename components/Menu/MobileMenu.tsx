@@ -1,6 +1,5 @@
 import {
   VStack,
-  Icon,
   useDisclosure,
   Drawer,
   DrawerBody,
@@ -17,16 +16,16 @@ import {
   AccordionPanel,
   AccordionIcon,
   Box,
+  Icon,
+  chakra,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { AiOutlineMenu } from "react-icons/ai";
 import MenuLink from "./MenuLink";
-import {
-  ByHairType,
-  ByProductTypes,
-  MoreLinks,
-} from "./MenuSections";
+import { ByHairType, ByProductTypes, MoreLinks } from "./MenuSections";
+
+const MenuIcon = chakra(AiOutlineMenu);
 
 const MobileMenu = () => {
   const {
@@ -68,12 +67,16 @@ const MobileMenu = () => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader><Text fontFamily={"Futura"}>TOR</Text></DrawerHeader>
+          <DrawerHeader>
+            <Text fontFamily={"Futura"}>TOR</Text>
+          </DrawerHeader>
           <DrawerBody p={8}>
             <VStack spacing={4} alignItems={"flex-start"} w="full">
               <MenuLink href={"/"} text="Home" />
               <Box w="full">
-                <Text fontWeight={600} mb={2}>Shop</Text>
+                <Text fontWeight={600} mb={2}>
+                  Shop
+                </Text>
                 <Accordion w="full" allowToggle>
                   <AccordionItem>
                     <h2>
@@ -115,9 +118,9 @@ const MobileMenu = () => {
                       </AccordionButton>
                     </h2>
                     <AccordionPanel>
-                    <Stack>
-                      <MoreLinks />
-                    </Stack>
+                      <Stack>
+                        <MoreLinks />
+                      </Stack>
                     </AccordionPanel>
                   </AccordionItem>
                 </Accordion>
@@ -127,7 +130,7 @@ const MobileMenu = () => {
               <MenuLink href={"/blog"} text="Blog" />
               <MenuLink href={"/about"} text="About" />
               <MenuLink href={"/help"} text="Help &amp; FAQ" />
-              </VStack>
+            </VStack>
           </DrawerBody>
           <DrawerFooter></DrawerFooter>
         </DrawerContent>

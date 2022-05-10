@@ -1,5 +1,11 @@
 import type { AppProps } from "next/app";
-import { extendTheme, ChakraProvider, ColorModeScript, Spinner } from "@chakra-ui/react";
+import {
+  extendTheme,
+  ChakraProvider,
+  ColorModeScript,
+  Spinner,
+  Box,
+} from "@chakra-ui/react";
 import { theme as defaultTheme, ThemeConfig } from "@chakra-ui/theme";
 import { useEffect, useState, lazy, Suspense } from "react";
 import CartContext from "../lib/CartContext";
@@ -13,7 +19,7 @@ import "@fontsource/raleway/400.css";
 import "../styles/globals.css";
 import Script from "next/script";
 import { useRouter } from "next/router";
-import * as fbq from '../lib/fpixel'
+import * as fbq from "../lib/fpixel";
 
 const NavBar = dynamic(() => import("../components/NavBar"));
 const Footer = lazy(() => import("../components/Footer"));
@@ -59,17 +65,17 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     // This pageview only triggers the first time (it's important for Pixel to have real information)
-    fbq.pageview()
+    fbq.pageview();
 
     const handleRouteChange = () => {
-      fbq.pageview()
-    }
+      fbq.pageview();
+    };
 
-    router.events.on('routeChangeComplete', handleRouteChange)
+    router.events.on("routeChangeComplete", handleRouteChange);
     return () => {
-      router.events.off('routeChangeComplete', handleRouteChange)
-    }
-  }, [router.events])
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, [router.events]);
 
   return (
     <ChakraProvider theme={customTheme}>
@@ -86,9 +92,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <NavBar />
           <Component {...pageProps} />
         </CartContext.Provider>
-        <Suspense fallback={<Spinner />}>
-          <Footer />
-        </Suspense>
+        <Footer />
       </ShopContext.Provider>
       <ColorModeScript initialColorMode={customTheme.initialColorMode} />
       {process.env.NODE_ENV === "production" && (
@@ -118,11 +122,11 @@ function MyApp({ Component, pageProps }: AppProps) {
         }}
       />
       <noscript>
-        {/* eslint-disable-next-line @next/next/no-img-element */} {/* eslint-disable-next-line jsx-a11y/alt-text */}
+        {/* eslint-disable-next-line @next/next/no-img-element */ /* eslint-disable-next-line jsx-a11y/alt-text */}
         <img
           height="1"
           width="1"
-          style={{display: 'none' }}
+          style={{ display: "none" }}
           src="https://www.facebook.com/tr?id={your-pixel-id-goes-here}&ev=PageView&noscript=1"
         />
       </noscript>

@@ -88,7 +88,7 @@ function HomePage({ products, styling, body }: any) {
       <Container maxW="container.xl" pt={[20, 200, null, null, 20]} pb={40}>
         <Stack maxW="600px" px={[2, 0]}>
           <Text fontSize={22} textTransform="uppercase" fontFamily={"Futura"}>
-            Salon Grade -
+            Salon Quality -
           </Text>
           <Heading size="2xl">
             Hair care formulated for you. Not Everyone.

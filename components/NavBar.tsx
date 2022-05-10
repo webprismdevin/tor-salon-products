@@ -11,18 +11,15 @@ import {
   MenuButton,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense, lazy } from "react";
 import { AiOutlineUser } from "react-icons/ai";
 import { useRouter } from "next/router";
-import dynamic from "next/dynamic";
 import { Search } from "./Search";
 import MobileMenu from "./Menu/MobileMenu";
 import DesktopMenu from "./Menu/DesktopMenu";
 import MenuLink from "./Menu/MenuLink";
 import { isMobile } from "react-device-detect";
 import Cart from "./Cart";
-
-// const Cart = dynamic(() => import("../components/Cart"));
 
 const NavBar = () => {
   const [auth, setAuth] = useState(false);
