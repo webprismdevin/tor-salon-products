@@ -11,7 +11,7 @@ import {
   MenuButton,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { useState, useEffect, Suspense, lazy } from "react";
+import { useState, useEffect } from "react";
 import { AiOutlineUser } from "react-icons/ai";
 import { useRouter } from "next/router";
 import { Search } from "./Search";

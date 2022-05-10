@@ -117,7 +117,7 @@ export default function MailingList() {
         <Heading>
           {formStatus === "success"
             ? "Check your inbox!"
-            : "Join the TOR Community!"}
+            : "Get 15% off your first order!"}
         </Heading>
         <InputGroup display={formStatus === "success" ? "none" : "inherit"}>
           <Input

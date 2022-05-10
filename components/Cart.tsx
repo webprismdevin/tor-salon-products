@@ -21,6 +21,7 @@ import {
   Input,
   AspectRatio,
   IconButton,
+  CloseButton,
 } from "@chakra-ui/react";
 import { useEffect, useContext, useState } from "react";
 import {
@@ -191,19 +192,21 @@ const Cart = () => {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>
-            Cart
-            {cart.lines.length > 0 && (
-              <IconButton
-                ml={4}
-                icon={<AiOutlineDelete />}
-                size="sm"
-                onClick={emptyCart}
-                aria-label="empty cart"
-                variant={"outline"}
-              />
-            )}
+            <HStack direction={"row"}>
+              <Text fontSize={[18, 20]} fontWeight="bold">Your Cart</Text>
+              {cart.lines.length > 0 && (
+                <IconButton
+                  ml={4}
+                  icon={<AiOutlineDelete />}
+                  size="sm"
+                  onClick={emptyCart}
+                  aria-label="empty cart"
+                  variant={"outline"}
+                />
+              )}
+            </HStack>
           </DrawerHeader>
-          <DrawerBody p={8}>
+          <DrawerBody p={[4, 8]}>
             <VStack
               pt={8}
               justifyContent={cart.lines.length === 0 ? "center" : "flex-start"}
@@ -259,13 +262,13 @@ function CartLineItem({
     <Flex
       borderBottom={"1px solid"}
       borderColor={"gray.300"}
-      py={4}
+      py={[4]}
       minW="100%"
       justifyContent="flex-start"
       alignItems={"flex-start"}
-      gap={4}
+      gap={[0, 4]}
     >
-      <AspectRatio ratio={1 / 1} boxSize={"120px"} flexShrink={0}>
+      <AspectRatio ratio={1 / 1} boxSize={["100px", "120px"]} flexShrink={0}>
         <Image
           borderRadius={6}
           src={product.node.merchandise.product.images.edges[0].node.url}
@@ -273,7 +276,7 @@ function CartLineItem({
         />
       </AspectRatio>
       <VStack flexGrow={1} spacing={2} alignItems={"flex-start"} mr={2}>
-        <Text fontSize={20} fontWeight="bold">
+        <Text fontSize={[18, 20]} fontWeight="bold">
           {product.node.merchandise.product.title}
         </Text>
         {product.node.merchandise.title !== "Default Title" && (
@@ -284,15 +287,16 @@ function CartLineItem({
         <ItemQty product={product} />
       </VStack>
       <VStack spacing={1}>
-        <Text>
+        <Text fontSize={[18, 20]} fontWeight="bold">
           {formatter.format(product.node.estimatedCost.subtotalAmount.amount)}
         </Text>
         <Text
-          fontSize="xs"
+          fontSize="4xl"
           cursor={"pointer"}
+          userSelect="none"
           onClick={() => removeItem(product.node.id)}
         >
-          Remove
+          &times;
         </Text>
       </VStack>
     </Flex>
@@ -340,7 +344,7 @@ function ItemQty({ product }: { product: any }) {
       </Button>
       <Input
         size="sm"
-        w={20}
+        w={[14, 20]}
         {...input}
         onBlur={(e) => handleQtyUpdate(e.target.value)}
       />

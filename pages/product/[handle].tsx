@@ -31,7 +31,7 @@ import Product from "../../components/Product";
 import Script from "next/script";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { wrap } from "@popmotion/popcorn";
-import NextLink from 'next/link'
+import NextLink from "next/link";
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -44,18 +44,18 @@ declare interface VariantType {
   availableForSale: boolean;
 }
 
-const returnCollection = (handle:string) => {
-  switch(handle){
-    case 'curly':
-      return '/type/curly'
-    case 'medium-thick':
-      return '/type/medium-thick'
-    case 'fine-thin':
-      return '/type/fine-thin'
+const returnCollection = (handle: string) => {
+  switch (handle) {
+    case "curly":
+      return "/type/curly";
+    case "medium-thick":
+      return "/type/medium-thick";
+    case "fine-thin":
+      return "/type/fine-thin";
     default:
-      return `/collection/${handle}`
+      return `/collection/${handle}`;
   }
-}
+};
 
 const ProductPage = ({
   handle,
@@ -88,7 +88,6 @@ const ProductPage = ({
       onChange: (valueAsString: string, valueAsNumber: number) =>
         setItemQty(valueAsNumber),
     });
-
 
   const inc = getIncrementButtonProps();
   const dec = getDecrementButtonProps();
@@ -140,7 +139,7 @@ const ProductPage = ({
         <PhotoCarousel images={product.images.edges} />
         <Stack
           direction={["column"]}
-          spacing={4}
+          spacing={6}
           w="full"
           align="flex-start"
           pt={[0, 20]}
@@ -161,67 +160,83 @@ const ProductPage = ({
             justify={"center"}
             flexShrink={1}
           >
-            {variants.length > 1 && (
-              <Stack>
-                <Heading as="h4" size="md" mb={3} ml={2}>
-                  Select A Size
-                </Heading>
-                <Select
-                  minW={"200px"}
-                  value={activeVariant.id}
-                  onChange={(e) => {
-                    handleActiveVariantChange(e.target.value);
-                  }}
-                >
-                  {variants.map((v: { node: VariantType }, i: number) => (
-                    <option key={v.node.id} value={v.node.id}>
-                      {v.node.title}
-                    </option>
-                  ))}
-                </Select>
-              </Stack>
-            )}
+            <>
+              {variants.length > 1 && (
+                <Stack spacing={[4]}>
+                  <Heading as="h4" size="md">
+                    Select A Size
+                  </Heading>
+                  <Select
+                    minW={"200px"}
+                    value={activeVariant.id}
+                    onChange={(e) => {
+                      handleActiveVariantChange(e.target.value);
+                    }}
+                  >
+                    {variants.map((v: { node: VariantType }, i: number) => (
+                      <option key={v.node.id} value={i}>
+                        {v.node.title}
+                      </option>
+                    ))}
+                  </Select>
+                </Stack>
+              )}
+            </>
             <HStack w="140px">
-              <Button fontSize="2xl" {...dec}>-</Button>
+              <Button fontSize="2xl" {...dec}>
+                -
+              </Button>
               <Input {...input} textAlign="center" />
-              <Button fontSize="2xl" {...inc}>+</Button>
+              <Button fontSize="2xl" {...inc}>
+                +
+              </Button>
             </HStack>
           </Stack>
-          <Text fontSize={24} fontWeight={600}>
-            {formatter.format(parseInt(activeVariant.priceV2.amount))}
-          </Text>
+          <HStack>
+            <Box
+              pos={["fixed", "static"]}
+              bottom={7}
+              zIndex={2}
+              right={2}
+              px={[2, 0]}
+              w={["75%", "inherit"]}
+            >
+              <Button
+                w={["full", 140]}
+                onClick={addToCart}
+                isDisabled={!activeVariant?.availableForSale}
+              >
+                {activeVariant?.availableForSale ? "Add To Cart" : "Sold Out!"}
+              </Button>
+            </Box>
+            <Text fontSize={28} fontWeight={600}>
+              {formatter.format(parseInt(activeVariant.priceV2.amount))}
+            </Text>
+          </HStack>
+          <Flex w="full" justify={["center", "flex-start"]}>
+            <AspectRatio ratio={166 / 42} minW="166">
+              <Image
+                src={"/images/shop-pay/shop_pay_with_affirm_color.png"}
+                alt="Shop Pay Installments logo"
+              />
+            </AspectRatio>
+          </Flex>
           {!activeVariant?.availableForSale && (
             <Link onClick={() => window.Tawk_API.maximize()}>
               Let me know when this product is back in stock!
             </Link>
           )}
-          <Box
-            pos={["fixed", "static"]}
-            bottom={7}
-            zIndex={2}
-            right={2}
-            px={[2, 0]}
-            w={["75%", "inherit"]}
-          >
-            <Button
-              w={["full", 140]}
-              onClick={addToCart}
-              isDisabled={!activeVariant?.availableForSale}
-            >
-              {activeVariant?.availableForSale ? "Add To Cart" : "Sold Out!"}
-            </Button>
-          </Box>
-          <Accordion w="full" allowToggle pt={10}>
+          <Accordion w="full" allowToggle>
             <AccordionItem>
               <h2>
                 <AccordionButton>
                   <Box flex="1" textAlign="left">
-                    Guarantee &amp; Return Policy
+                    Money-back Guarantee
                   </Box>
                   <AccordionIcon />
                 </AccordionButton>
               </h2>
-              <AccordionPanel pb={4}>
+              <AccordionPanel p={4}>
                 We believe in our products. If you&apos;re not satisfied with
                 your first few washes, or you don&apos;t find our products work
                 for you, we&apos;ll buy it back. No hassles. Just pay return
@@ -262,6 +277,7 @@ const ProductPage = ({
                   <Box w="120px">
                     <Image
                       mb={2}
+                      boxSize={6}
                       src={collection?.benefitOneIcon?.reference.image?.url}
                       alt={collection?.benefitOneText?.value}
                     />
@@ -270,6 +286,7 @@ const ProductPage = ({
                   <Box w="120px">
                     <Image
                       mb={2}
+                      boxSize={6}
                       src={collection?.benefitTwoIcon?.reference.image.url}
                       alt={collection?.benefitTwoText?.value}
                     />
@@ -278,6 +295,7 @@ const ProductPage = ({
                   <Box w="120px">
                     <Image
                       mb={2}
+                      boxSize={6}
                       src={collection?.benefitThreeIcon?.reference.image.url}
                       alt={collection?.benefitThreeText?.value}
                     />
@@ -300,12 +318,15 @@ const ProductPage = ({
               Other items in this line
             </Heading>
             <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
-              {collection.products.edges.map((p: any) => (
-                  <Product product={p} fontSize={24} key={p.node.id} />
+              {collection.products.edges.map((p: any, i: number) => (
+                <Product product={p} fontSize={24} key={i} />
               ))}
             </SimpleGrid>
-            <NextLink href={returnCollection(collection.handle) as string} passHref>
-              <Button>See Collection</Button>
+            <NextLink
+              href={returnCollection(collection.handle) as string}
+              passHref
+            >
+              <Button mt={[8]}>See Collection</Button>
             </NextLink>
           </Container>
         </Box>

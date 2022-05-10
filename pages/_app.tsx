@@ -7,7 +7,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { theme as defaultTheme, ThemeConfig } from "@chakra-ui/theme";
-import { useEffect, useState, lazy, Suspense } from "react";
+import { useEffect, useState } from "react";
 import CartContext from "../lib/CartContext";
 import ShopContext from "../lib/shop-context";
 import Head from "next/head";
@@ -22,7 +22,7 @@ import { useRouter } from "next/router";
 import * as fbq from "../lib/fpixel";
 
 const NavBar = dynamic(() => import("../components/NavBar"));
-const Footer = lazy(() => import("../components/Footer"));
+const Footer = dynamic(() => import("../components/Footer"));
 const Tawk = dynamic(() => import("../lib/tawk"));
 
 declare global {
@@ -78,6 +78,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [router.events]);
 
   return (
+    <>
     <ChakraProvider theme={customTheme}>
       <ShopContext.Provider value={{ shop }}>
         <Head>
@@ -105,32 +106,24 @@ function MyApp({ Component, pageProps }: AppProps) {
           <MailingList />
         </>
       )}
-      <Script
-        id="fb_pixel"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `!function(f,b,e,v,n,t,s)
-          {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-          n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-          if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-          n.queue=[];t=b.createElement(e);t.async=!0;
-          t.src=v;s=b.getElementsByTagName(e)[0];
-          s.parentNode.insertBefore(t,s)}(window, document,'script',
-          'https://connect.facebook.net/en_US/fbevents.js');
-          fbq('init', ${fbq.FB_PIXEL_ID});
-          fbq('track', 'PageView');`,
-        }}
-      />
-      <noscript>
-        {/* eslint-disable-next-line @next/next/no-img-element */ /* eslint-disable-next-line jsx-a11y/alt-text */}
-        <img
-          height="1"
-          width="1"
-          style={{ display: "none" }}
-          src="https://www.facebook.com/tr?id={your-pixel-id-goes-here}&ev=PageView&noscript=1"
-        />
-      </noscript>
     </ChakraProvider>
+      <Script
+      id="fb_pixel"
+      strategy="afterInteractive"
+      dangerouslySetInnerHTML={{
+        __html: `!function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', ${fbq.FB_PIXEL_ID});
+        fbq('track', 'PageView');`,
+      }}
+    />
+    </>
   );
 }
 
