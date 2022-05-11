@@ -335,7 +335,8 @@ const ProductPage = ({
         {yjsLoaded && (
           <div
             className="yotpo yotpo-main-widget"
-            data-product-id={Buffer.from(product.id).toString("base64")}
+            // data-product-id={Buffer.from(product.id).toString("base64")}
+            data-product-id={product.id.split("/")[4]}
             data-price={activeVariant.priceV2.amount}
             data-currency={"USD"}
             data-name={product.title}
