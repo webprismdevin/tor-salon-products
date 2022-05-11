@@ -124,6 +124,18 @@ function MyApp({ Component, pageProps }: AppProps) {
         fbq('init', ${fbq.FB_PIXEL_ID});
         fbq('track', 'PageView');`,
       }}
+    /> 
+    <Script
+      id="yotpo_conversion_tracking"
+      dangerouslySetInnerHTML={{
+        __html: `(function e(){var e=document.createElement("script");e.type="text/javascript",e.async=true,e.src="//staticw2.yotpo.com/bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l/widget.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})();</script><script>yotpoTrackConversionData = {orderId: "{{order_name|handleize}}", orderAmount: "{{subtotal_price|money_without_currency}}", orderCurrency: "{{shop.currency }}"}`
+      }}
+    />
+    {/* // eslint-disable-next-line @next/next/no-img-element */}
+    <noscript
+      dangerouslySetInnerHTML={{
+        __html: `<img src="//api.yotpo.com/conversion_tracking.gif?app_key=bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l&order_id={{order_name|handleize}}&order_amount={{subtotal_price|money_without_currency}}&order_currency={{ shop.currency }}" width="1" height="1" />`
+      }}
     />
     </>
   );

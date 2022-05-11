@@ -149,6 +149,12 @@ const ProductPage = ({
           <Heading as="h1" maxW={500}>
             {product.title}
           </Heading>
+          {yjsLoaded && (
+            <div
+              className="yotpo bottomLine"
+              data-yotpo-product-id={product.id.split("/")[4]}
+            ></div>
+          )}
           <Box
             dangerouslySetInnerHTML={{
               __html: product.descriptionHtml,
@@ -331,16 +337,15 @@ const ProductPage = ({
           </Container>
         </Box>
       )}
-      <Container maxW="container.xl" pt={20} pb={40} centerContent>
+      <Container maxW="container.xl" pt={20} pb={20} centerContent>
         {yjsLoaded && (
           <div
             className="yotpo yotpo-main-widget"
-            // data-product-id={Buffer.from(product.id).toString("base64")}
             data-product-id={product.id.split("/")[4]}
             data-price={activeVariant.priceV2.amount}
             data-currency={"USD"}
             data-name={product.title}
-            data-url={`https://torsalonproducts.com/product/${product.handle}`}
+            data-url={`${process.env.NODE_ENV === "production" ? 'https://torsalonproducts.com/product/' : 'http://localhost:3000'}/${product.handle}`}
             data-image-url={product.images.edges[0]?.node.url}
           ></div>
         )}
@@ -416,7 +421,7 @@ export async function getStaticPaths() {
 
   const query = gql`
     {
-      products(first: 200, query: "NOT gift-cards") {
+      products(first: 200, query: "NOT gift-card") {
         edges {
           node {
             id
