@@ -462,7 +462,6 @@ function HomePage({ products, styling, body }: any) {
           </Box>
         </Stack>
       </Box>
-      <Follow />
     </>
   );
 }

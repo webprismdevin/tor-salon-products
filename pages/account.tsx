@@ -99,7 +99,7 @@ export default function Account() {
     return (
       <Box pt={20} pb={40}>
         <Head>
-          <title>{process.env.NEXT_PUBLIC_SHOP_NAME} | My Account</title>
+          <title>My Account | TOR Salon Products</title>
         </Head>
         <Container maxW="container.xl" centerContent>
           <Stack spacing={10} w="full">

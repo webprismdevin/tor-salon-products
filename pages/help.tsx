@@ -9,6 +9,7 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
+  Link,
 } from "@chakra-ui/react";
 import { groq } from "next-sanity";
 import { getClient } from "../lib/sanity";
@@ -32,10 +33,7 @@ export default function FAQ({ data }: any) {
       </Box>
       <Box w="full" py={20}>
         <Container maxW="container.md">
-          {/* <Stack direction={["column", "row"]} spacing={20}>
-            <Text>{data.paragraphOne}</Text> */}
             <FaqAccordion faqs={data.faqs}/>
-          {/* </Stack> */}
         </Container>
       </Box>
     </>
@@ -55,7 +53,10 @@ function FaqAccordion({ faqs }: any) {
               <AccordionIcon />
             </AccordionButton>
           </h2>
-          <AccordionPanel pb={4}>{faq.answer}</AccordionPanel>
+          <AccordionPanel py={4}>
+            <Text>{faq.answer}</Text>
+            {faq.link && <Link href={faq.link}>Learn more</Link>}  
+          </AccordionPanel>
         </AccordionItem>
       ))}
     </Accordion>

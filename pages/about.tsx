@@ -167,7 +167,6 @@ const About = ({ data }: AboutPageData) => {
           />
         </Stack>
       </Container>
-      <Follow />
     </>
   );
 };

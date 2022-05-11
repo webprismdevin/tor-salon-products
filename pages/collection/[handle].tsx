@@ -36,7 +36,6 @@ export default function CollectionPage({
       <Flex
         flexDir={["column-reverse", "row"]}
         bg={data.color?.value ? data.color.value : "white"}
-        maxH={["auto", "600px"]}
       >
         <Box w={["full", "50%"]} px={[8, 20]} py={[20, 20]} pos="relative">
           <Stack direction={["column"]} spacing={6} pos="relative" zIndex={1}>

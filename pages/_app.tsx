@@ -20,6 +20,7 @@ import "../styles/globals.css";
 import Script from "next/script";
 import { useRouter } from "next/router";
 import * as fbq from "../lib/fpixel";
+import Follow from "../components/Follow";
 
 const NavBar = dynamic(() => import("../components/NavBar"));
 const Footer = dynamic(() => import("../components/Footer"));
@@ -93,6 +94,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <NavBar />
           <Component {...pageProps} />
         </CartContext.Provider>
+        <Follow />
         <Footer />
       </ShopContext.Provider>
       <ColorModeScript initialColorMode={customTheme.initialColorMode} />
