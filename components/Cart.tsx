@@ -200,21 +200,9 @@ const Cart = () => {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>
-            <HStack direction={"row"}>
               <Text fontSize={[18, 20]} fontWeight="bold">
                 Your Cart
               </Text>
-              {cart.lines.length > 0 && (
-                <IconButton
-                  ml={4}
-                  icon={<AiOutlineDelete />}
-                  size="sm"
-                  onClick={emptyCart}
-                  aria-label="empty cart"
-                  variant={"outline"}
-                />
-              )}
-            </HStack>
           </DrawerHeader>
           <DrawerBody py={4} pl={[4]} pr={[4, 6]}>
             <VStack
@@ -291,6 +279,7 @@ function CartLineItem({
       direction="row"
       w="full"
       justify={"space-between"}
+      pb={[4, 0]}
       borderBottom={"2px solid"}
       borderBottomColor={"gray.400"}
     >
