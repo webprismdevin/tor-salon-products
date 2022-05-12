@@ -80,40 +80,40 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
-    <ChakraProvider theme={customTheme}>
-      <ShopContext.Provider value={{ shop }}>
-        <Head>
-          <meta name="theme-color" content="#ffffff" />
-          <link rel="shortcut icon" href="/favicon.png" />
-          <meta
-            name="facebook-domain-verification"
-            content="bk02y72cdwvcwzina508gmb7xv87g6"
-          />
-        </Head>
-        <CartContext.Provider value={{ cart, setCart }}>
-          <NavBar />
-          <Component {...pageProps} />
-        </CartContext.Provider>
-        <Follow />
-        <Footer />
-      </ShopContext.Provider>
-      <ColorModeScript initialColorMode={customTheme.initialColorMode} />
-      {process.env.NODE_ENV === "production" && (
-        <>
-          <Tawk src="https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu" />
-        </>
-      )}
-      {process.env.NODE_ENV === "production" && (
-        <>
-          <MailingList />
-        </>
-      )}
-    </ChakraProvider>
+      <ChakraProvider theme={customTheme}>
+        <ShopContext.Provider value={{ shop }}>
+          <Head>
+            <meta name="theme-color" content="#ffffff" />
+            <link rel="shortcut icon" href="/favicon.png" />
+            <meta
+              name="facebook-domain-verification"
+              content="bk02y72cdwvcwzina508gmb7xv87g6"
+            />
+          </Head>
+          <CartContext.Provider value={{ cart, setCart }}>
+            <NavBar />
+            <Component key={router.asPath} {...pageProps} />
+          </CartContext.Provider>
+          <Follow />
+          <Footer />
+        </ShopContext.Provider>
+        <ColorModeScript initialColorMode={customTheme.initialColorMode} />
+        {process.env.NODE_ENV === "production" && (
+          <>
+            <Tawk src="https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu" />
+          </>
+        )}
+        {process.env.NODE_ENV === "production" && (
+          <>
+            <MailingList />
+          </>
+        )}
+      </ChakraProvider>
       <Script
-      id="fb_pixel"
-      strategy="afterInteractive"
-      dangerouslySetInnerHTML={{
-        __html: `!function(f,b,e,v,n,t,s)
+        id="fb_pixel"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `!function(f,b,e,v,n,t,s)
         {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
         n.callMethod.apply(n,arguments):n.queue.push(arguments)};
         if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
@@ -123,20 +123,21 @@ function MyApp({ Component, pageProps }: AppProps) {
         'https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', ${fbq.FB_PIXEL_ID});
         fbq('track', 'PageView');`,
-      }}
-    /> 
-    <Script
-      id="yotpo_conversion_tracking"
-      dangerouslySetInnerHTML={{
-        __html: `(function e(){var e=document.createElement("script");e.type="text/javascript",e.async=true,e.src="//staticw2.yotpo.com/bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l/widget.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})();</script><script>yotpoTrackConversionData = {orderId: "{{order_name|handleize}}", orderAmount: "{{subtotal_price|money_without_currency}}", orderCurrency: "{{shop.currency }}"}`
-      }}
-    />
-    {/* // eslint-disable-next-line @next/next/no-img-element */}
-    <noscript
-      dangerouslySetInnerHTML={{
-        __html: `<img src="//api.yotpo.com/conversion_tracking.gif?app_key=bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l&order_id={{order_name|handleize}}&order_amount={{subtotal_price|money_without_currency}}&order_currency={{ shop.currency }}" width="1" height="1" />`
-      }}
-    />
+        }}
+      />
+      {/* <Script
+        id="yotpo_reviews"
+        src="/yotpo.js"
+        // onLoad={() => {
+        //   setLoaded(true);
+        // }}
+      /> */}
+      {/* // eslint-disable-next-line @next/next/no-img-element */}
+      <noscript
+        dangerouslySetInnerHTML={{
+          __html: `<img src="//api.yotpo.com/conversion_tracking.gif?app_key=bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l&order_id={{order_name|handleize}}&order_amount={{subtotal_price|money_without_currency}}&order_currency={{ shop.currency }}" width="1" height="1" />`,
+        }}
+      />
     </>
   );
 }

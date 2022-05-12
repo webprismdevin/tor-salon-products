@@ -22,12 +22,15 @@ import {
   AspectRatio,
   IconButton,
   CloseButton,
+  Stack,
+  Tooltip,
 } from "@chakra-ui/react";
 import { useEffect, useContext, useState } from "react";
 import {
   AiOutlineShopping,
   AiOutlineDelete,
   AiOutlineShoppingCart,
+  AiOutlineInfoCircle,
 } from "react-icons/ai";
 import CartContext from "../lib/CartContext";
 import formatter from "../lib/formatter";
@@ -148,11 +151,16 @@ const Cart = () => {
   }
 
   async function handleCheckout() {
-    window.dataLayer.push({
-      event: "begin_checkout",
-      eventCallback: () => (window.location.href = cart.checkoutUrl),
-      eventTimeout: 2000,
-    });
+    if (process.env.NODE_ENV === "production") {
+      window.dataLayer.push({
+        event: "begin_checkout",
+        eventCallback: () => (window.location.href = cart.checkoutUrl),
+        eventTimeout: 2000,
+      });
+    }
+    if (process.env.NODE_ENV !== "production") {
+      window.location.href = cart.checkoutUrl;
+    }
   }
 
   return (
@@ -187,13 +195,15 @@ const Cart = () => {
           {cart.lines.length > 0 && cartQty}
         </Text>
       </Box>
-      <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="sm">
+      <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="md">
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>
             <HStack direction={"row"}>
-              <Text fontSize={[18, 20]} fontWeight="bold">Your Cart</Text>
+              <Text fontSize={[18, 20]} fontWeight="bold">
+                Your Cart
+              </Text>
               {cart.lines.length > 0 && (
                 <IconButton
                   ml={4}
@@ -206,7 +216,7 @@ const Cart = () => {
               )}
             </HStack>
           </DrawerHeader>
-          <DrawerBody p={[4, 8]}>
+          <DrawerBody py={4} pl={[4]} pr={[4, 6]}>
             <VStack
               pt={8}
               justifyContent={cart.lines.length === 0 ? "center" : "flex-start"}
@@ -232,14 +242,32 @@ const Cart = () => {
               <VStack w="full" spacing={2}>
                 <Divider />
                 {cart.estimatedCost && (
-                  <Flex w="100%" justifyContent={"space-between"}>
-                    <Text>Estimated Cost:</Text>
+                  <Flex
+                    w="100%"
+                    justifyContent={"space-between"}
+                    fontSize="lg"
+                    fontWeight={600}
+                  >
+                    <Text>Total:</Text>
                     <Text>
                       {formatter.format(cart.estimatedCost.totalAmount.amount)}
                     </Text>
                   </Flex>
                 )}
-                <Button onClick={handleCheckout} w="full">
+                <HStack justify={"center"} w="full">
+                  <Text fontSize={"xs"}>
+                    Pay in 4 installments. Interest-free.
+                  </Text>
+                  <Tooltip
+                    label="Purchase now and pay later with Shop Pay Installments. Most approvals are instant, and pay no interest or fees with on-time payments."
+                    aria-label="A tooltip"
+                  >
+                    <span>
+                      <Icon as={AiOutlineInfoCircle} />
+                    </span>
+                  </Tooltip>
+                </HStack>
+                <Button size="lg" onClick={handleCheckout} w="full">
                   Checkout
                 </Button>
               </VStack>
@@ -259,47 +287,51 @@ function CartLineItem({
   removeItem: any;
 }) {
   return (
-    <Flex
-      borderBottom={"1px solid"}
-      borderColor={"gray.300"}
-      py={[4]}
-      minW="100%"
-      justifyContent="flex-start"
-      alignItems={"flex-start"}
-      gap={[0, 4]}
+    <Stack
+      direction="row"
+      w="full"
+      justify={"space-between"}
+      borderBottom={"2px solid"}
+      borderBottomColor={"gray.400"}
     >
-      <AspectRatio ratio={1 / 1} boxSize={["100px", "120px"]} flexShrink={0}>
+      <AspectRatio
+        ratio={1 / 1}
+        flexGrow={1}
+        minW={["100px", "120px"]}
+        maxW={["100px", "180px"]}
+      >
         <Image
           borderRadius={6}
           src={product.node.merchandise.product.images.edges[0].node.url}
           alt={product.node.merchandise.product.title}
         />
       </AspectRatio>
-      <VStack flexGrow={1} spacing={2} alignItems={"flex-start"} mr={2}>
-        <Text fontSize={[18, 20]} fontWeight="bold">
-          {product.node.merchandise.product.title}
-        </Text>
-        {product.node.merchandise.title !== "Default Title" && (
-          <Text mt={1} fontSize={12}>
-            {product.node.merchandise.title}
+      <Stack spacing={6}>
+        <Stack direction="row">
+          <Box>
+            <Text fontSize={[16, 18]} fontWeight="bold">
+              {product.node.merchandise.product.title}
+            </Text>
+            {product.node.merchandise.title !== "Default Title" && (
+              <Text mt={1} fontSize={[14, 16]}>
+                {product.node.merchandise.title}
+              </Text>
+            )}
+          </Box>
+          <CloseButton
+            cursor={"pointer"}
+            userSelect="none"
+            onClick={() => removeItem(product.node.id)}
+          />
+        </Stack>
+        <Stack direction="row" justify={"space-between"}>
+          <ItemQty product={product} />
+          <Text fontSize={[16, 18]}>
+            {formatter.format(product.node.estimatedCost.subtotalAmount.amount)}
           </Text>
-        )}
-        <ItemQty product={product} />
-      </VStack>
-      <VStack spacing={1}>
-        <Text fontSize={[18, 20]} fontWeight="bold">
-          {formatter.format(product.node.estimatedCost.subtotalAmount.amount)}
-        </Text>
-        <Text
-          fontSize="4xl"
-          cursor={"pointer"}
-          userSelect="none"
-          onClick={() => removeItem(product.node.id)}
-        >
-          &times;
-        </Text>
-      </VStack>
-    </Flex>
+        </Stack>
+      </Stack>
+    </Stack>
   );
 }
 
@@ -339,16 +371,18 @@ function ItemQty({ product }: { product: any }) {
 
   return (
     <HStack>
-      <Button size="sm" {...dec}>
+      <Button size="sm" fontSize="md" {...dec} variant="ghost">
         -
       </Button>
       <Input
         size="sm"
-        w={[14, 20]}
+        borderRadius={5}
+        textAlign="center"
+        w={[10]}
         {...input}
         onBlur={(e) => handleQtyUpdate(e.target.value)}
       />
-      <Button size="sm" {...inc}>
+      <Button size="sm" fontSize="md" {...inc} variant="ghost">
         +
       </Button>
     </HStack>

@@ -20,18 +20,22 @@ import {
   AccordionPanel,
   AccordionIcon,
   Link,
+  Divider,
+  Tooltip,
+  Icon,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useRef } from "react";
 import CartContext from "../../lib/CartContext";
 import formatter from "../../lib/formatter";
 import { GetStaticProps } from "next";
 import Product from "../../components/Product";
-import Script from "next/script";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { wrap } from "@popmotion/popcorn";
 import NextLink from "next/link";
+import { RatingStar } from "rating-star";
+import { AiOutlineInfoCircle } from "react-icons/ai";
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -58,19 +62,19 @@ const returnCollection = (handle: string) => {
 };
 
 const ProductPage = ({
-  handle,
   product,
   collection,
-  collections,
+  reviews,
 }: {
   handle: string;
   product: any;
   collection: any;
   collections: any;
+  reviews: any;
 }) => {
   const [itemQty, setItemQty] = useState(1);
   const { cart, setCart } = useContext(CartContext);
-  const [yjsLoaded, setLoaded] = useState(false);
+  // const [reviews] = useReviews(product.id.split("/")[4], 1);
   const [activeVariant, setActiveVariant] = useState<VariantType>(() => {
     if (!product) return null;
 
@@ -78,6 +82,8 @@ const ProductPage = ({
       (edge: any) => edge.node.availableForSale === true
     ).node;
   });
+
+  const reviewsSection = useRef<HTMLDivElement | null>(null);
 
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
     useNumberInput({
@@ -121,13 +127,6 @@ const ProductPage = ({
 
   return (
     <>
-      <Script
-        id="yotpo reviews"
-        src="/yotpo.js"
-        onLoad={() => {
-          setLoaded(true);
-        }}
-      />
       <Head>
         <title>{product.title} | TOR Salon Products</title>
         <meta
@@ -135,7 +134,11 @@ const ProductPage = ({
           content={`${product.description.substring(0, 200)}...`}
         />
       </Head>
-      <Stack flexDirection={["column", "row"]} spacing={[6, 0]}>
+      <Stack
+        flexDirection={["column", "row"]}
+        alignItems="flex-start"
+        spacing={[6, 0]}
+      >
         <PhotoCarousel images={product.images.edges} />
         <Stack
           direction={["column"]}
@@ -146,32 +149,55 @@ const ProductPage = ({
           pb={20}
           px={[4, 20]}
         >
-          <Heading as="h1" maxW={500}>
+          <Heading size="xl" as="h1">
             {product.title}
           </Heading>
-          {yjsLoaded && (
-            <div
-              className="yotpo bottomLine"
-              data-yotpo-product-id={product.id.split("/")[4]}
-            ></div>
+          {reviews && (
+            <HStack
+              onClick={() =>
+                reviewsSection.current?.scrollIntoView({ behavior: "smooth" })
+              }
+            >
+              <RatingStar
+                id={product.id.split("/")[4]}
+                rating={reviews.bottomline.average_score}
+              />
+              <Text>
+                {reviews.bottomline.total_review} Review
+                {reviews.bottomline.totalReviews > 1 ? "s" : ""}
+              </Text>
+            </HStack>
           )}
+          <Box>
+            <Text fontSize={18}>
+              {formatter.format(parseInt(activeVariant.priceV2.amount))}
+            </Text>
+            <HStack justify={"center"}>
+              <Text fontSize={"xs"}>Pay in 4 installments. Interest-free.</Text>
+              <Tooltip
+                label="Purchase now and pay later with Shop Pay Installments. Most approvals are instant, and pay no interest or fees with on-time payments."
+                aria-label="A tooltip"
+              >
+                <span>
+                  <Icon as={AiOutlineInfoCircle} />
+                </span>
+              </Tooltip>
+            </HStack>
+          </Box>
           <Box
             dangerouslySetInnerHTML={{
               __html: product.descriptionHtml,
             }}
           />
-          <Stack
-            direction={"row"}
-            align="flex-end"
-            justify={"center"}
-            flexShrink={1}
-          >
-            <>
-              {variants.length > 1 && (
-                <Stack spacing={[4]}>
-                  <Heading as="h4" size="md">
-                    Select A Size
-                  </Heading>
+          <Stack spacing={4}>
+            <Stack
+              direction={"row"}
+              align="flex-end"
+              justify={"center"}
+              flexShrink={1}
+            >
+              <>
+                {variants.length > 1 && (
                   <Select
                     minW={"200px"}
                     value={activeVariant.id}
@@ -179,60 +205,54 @@ const ProductPage = ({
                       handleActiveVariantChange(e.target.value);
                     }}
                   >
-                    {variants.map((v: { node: VariantType }, i: number) => (
-                      <option key={v.node.id} value={i}>
-                        {v.node.title}
+                    {variants.map((v: { node: VariantType }) => (
+                      <option key={v.node.id} value={v.node.id}>
+                        Size: {v.node.title}
                       </option>
                     ))}
                   </Select>
-                </Stack>
-              )}
-            </>
-            <HStack w="140px">
-              <Button fontSize="2xl" {...dec}>
-                -
-              </Button>
-              <Input {...input} textAlign="center" />
-              <Button fontSize="2xl" {...inc}>
-                +
-              </Button>
-            </HStack>
-          </Stack>
-          <HStack>
+                )}
+              </>
+              <HStack>
+                <Button fontSize="2xl" variant="ghost" {...dec}>
+                  -
+                </Button>
+                <Input
+                  w="50px"
+                  {...input}
+                  variant="outline"
+                  textAlign="center"
+                />
+                <Button fontSize="2xl" variant="ghost" {...inc}>
+                  +
+                </Button>
+              </HStack>
+            </Stack>
+
             <Box
               pos={["fixed", "static"]}
               bottom={7}
-              zIndex={2}
+              zIndex={[2, 0]}
               right={2}
               px={[2, 0]}
-              w={["75%", "inherit"]}
+              w={["75%", "full"]}
             >
               <Button
-                w={["full", 140]}
+                w={["full"]}
                 onClick={addToCart}
                 isDisabled={!activeVariant?.availableForSale}
+                size="lg"
               >
                 {activeVariant?.availableForSale ? "Add To Cart" : "Sold Out!"}
               </Button>
             </Box>
-            <Text fontSize={28} fontWeight={600}>
-              {formatter.format(parseInt(activeVariant.priceV2.amount))}
-            </Text>
-          </HStack>
-          <Flex w="full" justify={["center", "flex-start"]}>
-            <AspectRatio ratio={166 / 42} minW="166">
-              <Image
-                src={"/images/shop-pay/shop_pay_with_affirm_color.png"}
-                alt="Shop Pay Installments logo"
-              />
-            </AspectRatio>
-          </Flex>
+          </Stack>
           {!activeVariant?.availableForSale && (
             <Link onClick={() => window.Tawk_API.maximize()}>
               Let me know when this product is back in stock!
             </Link>
           )}
-          <Accordion w="full" allowToggle>
+          <Accordion w="full" allowToggle pt={10}>
             <AccordionItem>
               <h2>
                 <AccordionButton>
@@ -250,6 +270,26 @@ const ProductPage = ({
               </AccordionPanel>
             </AccordionItem>
           </Accordion>
+          <HStack w="full" justify={["center", "flex-start"]} spacing={6}>
+            <Image
+              minW="166"
+              maxW="166"
+              src={"/images/payment-options/shop_pay_with_affirm_color.png"}
+              alt="Shop Pay Installments logo"
+            />
+            <Image
+              minH="42"
+              maxH="42"
+              src={"/images/payment-options/apple_pay_mark.svg"}
+              alt="Apple Pay logo"
+            />
+            <Image
+              minH="42"
+              maxH="42"
+              src={"/images/payment-options/GPay_Acceptance_Mark_800.png"}
+              alt="Apple Pay logo"
+            />
+          </HStack>
         </Stack>
       </Stack>
       {collection && (
@@ -337,17 +377,51 @@ const ProductPage = ({
           </Container>
         </Box>
       )}
-      <Container maxW="container.xl" pt={20} pb={20} centerContent>
-        {yjsLoaded && (
-          <div
-            className="yotpo yotpo-main-widget"
-            data-product-id={product.id.split("/")[4]}
-            data-price={activeVariant.priceV2.amount}
-            data-currency={"USD"}
-            data-name={product.title}
-            data-url={`${process.env.NODE_ENV === "production" ? 'https://torsalonproducts.com/product/' : 'http://localhost:3000'}/${product.handle}`}
-            data-image-url={product.images.edges[0]?.node.url}
-          ></div>
+      <Container
+        ref={reviewsSection}
+        maxW="container.lg"
+        pt={40}
+        pb={20}
+        centerContent
+        key={product.id.split("/")[4]}
+      >
+        {reviews && reviews.reviews.length > 0 && (
+          <Box w="full" py={12}>
+            <Heading>Reviews</Heading>
+            <Divider mt={6} />
+          </Box>
+        )}
+        {reviews &&
+          reviews.reviews.map((r: any) => (
+            <Stack key={r.id} spacing={2}>
+              <HStack>
+                <RatingStar id={r.id.toString()} rating={r.score} />
+                <Text>Verified Review</Text>
+              </HStack>
+              <Text
+                fontSize="2xl"
+                textTransform={"capitalize"}
+                dangerouslySetInnerHTML={{
+                  __html: r.title,
+                }}
+              />
+              <Text
+                dangerouslySetInnerHTML={{
+                  __html: r.content,
+                }}
+              ></Text>
+              <Text fontStyle={"italic"} textTransform="capitalize">
+                {r.user.display_name}
+              </Text>
+            </Stack>
+          ))}
+        {reviews && reviews.reviews.length === 0 && (
+          <Stack spacing={2} textAlign={"center"}>
+            <Heading size="lg">No Reviews Yet</Heading>
+            <Text>
+              Get up to 30% off for writing a review on a past purchase!
+            </Text>
+          </Stack>
         )}
       </Container>
     </>
@@ -366,7 +440,7 @@ function PhotoCarousel({ images }: any) {
   };
 
   return (
-    <Box pos="relative" maxW={["100%", "50%"]} minW={["100%", "50%"]}>
+    <Box pos="relative" top={0} maxW={["100%", "50%"]} minW={["100%", "50%"]}>
       <AspectRatio ratio={1}>
         <AnimatePresence exitBeforeEnter>
           <MotionImage
@@ -469,7 +543,7 @@ export async function getStaticPaths() {
 
   return {
     paths: res.products.edges.map((edge: any) => ({
-      params: { handle: edge.node.handle },
+      params: { handle: edge.node.handle, key: edge.node.handle },
     })),
     fallback: true,
   };
@@ -716,9 +790,16 @@ export const getStaticProps: GetStaticProps = async (context) => {
     return null;
   }
 
+  const reviews = await fetch(
+    `https://api-cdn.yotpo.com/v1/widget/bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l/products/${
+      res.product.id.split("/")[4]
+    }/reviews.json`
+  ).then((res) => res.json());
+
   return {
     props: {
-      handle: handle,
+      key: handle,
+      reviews: reviews.response,
       product: res.product,
       collection: collectionRes.collection
         ? collectionRes.collection

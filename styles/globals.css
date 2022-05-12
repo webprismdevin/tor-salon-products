@@ -35,3 +35,8 @@ div[data-framer-component-type='Text'] span {
   font-size: var(--framer-font-size) !important;
   line-height: var(--framer-line-height) !important;
 }
+
+.rating-star {
+  padding: 0px !important;
+  margin: 0px !important;
+}
