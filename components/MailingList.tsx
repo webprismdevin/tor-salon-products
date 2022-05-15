@@ -65,10 +65,12 @@ export default function MailingList() {
 
     if (!response) {
       setStatus("failure");
-      // window.dataLayer.push({
-      //   event: "join_email_list",
-      //   method: "popup"
-      // })
+      if(process.env.NODE_ENV === "production"){
+        window.dataLayer.push({
+          event: "join_email_list",
+          method: "popup"
+        })
+      }
     }
 
     if (response) {

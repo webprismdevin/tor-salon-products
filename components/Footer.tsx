@@ -52,11 +52,13 @@ const Footer = () => {
     if (response) {
       setEmail("");
       setStatus("success");
-      window.dataLayer.push({
-        event: "join_email_list",
-        signUpMethod: "popup",
-        callback: () => console.log("fired join_email_list event to GTM")
-      })
+      if (process.env.NODE_ENV === "production") {
+        window.dataLayer.push({
+          event: "join_email_list",
+          signUpMethod: "popup",
+          callback: () => console.log("fired join_email_list event to GTM"),
+        });
+      }
     }
   }
 
@@ -127,7 +129,12 @@ const Footer = () => {
               >
                 Contact
               </Link>
-              <Link fontSize={"sm"} href="https://dovetale.com/community/apply/GhTbYLIXsL4">Ambassadors</Link>
+              <Link
+                fontSize={"sm"}
+                href="https://dovetale.com/community/apply/GhTbYLIXsL4"
+              >
+                Ambassadors
+              </Link>
               {/* <FooterLink href={"/our-friends"} text={"Our Friends"} /> */}
             </Stack>
           </Stack>

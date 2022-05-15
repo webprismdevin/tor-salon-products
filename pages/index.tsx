@@ -21,6 +21,8 @@ import { gql, GraphQLClient } from "graphql-request";
 import { motion } from "framer-motion";
 import { FiArrowRight, FiBookOpen, FiCreditCard, FiGift } from "react-icons/fi";
 import dynamic from "next/dynamic";
+import { getClient } from "../lib/sanity";
+import { groq } from "next-sanity";
 
 const Follow = dynamic(() => import("../components/Follow"), { ssr: false })
 const Testimonials = dynamic(() => import("../components/Home/Testimonials"))
@@ -30,12 +32,12 @@ const HairType = dynamic(() => import("../components/Home/HairType"))
 
 const MotionBox = motion<BoxProps>(Box);
 
-function HomePage({ products, styling, body }: any) {
+function HomePage({ products, styling, body, homepageData }: any) {
   return (
     <>
       <Head>
-        <title>Uncompromised Hair + Body Products | TOR Salon Products</title>
-        <meta name="description" content="TOR is taking a different approach to hair + body products - we don&apos;t compromise, and we don&apos;t ask our customers to. That&apos;s why we started with 3 hair care lines based on the specific needs of each hair type." />
+        <title>{homepageData.seo_title} | TOR Salon Products</title>
+        <meta name="description" content={homepageData.seo_description}/>
       </Head>
       <Container py={20} centerContent pos="relative" maxW="container.xl">
         <Stack spacing={4} textAlign={"center"}>
@@ -98,6 +100,9 @@ function HomePage({ products, styling, body }: any) {
             their unique needs - not for mass appeal. Made in the USA.
           </Text>
         </Stack>
+      </Container>
+      <Container maxW="container.xl" py={8}>
+        <Heading>What&apos;s Your Hair Type?</Heading>
       </Container>
       <Flex
         borderColor="#222222"
@@ -614,9 +619,13 @@ export async function getStaticProps() {
     throw Error("Unable to retrieve Shopify Products. Please check logs");
   }
 
+  const aboutPageQuery = groq`*[_type == "homepage"][0]`;
+
+  const homepageData = await getClient(false).fetch(aboutPageQuery, {});
+
   return {
     props: {
-      // homepageData: null,
+      homepageData,
       styling: res.styling.products.edges,
       collection: res.featured,
       products: res.featured.products.edges,
