@@ -4,7 +4,6 @@ import {
   VStack,
   Text,
   Button,
-  Link,
   Divider,
   Icon,
   useDisclosure,
@@ -20,7 +19,6 @@ import {
   HStack,
   Input,
   AspectRatio,
-  IconButton,
   CloseButton,
   Stack,
   Tooltip,
@@ -28,7 +26,6 @@ import {
 import { useEffect, useContext, useState } from "react";
 import {
   AiOutlineShopping,
-  AiOutlineDelete,
   AiOutlineShoppingCart,
   AiOutlineInfoCircle,
 } from "react-icons/ai";
@@ -151,16 +148,21 @@ const Cart = () => {
   }
 
   async function handleCheckout() {
-    if (process.env.NODE_ENV === "production") {
-      window.dataLayer.push({
-        event: "begin_checkout",
-        eventCallback: () => (window.location.href = cart.checkoutUrl),
-        eventTimeout: 2000,
-      });
-    }
-    if (process.env.NODE_ENV !== "production") {
-      window.location.href = cart.checkoutUrl;
-    }
+    window.dataLayer.push({
+      'event': 'begin_checkout',
+      'eventCallback': () => (window.location.href = cart.checkoutUrl),
+      'eventTimeout': 2000,
+    })
+    // if (process.env.NODE_ENV === "production") {
+    //   window.dataLayer.push({
+    //     event: "begin_checkout",
+    //     eventCallback: () => (window.location.href = cart.checkoutUrl),
+    //     eventTimeout: 2000,
+    //   });
+    // }
+    // if (process.env.NODE_ENV !== "production") {
+    //   window.location.href = cart.checkoutUrl;
+    // }
   }
 
   return (

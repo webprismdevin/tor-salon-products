@@ -3,15 +3,12 @@ import {
   extendTheme,
   ChakraProvider,
   ColorModeScript,
-  Spinner,
-  Box,
 } from "@chakra-ui/react";
 import { theme as defaultTheme, ThemeConfig } from "@chakra-ui/theme";
 import { useEffect, useState } from "react";
 import CartContext from "../lib/CartContext";
 import ShopContext from "../lib/shop-context";
 import Head from "next/head";
-import TagManager from "react-gtm-module";
 import dynamic from "next/dynamic";
 import themeConfig from "../lib/theme";
 import MailingList from "../components/MailingList";
@@ -19,7 +16,6 @@ import "@fontsource/raleway/400.css";
 import "../styles/globals.css";
 import Script from "next/script";
 import { useRouter } from "next/router";
-import * as fbq from "../lib/fpixel";
 import Follow from "../components/Follow";
 
 const NavBar = dynamic(() => import("../components/NavBar"));
@@ -34,19 +30,6 @@ declare global {
 }
 
 const customTheme: ThemeConfig = extendTheme(defaultTheme, themeConfig);
-
-const tagManagerArgs = {
-  gtmId: "GTM-MKG7C6H",
-};
-
-if (process.env.NODE_ENV === "production" && process.browser) {
-  console.log("GTM in production");
-  TagManager.initialize(tagManagerArgs);
-}
-// if (process.env.NODE_ENV === "development" && process.browser) {
-//   console.log("GTM in development");
-//   TagManager.initialize(tagManagerArgs);
-// }
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -63,20 +46,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       };
     }
   }, []);
-
-  useEffect(() => {
-    // This pageview only triggers the first time (it's important for Pixel to have real information)
-    fbq.pageview();
-
-    const handleRouteChange = () => {
-      fbq.pageview();
-    };
-
-    router.events.on("routeChangeComplete", handleRouteChange);
-    return () => {
-      router.events.off("routeChangeComplete", handleRouteChange);
-    };
-  }, [router.events]);
 
   return (
     <>
@@ -109,35 +78,32 @@ function MyApp({ Component, pageProps }: AppProps) {
           </>
         )}
       </ChakraProvider>
-      <Script
-        id="fb_pixel"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `!function(f,b,e,v,n,t,s)
-        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-        n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t,s)}(window, document,'script',
-        'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', ${fbq.FB_PIXEL_ID});
-        fbq('track', 'PageView');`,
-        }}
-      />
-      {/* <Script
-        id="yotpo_reviews"
-        src="/yotpo.js"
-        // onLoad={() => {
-        //   setLoaded(true);
-        // }}
-      /> */}
-      {/* // eslint-disable-next-line @next/next/no-img-element */}
+      {process.env.NODE_ENV === "production" && (
+        <Script
+          id="tagManager"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+          'https://metrics.torsalonproducts.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','GTM-MKG7C6H');`,
+          }}
+        />
+      )}
       <noscript
         dangerouslySetInnerHTML={{
           __html: `<img src="//api.yotpo.com/conversion_tracking.gif?app_key=bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l&order_id={{order_name|handleize}}&order_amount={{subtotal_price|money_without_currency}}&order_currency={{ shop.currency }}" width="1" height="1" />`,
         }}
       />
+      {process.env.NODE_ENV === "development" && (
+        <noscript
+          dangerouslySetInnerHTML={{
+            __html: `<iframe src="https://metrics.torsalonproducts.com/ns.html?id=GTM-MKG7C6H"
+          height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
+          }}
+        />
+      )}
     </>
   );
 }

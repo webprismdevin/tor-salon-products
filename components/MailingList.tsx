@@ -34,7 +34,7 @@ export default function MailingList() {
         controls.start("animate");
         setShown(true);
       }
-    }, 250);
+    }, 100);
 
     return () => clearInterval(interval);
   }, [popupShown]);

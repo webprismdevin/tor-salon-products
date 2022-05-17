@@ -1,5 +1,4 @@
 import {
-  Heading,
   Text,
   Container,
   Divider,
@@ -10,16 +9,32 @@ import {
   Box,
   SimpleGrid,
   GridItem,
-  Flex,
   Button,
+  Spinner,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import Head from "next/head";
-import * as fbq from '../../lib/fpixel'
 import { useEffect, useState } from "react";
+import formatter from "../../lib/formatter";
+import { createHash } from "crypto";
 
-export default function ThankYou({ data, order_id }: any) {
+declare interface LineItemType {
+  node: {id: string; image: {url: string}; name: string; currentQuantity: number }
+}
+
+export default function ThankYou() {
   const [auth, setAuth] = useState(false);
+  const [data, setData] = useState<any>(null);
+
+  const getOrder = async (id: string) => {
+    const response = await fetch(`/api/get-order?orderId=${id}`).then((res) =>
+      res.json()
+    );
+
+    console.log(response.response.order);
+
+    setData(response.response.order);
+  };
 
   useEffect(() => {
     async function checkToken() {
@@ -32,36 +47,56 @@ export default function ThankYou({ data, order_id }: any) {
       if (token) setAuth(true);
     }
 
-    const urlParams = new URLSearchParams(window.location.search);
-
-    console.log(urlParams.get("event"));
-
-    if (
-      // document.referrer === "https://checkout.torsalonproducts.com/" &&
-      urlParams.get("event") === "purchase"
-    ) {
-      fbq.event('Purchase', { currency: 'USD', value: data.currentTotalPriceSet.shopMoney.amount })
-
-      window.dataLayer.push({
-        event: "purchase",
-        ecommerce: {
-          value: data.currentTotalPriceSet.shopMoney.amount,
-          currency: "USD",
-          transaction_id: order_id
-        }
-      });
-    }
-
     checkToken();
   }, []);
 
-  if (!data) return null;
+  useEffect(() => {
+    getOrder(window.location.pathname.split("/")[2]);
+  }, []);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    if (urlParams.get("event") === "purchase" && data) {
+      const user_data = {
+        em: createHash("sha256").update(data.email).digest("hex")
+      };
+
+      const orderId = window.location.pathname.split("/")[2];
+
+      const itemsArray = data.lineItems.edges.map((i:LineItemType) => ({'item_id': i.node.id, 'item_name': i.node.name}))
+
+      window.dataLayer.push({
+        'event': 'purchase',
+        'value': data.currentTotalPriceSet.shopMoney.amount,
+        'transaction_id': orderId,
+        'currency': "USD",
+        'items': itemsArray,
+        'eventModel': {
+          'value': data.currentTotalPriceSet.shopMoney.amount,
+          'currency': "USD",
+          'transaction_id': orderId,
+        }
+      })
+
+    }
+  }, [data]);
+
+  if (!data)
+    return (
+      <Container py={20} centerContent>
+        <Spinner />
+      </Container>
+    );
 
   return (
     <>
       <Head>
         <title>Thank You!</title>
-        <meta name="description" content="Thank you for your purchase! You'll receive an order confirmation at the email your provided during checkout!"/>
+        <meta
+          name="description"
+          content="Thank you for your purchase! You'll receive an order confirmation at the email your provided during checkout!"
+        />
       </Head>
       <Container py={20} maxW="container.xl">
         <SimpleGrid templateColumns={"repeat(3, 1fr)"}>
@@ -69,7 +104,7 @@ export default function ThankYou({ data, order_id }: any) {
             <Stack spacing={8} align="flex-start">
               <Box>
                 <Text fontSize="2xl" fontWeight={600}>
-                  Thank you {data.displayAddress?.firstName}!
+                  Thank you, {data.displayAddress?.firstName}!
                 </Text>
                 <Text>
                   We appreciate your business, and look forward to shipping your
@@ -117,22 +152,30 @@ export default function ThankYou({ data, order_id }: any) {
         </SimpleGrid>
         {!auth && (
           <>
-            <Divider />
+            <Divider pt={20} />
             <VStack py={[5, 10]}>
               <Text fontWeight={600}>Want to track your order?</Text>
               <Text>
-                <NextLink href="/login" passHref>
-                  <Link>Create an account</Link>
-                </NextLink>{" "}
+                
+                  <NextLink href="/login" passHref>
+                  <Link textDecor={"underline"}>Create an account</Link>
+                  </NextLink>
+                {" "}
                 with the same email you used for your purchase. Or{" "}
                 <NextLink href="/login" passHref>
-                  <Link>login</Link>
+                  <Link textDecor={"underline"}>login</Link>
                 </NextLink>
+                .
               </Text>
             </VStack>
           </>
         )}
       </Container>
+      <noscript
+        dangerouslySetInnerHTML={{
+          __html: `<img src="https://www.facebook.com/tr?id=${process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID}&ev=Purchase&eid=${window.location.pathname.split("/")[2]}"/>`
+        }}
+      />
     </>
   );
 }
@@ -165,21 +208,21 @@ function PurchaseDetails({ data }: any) {
     <SimpleGrid templateColumns={"repeat(2, 1fr)"}>
       <GridItem>Subtotal:</GridItem>
       <GridItem textAlign={"right"}>
-        {data.currentSubtotalPriceSet.shopMoney.amount}
+        {formatter.format(data.currentSubtotalPriceSet.shopMoney.amount)}
       </GridItem>
       <GridItem>Shipping:</GridItem>
       <GridItem textAlign={"right"}>
-        {data.totalShippingPriceSet.shopMoney.amount}
+        {formatter.format(data.totalShippingPriceSet.shopMoney.amount)}
       </GridItem>
       <GridItem>Tax:</GridItem>
       <GridItem textAlign={"right"}>
-        {data.currentTotalTaxSet.shopMoney.amount}
+        {formatter.format(data.currentTotalTaxSet.shopMoney.amount)}
       </GridItem>
       <GridItem fontWeight={600} fontSize={18} mt={2}>
         Total:
       </GridItem>
       <GridItem textAlign={"right"} fontWeight={600} fontSize={18} mt={2}>
-        {data.currentTotalPriceSet.shopMoney.amount}
+        {formatter.format(data.currentTotalPriceSet.shopMoney.amount)}
       </GridItem>
     </SimpleGrid>
   );
@@ -224,20 +267,20 @@ function LineItem({ product }: any) {
   );
 }
 
-export async function getServerSideProps(context: any) {
-  const base_url =
-    process.env.NODE_ENV === "production"
-      ? process.env.NEXT_PUBLIC_SHOP_URL
-      : "http://localhost:3000";
+// export async function getServerSideProps(context: any) {
+//   const base_url =
+//     process.env.NODE_ENV === "production"
+//       ? process.env.NEXT_PUBLIC_SHOP_URL
+//       : "http://localhost:3000";
 
-  const result = await fetch(
-    `${base_url}/api/get-order?orderId=${context.params.id}`
-  ).then((res) => res.json());
+//   const result = await fetch(
+//     `${base_url}/api/get-order?orderId=${context.params.id}`
+//   ).then((res) => res.json());
 
-  return {
-    props: {
-      data: result.response.order,
-      order_id: context.params.id
-    },
-  };
-}
+//   return {
+//     props: {
+//       data: result.response.order,
+//       order_id: context.params.id,
+//     },
+//   };
+// }
