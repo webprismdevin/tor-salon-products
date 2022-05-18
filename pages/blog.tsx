@@ -35,7 +35,7 @@ const Posts = ({ posts }: any) => {
                 <AspectRatio ratio={3/2} minH={['auto', '100%']} minW={['100%', 400]}>
                     <Image src={imageBuilder(post.mainImage).url()!} alt="blog post photo" objectFit="cover"/>
                 </AspectRatio>
-                <VStack py={8} pl={[0, 8]} alignItems={"flex-start"} spacing={3} minW={['auto']}>
+                <VStack py={8} px={[0, 8]} alignItems={"flex-start"} spacing={3} minW={['auto']}>
                     <Heading size="lg">
                       {post.title}
                     </Heading>
@@ -53,7 +53,7 @@ const Posts = ({ posts }: any) => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const query = encodeURIComponent(
-    `*[ _type == "post" ] | order (publishedAt desc)`
+    `*[ _type == "post" ] | order (_createdAt desc)`
   );
 
   const url = `https://${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}.api.sanity.io/v1/data/query/production?query=${query}`;
