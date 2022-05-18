@@ -1,6 +1,6 @@
 import { GetStaticProps } from "next";
 import Head from "next/head";
-import { Box, Stack, Heading, Text, Container, AspectRatio, Image, Button, VStack, Divider } from "@chakra-ui/react"
+import { Box, Stack, Heading, Text, Container, AspectRatio, Image, Button, VStack, Divider, HStack } from "@chakra-ui/react"
 import { imageBuilder } from "../lib/sanity";
 import { useRouter } from "next/router";
 
@@ -35,12 +35,13 @@ const Posts = ({ posts }: any) => {
                 <AspectRatio ratio={3/2} minH={['auto', '100%']} minW={['100%', 400]}>
                     <Image src={imageBuilder(post.mainImage).url()!} alt="blog post photo" objectFit="cover"/>
                 </AspectRatio>
-                <VStack py={8} px={[0, 8]} alignItems={"flex-start"} spacing={3} minW={['auto']}>
+                <VStack py={8} px={[2, 8]} alignItems={"flex-start"} spacing={3} minW={['auto']}>
                     <Heading size="lg">
                       {post.title}
                     </Heading>
                     <Text mt={2}>{post.subtitle}</Text>
                     <Button onClick={() => router.push(`/blog/${post.slug.current}`)}>Read more →</Button>
+                    <HStack></HStack>
                 </VStack>
               </Stack>
             </Box>
