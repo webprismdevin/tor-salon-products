@@ -37,14 +37,14 @@ export default function ProductFeature({ reference }: any) {
               <Text maxW={500} noOfLines={4}>
                 {reference.description}
               </Text>
-              <Text fontSize={32} fontWeight={600}>
+              <Text fontSize={32} fontWeight={400}>
                 {formatter.format(reference.priceRange.minVariantPrice.amount)}
                 {reference.priceRange.minVariantPrice?.amount !==
                 reference.priceRange.maxVariantPrice.amount
                   ? ` - ${formatter.format(
                       reference.priceRange.maxVariantPrice.amount
                     )}`
-                  : ""}
+                  : ""}{reference.compareAtPriceRange.maxVariantPrice.amount !== "0.0" && <span style={{textDecoration: 'line-through', marginLeft: 12, opacity: 0.4}}>{formatter.format(reference.compareAtPriceRange.maxVariantPrice.amount)}</span>}
               </Text>
             </Stack>
           </NextLink>
