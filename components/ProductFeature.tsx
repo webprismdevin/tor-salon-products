@@ -23,9 +23,9 @@ export default function ProductFeature({ reference }: any) {
         align={["center", "flex-start"]}
       >
         <NextLink href={`/product/${reference.handle}`} passHref>
-          <AspectRatio ratio={1 / 1} boxSize={[320, 400]}  cursor="pointer">
+          <AspectRatio ratio={1 / 1} boxSize={[320, 400]} cursor="pointer">
             <Image
-              src={reference?.images.edges[0].node.url}
+              src={reference?.images.edges[0]?.node.url}
               alt={reference?.title}
             />
           </AspectRatio>
@@ -38,9 +38,13 @@ export default function ProductFeature({ reference }: any) {
                 {reference.description}
               </Text>
               <Text fontSize={32} fontWeight={600}>
-                {formatter.format(
-                  reference.variants.edges[0].node.priceV2.amount
-                )}
+                {formatter.format(reference.priceRange.minVariantPrice.amount)}
+                {reference.priceRange.minVariantPrice?.amount !==
+                reference.priceRange.maxVariantPrice.amount
+                  ? ` - ${formatter.format(
+                      reference.priceRange.maxVariantPrice.amount
+                    )}`
+                  : ""}
               </Text>
             </Stack>
           </NextLink>

@@ -1,6 +1,7 @@
 import { Text, GridItem, AspectRatio, Image } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
+import formatter from "../lib/formatter";
 
 const Product = ({
   product,
@@ -15,7 +16,6 @@ const Product = ({
   return (
     <NextLink href={`/product/${prod.handle}`} passHref>
       <GridItem
-        // onClick={() => router.push(`/product/${prod.handle}`)}
         colSpan={[3, 1]}
         textAlign="center"
         placeItems={"center"}
@@ -23,12 +23,13 @@ const Product = ({
         pos={"relative"}
         cursor={"pointer"}
       >
-        <AspectRatio ratio={1 / 1} boxSize={300}>
+        <AspectRatio ratio={1 / 1} boxSize={300} mb={4}>
           <Image src={prod.images.edges[0]?.node.url} alt={prod.title} borderRadius={6} />
         </AspectRatio>
-        <Text fontSize={fontSize ? fontSize : 32} maxW="300px" lineHeight={1.3} minH={["none", 84]}>
+        <Text fontSize={fontSize ? fontSize : 32} maxW="300px" lineHeight={1.3} mb={2}>
           {prod.title}
         </Text>
+        <Text>{formatter.format(prod.priceRange.minVariantPrice.amount)}{prod.priceRange.minVariantPrice?.amount !== prod.priceRange.maxVariantPrice.amount ? ` - ${formatter.format(prod.priceRange.maxVariantPrice.amount)}` : ""}</Text>
       </GridItem>
     </NextLink>
   );

@@ -200,6 +200,9 @@ export async function getStaticProps(context: any) {
                         maxVariantPrice {
                           amount
                         }
+                        minVariantPrice {
+                          amount
+                        }
                       }
                       compareAtPriceRange {
                         maxVariantPrice {

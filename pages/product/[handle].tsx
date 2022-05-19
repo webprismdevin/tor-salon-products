@@ -295,15 +295,15 @@ const ProductPage = ({
       {collection && (
         <Box bg={collection.color?.value ? collection.color.value : "white"}>
           <Flex flexDir={["column-reverse", "row"]}>
-            <Box w={["full", "50%"]} px={[8, 20]} py={[20, 40]} pos="relative">
+            <Box w={["full", "60%"]} pl={[8, 20]} pr={[8, 40]} py={[20, 40]} pos="relative">
               <Image
                 src={collection.typeImage?.reference.image.url}
                 alt=""
                 pos="absolute"
-                top={0}
+                top={[0, 10]}
                 opacity={0.1}
-                w="100%"
-                left={0}
+                w="70%"
+                left={[0, 20]}
                 zIndex={0}
               />
               <Stack
@@ -350,19 +350,11 @@ const ProductPage = ({
                 </Stack>
               </Stack>
             </Box>
-            <AspectRatio ratio={1 / 1} w={["full", "50%"]}>
+            <AspectRatio ratio={1 / 1} w={["full", "40%"]}>
               <Image src={collection?.image?.url} alt="" />
             </AspectRatio>
           </Flex>
           <Container maxW="container.xl" centerContent py={20}>
-            <Heading
-              size="md"
-              fontWeight={600}
-              mb={20}
-              textTransform="uppercase"
-            >
-              Other items in this line
-            </Heading>
             <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
               {collection.products.edges.map((p: any, i: number) => (
                 <Product product={p} fontSize={24} key={i} />
@@ -527,6 +519,14 @@ export async function getStaticPaths() {
               maxVariantPrice {
                 amount
               }
+              minVariantPrice {
+                amount
+              }
+            }
+            compareAtPriceRange {
+              maxVariantPrice {
+                amount
+              }
             }
           }
         }
@@ -588,7 +588,15 @@ export const getStaticProps: GetStaticProps = async (context) => {
                   handle
                   title
                   priceRange {
+                    maxVariantPrice {
+                      amount
+                    }
                     minVariantPrice {
+                      amount
+                    }
+                  }
+                  compareAtPriceRange {
+                    maxVariantPrice {
                       amount
                     }
                   }
@@ -679,6 +687,14 @@ export const getStaticProps: GetStaticProps = async (context) => {
         maxVariantPrice {
           amount
         }
+        minVariantPrice {
+          amount
+        }
+      }
+      compareAtPriceRange {
+        maxVariantPrice {
+          amount
+        }
       }
     }
   }`;
@@ -699,13 +715,16 @@ export const getStaticProps: GetStaticProps = async (context) => {
         image {
           url
         }
-        products(first: 3) {
+        products(first: 3, sortKey: BEST_SELLING) {
           edges {
             node {
               handle
               title
               priceRange {
                 minVariantPrice {
+                  amount
+                }
+                maxVariantPrice {
                   amount
                 }
               }

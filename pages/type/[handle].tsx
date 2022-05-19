@@ -40,7 +40,7 @@ export default function CollectionPage({
             src={data.typeImage.reference.image.url}
             alt=""
             pos={["absolute"]}
-            top={[20, 0]}
+            top={[20, 20]}
             opacity={0.1}
             w="80%"
             left={["10%", 0]}
@@ -94,12 +94,10 @@ export default function CollectionPage({
           <Image src={data.image.url} alt="" />
         </AspectRatio>
       </Flex>
-      {data.collectionFeature?.reference && (
-        <ProductFeature reference={data.collectionFeature.reference} />
-      )}
+      <ProductFeature reference={data.products.edges[0].node} />
       <Container maxW="container.xl" pt={10} pb={20}>
         <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
-          {data.products.edges.map((p: any) => (
+          {data.products.edges.map((p: any, index: number) => index !== 0 && (
             <Product product={p} key={p.node.id} fontSize={24} />
           ))}
         </SimpleGrid>
@@ -219,6 +217,9 @@ export async function getStaticProps(context: any) {
               maxVariantPrice {
                 amount
               }
+              minVariantPrice {
+                amount
+              }
             }
             compareAtPriceRange {
               maxVariantPrice {
@@ -251,6 +252,9 @@ export async function getStaticProps(context: any) {
             }
             priceRange {
               maxVariantPrice {
+                amount
+              }
+              minVariantPrice {
                 amount
               }
             }

@@ -287,9 +287,9 @@ function CartLineItem({
     >
       <AspectRatio
         ratio={1 / 1}
-        flexGrow={1}
-        minW={["100px", "120px"]}
-        maxW={["100px", "180px"]}
+        flexGrow={0}
+        minW={["100px", "140px"]}
+        maxW={["100px", "140px"]}
       >
         <Image
           borderRadius={6}
@@ -297,9 +297,9 @@ function CartLineItem({
           alt={product.node.merchandise.product.title}
         />
       </AspectRatio>
-      <Stack spacing={6}>
+      <Stack spacing={6} flexGrow={1}>
         <Stack direction="row">
-          <Box>
+          <Box flexGrow={1}>
             <Text fontSize={[16, 18]} fontWeight="bold">
               {product.node.merchandise.product.title}
             </Text>
