@@ -22,8 +22,9 @@ import {
   CloseButton,
   Stack,
   Tooltip,
+  Progress,
 } from "@chakra-ui/react";
-import { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import {
   AiOutlineShopping,
   AiOutlineShoppingCart,
@@ -149,20 +150,10 @@ const Cart = () => {
 
   async function handleCheckout() {
     window.dataLayer.push({
-      'event': 'begin_checkout',
-      'eventCallback': () => (window.location.href = cart.checkoutUrl),
-      'eventTimeout': 2000,
-    })
-    // if (process.env.NODE_ENV === "production") {
-    //   window.dataLayer.push({
-    //     event: "begin_checkout",
-    //     eventCallback: () => (window.location.href = cart.checkoutUrl),
-    //     eventTimeout: 2000,
-    //   });
-    // }
-    // if (process.env.NODE_ENV !== "production") {
-    //   window.location.href = cart.checkoutUrl;
-    // }
+      event: "begin_checkout",
+      eventCallback: () => (window.location.href = cart.checkoutUrl),
+      eventTimeout: 2000,
+    });
   }
 
   return (
@@ -202,27 +193,48 @@ const Cart = () => {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>
-              <Text fontSize={[18, 20]} fontWeight="bold">
+            <Stack spacing={2}>
+              <Text
+                fontSize={"2xl"}
+                textTransform={"uppercase"}
+                fontWeight="bold"
+              >
                 Your Cart
               </Text>
+              <Divider />
+              <Text fontSize={"md"}>Free U.S. shipping on orders of $100+</Text>
+              <Divider />
+            </Stack>
           </DrawerHeader>
-          <DrawerBody py={4} pl={[4]} pr={[4, 6]}>
+          <DrawerBody pl={[4]} pr={[4, 6]}>
             <VStack
-              pt={8}
               justifyContent={cart.lines.length === 0 ? "center" : "flex-start"}
               alignItems={cart.lines.length === 0 ? "center" : "flex-start"}
               h="full"
+              w="full"
             >
               {cart.lines.length === 0 && <EmptyCart />}
               {cart.lines.length > 0 && (
                 <>
                   {cart.lines.map((l: any) => (
-                    <CartLineItem
-                      key={l.node.id}
-                      product={l}
-                      removeItem={removeItem}
-                    />
+                    <React.Fragment key={l.node.id}>
+                      <CartLineItem
+                        product={l}
+                        removeItem={removeItem}
+                      />
+                      <Divider/>
+                    </React.Fragment>
                   ))}
+                  <Box py={4} w="full">
+                    {cart.estimatedCost.totalAmount.amount < 100 ? 
+                      <Text textAlign={"center"}>Add ${100 - cart.estimatedCost.totalAmount.amount} for free shipping!</Text>
+                    :
+                    <Text>Free shipping unlocked!</Text>
+                    }
+                    <Text textAlign={"right"} fontSize="xs">$100</Text>
+                    <Progress value={cart.estimatedCost.totalAmount.amount} colorScheme={cart.estimatedCost.totalAmount.amount < 100 ? "blackAlpha" : "green"} />
+                  </Box>
+                  <Divider />
                 </>
               )}
             </VStack>
@@ -257,7 +269,7 @@ const Cart = () => {
                     </span>
                   </Tooltip>
                 </HStack>
-                <Button size="lg" onClick={handleCheckout} w="full">
+                <Button fontSize={"2xl"} size="lg" onClick={handleCheckout} w="full">
                   Checkout
                 </Button>
               </VStack>
@@ -281,9 +293,9 @@ function CartLineItem({
       direction="row"
       w="full"
       justify={"space-between"}
-      pb={[4, 0]}
-      borderBottom={"2px solid"}
-      borderBottomColor={"gray.400"}
+      pb={[4, 2]}
+      // borderBottom={"2px solid"}
+      // borderBottomColor={"gray.400"}
     >
       <AspectRatio
         ratio={1 / 1}
