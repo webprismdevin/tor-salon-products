@@ -156,7 +156,7 @@ const Cart = () => {
     });
   }
 
-  async function addToCart(id) {
+  async function addToCart(id:string) {
     const response = await fetch("/api/addtocart", {
       method: "POST",
       body: JSON.stringify({
