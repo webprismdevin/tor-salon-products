@@ -156,6 +156,27 @@ const Cart = () => {
     });
   }
 
+  async function addToCart(id) {
+    const response = await fetch("/api/addtocart", {
+      method: "POST",
+      body: JSON.stringify({
+        variantId: id,
+        cartId: cart.id,
+        qty: 1,
+      }),
+    }).then((res) => res.json());
+
+    setCart({
+      ...cart,
+      status: "dirty",
+      lines: response.response.cartLinesAdd.cart.lines,
+    });
+  }
+
+  const howManyLipBalms = Math.ceil(
+    (100 - cart.estimatedCost?.totalAmount.amount) / 4
+  );
+
   return (
     <>
       <Box
@@ -218,21 +239,60 @@ const Cart = () => {
                 <>
                   {cart.lines.map((l: any) => (
                     <React.Fragment key={l.node.id}>
-                      <CartLineItem
-                        product={l}
-                        removeItem={removeItem}
-                      />
-                      <Divider/>
+                      <CartLineItem product={l} removeItem={removeItem} />
+                      <Divider />
                     </React.Fragment>
                   ))}
                   <Box py={4} w="full">
-                    {cart.estimatedCost.totalAmount.amount < 100 ? 
-                      <Text textAlign={"center"}>Add ${100 - cart.estimatedCost.totalAmount.amount} for free shipping!</Text>
-                    :
-                    <Text>Free shipping unlocked!</Text>
-                    }
-                    <Text textAlign={"right"} fontSize="xs">$100</Text>
-                    <Progress value={cart.estimatedCost.totalAmount.amount} colorScheme={cart.estimatedCost.totalAmount.amount < 100 ? "blackAlpha" : "green"} />
+                    {cart.estimatedCost.totalAmount.amount < 100 ? (
+                      <Text textAlign={"center"}>
+                        Add ${100 - cart.estimatedCost.totalAmount.amount} for
+                        free shipping!
+                      </Text>
+                    ) : (
+                      <Text>Free shipping unlocked!</Text>
+                    )}
+                    <Text textAlign={"right"} fontSize="xs">
+                      $100
+                    </Text>
+                    <Progress
+                      value={cart.estimatedCost.totalAmount.amount}
+                      colorScheme={
+                        cart.estimatedCost.totalAmount.amount < 100
+                          ? "blackAlpha"
+                          : "green"
+                      }
+                    />
+                    {cart.estimatedCost.totalAmount.amount < 100 && (
+                      <Stack spacing={2} mt={4} align={"center"}>
+                        <Text>
+                          That&apos;s only <strong>{howManyLipBalms}</strong>{" "}
+                          lip balms!
+                        </Text>
+                        <Stack direction="row">
+                          <Button
+                            onClick={() =>
+                              addToCart(
+                                "gid://shopify/ProductVariant/43229151625462"
+                              )
+                            }
+                            size="sm"
+                          >
+                            Add Mint Lip Balm!
+                          </Button>
+                          <Button
+                            onClick={() =>
+                              addToCart(
+                                "gid://shopify/ProductVariant/43229151592694"
+                              )
+                            }
+                            size="sm"
+                          >
+                            Add Regular Lip Balm!
+                          </Button>
+                        </Stack>
+                      </Stack>
+                    )}
                   </Box>
                   <Divider />
                 </>
@@ -240,40 +300,45 @@ const Cart = () => {
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            {cart.lines.length > 0 && (
-              <VStack w="full" spacing={2}>
-                <Divider />
-                {cart.estimatedCost && (
-                  <Flex
-                    w="100%"
-                    justifyContent={"space-between"}
-                    fontSize="lg"
-                    fontWeight={600}
-                  >
-                    <Text>Total:</Text>
-                    <Text>
-                      {formatter.format(cart.estimatedCost.totalAmount.amount)}
-                    </Text>
-                  </Flex>
-                )}
-                <HStack justify={"center"} w="full">
-                  <Text fontSize={"xs"}>
-                    Pay in 4 installments. Interest-free.
+            {/* {cart.lines.length > 0 && ( */}
+            <VStack w="full" spacing={2}>
+              <Divider />
+              {cart.estimatedCost && (
+                <Flex
+                  w="100%"
+                  justifyContent={"space-between"}
+                  fontSize="lg"
+                  fontWeight={600}
+                >
+                  <Text>Total:</Text>
+                  <Text>
+                    {formatter.format(cart.estimatedCost.totalAmount.amount)}
                   </Text>
-                  <Tooltip
-                    label="Purchase now and pay later with Shop Pay Installments. Most approvals are instant, and pay no interest or fees with on-time payments."
-                    aria-label="A tooltip"
-                  >
-                    <span>
-                      <Icon as={AiOutlineInfoCircle} />
-                    </span>
-                  </Tooltip>
-                </HStack>
-                <Button fontSize={"2xl"} size="lg" onClick={handleCheckout} w="full">
-                  Checkout
-                </Button>
-              </VStack>
-            )}
+                </Flex>
+              )}
+              <HStack justify={"center"} w="full">
+                <Text fontSize={"xs"}>
+                  Pay in 4 installments. Interest-free.
+                </Text>
+                <Tooltip
+                  label="Purchase now and pay later with Shop Pay Installments. Most approvals are instant, and pay no interest or fees with on-time payments."
+                  aria-label="A tooltip"
+                >
+                  <span>
+                    <Icon as={AiOutlineInfoCircle} />
+                  </span>
+                </Tooltip>
+              </HStack>
+              <Button
+                fontSize={"2xl"}
+                size="lg"
+                onClick={handleCheckout}
+                w="full"
+              >
+                Checkout
+              </Button>
+            </VStack>
+            {/* )} */}
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
@@ -342,14 +407,14 @@ function ItemQty({ product }: { product: any }) {
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
     useNumberInput({
       step: 1,
-      min: 1,
+      min: 0,
       defaultValue: product.node.quantity,
     });
   const { cart, setCart } = useContext(CartContext);
 
   const inc = getIncrementButtonProps();
   const dec = getDecrementButtonProps();
-  const input = getInputProps({ readOnly: true });
+  const input = getInputProps({ readOnly: false });
 
   async function handleQtyUpdate(newQty: string) {
     const resp = await fetch("/api/update-cart-item-qty", {
@@ -398,10 +463,10 @@ function EmptyCart() {
       justifyContent="center"
       alignItems="center"
       direction="column"
-      maxW="200px"
+      maxW="full"
     >
-      <Icon as={AiOutlineShoppingCart} color="gray.400" />
-      <Text textAlign="center" mt={4} fontSize={12}>
+      <Icon as={AiOutlineShoppingCart} color="gray.400" boxSize={8} />
+      <Text textAlign="center" mt={4} fontSize={16}>
         Hmmm...it&apos;s pretty empty in here!
       </Text>
     </Flex>
