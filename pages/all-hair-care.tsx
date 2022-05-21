@@ -1,21 +1,14 @@
 import {
   Stack,
-  Flex,
   Heading,
   Text,
   Box,
   Container,
   SimpleGrid,
-  Divider,
-  AspectRatio,
-  chakra
 } from "@chakra-ui/react";
 import Product from "../components/Product";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
-import NextImage, { ImageProps } from 'next/image'
-
-const ChakraImage = chakra(NextImage)
 
 const HairCatalog = ({ products }: any) => {
   //to do - add filters
@@ -26,28 +19,15 @@ const HairCatalog = ({ products }: any) => {
         <title>All Hair Products | TOR Salon Products</title>
         <meta name="description" content="" />
       </Head>
-      {/* <Stack direction={["column", "row"]}>
-        <Stack maxW={["full", "50%"]} px={[8, 20]} py={[20, 20]}>
-          <Text fontSize={22} textTransform="uppercase" fontFamily={"Futura"}>
-            Salon Grade -
-          </Text>
-          <Heading size="2xl">Hair Care</Heading>
-          <Text maxW="500px">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat
-            blanditiis ipsa impedit! Veritatis suscipit vero dolore enim, odio
-            ut? Cupiditate officia vero veritatis nemo incidunt unde ullam
-            maiores aut. Libero.
-          </Text>
-        </Stack>
-        <AspectRatio ratio={1/1} w={["full", "50%"]}>
-          <ChakraImage src="" layout="fill" objectFit={"cover"}/>
-        </AspectRatio>
-      </Stack> */}
-      <Container maxW="container.xl" py={40}>
-        <Heading mb={6} size="2xl" textAlign="center">
-          All Hair Care
-        </Heading>
-        <Divider />
+      <Box w="full" bgImage="/images/all-hair-care-bg.jpg" bgPos={"center"} bgSize={"cover"} bgAttachment={["scroll", "fixed"]}>
+          <Container py={40} maxW="container.xl">
+            <Stack w={["full", "50%"]} color="black" bgColor={"whiteAlpha.900"} p={[10]} borderRadius={5}>
+              <Heading size="2xl">Shop All Hair Care</Heading>
+              <Text>TOR products are formulated specifically by hair type, to tackle their unique needs - not for mass appeal. Made in the USA.</Text>
+            </Stack>
+          </Container>
+      </Box>
+      <Container maxW="container.xl" py={20}>
         <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
           {products.map((p: any) => (
             <Product product={p} key={p.node.id} />
@@ -75,7 +55,7 @@ export async function getStaticProps() {
     {
       products(
         first: 200,
-        query: "product_type:Bundle OR product_type:Conditioners OR product_type:Shampoo OR product_type:Styling Products",
+        query: "product_type:Bundle OR product_type:Co-wash OR product_type:Conditioners OR product_type:Shampoo OR product_type:Styling Products",
         sortKey: PRODUCT_TYPE
       ) {
         edges {
