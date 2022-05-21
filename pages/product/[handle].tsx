@@ -189,6 +189,27 @@ const ProductPage = ({
               __html: product.descriptionHtml,
             }}
           />
+          {product.instructions && (
+            <Accordion w="full" allowToggle>
+              <AccordionItem>
+                <h2>
+                  <AccordionButton>
+                    <Box flex="1" textAlign="left">
+                      Use Instructions &amp; Tips
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                </h2>
+                <AccordionPanel p={4}>
+                  <Box
+                    dangerouslySetInnerHTML={{
+                      __html: product.instructions.value,
+                    }}
+                  />
+                </AccordionPanel>
+              </AccordionItem>
+            </Accordion>
+          )}
           <Stack spacing={4}>
             <Stack
               direction={"row"}
@@ -252,24 +273,6 @@ const ProductPage = ({
               Let me know when this product is back in stock!
             </Link>
           )}
-          <Accordion w="full" allowToggle pt={10}>
-            <AccordionItem>
-              <h2>
-                <AccordionButton>
-                  <Box flex="1" textAlign="left">
-                    Money-back Guarantee
-                  </Box>
-                  <AccordionIcon />
-                </AccordionButton>
-              </h2>
-              <AccordionPanel p={4}>
-                We believe in our products. If you&apos;re not satisfied with
-                your first few washes, or you don&apos;t find our products work
-                for you, we&apos;ll buy it back. No hassles. Just pay return
-                shipping and we&apos;ll refund your purchase.
-              </AccordionPanel>
-            </AccordionItem>
-          </Accordion>
           <HStack w="full" justify={["center", "flex-start"]} spacing={6}>
             <Image
               minW="166"
@@ -290,12 +293,63 @@ const ProductPage = ({
               alt="Apple Pay logo"
             />
           </HStack>
+          <Accordion w="full" allowToggle>
+            <AccordionItem>
+              <h2>
+                <AccordionButton>
+                  <Box flex="1" textAlign="left">
+                    Money-back Guarantee
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel p={4}>
+                We believe in our products. If you&apos;re not satisfied with
+                your first few washes, or you don&apos;t find our products work
+                for you, we&apos;ll buy it back. No hassles. Just pay return
+                shipping and we&apos;ll refund your purchase.
+              </AccordionPanel>
+            </AccordionItem>
+            <AccordionItem>
+              <h2>
+                <AccordionButton>
+                  <Box flex="1" textAlign="left">
+                    Shipping Policy
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel p={4}>
+                <Stack spacing={2}>
+                  <Text>
+                    We want to get everyone their orders as soon as possible, and
+                    make our best effort to do so.
+                  </Text><Text>
+                    Orders placed after 12pm
+                    (Mountain Time) Monday - Thursday, will ship the following
+                    morning. Orders placed after 11pm (Mountain Time) on Friday
+                    will ship the following Monday.
+                  </Text><Text>
+                     The shipping companies in our
+                    town aren&apos;t open past noon on Friday. We appreciate your
+                    patience.
+                  </Text>
+                </Stack>
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
         </Stack>
       </Stack>
       {collection && (
         <Box bg={collection.color?.value ? collection.color.value : "white"}>
           <Flex flexDir={["column-reverse", "row"]}>
-            <Box w={["full", "60%"]} pl={[8, 20]} pr={[8, 40]} py={[20, 40]} pos="relative">
+            <Box
+              w={["full", "60%"]}
+              pl={[8, 20]}
+              pr={[8, 40]}
+              py={[20, 40]}
+              pos="relative"
+            >
               <Image
                 src={collection.typeImage?.reference.image.url}
                 alt=""
@@ -570,6 +624,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
       description
       tags
       collectionToPull: metafield(namespace: "product", key:"featured_collection"){
+        value
+      }
+      instructions: metafield(namespace: "product", key: "use_instructions") {
         value
       }
       collections(first: 5) {

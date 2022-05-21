@@ -74,8 +74,9 @@ export async function getStaticProps() {
   const query = gql`
     {
       products(
-        first: 200
-        query: "product_type:Shampoo OR product_type:Conditioners OR product_type:Styling Products"
+        first: 200,
+        query: "product_type:Bundle OR product_type:Conditioners OR product_type:Shampoo OR product_type:Styling Products",
+        sortKey: PRODUCT_TYPE
       ) {
         edges {
           node {
