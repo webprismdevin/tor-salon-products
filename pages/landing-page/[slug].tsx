@@ -162,7 +162,7 @@ function PageSection({section}:{ section: SectionProps}) {
   return (
     <Container maxW="container.lg" py={20}>
       <Stack direction={["column", section.layout]} spacing={10}>
-        <AspectRatio ratio={1 / 1} flexShrink={0} minW="400">
+        <AspectRatio ratio={1 / 1} flexShrink={0} minW={["full", "400"]}>
           <Image
             src={imageBuilder(section.image).width(400).url() as string}
             alt=""
@@ -304,7 +304,7 @@ function ProductSection({ product, landingPage }: any) {
   }, [cart.id]);
 
   return (
-    <Stack spacing={4} align="center" minW="400">
+    <Stack spacing={4} align="center" minW={["full", "400"]}>
       {product.variants?.edges.length > 1 && (
         <>
           <Text fontSize="2xl">{landingPage.variantPrompt}</Text>
