@@ -95,7 +95,7 @@ const LandingPage = ({ landingPage, product }: any) => {
               </Stack>
             </Box>
           </Stack>
-          <Box flexShrink={1}>
+          <Box flexShrink={1} display={["none", "inherit"]}>
             <Image
               src={imageBuilder(landingPage.mainImage).url()!}
               alt={landingPage.mainImage?.alt}
