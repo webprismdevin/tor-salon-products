@@ -33,7 +33,7 @@ import {
 import CartContext from "../lib/CartContext";
 import formatter from "../lib/formatter";
 
-const Cart = () => {
+const Cart = ({ color }: { color?: string }) => {
   const { cart, setCart } = useContext(CartContext);
   const [cartQty, setCartQty] = useState<number | null>(null);
 
@@ -152,7 +152,7 @@ const Cart = () => {
     window.dataLayer.push({
       event: "begin_checkout",
       eventCallback: () => (window.location.href = cart.checkoutUrl),
-      eventTimeout: 2000,
+      eventTimeout: 1200,
     });
   }
 
@@ -198,6 +198,7 @@ const Cart = () => {
             display: "inline",
           }}
           boxSize={6}
+          color={color ? color : 'black'}
         />
         <Text
           fontSize={12}
@@ -395,7 +396,7 @@ function CartLineItem({
         <Stack direction="row" justify={"space-between"}>
           <ItemQty product={product} />
           <Text fontSize={[16, 18]}>
-            {formatter.format(product.node.estimatedCost.subtotalAmount.amount)}
+            {formatter.format(product.node.estimatedCost.totalAmount.amount)}
           </Text>
         </Stack>
       </Stack>

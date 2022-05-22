@@ -60,11 +60,11 @@ function MyApp({ Component, pageProps }: AppProps) {
             />
           </Head>
           <CartContext.Provider value={{ cart, setCart }}>
-            <NavBar />
+            {!router.asPath.includes("/landing-page") && <NavBar />}
             <Component key={router.asPath} {...pageProps} />
           </CartContext.Provider>
-          <Follow />
-          <Footer />
+          {!router.asPath.includes("/landing-page")&& <Follow />}
+          {!router.asPath.includes("/landing-page")&& <Footer />}
         </ShopContext.Provider>
         <ColorModeScript initialColorMode={customTheme.initialColorMode} />
         {process.env.NODE_ENV === "production" && (
@@ -78,7 +78,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           </>
         )}
       </ChakraProvider>
-      {process.env.NODE_ENV === "production" && (
+      {/* {process.env.NODE_ENV === "production" && ( */}
         <Script
           id="tagManager"
           strategy="afterInteractive"
@@ -90,7 +90,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           })(window,document,'script','dataLayer','GTM-MKG7C6H');`,
           }}
         />
-      )}
+      {/* )} */}
       <noscript
         dangerouslySetInnerHTML={{
           __html: `<img src="//api.yotpo.com/conversion_tracking.gif?app_key=bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l&order_id={{order_name|handleize}}&order_amount={{subtotal_price|money_without_currency}}&order_currency={{ shop.currency }}" width="1" height="1" />`,
