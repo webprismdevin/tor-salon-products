@@ -75,7 +75,7 @@ const LandingPage = ({ landingPage, product }: any) => {
               {landingPage.buttonOne}
             </Button>
             <Text fontSize="xs">{landingPage.buttonSubtext}</Text>
-            <Box pt={20}>
+            {landingPage.reviews?.length > 3 && <Box pt={20}>
               <Stack
                 spacing={4}
                 align="flex-start"
@@ -93,7 +93,7 @@ const LandingPage = ({ landingPage, product }: any) => {
                   <em>- {landingPage.reviews[0].name}</em>
                 </Text>
               </Stack>
-            </Box>
+            </Box>}
           </Stack>
           <Box flexShrink={1} display={["none", "inherit"]}>
             <Image
@@ -103,12 +103,12 @@ const LandingPage = ({ landingPage, product }: any) => {
           </Box>
         </Stack>
       </Container>
-      {landingPage.sections.map((section: SectionProps) => (
+      {landingPage.sections && landingPage.sections.map((section: SectionProps) => (
         <PageSection key={section._id} section={section} />
       ))}
       <Container maxW="container.lg">
         <Stack direction={["column", "row"]} spacing={6}>
-          {landingPage.reviews.map((r: any, i: number) => {
+          {landingPage.reviews?.map((r: any, i: number) => {
             if (i > 0)
               return (
                 <Stack
@@ -157,8 +157,6 @@ declare interface SectionProps {
 }
 
 function PageSection({section}:{ section: SectionProps}) {
-    console.log(section)
-
   return (
     <Container maxW="container.lg" py={20}>
       <Stack direction={["column", section.layout]} spacing={10}>
