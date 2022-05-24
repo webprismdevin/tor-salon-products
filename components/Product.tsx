@@ -29,7 +29,7 @@ const Product = ({
         <Text fontSize={fontSize ? fontSize : 32} maxW="300px" lineHeight={1.3} mb={2}>
           {prod.title}
         </Text>
-        <Text>{formatter.format(prod.priceRange.minVariantPrice.amount)}{prod.priceRange.minVariantPrice?.amount !== prod.priceRange.maxVariantPrice.amount ? ` - ${formatter.format(prod.priceRange.maxVariantPrice.amount)}` : ""}</Text>
+        <Text>{formatter.format(prod.priceRange.minVariantPrice.amount)}{prod.priceRange.minVariantPrice?.amount !== prod.priceRange.maxVariantPrice.amount ? ` - ${formatter.format(prod.priceRange.maxVariantPrice.amount)}` : ""}{prod.compareAtPriceRange?.maxVariantPrice.amount !== "0.0" && <span style={{textDecoration: 'line-through', marginLeft: 12, opacity: 0.4, fontSize: 18}}>{formatter.format(prod.compareAtPriceRange?.maxVariantPrice.amount)}</span>}</Text>
       </GridItem>
     </NextLink>
   );

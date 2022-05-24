@@ -1,6 +1,7 @@
 // web/lib/sanity.js
 
-import { groq, createClient, createImageUrlBuilder } from "next-sanity";
+import { groq, createClient } from "next-sanity";
+import createImageUrlBuilder from '@sanity/image-url'
 
 const config = {
   /**

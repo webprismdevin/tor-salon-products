@@ -785,6 +785,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
                   amount
                 }
               }
+              compareAtPriceRange {
+                maxVariantPrice {
+                  amount
+                }
+              }
               images(first: 1) {
                 edges {
                   node {

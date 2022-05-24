@@ -13,9 +13,9 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-body {
+/* body {
   overscroll-behavior-y: none;
-}
+} */
 
 a {
   color: inherit;
