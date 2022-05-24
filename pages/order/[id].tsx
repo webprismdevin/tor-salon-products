@@ -62,16 +62,20 @@ export default function ThankYou() {
         em: createHash("sha256").update(data.email).digest("hex")
       };
 
+      console.log("firing")
+
       const orderId = window.location.pathname.split("/")[2];
 
-      const itemsArray = data.lineItems.edges.map((i:LineItemType) => ({'item_id': i.node.id, 'item_name': i.node.name}))
+      const itemsArray = data.lineItems.edges.map((i:LineItemType) => ({'item_id': i.node.id, 'item_name': i.node.name, currency: "USD"}))
 
       window.dataLayer.push({
         'event': 'purchase',
-        'value': data.currentTotalPriceSet.shopMoney.amount,
-        'transaction_id': orderId,
-        'currency': "USD",
-        'items': itemsArray,
+        'ecommerce': {
+          'value': data.currentTotalPriceSet.shopMoney.amount,
+          'transaction_id': orderId,
+          'currency': "USD",
+          'items': itemsArray,
+        },
         'eventModel': {
           'value': data.currentTotalPriceSet.shopMoney.amount,
           'currency': "USD",

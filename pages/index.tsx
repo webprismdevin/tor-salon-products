@@ -12,36 +12,83 @@ import {
   BoxProps,
   Image,
   Link,
+  TextProps,
+  Portal,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NextImage from "next/image";
 import Head from "next/head";
 import NextLink from "next/link";
 import { gql, GraphQLClient } from "graphql-request";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { FiArrowRight, FiBookOpen, FiCreditCard, FiGift } from "react-icons/fi";
 import dynamic from "next/dynamic";
 import { getClient } from "../lib/sanity";
 import { groq } from "next-sanity";
+import { wrap } from "@popmotion/popcorn";
 
-const Follow = dynamic(() => import("../components/Follow"), { ssr: false })
-const Testimonials = dynamic(() => import("../components/Home/Testimonials"))
-const ProductFeature = dynamic(() => import("../components/Home/HomeFeature"))
-const GridFeature = dynamic(() => import("../components/Home/GridFeature"))
-const HairType = dynamic(() => import("../components/Home/HairType"))
+const Testimonials = dynamic(() => import("../components/Home/Testimonials"));
+const ProductFeature = dynamic(() => import("../components/Home/HomeFeature"));
+const GridFeature = dynamic(() => import("../components/Home/GridFeature"));
+const HairType = dynamic(() => import("../components/Home/HairType"));
 
 const MotionBox = motion<BoxProps>(Box);
+const MotionText = motion<TextProps>(Text);
 
-function HomePage({ products, styling, body, homepageData }: any) {
+function HomePage({ products, styling, body, homepageData, bannerPortal }: any) {
+  const [[page, direction], setPage] = useState([0, 0]);
+
+  const index = wrap(0, homepageData.banner.length, page);
+
+  const paginate = (newDirection: number) => {
+    setPage([page + newDirection, newDirection]);
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      paginate(1);
+    }, 2900);
+
+    return () => clearInterval(interval);
+  }, [page]);
+
   return (
     <>
       <Head>
         <title>{homepageData.seo_title} | TOR Salon Products</title>
-        <meta name="description" content={homepageData.seo_description}/>
+        <meta name="description" content={homepageData.seo_description} />
       </Head>
+      <Portal containerRef={bannerPortal}>
+        <MotionBox py={2} bg="black" color="white">
+          <AnimatePresence
+            initial={true}
+            custom={direction}
+            exitBeforeEnter={true}
+          >
+            <MotionBox
+              custom={direction}
+              initial={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+                transition: {duration: 0.2}
+              }}
+              exit={{
+                opacity: 0,
+              }}
+              key={page}
+            >
+              <Text textAlign={"center"}>{homepageData.banner[index]}</Text>
+            </MotionBox>
+          </AnimatePresence>
+        </MotionBox>
+      </Portal>
       <Container py={20} centerContent pos="relative" maxW="container.xl">
         <Stack spacing={4} textAlign={"center"}>
-          <Heading fontSize={[42, 84, null, null, 144]} as="h1">Uncompromised</Heading>
+          <Heading fontSize={[42, 84, null, null, 144]} as="h1">
+            Uncompromised
+          </Heading>
           <Heading fontSize={[28, 48, null, null, 56]}>
             Hair + Body Products
           </Heading>
@@ -161,7 +208,11 @@ function HomePage({ products, styling, body, homepageData }: any) {
         </Container>
       </Box>
       <Container maxW="container.xl" py={36}>
-        <Stack direction={["column", "row"]} w="full" justifyContent={"space-between"}>
+        <Stack
+          direction={["column", "row"]}
+          w="full"
+          justifyContent={"space-between"}
+        >
           <Stack
             px={[2, 0]}
             maxW={["none", "240px"]}
@@ -173,8 +224,8 @@ function HomePage({ products, styling, body, homepageData }: any) {
             </Text>
             <Heading size="2xl">Styling</Heading>
             <Text>
-              TOR&apos;s innovative formulas let&apos;s you create amazing looks,
-              while remaining soft to the touch.
+              TOR&apos;s innovative formulas let&apos;s you create amazing
+              looks, while remaining soft to the touch.
             </Text>
           </Stack>
           {styling.map((prod: any) => (
@@ -219,7 +270,7 @@ function HomePage({ products, styling, body, homepageData }: any) {
           </Stack>
         </Container>
       </Box>
-      <Container maxW="container.lg"  py={48}>
+      <Container maxW="container.lg" py={48}>
         <Stack
           direction={["column", "row"]}
           w="full"
@@ -268,11 +319,7 @@ function HomePage({ products, styling, body, homepageData }: any) {
             CBD more effective.
           </Text>
           <Link href="https://tor-cbd.square.site/s/shop" target="_blank">
-            <Button
-              alignSelf={"flex-start"}
-            >
-              Shop All CBD
-            </Button>
+            <Button alignSelf={"flex-start"}>Shop All CBD</Button>
           </Link>
         </Stack>
         <Stack
@@ -283,7 +330,10 @@ function HomePage({ products, styling, body, homepageData }: any) {
           p={[2, 0]}
           spacing={[4]}
         >
-          <Link href="https://cbd.torsalonproducts.com/shop/cbd-tinctures/3" target={"_blank"}>
+          <Link
+            href="https://cbd.torsalonproducts.com/shop/cbd-tinctures/3"
+            target={"_blank"}
+          >
             <MotionBox
               whileHover={{
                 scale: 1.02,
@@ -303,7 +353,10 @@ function HomePage({ products, styling, body, homepageData }: any) {
               </Flex>
             </MotionBox>
           </Link>
-          <Link href="https://cbd.torsalonproducts.com/shop/cbd-lotions/2" target={"_blank"}>
+          <Link
+            href="https://cbd.torsalonproducts.com/shop/cbd-lotions/2"
+            target={"_blank"}
+          >
             <MotionBox
               whileHover={{
                 scale: 1.02,
@@ -631,6 +684,6 @@ export async function getStaticProps() {
       products: res.featured.products.edges,
       body: res.body.products.edges,
     },
-    revalidate: 60,
+    revalidate: 10,
   };
 }

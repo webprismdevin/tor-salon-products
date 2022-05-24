@@ -1,9 +1,10 @@
-
+import { RiStarLine } from 'react-icons/ri'
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
     name: 'review',
     title: 'Review',
     type: 'document',
+    icon: RiStarLine,
     fields: [
       {
         name: 'title',

@@ -33,7 +33,7 @@ import {
 import CartContext from "../lib/CartContext";
 import formatter from "../lib/formatter";
 
-const Cart = ({ color }: { color?: string }) => {
+const Cart = ({ color }: { color?: string}) => {
   const { cart, setCart } = useContext(CartContext);
   const [cartQty, setCartQty] = useState<number | null>(null);
 
@@ -268,7 +268,7 @@ const Cart = ({ color }: { color?: string }) => {
                       <Stack spacing={2} mt={4} align={"center"}>
                         <Text>
                           That&apos;s only <strong>{howManyLipBalms}</strong>{" "}
-                          lip balms!
+                          lip balms! Add for only $4!
                         </Text>
                         <Stack direction="row">
                           <Button

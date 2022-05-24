@@ -3,9 +3,10 @@ import {
   extendTheme,
   ChakraProvider,
   ColorModeScript,
+  Box,
 } from "@chakra-ui/react";
 import { theme as defaultTheme, ThemeConfig } from "@chakra-ui/theme";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CartContext from "../lib/CartContext";
 import ShopContext from "../lib/shop-context";
 import Head from "next/head";
@@ -38,6 +39,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     name: "TOR Salon Products",
   };
 
+  const bannerPortal = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     if (typeof window) {
       window.Tawk_API = window.Tawk_API || {};
@@ -60,8 +63,9 @@ function MyApp({ Component, pageProps }: AppProps) {
             />
           </Head>
           <CartContext.Provider value={{ cart, setCart }}>
+            <Box ref={bannerPortal}></Box>
             {!router.asPath.includes("/landing-page") && <NavBar />}
-            <Component key={router.asPath} {...pageProps} />
+            <Component key={router.asPath} {...pageProps} bannerPortal={bannerPortal}/>
           </CartContext.Provider>
           {!router.asPath.includes("/landing-page")&& <Follow />}
           {!router.asPath.includes("/landing-page")&& <Footer />}
@@ -73,12 +77,10 @@ function MyApp({ Component, pageProps }: AppProps) {
           </>
         )}
         {process.env.NODE_ENV === "production" && (
-          <>
             <MailingList />
-          </>
         )}
       </ChakraProvider>
-      {/* {process.env.NODE_ENV === "production" && ( */}
+      {process.env.NODE_ENV === "production" && (
         <Script
           id="tagManager"
           strategy="afterInteractive"
@@ -90,7 +92,10 @@ function MyApp({ Component, pageProps }: AppProps) {
           })(window,document,'script','dataLayer','GTM-MKG7C6H');`,
           }}
         />
-      {/* )} */}
+      )}
+      <Script
+        src="https://dttrk.com/shopify/track.js?shop=tor-salon-products.myshopify.com"
+      />
       <noscript
         dangerouslySetInnerHTML={{
           __html: `<img src="//api.yotpo.com/conversion_tracking.gif?app_key=bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l&order_id={{order_name|handleize}}&order_amount={{subtotal_price|money_without_currency}}&order_currency={{ shop.currency }}" width="1" height="1" />`,

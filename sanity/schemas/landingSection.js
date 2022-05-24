@@ -1,9 +1,10 @@
-
+import { ImPageBreak } from 'react-icons/im'
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
     name: 'landingSection',
     title: 'Landing Page Section',
     type: 'document',
+    icon: ImPageBreak,
     fields: [
       {
         name: 'heading',

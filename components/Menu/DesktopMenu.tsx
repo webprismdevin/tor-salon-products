@@ -46,7 +46,7 @@ const DesktopMenu = () => {
 
   return (
     <>
-      <Text display={["none", "inherit"]} onMouseEnter={() => controls.start("animate")}>Shop</Text>
+      <Text display={["none", "inherit"]} onMouseEnter={() => controls.start("animate")} order={[4, 3]} pl={[8]}>Shop</Text>
       <AnimatePresence exitBeforeEnter={true} initial>
         <MotionBox
           pos="fixed"

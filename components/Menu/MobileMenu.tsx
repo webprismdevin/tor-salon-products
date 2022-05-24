@@ -46,17 +46,18 @@ const MobileMenu = () => {
   return (
     <>
       <Icon
+        order={[1, 4]}
+        display={['inherit', 'none']}
         as={AiOutlineMenu}
         onClick={menuOnOpen}
         style={{
           cursor: "pointer",
         }}
-        boxSize={[6, 0]}
+        boxSize={[6]}
         _hover={{
           opacity: 0.4,
         }}
         transition={"opacity 200ms ease"}
-        display={["inherit", "none"]}
       />
       <Drawer
         isOpen={menuIsOpen}

@@ -1,9 +1,10 @@
-
+import { RiPagesLine } from 'react-icons/ri'
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   name: 'landing',
   title: 'Landing Page',
   type: 'document',
+  icon: RiPagesLine,
   fields: [
     {
       name: 'name',

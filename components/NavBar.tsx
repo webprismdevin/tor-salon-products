@@ -18,7 +18,6 @@ import { Search } from "./Search";
 import MobileMenu from "./Menu/MobileMenu";
 import DesktopMenu from "./Menu/DesktopMenu";
 import MenuLink from "./Menu/MenuLink";
-import { isMobile } from "react-device-detect";
 import Cart from "./Cart";
 
 const NavBar = () => {
@@ -58,11 +57,12 @@ const NavBar = () => {
       <Flex align={"center"} justify={"space-between"}>
         <Stack
           direction="row"
-          spacing={[4, 8]}
-          align={"center"}
+          spacing={[4, 0]}
+          align={["center"]}
           justify={"flex-start"}
         >
-          {isMobile && <MobileMenu />}
+          
+          <MobileMenu />
           <StoreName />
           <DesktopMenu />
         </Stack>
@@ -111,7 +111,7 @@ export default NavBar;
 
 const StoreName = () => {
   return (
-    <Box>
+    <Box order={[2]}>
       <NextLink href="/" passHref>
         <Image src={"/logo_800.png"} h={7} alt="TOR logo" />
       </NextLink>
