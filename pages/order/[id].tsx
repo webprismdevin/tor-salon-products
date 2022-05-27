@@ -65,23 +65,37 @@ export default function ThankYou() {
       console.log("firing")
 
       const orderId = window.location.pathname.split("/")[2];
-
-      const itemsArray = data.lineItems.edges.map((i:LineItemType) => ({'item_id': i.node.id, 'item_name': i.node.name, currency: "USD"}))
-
-      window.dataLayer.push({
-        'event': 'purchase',
-        'ecommerce': {
-          'value': data.currentTotalPriceSet.shopMoney.amount,
-          'transaction_id': orderId,
-          'currency': "USD",
-          'items': itemsArray,
-        },
-        'eventModel': {
-          'value': data.currentTotalPriceSet.shopMoney.amount,
-          'currency': "USD",
-          'transaction_id': orderId,
+      const orderValue = parseFloat(data.currentTotalPriceSet.shopMoney.amount);
+      
+      const itemsArray = data.lineItems.edges.map((i:LineItemType) => (
+        {
+          'item_id': i.node.id, //string
+          'item_name': i.node.name, //string
+          currency: "USD", //string
+          quantity: i.node.currentQuantity //number
         }
-      })
+      ))
+
+      console.log(orderId, typeof orderValue, itemsArray);
+
+      if(window.dataLayer){
+        window.dataLayer.push({ ecommerce: null }); 
+
+        window.dataLayer.push({
+          'event': 'purchase',
+          'ecommerce': {
+            'value': orderValue,
+            'transaction_id': orderId, //string
+            'currency': "USD",
+            'items': itemsArray,
+          },
+          'eventModel': {
+            'value': orderValue,
+            'currency': "USD",
+            'transaction_id': orderId,
+          }
+        })
+      }
 
     }
   }, [data]);
