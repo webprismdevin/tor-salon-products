@@ -152,7 +152,7 @@ const ProductPage = ({
           <Heading size="xl" as="h1">
             {product.title}
           </Heading>
-          {reviews && (
+          {reviews && reviews.bottomline.totalReviews > 0 && (
             <HStack
               onClick={() =>
                 reviewsSection.current?.scrollIntoView({ behavior: "smooth" })
@@ -164,7 +164,7 @@ const ProductPage = ({
               />
               <Text>
                 {reviews.bottomline.total_review} Review
-                {reviews.bottomline.totalReviews > 1 ? "s" : ""}
+                {reviews.bottomline.totalReviews !== 1 ? "s" : ""}
               </Text>
             </HStack>
           )}
@@ -322,17 +322,17 @@ const ProductPage = ({
               <AccordionPanel p={4}>
                 <Stack spacing={2}>
                   <Text>
-                    We want to get everyone their orders as soon as possible, and
-                    make our best effort to do so.
-                  </Text><Text>
-                    Orders placed after 12pm
-                    (Mountain Time) Monday - Thursday, will ship the following
-                    morning. Orders placed after 11pm (Mountain Time) on Friday
-                    will ship the following Monday.
-                  </Text><Text>
-                     The shipping companies in our
-                    town aren&apos;t open past noon on Friday. We appreciate your
-                    patience.
+                    We want to get everyone their orders as soon as possible,
+                    and make our best effort to do so.
+                  </Text>
+                  <Text>
+                    Orders placed after 12pm (Mountain Time) Monday - Thursday,
+                    will ship the following morning. Orders placed after 11pm
+                    (Mountain Time) on Friday will ship the following Monday.
+                  </Text>
+                  <Text>
+                    The shipping companies in our town aren&apos;t open past
+                    noon on Friday. We appreciate your patience.
                   </Text>
                 </Stack>
               </AccordionPanel>
@@ -423,22 +423,20 @@ const ProductPage = ({
           </Container>
         </Box>
       )}
-      <Container
-        ref={reviewsSection}
-        maxW="container.lg"
-        pt={40}
-        pb={20}
-        centerContent
-        key={product.id.split("/")[4]}
-      >
-        {reviews && reviews.reviews.length > 0 && (
+      {reviews && reviews.reviews.length > 0 && (
+        <Container
+          ref={reviewsSection}
+          maxW="container.lg"
+          pt={40}
+          pb={20}
+          centerContent
+          key={product.id.split("/")[4]}
+        >
           <Box w="full" py={12}>
             <Heading>Reviews</Heading>
             <Divider mt={6} />
           </Box>
-        )}
-        {reviews &&
-          reviews.reviews.map((r: any) => (
+          {reviews.reviews.map((r: any) => (
             <Stack key={r.id} spacing={2}>
               <HStack>
                 <RatingStar id={r.id.toString()} rating={r.score} />
@@ -461,15 +459,8 @@ const ProductPage = ({
               </Text>
             </Stack>
           ))}
-        {reviews && reviews.reviews.length === 0 && (
-          <Stack spacing={2} textAlign={"center"}>
-            <Heading size="lg">No Reviews Yet</Heading>
-            <Text>
-              Get up to 30% off for writing a review on a past purchase!
-            </Text>
-          </Stack>
-        )}
-      </Container>
+        </Container>
+      )}
     </>
   );
 };
