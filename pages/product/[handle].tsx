@@ -139,7 +139,7 @@ const ProductPage = ({
           <PhotoCarousel images={product.images.edges} />
         </GridItem>
         <GridItem colSpan={[2, 1]}>
-          <Stack py={[4, 20]} pl={[4, 8]} pr={[4, 40]} spacing={6}>
+          <Stack py={[4, 20]} pl={[4, null, 4, 8]} pr={[4,null, 10, 20]} spacing={6}>
             <Stack direction={"row"} justify={"space-between"}>
               <Heading>{product.title}</Heading>
               <Heading fontWeight={600}>
@@ -149,10 +149,10 @@ const ProductPage = ({
             <Divider />
             <HStack justify={"space-between"}>
               <Stack
-              direction={["column", "row"]}
+              direction={["column", null, "column", "row"]}
               align="center"
               justify={"center"}
-                w="50%"
+                w={["100%", "50%"]}
                 onClick={() =>
                   reviewsSection.current?.scrollIntoView({
                     behavior: "smooth",
@@ -169,7 +169,7 @@ const ProductPage = ({
                 </Text>
               </Stack>
               <Divider orientation="vertical" height={"60px"} />
-              <Link w="50%" textAlign={"center"} onClick={() => window.open("https://notionforms.io/forms/leave-us-a-review", "status=no,toolbar=no,menubar=no,location=no")}>
+              <Link w={["100%", "50%"]} textAlign={"center"} onClick={() => window.open("https://notionforms.io/forms/leave-us-a-review", "status=no,toolbar=no,menubar=no,location=no")}>
                 <Stack direction="row" align={"center"} justify="center">
                   <Icon as={AiFillEdit} boxSize={6} display="inline" /><Text>Write a review</Text>
                 </Stack>

@@ -33,7 +33,7 @@ export default createSchema({
     salon,
     post,
     // author,
-    // category,
+    category,
     help,
     faq,
     reviews,
