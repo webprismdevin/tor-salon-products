@@ -139,7 +139,7 @@ const ProductPage = ({
           <PhotoCarousel images={product.images.edges} />
         </GridItem>
         <GridItem colSpan={[2, 1]}>
-          <Stack py={[4, 20]} pl={[4, 0]} pr={[4, 40]} spacing={6}>
+          <Stack py={[4, 20]} pl={[4, 8]} pr={[4, 40]} spacing={6}>
             <Stack direction={"row"} justify={"space-between"}>
               <Heading>{product.title}</Heading>
               <Heading fontWeight={600}>
