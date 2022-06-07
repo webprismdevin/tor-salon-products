@@ -1,53 +1,54 @@
 import { GetStaticProps } from "next";
 import Head from "next/head";
-import { Box, Stack, Heading, Text, Container, AspectRatio, Image, Button, VStack, Divider, HStack } from "@chakra-ui/react"
+import {
+  Box,
+  Stack,
+  Heading,
+  Text,
+  AspectRatio,
+  Image,
+  Link,
+  SimpleGrid,
+  GridItem,
+} from "@chakra-ui/react";
 import { imageBuilder } from "../lib/sanity";
-import { useRouter } from "next/router";
+import NextLink from 'next/link';
 
 const Posts = ({ posts }: any) => {
-  const router = useRouter();
-
   return (
     <Box>
       <Head>
         <title>Blog</title>
-        <meta name="description" content="Join us as we share stories about building the TOR business and brand, life as entreprenuers, and of course, articles about the science behind hair, trends and other news!" />
+        <meta
+          name="description"
+          content="Join us as we share stories about building the TOR business and brand, life as entreprenuers, and of course, articles about the science behind hair, trends and other news!"
+        />
       </Head>
-      <Container centerContent maxW="container.lg" p={[4, 0]} mt={20}>
-        {/* <Heading as={"h1"} mb={16} size="2xl">TOR Blog</Heading> */}
-        <Stack
-          spacing={["24px", "36px"]}
-          alignItems="center"
-          justifyContent="center"
-          direction={["column"]}
-          pb={16}
-          w="full"
-        >
-          {posts.map((post:any) => (
-            <Box
-              shadow="base"
-              border={"1px solid rgba(0, 0, 0, 0.05)"}
-              key={post._id}
-              maxW={["full"]}
-              w="full"
+      <SimpleGrid templateColumns={"repeat(3, 1fr)"}>
+        {posts.map((post: any) => (
+          <GridItem key={post._id} className="blog_article" pos="relative">
+            <AspectRatio
+              position="relative"
+              zIndex={0}
+              ratio={3 / 3}
+              height={[200, 400]}
             >
-              <Stack direction={['column', 'row']} alignItems={"flex-start"} w="100%">
-                <AspectRatio ratio={3/2} minH={['auto', '100%']} minW={['100%', 400]}>
-                    <Image src={imageBuilder(post.mainImage).url()!} alt="blog post photo" objectFit="cover"/>
-                </AspectRatio>
-                <VStack py={8} px={[2, 8]} alignItems={"flex-start"} spacing={3} minW={['auto']}>
-                    <Heading size="lg">
-                      {post.title}
-                    </Heading>
-                    <Text mt={2}>{post.subtitle}</Text>
-                    <Button onClick={() => router.push(`/blog/${post.slug.current}`)}>Read more →</Button>
-                    <HStack></HStack>
-                </VStack>
-              </Stack>
-            </Box>
-          ))}
-        </Stack>
-      </Container>
+              <Image
+                src={imageBuilder(post.mainImage).url()!}
+                alt="blog post photo"
+                objectFit="cover"
+              />
+            </AspectRatio>
+            <Stack pos="relative" zIndex={1} p={[2, 8]} align="flex-start">
+              <Heading size="lg">{post.title}</Heading>
+              <Text mt={2}>{post.subtitle}</Text>
+              <NextLink href={`/blog/${post.slug.current}`}>
+                <Link py={2} _hover={{textDecor: "none"}} borderBottom="1px solid black">Read more →</Link>
+              </NextLink>
+            </Stack>
+          </GridItem>
+        ))}
+      </SimpleGrid>
     </Box>
   );
 };

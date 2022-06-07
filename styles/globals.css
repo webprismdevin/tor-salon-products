@@ -84,3 +84,11 @@ div[data-framer-component-type='Text'] span {
 .product_description_hmtl_outer_container > li {
   margin: 4px 0px;
 }
+
+.blog_article:first-child, .blog_article:nth-child(3) {
+  border: 2px solid black
+}
+.blog_article:nth-child(2){
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+}
