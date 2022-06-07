@@ -198,7 +198,7 @@ const ProductPage = ({
               </Select>
             )}
             <HStack
-              outline={"1px solid black"}
+              border={"1px solid black"}
               alignSelf={["flex-end", "flex-start"]}
               borderRadius={6}
             >
@@ -212,8 +212,8 @@ const ProductPage = ({
             </HStack>
             <Button
               position={["fixed", "static"]}
-              bottom={[2, 0]}
-              right={[2, 0]}
+              bottom={[7, 0]}
+              right={[4, 0]}
               zIndex={2}
               w={["70%", "full"]}
               onClick={addToCart}
@@ -468,7 +468,7 @@ function PhotoCarousel({ images }: any) {
           <Box
             pos="absolute"
             left={10}
-            top={"50%"}
+            bottom={[4, "50%"]}
             onClick={() => paginate(-1)}
           >
             ←
@@ -476,7 +476,7 @@ function PhotoCarousel({ images }: any) {
           <Box
             pos="absolute"
             right={10}
-            top={"50%"}
+            bottom={[4, "50%"]}
             onClick={() => paginate(1)}
           >
             →
