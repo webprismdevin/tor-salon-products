@@ -15,7 +15,7 @@ const BodyCatalog = ({ products }: any) => {
       <Container maxW="container.xl" py={40}>
         <Heading mb={6} size="2xl" textAlign="center">All Body Products</Heading>
         <Divider />
-        <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
+        <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12} mt={8}>
           {products.map((p: any) => (
             <Product product={p} key={p.node.id} />
           ))}

@@ -15,7 +15,7 @@ import {
   TextProps,
   Portal,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import NextImage from "next/image";
 import Head from "next/head";
 import NextLink from "next/link";
@@ -35,8 +35,16 @@ const HairType = dynamic(() => import("../components/Home/HairType"));
 const MotionBox = motion<BoxProps>(Box);
 const MotionText = motion<TextProps>(Text);
 
-function HomePage({ products, styling, body, homepageData, bannerPortal }: any) {
+function HomePage({
+  products,
+  styling,
+  body,
+  homepageData,
+  bannerPortal,
+}: any) {
   const [[page, direction], setPage] = useState([0, 0]);
+
+  const hairTypeSelect = useRef<HTMLDivElement | null>(null);
 
   const index = wrap(0, homepageData.banner.length, page);
 
@@ -72,7 +80,7 @@ function HomePage({ products, styling, body, homepageData, bannerPortal }: any) 
               }}
               animate={{
                 opacity: 1,
-                transition: {duration: 0.2}
+                transition: { duration: 0.2 },
               }}
               exit={{
                 opacity: 0,
@@ -87,15 +95,22 @@ function HomePage({ products, styling, body, homepageData, bannerPortal }: any) 
       <Container py={20} centerContent pos="relative" maxW="container.xl">
         <Stack spacing={4} textAlign={"center"}>
           <Heading fontSize={[42, 84, null, null, 144]} as="h1">
-            Uncompromised
+            {homepageData.heroTitle}
           </Heading>
           <Heading fontSize={[28, 48, null, null, 56]}>
-            Hair + Body Products
+            {homepageData.heroSubtitle}
           </Heading>
           <HStack justify={"center"} spacing={4}>
-            <NextLink href="/all-hair-care" passHref>
-              <Button>Shop Hair</Button>
-            </NextLink>
+            <Button
+              onClick={() =>
+                hairTypeSelect.current?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "center"
+                })
+              }
+            >
+              Shop Hair
+            </Button>
             <Link href="https://tor-cbd.square.site/s/shop" target="_blank">
               <Button>Shop CBD</Button>
             </Link>
@@ -148,37 +163,39 @@ function HomePage({ products, styling, body, homepageData, bannerPortal }: any) 
           </Text>
         </Stack>
       </Container>
-      <Container maxW="container.xl" py={8}>
-        <Heading>What&apos;s Your Hair Type?</Heading>
-      </Container>
-      <Flex
-        borderColor="#222222"
-        borderTop="10px solid"
-        justify={"center"}
-        align="stretch"
-        flexDir={["column", "row"]}
-        maxW={"full"}
-        overflow={"hidden"}
-      >
-        <HairType
-          photo={"/images/hairtypes/fine-hair-girl.jpg"}
-          typeImage={"/images/hairtypes/tor-fine_thin_hair.png"}
-          title="Fine/Thin"
-          link="/type/fine-thin"
-        />
-        <HairType
-          photo={"/images/hairtypes/thick-hair-girl.jpg"}
-          typeImage={"/images/hairtypes/tor-thick_medium_hair.png"}
-          title="Medium/Thick"
-          link="/type/medium-thick"
-        />
-        <HairType
-          photo={"/images/hairtypes/curly-hair-girl.jpg"}
-          typeImage={"/images/hairtypes/tor-curly_hair.png"}
-          title="Curly"
-          link="/type/curly"
-        />
-      </Flex>
+      <Box ref={hairTypeSelect} pt={[4, 0]}>
+        <Container maxW="container.xl" py={8}>
+          <Heading>What&apos;s Your Hair Type?</Heading>
+        </Container>
+        <Flex
+          borderColor="#222222"
+          borderTop="10px solid"
+          justify={"center"}
+          align="stretch"
+          flexDir={["column", "row"]}
+          maxW={"full"}
+          overflow={"hidden"}
+        >
+          <HairType
+            photo={"/images/hairtypes/fine-hair-girl.jpg"}
+            typeImage={"/images/hairtypes/tor-fine_thin_hair.png"}
+            title="Fine/Thin"
+            link="/type/fine-thin"
+          />
+          <HairType
+            photo={"/images/hairtypes/thick-hair-girl.jpg"}
+            typeImage={"/images/hairtypes/tor-thick_medium_hair.png"}
+            title="Medium/Thick"
+            link="/type/medium-thick"
+          />
+          <HairType
+            photo={"/images/hairtypes/curly-hair-girl.jpg"}
+            typeImage={"/images/hairtypes/tor-curly_hair.png"}
+            title="Curly"
+            link="/type/curly"
+          />
+        </Flex>
+      </Box>
       <Box bgColor="#000000" py={10} px={[2, 6]}>
         <Container maxW="container.xl">
           <Stack direction={["row"]} w="full" align="center" spacing={[4, 16]}>

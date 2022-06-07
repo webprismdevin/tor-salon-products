@@ -32,17 +32,46 @@ export default async function handler(
             }
             email
             note
-            lineItems (first: 100) {
-                edges {
-                    node {
-                        id
-                        image {
-                            url
-                        }
-                        name
-                        currentQuantity
+            lineItems(first: 100) {
+              edges {
+                node {
+                  currentQuantity
+                  discountedTotalSet {
+                    presentmentMoney {
+                      amount
+                      currencyCode
                     }
+                    shopMoney {
+                      amount
+                      currencyCode
+                    }
+                  }
+                  discountAllocations {
+                    allocatedAmountSet {
+                      shopMoney {
+                        amount
+                        currencyCode
+                      }
+                    }
+                  }
+                  originalTotalSet {
+                    presentmentMoney {
+                      amount
+                      currencyCode
+                    }
+                    shopMoney {
+                      amount
+                      currencyCode
+                    }
+                  }
+                  id
+                  image {
+                    url
+                  }
+                  name
+                  currentQuantity
                 }
+              }
             }
             shippingLines(first: 100) {
 							edges {
@@ -57,6 +86,7 @@ export default async function handler(
                 }
               }
             }
+            currencyCode
             currentSubtotalPriceSet {
                 shopMoney {
                     amount

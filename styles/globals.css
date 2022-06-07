@@ -40,3 +40,16 @@ div[data-framer-component-type='Text'] span {
   padding: 0px !important;
   margin: 0px !important;
 }
+
+.product_description_hmtl_outer_container > * {
+  margin: 6px 0px;
+}
+
+.product_description_hmtl_outer_container > ul {
+  list-style-position: inside;
+  list-style-type: circle;
+}
+
+.product_description_hmtl_outer_container > li {
+  margin: 4px 0px;
+}

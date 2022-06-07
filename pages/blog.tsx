@@ -14,7 +14,7 @@ const Posts = ({ posts }: any) => {
         <meta name="description" content="Join us as we share stories about building the TOR business and brand, life as entreprenuers, and of course, articles about the science behind hair, trends and other news!" />
       </Head>
       <Container centerContent maxW="container.lg" p={[4, 0]} mt={20}>
-        <Heading as={"h1"} mb={16} size="2xl">TOR Blog</Heading>
+        {/* <Heading as={"h1"} mb={16} size="2xl">TOR Blog</Heading> */}
         <Stack
           spacing={["24px", "36px"]}
           alignItems="center"

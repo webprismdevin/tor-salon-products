@@ -75,6 +75,9 @@ export const getServerSideProps: GetServerSideProps = async ({
                 maxVariantPrice {
                   amount
                 }
+                minVariantPrice {
+                  amount
+                }
               }
               compareAtPriceRange {
                 maxVariantPrice {

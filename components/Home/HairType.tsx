@@ -26,7 +26,7 @@ const HairType = ({
   return (
     <NextLink href={link} passHref>
       <MotionBox
-        py={48}
+        py={[20, 48]}
         pos="relative"
         width={["full", "33.33%"]}
         display={"grid"}
@@ -36,7 +36,8 @@ const HairType = ({
       >
         <MotionImage
           src={photo}
-          objectFit={"fill"}
+          objectFit={["contain", "fill"]}
+          maxH={["full", "auto"]}
           pos="absolute"
           loading="lazy"
           zIndex={0}
@@ -52,8 +53,9 @@ const HairType = ({
         />
         <MotionImage
           src={typeImage}
-          objectFit={"fill"}
+          objectFit={["contain", "fill"]}
           pos="absolute"
+          maxH={["full", "auto"]}
           loading="lazy"
           zIndex={-1}
           transform={"rotate(35deg)"}

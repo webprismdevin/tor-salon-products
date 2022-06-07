@@ -19,7 +19,12 @@ import formatter from "../../lib/formatter";
 import { createHash } from "crypto";
 
 declare interface LineItemType {
-  node: {id: string; image: {url: string}; name: string; currentQuantity: number }
+  node: {
+    id: string;
+    image: { url: string };
+    name: string;
+    currentQuantity: number;
+  };
 }
 
 export default function ThankYou() {
@@ -30,8 +35,6 @@ export default function ThankYou() {
     const response = await fetch(`/api/get-order?orderId=${id}`).then((res) =>
       res.json()
     );
-
-    console.log(response.response.order);
 
     setData(response.response.order);
   };
@@ -59,44 +62,38 @@ export default function ThankYou() {
 
     if (urlParams.get("event") === "purchase" && data) {
       const user_data = {
-        em: createHash("sha256").update(data.email).digest("hex")
+        em: createHash("sha256").update(data.email).digest("hex"),
       };
-
-      console.log("firing")
 
       const orderId = window.location.pathname.split("/")[2];
       const orderValue = parseFloat(data.currentTotalPriceSet.shopMoney.amount);
-      
-      const itemsArray = data.lineItems.edges.map((i:LineItemType) => (
-        {
-          'item_id': i.node.id, //string
-          'item_name': i.node.name, //string
-          currency: "USD", //string
-          quantity: i.node.currentQuantity //number
-        }
-      ))
 
-      console.log(orderId, typeof orderValue, itemsArray);
+      const itemsArray = data.lineItems.edges.map((i: LineItemType) => ({
+        item_id: i.node.id, //string
+        item_name: i.node.name, //string
+        currency: "USD", //string
+        quantity: i.node.currentQuantity, //number
+      }));
 
-      if(window.dataLayer){
-        window.dataLayer.push({ ecommerce: null }); 
-
+      if (window.dataLayer) {
+        window.dataLayer.push({ ecommerce: null });
         window.dataLayer.push({
-          'event': 'purchase',
-          'ecommerce': {
-            'value': orderValue,
-            'transaction_id': orderId, //string
-            'currency': "USD",
-            'items': itemsArray,
+          event: "purchase",
+          ecommerce: {
+            affiliation: "Storefront",
+            value: orderValue,
+            transaction_id: orderId, //string
+            currency: data.currencyCode,
+            items: itemsArray,
           },
-          'eventModel': {
-            'value': orderValue,
-            'currency': "USD",
-            'transaction_id': orderId,
-          }
-        })
+          eventModel: {
+            value: orderValue,
+            currency: data.currencyCode,
+            transaction_id: orderId,
+          },
+          eventCallback: () => console.log("event pushed"),
+        });
       }
-
     }
   }, [data]);
 
@@ -174,11 +171,9 @@ export default function ThankYou() {
             <VStack py={[5, 10]}>
               <Text fontWeight={600}>Want to track your order?</Text>
               <Text>
-                
-                  <NextLink href="/login" passHref>
+                <NextLink href="/login" passHref>
                   <Link textDecor={"underline"}>Create an account</Link>
-                  </NextLink>
-                {" "}
+                </NextLink>{" "}
                 with the same email you used for your purchase. Or{" "}
                 <NextLink href="/login" passHref>
                   <Link textDecor={"underline"}>login</Link>
@@ -191,7 +186,9 @@ export default function ThankYou() {
       </Container>
       <noscript
         dangerouslySetInnerHTML={{
-          __html: `<img src="https://www.facebook.com/tr?id=${process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID}&ev=Purchase&eid=${window.location.pathname.split("/")[2]}"/>`
+          __html: `<img src="https://www.facebook.com/tr?id=${
+            process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID
+          }&ev=Purchase&eid=${window.location.pathname.split("/")[2]}"/>`,
         }}
       />
     </>
@@ -284,21 +281,3 @@ function LineItem({ product }: any) {
     </Stack>
   );
 }
-
-// export async function getServerSideProps(context: any) {
-//   const base_url =
-//     process.env.NODE_ENV === "production"
-//       ? process.env.NEXT_PUBLIC_SHOP_URL
-//       : "http://localhost:3000";
-
-//   const result = await fetch(
-//     `${base_url}/api/get-order?orderId=${context.params.id}`
-//   ).then((res) => res.json());
-
-//   return {
-//     props: {
-//       data: result.response.order,
-//       order_id: context.params.id,
-//     },
-//   };
-// }

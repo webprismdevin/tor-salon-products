@@ -74,7 +74,6 @@ const ProductPage = ({
 }) => {
   const [itemQty, setItemQty] = useState(1);
   const { cart, setCart } = useContext(CartContext);
-  // const [reviews] = useReviews(product.id.split("/")[4], 1);
   const [activeVariant, setActiveVariant] = useState<VariantType>(() => {
     if (!product) return null;
 
@@ -185,12 +184,13 @@ const ProductPage = ({
             </HStack>
           </Box>
           <Box
+            className="product_description_hmtl_outer_container"
             dangerouslySetInnerHTML={{
               __html: product.descriptionHtml,
             }}
           />
-          {product.instructions && (
-            <Accordion w="full" allowToggle>
+          <Accordion w="full" allowToggle>
+            {product.instructions && (
               <AccordionItem>
                 <h2>
                   <AccordionButton>
@@ -208,8 +208,27 @@ const ProductPage = ({
                   />
                 </AccordionPanel>
               </AccordionItem>
-            </Accordion>
-          )}
+            )}
+            {product.ingredients && (
+              <AccordionItem>
+                <h2>
+                  <AccordionButton>
+                    <Box flex="1" textAlign="left">
+                      Product Ingredients
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                </h2>
+                <AccordionPanel p={4}>
+                  <Box
+                    dangerouslySetInnerHTML={{
+                      __html: product.ingredients.value,
+                    }}
+                  />
+                </AccordionPanel>
+              </AccordionItem>
+            )}
+          </Accordion>
           <Stack spacing={4}>
             <Stack
               direction={"row"}
@@ -477,7 +496,7 @@ function PhotoCarousel({ images }: any) {
   };
 
   return (
-    <Box pos="relative" top={0} maxW={["100%", "50%"]} minW={["100%", "50%"]}>
+    <Box pos="relative" top={0} maxW={["100%", "40%"]} minW={["100%", "40%"]}>
       <AspectRatio ratio={1}>
         <AnimatePresence exitBeforeEnter>
           <MotionImage
@@ -618,6 +637,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
         value
       }
       instructions: metafield(namespace: "product", key: "use_instructions") {
+        value
+      }
+      ingredients: metafield(namespace: "product", key: "ingredients"){
         value
       }
       collections(first: 5) {

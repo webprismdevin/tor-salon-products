@@ -49,9 +49,9 @@ const DesktopMenu = () => {
       <Text display={["none", "inherit"]} onMouseEnter={() => controls.start("animate")} order={[4, 3]} pl={[8]}>Shop</Text>
       <AnimatePresence exitBeforeEnter={true} initial>
         <MotionBox
-          pos="fixed"
+          pos="absolute"
           right={0}
-          top={16}
+          top={20}
           w="100vw"
           bg="white"
           shadow={"md"}
