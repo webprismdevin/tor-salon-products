@@ -14,8 +14,8 @@ const themeConfig = {
     },
   },
   fonts: {
-    heading: "Raleway, sans-serif",
-    body: "Raleway, sans-serif",
+    heading: "ApercuPro, sans-serif",
+    body: "ApercuPro, sans-serif",
   },
   components: {
     Button: {
@@ -32,7 +32,7 @@ const themeConfig = {
     },
     Heading: {
       baseStyle: {
-        fontWeight: "regular",
+        fontWeight: 300,
       },
       sizes: {
         "4xl": {

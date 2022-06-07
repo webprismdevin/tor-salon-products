@@ -27,6 +27,7 @@ const ProductFeature = ({ name, price, image, link }: ProductFeatureTypes) => {
       <MotionBox
         cursor={"pointer"}
         maxW={["none", 240]}
+        minW={["none", 240]}
         textAlign="center"
         display={"grid"}
         placeItems={"center"}

@@ -4,6 +4,34 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'ApercuPro';
+  src: url("/fonts/apercu_light_pro.otf");
+  font-display: swap;
+  font-weight: 300
+}
+
+@font-face {
+  font-family: 'ApercuPro';
+  src: url("/fonts/apercu_regular_pro.otf");
+  font-display: swap;
+  font-weight: 400
+}
+
+@font-face {
+  font-family: 'ApercuPro';
+  src: url("/fonts/apercu_medium_pro.otf");
+  font-display: swap;
+  font-weight: 500
+}
+
+@font-face {
+  font-family: 'OggRoman';
+  src: url("/fonts/Ogg-Roman.otf");
+  font-display: swap;
+  font-weight: 400
+}
+
 html,
 body {
   /* overflow-x: hidden; */
@@ -45,8 +73,11 @@ div[data-framer-component-type='Text'] span {
   margin: 6px 0px;
 }
 
-.product_description_hmtl_outer_container > ul {
+.product_description_hmtl_outer_container > ul, ol {
   list-style-position: inside;
+}
+
+.product_description_hmtl_outer_container > ul {
   list-style-type: circle;
 }
 

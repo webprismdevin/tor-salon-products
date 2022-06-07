@@ -1,17 +1,17 @@
 import {
-  Flex,
   Stack,
+  HStack,
   Container,
   Heading,
+  Image,
+  Button,
+  Link,
+  Flex,
   Box,
   Text,
-  Button,
-  HStack,
   SimpleGrid,
   Icon,
   BoxProps,
-  Image,
-  Link,
   TextProps,
   Portal,
 } from "@chakra-ui/react";
@@ -432,7 +432,7 @@ function HomePage({
             >
               About
             </Text>
-            <Heading fontSize={[114, 220]} fontFamily={"Futura"}>
+            <Heading fontSize={[160, 220]} fontFamily={"Futura"}>
               TOR
             </Heading>
           </Box>

@@ -69,7 +69,7 @@ const HairType = ({
             },
           }}
         />
-        <Text px={2} fontSize={"2xl"} textAlign={"center"}>{title}</Text>
+        <Text px={2} fontSize={["2xl", "4xl"]} textAlign={"center"}>{title}</Text>
       </MotionBox>
     </NextLink>
   );

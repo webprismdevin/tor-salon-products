@@ -23,6 +23,7 @@ import {
   Divider,
   Tooltip,
   Icon,
+  GridItem,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
@@ -35,7 +36,7 @@ import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { wrap } from "@popmotion/popcorn";
 import NextLink from "next/link";
 import { RatingStar } from "rating-star";
-import { AiOutlineInfoCircle } from "react-icons/ai";
+import { AiFillEdit } from "react-icons/ai";
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -133,187 +134,135 @@ const ProductPage = ({
           content={`${product.description.substring(0, 200)}...`}
         />
       </Head>
-      <Stack
-        flexDirection={["column", "row"]}
-        alignItems="flex-start"
-        spacing={[6, 0]}
-      >
-        <PhotoCarousel images={product.images.edges} />
-        <Stack
-          direction={["column"]}
-          spacing={6}
-          w="full"
-          align="flex-start"
-          pt={[0, 20]}
-          pb={20}
-          px={[4, 20]}
-        >
-          <Heading size="xl" as="h1">
-            {product.title}
-          </Heading>
-          {reviews && reviews.bottomline.totalReviews > 0 && (
-            <HStack
-              onClick={() =>
-                reviewsSection.current?.scrollIntoView({ behavior: "smooth" })
-              }
-            >
-              <RatingStar
-                id={product.id.split("/")[4]}
-                rating={reviews.bottomline.average_score}
-              />
-              <Text>
-                {reviews.bottomline.total_review} Review
-                {reviews.bottomline.totalReviews !== 1 ? "s" : ""}
-              </Text>
-            </HStack>
-          )}
-          <Box>
-            <Text fontSize={18}>
-              {formatter.format(parseInt(activeVariant.priceV2.amount))}
-            </Text>
-            <HStack justify={"center"}>
-              <Text fontSize={"xs"}>Pay in 4 installments. Interest-free.</Text>
-              <Tooltip
-                label="Purchase now and pay later with Shop Pay Installments. Most approvals are instant, and pay no interest or fees with on-time payments."
-                aria-label="A tooltip"
-              >
-                <span>
-                  <Icon as={AiOutlineInfoCircle} />
-                </span>
-              </Tooltip>
-            </HStack>
-          </Box>
-          <Box
-            className="product_description_hmtl_outer_container"
-            dangerouslySetInnerHTML={{
-              __html: product.descriptionHtml,
-            }}
-          />
-          <Accordion w="full" allowToggle>
-            {product.instructions && (
-              <AccordionItem>
-                <h2>
-                  <AccordionButton>
-                    <Box flex="1" textAlign="left">
-                      Use Instructions &amp; Tips
-                    </Box>
-                    <AccordionIcon />
-                  </AccordionButton>
-                </h2>
-                <AccordionPanel p={4}>
-                  <Box
-                    dangerouslySetInnerHTML={{
-                      __html: product.instructions.value,
-                    }}
-                  />
-                </AccordionPanel>
-              </AccordionItem>
-            )}
-            {product.ingredients && (
-              <AccordionItem>
-                <h2>
-                  <AccordionButton>
-                    <Box flex="1" textAlign="left">
-                      Product Ingredients
-                    </Box>
-                    <AccordionIcon />
-                  </AccordionButton>
-                </h2>
-                <AccordionPanel p={4}>
-                  <Box
-                    dangerouslySetInnerHTML={{
-                      __html: product.ingredients.value,
-                    }}
-                  />
-                </AccordionPanel>
-              </AccordionItem>
-            )}
-          </Accordion>
-          <Stack spacing={4}>
-            <Stack
-              direction={"row"}
-              align="flex-end"
-              justify={"center"}
-              flexShrink={1}
-            >
-              <>
-                {variants.length > 1 && (
-                  <Select
-                    minW={"200px"}
-                    value={activeVariant.id}
-                    onChange={(e) => {
-                      handleActiveVariantChange(e.target.value);
-                    }}
-                  >
-                    {variants.map((v: { node: VariantType }) => (
-                      <option key={v.node.id} value={v.node.id}>
-                        Size: {v.node.title}
-                      </option>
-                    ))}
-                  </Select>
-                )}
-              </>
-              <HStack>
-                <Button fontSize="2xl" variant="ghost" {...dec}>
-                  -
-                </Button>
-                <Input
-                  w="50px"
-                  {...input}
-                  variant="outline"
-                  textAlign="center"
-                />
-                <Button fontSize="2xl" variant="ghost" {...inc}>
-                  +
-                </Button>
-              </HStack>
+      <SimpleGrid templateColumns={"repeat(2, 1fr)"}>
+        <GridItem colSpan={[2, 1]}>
+          <PhotoCarousel images={product.images.edges} />
+        </GridItem>
+        <GridItem colSpan={[2, 1]}>
+          <Stack py={[4, 20]} pl={[4, 0]} pr={[4, 40]} spacing={6}>
+            <Stack direction={"row"} justify={"space-between"}>
+              <Heading>{product.title}</Heading>
+              <Heading fontWeight={600}>
+                {formatter.format(parseInt(activeVariant.priceV2.amount))}
+              </Heading>
             </Stack>
-
-            <Box
-              pos={["fixed", "static"]}
-              bottom={7}
-              zIndex={[2, 0]}
-              right={2}
-              px={[2, 0]}
-              w={["75%", "full"]}
-            >
-              <Button
-                w={["full"]}
-                onClick={addToCart}
-                isDisabled={!activeVariant?.availableForSale}
-                size="lg"
+            <Divider />
+            <HStack justify={"space-between"}>
+              <Stack
+              direction={["column", "row"]}
+              align="center"
+              justify={"center"}
+                w="50%"
+                onClick={() =>
+                  reviewsSection.current?.scrollIntoView({
+                    behavior: "smooth",
+                  })
+                }
               >
-                {activeVariant?.availableForSale ? "Add To Cart" : "Sold Out!"}
+                <RatingStar
+                  id={product.id.split("/")[4]}
+                  rating={reviews.bottomline.average_score}
+                />
+                <Text>
+                  {reviews.bottomline.total_review} Review
+                  {reviews.bottomline.totalReviews !== 1 ? "s" : ""}
+                </Text>
+              </Stack>
+              <Divider orientation="vertical" height={"60px"} />
+              <Link w="50%" textAlign={"center"} onClick={() => window.open("https://notionforms.io/forms/leave-us-a-review", "status=no,toolbar=no,menubar=no,location=no")}>
+                <Stack direction="row" align={"center"} justify="center">
+                  <Icon as={AiFillEdit} boxSize={6} display="inline" /><Text>Write a review</Text>
+                </Stack>
+              </Link>
+            </HStack>
+            <Divider />
+            <Box
+              className="product_description_hmtl_outer_container"
+              dangerouslySetInnerHTML={{
+                __html: product.descriptionHtml,
+              }}
+            />
+            {variants.length > 1 && (
+              <Select
+                minW={"200px"}
+                value={activeVariant.id}
+                onChange={(e) => {
+                  handleActiveVariantChange(e.target.value);
+                }}
+              >
+                {variants.map((v: { node: VariantType }) => (
+                  <option key={v.node.id} value={v.node.id}>
+                    Size: {v.node.title}
+                  </option>
+                ))}
+              </Select>
+            )}
+            <HStack
+              outline={"1px solid black"}
+              alignSelf={["flex-end", "flex-start"]}
+              borderRadius={6}
+            >
+              <Button fontSize="2xl" variant="ghost" {...dec}>
+                -
               </Button>
-            </Box>
-          </Stack>
-          {!activeVariant?.availableForSale && (
-            <Link onClick={() => window.Tawk_API.maximize()}>
-              Let me know when this product is back in stock!
-            </Link>
-          )}
-          <HStack w="full" justify={["center", "flex-start"]} spacing={6}>
-            <Image
-              minW="166"
-              maxW="166"
-              src={"/images/payment-options/shop_pay_with_affirm_color.png"}
-              alt="Shop Pay Installments logo"
-            />
-            <Image
-              minH="42"
-              maxH="42"
-              src={"/images/payment-options/apple_pay_mark.svg"}
-              alt="Apple Pay logo"
-            />
-            <Image
-              minH="42"
-              maxH="42"
-              src={"/images/payment-options/GPay_Acceptance_Mark_800.png"}
-              alt="Apple Pay logo"
-            />
-          </HStack>
-          <Accordion w="full" allowToggle>
-            <AccordionItem>
+              <Input w="50px" {...input} variant="ghost" textAlign="center" />
+              <Button fontSize="2xl" variant="ghost" {...inc}>
+                +
+              </Button>
+            </HStack>
+            <Button
+              position={["fixed", "static"]}
+              bottom={[2, 0]}
+              right={[2, 0]}
+              zIndex={2}
+              w={["70%", "full"]}
+              onClick={addToCart}
+              isDisabled={!activeVariant?.availableForSale}
+              size="lg"
+            >
+              {activeVariant?.availableForSale ? "Add To Cart" : "Sold Out!"}
+            </Button>
+            <Accordion w="full" allowToggle>
+              {product.instructions && (
+                <AccordionItem>
+                  <h2>
+                    <AccordionButton>
+                      <Box flex="1" textAlign="left">
+                        Use Instructions &amp; Tips
+                      </Box>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel p={4}>
+                    <Box
+                      className=""
+                      dangerouslySetInnerHTML={{
+                        __html: product.instructions.value,
+                      }}
+                    />
+                  </AccordionPanel>
+                </AccordionItem>
+              )}
+              {product.ingredients && (
+                <AccordionItem>
+                  <h2>
+                    <AccordionButton>
+                      <Box flex="1" textAlign="left">
+                        Ingredients
+                      </Box>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel p={4}>
+                    <Box
+                      dangerouslySetInnerHTML={{
+                        __html: product.ingredients.value,
+                      }}
+                    />
+                  </AccordionPanel>
+                </AccordionItem>
+              )}
+                          <AccordionItem>
               <h2>
                 <AccordionButton>
                   <Box flex="1" textAlign="left">
@@ -356,14 +305,15 @@ const ProductPage = ({
                 </Stack>
               </AccordionPanel>
             </AccordionItem>
-          </Accordion>
-        </Stack>
-      </Stack>
+            </Accordion>
+          </Stack>
+        </GridItem>
+      </SimpleGrid>
       {collection && (
         <Box bg={collection.color?.value ? collection.color.value : "white"}>
           <Flex flexDir={["column-reverse", "row"]}>
             <Box
-              w={["full", "60%"]}
+              w={["full", "50%"]}
               pl={[8, 20]}
               pr={[8, 40]}
               py={[20, 40]}
@@ -423,7 +373,7 @@ const ProductPage = ({
                 </Stack>
               </Stack>
             </Box>
-            <AspectRatio ratio={1 / 1} w={["full", "40%"]}>
+            <AspectRatio ratio={1 / 1} w={["full", "50%"]}>
               <Image src={collection?.image?.url} alt="" />
             </AspectRatio>
           </Flex>
@@ -496,7 +446,7 @@ function PhotoCarousel({ images }: any) {
   };
 
   return (
-    <Box pos="relative" top={0} maxW={["100%", "40%"]} minW={["100%", "40%"]}>
+    <Box pos="sticky" top={20} maxW={["100%"]} minW={["100%"]} maxH={["400px", "100%"]}>
       <AspectRatio ratio={1}>
         <AnimatePresence exitBeforeEnter>
           <MotionImage
