@@ -92,3 +92,12 @@ div[data-framer-component-type='Text'] span {
   border-top: 2px solid black;
   border-bottom: 2px solid black;
 }
+
+@media(max-width: 560px){
+  .blog_article:nth-child(2){
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+    border-top: none;
+    border-bottom: none;
+  }
+}

@@ -26,7 +26,7 @@ const Posts = ({ posts }: any) => {
       </Head>
       <SimpleGrid templateColumns={"repeat(3, 1fr)"}>
         {posts.map((post: any) => (
-          <GridItem key={post._id} className="blog_article" pos="relative">
+          <GridItem colSpan={[3, 1]} key={post._id} className="blog_article" pos="relative">
             <AspectRatio
               position="relative"
               zIndex={0}
@@ -39,7 +39,7 @@ const Posts = ({ posts }: any) => {
                 objectFit="cover"
               />
             </AspectRatio>
-            <Stack pos="relative" zIndex={1} p={[2, 8]} align="flex-start">
+            <Stack pos="relative" zIndex={1} p={[4, 8]} align="flex-start">
               <Heading size="lg">{post.title}</Heading>
               <Text mt={2}>{post.subtitle}</Text>
               <NextLink href={`/blog/${post.slug.current}`}>
