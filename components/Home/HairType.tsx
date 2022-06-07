@@ -4,6 +4,7 @@ import {
   BoxProps,
   Image,
   ImageProps,
+  Text
 } from "@chakra-ui/react";
 import React from "react";
 import NextLink from "next/link";
@@ -37,7 +38,6 @@ const HairType = ({
         <MotionImage
           src={photo}
           objectFit={["contain", "fill"]}
-          maxH={["full", "auto"]}
           pos="absolute"
           loading="lazy"
           zIndex={0}
@@ -62,14 +62,14 @@ const HairType = ({
           alt=""
           variants={{
             initial: {
-              opacity: 0.25,
+              opacity: 0.15,
             },
             hover: {
               opacity: 0,
             },
           }}
         />
-        <Heading>{title}</Heading>
+        <Text px={2} fontSize={"2xl"} textAlign={"center"}>{title}</Text>
       </MotionBox>
     </NextLink>
   );

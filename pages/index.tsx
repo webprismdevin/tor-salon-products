@@ -172,20 +172,20 @@ function HomePage({
           borderTop="10px solid"
           justify={"center"}
           align="stretch"
-          flexDir={["column", "row"]}
+          flexDir={["row"]}
           maxW={"full"}
           overflow={"hidden"}
         >
           <HairType
             photo={"/images/hairtypes/fine-hair-girl.jpg"}
             typeImage={"/images/hairtypes/tor-fine_thin_hair.png"}
-            title="Fine/Thin"
+            title="Fine / Thin"
             link="/type/fine-thin"
           />
           <HairType
             photo={"/images/hairtypes/thick-hair-girl.jpg"}
             typeImage={"/images/hairtypes/tor-thick_medium_hair.png"}
-            title="Medium/Thick"
+            title="Medium / Thick"
             link="/type/medium-thick"
           />
           <HairType
@@ -200,7 +200,7 @@ function HomePage({
         <Container maxW="container.xl">
           <Stack direction={["row"]} w="full" align="center" spacing={[4, 16]}>
             <Heading
-              fontSize={[18, 64]}
+              fontSize={[18, 28]}
               color="white"
               textAlign={["left", "left"]}
             >
