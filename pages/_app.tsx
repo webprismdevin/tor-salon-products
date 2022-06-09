@@ -80,7 +80,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             <MailingList />
         )}
       </ChakraProvider>
-      {process.env.NODE_ENV === "development" && (
+      {process.env.NODE_ENV === "production" && (
         <Script
           id="tagManager"
           strategy="afterInteractive"
