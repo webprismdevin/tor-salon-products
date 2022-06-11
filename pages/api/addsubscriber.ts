@@ -10,9 +10,9 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
 
-    const { email } = JSON.parse(req.body);
+    const { email, hairType } = JSON.parse(req.body);
 
-    console.log(email)
+    console.log(email, hairType)
 
     const sub_hash = crypto.createHash('md5').update(email).digest("hex")
 
@@ -24,7 +24,8 @@ export default async function handler(
         body: JSON.stringify({
             email_address: email,
             status: "subscribed",
-            status_if_new: "subscribed"
+            status_if_new: "subscribed",
+            tags: [hairType]
         })
     }).then(res => res.json())
 

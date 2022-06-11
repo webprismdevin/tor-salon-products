@@ -9,6 +9,7 @@ import {
   InputRightElement,
   Icon,
   Spinner,
+  Select,
 } from "@chakra-ui/react";
 import { motion, useAnimation } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -20,21 +21,32 @@ export default function MailingList() {
   const [popupShown, setShown] = useState(false);
   const controls = useAnimation();
   const [email, setEmail] = useState("");
+  const [hairType, setHairType] = useState("");
   const [formStatus, setStatus] = useState("clean");
 
   useEffect(() => {
-    const height = document.body.scrollHeight;
-    const trigger = height / 3;
+    // const height = document.body.scrollHeight;
+    // const trigger = height / 3;
 
     if (!popupShown) controls.start("initial");
 
-    const interval = setInterval(() => {
-      if (window.scrollY > trigger && !popupShown) {
-        console.log(popupShown);
+    // const interval = setInterval(() => {
+    //   if (window.scrollY > trigger && !popupShown) {
+    //     console.log(popupShown);
+    //     controls.start("animate");
+    //     setShown(true);
+    //   }
+    // }, 100);
+
+    const interval = setInterval(async () => {
+      const isSubbed = await window.localStorage.getItem("subscribed")
+
+      if (!popupShown && isSubbed !== "true") {
+        // console.log(popupShown);
         controls.start("animate");
         setShown(true);
       }
-    }, 100);
+    }, 2000);
 
     return () => clearInterval(interval);
   }, [popupShown]);
@@ -58,18 +70,19 @@ export default function MailingList() {
       method: "POST",
       body: JSON.stringify({
         email,
+        hairType
       }),
     }).then((res) => res.json());
 
-    console.log(response)
+    console.log(response);
 
     if (!response) {
       setStatus("failure");
-      if(process.env.NODE_ENV === "production"){
+      if (process.env.NODE_ENV === "production") {
         window.dataLayer.push({
           event: "join_email_list",
-          method: "popup"
-        })
+          method: "popup",
+        });
       }
     }
 
@@ -78,8 +91,11 @@ export default function MailingList() {
       window.dataLayer.push({
         event: "join_email_list",
         signUpMethod: "popup",
-        callback: () => console.log("fired join_email_list event to GTM")
-      })
+        callback: () => {
+          console.log("fired join_email_list event to GTM");
+          window.localStorage.setItem("subscribed", "true")
+        },
+      });
     }
   }
 
@@ -104,7 +120,7 @@ export default function MailingList() {
     >
       <MotionBox
         whileHover={{
-          opacity: 0.6
+          opacity: 0.6,
         }}
         onClick={() => controls.start("close")}
         pos={"absolute"}
@@ -137,10 +153,23 @@ export default function MailingList() {
             {formStatus === "loading" ? (
               <Spinner />
             ) : (
-              <Icon _hover={{opacity: 0.6}} cursor="pointer" as={FiArrowRight} boxSize={6} mt={2} />
+              <Icon
+                _hover={{ opacity: 0.6 }}
+                cursor="pointer"
+                as={FiArrowRight}
+                boxSize={6}
+                mt={2}
+                onClick={subscribe}
+              />
             )}
           </InputRightElement>
         </InputGroup>
+        {email !== "" &&  formStatus !== "success" &&
+          <Select placeholder="Select your hair type" onChange={e => setHairType(e.target.value)}>
+            <option value="Curly">Curly</option>
+            <option value="Fine/Thin">Fine/Thin</option>
+            <option value="Medium/Thick">Medium/Thick</option>
+          </Select>}
         <Text>
           {formStatus === "success"
             ? "We're grateful to have you join! Check your inbox for your special discount."
