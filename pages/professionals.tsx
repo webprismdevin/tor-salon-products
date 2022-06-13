@@ -12,11 +12,17 @@ import {
   SimpleGrid,
   Textarea,
   Input,
+  Select,
+  RadioGroup,
+  Radio,
+  FormLabel,
+  useToast,
 } from "@chakra-ui/react";
 import { FiBookOpen, FiCreditCard, FiGift } from "react-icons/fi";
 import { useState, useRef } from "react";
 import { useFormik } from "formik";
 import Head from "next/head";
+import { useFormspark } from "@formspark/use-formspark";
 
 export default function SalonFinder() {
   const applyNowRef = useRef<null | HTMLDivElement>(null);
@@ -25,7 +31,10 @@ export default function SalonFinder() {
     <Box bgColor={"black"} color={"white"}>
       <Head>
         <title>Salon Professionals | TOR Salon Products</title>
-        <meta name="description"  content="TOR Salon Products was started by a haircare industry veteran, with a strong understanding of stylist and salons challenges, and over a decade helping salons formulate products for their clients." />
+        <meta
+          name="description"
+          content="TOR Salon Products was started by a haircare industry veteran, with a strong understanding of stylist and salons challenges, and over a decade helping salons formulate products for their clients."
+        />
       </Head>
       <Box pt={[20, 40]} pb={60} pos="relative" h={["auto", 1400]}>
         <Image
@@ -49,7 +58,15 @@ export default function SalonFinder() {
             <Heading mixBlendMode={"difference"} fontSize={[64, 84]}>
               Become a TOR Pro
             </Heading>
-            <Button onClick={() => applyNowRef && applyNowRef.current && applyNowRef.current.scrollIntoView({behavior: 'smooth'})} bgColor={"white"} color={"black"}>
+            <Button
+              onClick={() =>
+                applyNowRef &&
+                applyNowRef.current &&
+                applyNowRef.current.scrollIntoView({ behavior: "smooth" })
+              }
+              bgColor={"white"}
+              color={"black"}
+            >
               Apply Now →
             </Button>
           </Stack>
@@ -72,7 +89,8 @@ export default function SalonFinder() {
                   Education
                 </Heading>
                 <Text>
-                  Get one-on-one, or group, product and hair-care sessions led by founder and head chemist, Shannon Tor.
+                  Get one-on-one, or group, product and hair-care sessions led
+                  by founder and head chemist, Shannon Tor.
                 </Text>
               </Box>
             </HStack>
@@ -84,7 +102,8 @@ export default function SalonFinder() {
                     Wholesale Pricing
                   </Heading>
                   <Text>
-                    Exclusive wholesale discounts on all salon products, both back-bar and for retail.
+                    Exclusive wholesale discounts on all salon products, both
+                    back-bar and for retail.
                   </Text>
                 </Box>
               </HStack>
@@ -97,7 +116,10 @@ export default function SalonFinder() {
                     Special Offers
                   </Heading>
                   <Text>
-                    Receive special offers and incentives for sharing your TOR stories, seasonal discounts, and more! Have a product idea? We&apos;ll see if we can make it specifically for your clients.
+                    Receive special offers and incentives for sharing your TOR
+                    stories, seasonal discounts, and more! Have a product idea?
+                    We&apos;ll see if we can make it specifically for your
+                    clients.
                   </Text>
                 </Box>
               </HStack>
@@ -105,7 +127,13 @@ export default function SalonFinder() {
           </Stack>
         </Stack>
       </Container>
-      <Container maxW="container.sm" pb={60} pt={[40, null]} textAlign={"center"} ref={applyNowRef}>
+      <Container
+        maxW="container.sm"
+        pb={60}
+        pt={[40, null]}
+        textAlign={"center"}
+        ref={applyNowRef}
+      >
         <Stack w="full" spacing={6}>
           <Heading>Apply Now!</Heading>
           <Text>Get amazing benefits as a TOR Pro!</Text>
@@ -116,7 +144,71 @@ export default function SalonFinder() {
   );
 }
 
+const FORMSPARK_FORM_ID = "lNYIcWKt";
+
 function ContactForm() {
+  const [submit, submitting] = useFormspark({
+    formId: FORMSPARK_FORM_ID,
+  });
+  const toast = useToast();
+
+  const formObj = {
+    f_name: "",
+    l_name: "",
+    phone: "",
+    email: "",
+    type: "",
+    salon_name: "",
+    add_to_finder: "yes",
+    how_did_you_hear: ""
+  };
+
+  const [formData, updateForm] = useState(formObj)
+
+  const onSubmit = async (e: any) => {
+    e.preventDefault();
+    await submit(formData);
+    toast({
+      title: "We've received your submission!",
+      description: "Your application will be reviewed shortly and you'll receive an update from us once approved!"
+    })
+    updateForm(formObj)
+  };
+
+  return (
+    <Container>
+      <form onSubmit={onSubmit}>
+        <Stack spacing={6}>
+          <Stack direction="row" spacing={6}>
+            <Input placeholder="First name" value={formData.f_name} onChange={(e) => updateForm(prevState => ({...prevState, f_name: e.target.value}) )} />
+            <Input placeholder="Last name" value={formData.l_name} onChange={(e) => updateForm(prevState => ({...prevState, l_name: e.target.value}) )}/>
+          </Stack>
+          <Input placeholder="Phone number" value={formData.phone} onChange={(e) => updateForm(prevState => ({...prevState, phone: e.target.value}) )} />
+          <Input placeholder="Email address" value={formData.email} onChange={(e) => updateForm(prevState => ({...prevState, email: e.target.value}) )} />
+          <Select placeholder="I am a..." value={formData.type} onChange={(e) => updateForm(prevState => ({...prevState, type: e.target.value}) )}>
+            <option value="owner">Salon Owner</option>
+            <option value="independent">Independent Stylist</option>
+          </Select>
+          <Input placeholder="Salon name" value={formData.salon_name} onChange={(e) => updateForm(prevState => ({...prevState, salon_name: e.target.value}) )} />
+          <FormLabel>Would you like your salon to be added to our Salon Finder page?</FormLabel>
+          <RadioGroup value={formData.add_to_finder} onChange={(value) => updateForm(prevState => ({...prevState, add_to_finder: value}) )}>
+            <Stack direction="row">
+              <Radio value="yes">Yes 😊</Radio>
+              <Radio value="no">No 😔</Radio>
+            </Stack>
+          </RadioGroup>
+          <Textarea
+            placeholder="How did you hear about TOR?"
+            value={formData.how_did_you_hear} onChange={(e) => updateForm(prevState => ({...prevState, how_did_you_hear: e.target.value}) )}
+          />
+          <Button variant="outline" type="submit" disabled={submitting}>Submit Application</Button>
+        </Stack>
+      </form>
+    </Container>
+  );
+}
+
+function ContactForm2() {
   const [formStatus, setStatus] = useState("unsubmitted");
 
   const formik = useFormik({
