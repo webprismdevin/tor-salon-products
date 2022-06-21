@@ -36,12 +36,14 @@ export default function Account() {
   const [authenticated, setAuth] = useState(false);
   const router = useRouter();
   const [userData, setUserData] = useState<CustData | null>(null);
-  const { user, token } = useContext(AuthContext);
+  const { user, setUser, token } = useContext(AuthContext);
 
   function logout() {
     window.localStorage.removeItem(
       `${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:accessToken`
     );
+
+    setUser(null);
 
     router.push("/");
   }
@@ -55,19 +57,22 @@ export default function Account() {
   }
 
   useEffect(() => {
-    if (!token) router.push("/login");
+    if (!token) return
+
+    //check if token is still valid
+    console.log(token)
 
     getUser(token?.customerAccessToken.accessToken);
-  }, []);
+  }, [token]);
 
-  if (!userData)
+  if (!userData || !user)
     return (
       <Container py={20} centerContent>
         <Loader />
       </Container>
     );
 
-  if (userData)
+  if (userData && user)
     return (
       <Box pt={20} pb={40}>
         <Head>

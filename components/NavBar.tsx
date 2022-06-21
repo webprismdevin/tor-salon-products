@@ -73,8 +73,7 @@ const NavBar = () => {
               <Link>Blog</Link>
             </NextLink>
           </Box>
-          <Auth router={router} />
-          {/* <Login /> */}
+          <Auth />
           <Search router={router} />
           <Cart />
         </Stack>
@@ -83,11 +82,13 @@ const NavBar = () => {
   );
 };
 
-const Auth = ({ router }: any) => {
-  const { user } = useContext(AuthContext)
+const Auth = () => {
+  const { user } = useContext(AuthContext);
+  const router = useRouter();
+  // const [user, setUser, token] = useUser();
 
   function handleLoginOrAccount() {
-    if (user.id) router.push("/account");
+    if (user && user.id) router.push("/account");
     else router.push("/login");
   }
 

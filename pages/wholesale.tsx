@@ -3,17 +3,23 @@ import {
   Button,
   Container,
   Divider,
+  GridItem,
   Heading,
   IconButton,
   Select,
+  SimpleGrid,
   Stack,
   Tag,
   Text,
+  Image,
 } from "@chakra-ui/react";
 import { gql, GraphQLClient } from "graphql-request";
+import Head from "next/head";
 import { useContext, useEffect, useState } from "react";
+import AuthContext from "../lib/auth-context";
 import CartContext from "../lib/CartContext";
 import formatter from "../lib/formatter";
+import graphClient from "../lib/graph-client";
 
 interface OrderObject {
   pid: string;
@@ -28,33 +34,29 @@ interface OrderObject {
 // add link to download retail & wholesale pricing guide PDF
 
 export default function Wholesale({ products }: any) {
-  const [order, updateOrder] = useState<OrderObject[]>([]);
   const [type, setType] = useState("");
   const [filteredProducts, setProducts] = useState(products);
-  const [cart, setCart] = useState<any>(null);
+  const { cart, setCart } = useContext(CartContext);
 
   const typeSet = new Set(
     products.map((product: any) => product.node.productType)
   );
 
-  function addToOrder(vid: string, pid: string) {
-    updateOrder((prevState) => [...order, { vid, pid, qty: 1 }]);
-  }
+  async function addToCart(vid: string) {
+    const response = await fetch("/api/addtocart", {
+      method: "POST",
+      body: JSON.stringify({
+        variantId: vid,
+        cartId: cart.id,
+        qty: 1,
+      }),
+    }).then((res) => res.json());
 
-  function nameLookup(pid: string, vid: string) {
-    const product = products.find((item: any) => item.node.id === pid);
-
-    const variant = product.node.variants.edges.find(
-      (v: any) => v.node.id === vid
-    );
-
-    return { title: product?.node.title, vTitle: variant?.node.title };
-  }
-
-  function removeItem(vid: string) {
-    const newArray = order.filter((item) => item.vid !== vid);
-
-    updateOrder(newArray);
+    setCart({
+      ...cart,
+      status: "dirty",
+      lines: response.response.cartLinesAdd.cart.lines,
+    });
   }
 
   useEffect(() => {
@@ -66,128 +68,107 @@ export default function Wholesale({ products }: any) {
       );
   }, [type]);
 
-  function addQty(vid: string) {
-    const lineItem = order.find((item: any) => item.vid === vid);
-    const lineItemIndex = order.findIndex((item: any) => item.vid === vid);
-    const newOrder = order.filter((item: any) => item.vid !== vid);
-    const newLineItem = { ...lineItem, qty: lineItem!.qty + 1 };
+  useEffect(() => {
+    if (cart && cart.id) {
+      const mutation = gql`
+        mutation cartDiscountCodesUpdate(
+          $cartId: ID!
+          $discountCodes: [String!]
+        ) {
+          cartDiscountCodesUpdate(
+            cartId: $cartId
+            discountCodes: $discountCodes
+          ) {
+            cart {
+              discountCodes {
+                applicable
+                code
+              }
+            }
+            userErrors {
+              field
+              message
+            }
+          }
+        }
+      `;
 
-    newOrder.splice(lineItemIndex, 0, newLineItem as OrderObject);
+      const variables = {
+        cartId: cart.id,
+        discountCodes: ["WHOLESALE50"],
+      };
 
-    updateOrder([...newOrder]);
-  }
-
-  function removeQty(vid: string) {
-    const lineItem = order.find((item: any) => item.vid === vid);
-    const lineItemIndex = order.findIndex((item: any) => item.vid === vid);
-    const newOrder = order.filter((item: any) => item.vid !== vid);
-    const newLineItem = { ...lineItem, qty: lineItem!.qty - 1 };
-
-    newOrder.splice(lineItemIndex, 0, newLineItem as OrderObject);
-
-    updateOrder([...newOrder]);
-  }
-
-  function submitOrder() {}
+      graphClient
+        .request(mutation, variables)
+        .then((result) => console.log(result));
+    }
+  }, [cart]);
 
   return (
     <Container py={20} maxW="container.xl">
+      <Head>
+        <title>Order Wholesale | TOR Salon Products</title>
+      </Head>
       <Stack py={10}>
         <Heading as="h1" size="2xl">
           Order Wholesale
         </Heading>
       </Stack>
-      <Stack direction="row" spacing={10} align="flex-start" pos="relative">
-        <Stack minW={350} pos="sticky" top={40} spacing={8}>
-          <Stack spacing={4}>
-            <Heading size="lg">Filters</Heading>
-            <Select maxW={300} onChange={(e) => setType(e.target.value)}>
-              <option value="">Show all</option>
-              {Array.from(typeSet).map((pt: any) => (
-                <option key={pt} value={pt}>
-                  {pt}
-                </option>
-              ))}
-            </Select>
-          </Stack>
-          <Stack spacing={4}>
-            <Heading size="lg">Your Order</Heading>
-            <Divider />
-            {order.map((item) => {
-              const names = nameLookup(item.pid, item.vid);
-              return (
-                <Stack key={item.vid} w="100%">
-                  <Text fontWeight={600}>{names.title}</Text>
-                  <Stack direction="row" justify={"space-between"}>
-                    <Text>{names.vTitle}</Text>
-                    <Stack direction="row" spacing={2} align="center">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => removeQty(item.vid)}
-                        disabled={item.qty < 2}
-                      >
-                        -
-                      </Button>
-                      <Text>{item.qty}x</Text>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => addQty(item.vid)}
-                      >
-                        +
-                      </Button>
-                    </Stack>
-                  </Stack>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    alignSelf={"flex-end"}
-                    onClick={() => removeItem(item.vid)}
-                  >
-                    Remove
-                  </Button>
-                </Stack>
-              );
-            })}
-            <Divider />
-            <Button onClick={submitOrder}>Submit Order</Button>
-          </Stack>
+      <Stack direction="column" spacing={10} align="flex-start" pos="relative">
+        <Stack spacing={4}>
+          <Heading size="lg">Filters</Heading>
+          <Select maxW={300} onChange={(e) => setType(e.target.value)}>
+            <option value="">Show all</option>
+            {Array.from(typeSet).map((pt: any) => (
+              <option key={pt} value={pt}>
+                {pt}
+              </option>
+            ))}
+          </Select>
         </Stack>
-        <Stack spacing={6} w="full">
+        <SimpleGrid gap={6} w="full" templateColumns={"repeat(4, 1fr)"}>
           {filteredProducts.map((p: any) => (
-            <Box key={p.node.id} p={6} shadow="md">
-              <Tag size="sm">{p.node.productType}</Tag>
-              <Text fontWeight={600} fontSize="2xl">
-                {p.node.title}
-              </Text>
-              <Stack py={4}>
-                {p.node.variants.edges.map((v: any) => (
-                  <Stack
-                    direction="row"
-                    key={v.node.id}
-                    align="center"
-                    justify={"space-between"}
-                  >
-                    <Text>{v.node.title}</Text>
-                    <Stack direction="row" align="center">
-                      <Text>{formatter.format(v.node.priceV2.amount / 2)}</Text>
-                      <Button
-                        disabled={order.some((i) => i.vid === v.node.id)}
-                        onClick={() => addToOrder(v.node.id, p.node.id)}
-                        size="sm"
-                      >
-                        {order.some((i) => i.vid === v.node.id)
-                          ? "Already in order"
-                          : "Add To Order"}
-                      </Button>
+            <GridItem key={p.node.id} p={6} shadow="md" colSpan={2}>
+              <Stack justify={"space-between"} direction="row">
+                <Image
+                  src={p.node.images.edges[0].node.url}
+                  maxW={"40%"}
+                  alt={p.node.title}
+                />
+                <Stack align={"flex-start"} flexGrow={1}>
+                  <Tag size="sm">{p.node.productType}</Tag>
+                  <Text fontWeight={600} fontSize="2xl">
+                    {p.node.title}
+                  </Text>
+                  <Divider />
+                  {p.node.variants.edges.map((v: any) => (
+                    <Stack
+                      w="full"
+                      direction="row"
+                      key={v.node.id}
+                      align="center"
+                      justify={"space-between"}
+                    >
+                      <Text>
+                        {v.node.title === "Default Title"
+                          ? "One size"
+                          : v.node.title}
+                      </Text>
+                      <Stack direction="row" align="center">
+                        <Text>
+                          {formatter.format(v.node.priceV2.amount / 2)}
+                        </Text>
+                        <Button onClick={() => addToCart(v.node.id)} size="sm">
+                          Add To Cart
+                        </Button>
+                      </Stack>
                     </Stack>
-                  </Stack>
-                ))}
+                  ))}
+                </Stack>
               </Stack>
-            </Box>
+            </GridItem>
           ))}
-        </Stack>
+        </SimpleGrid>
       </Stack>
     </Container>
   );

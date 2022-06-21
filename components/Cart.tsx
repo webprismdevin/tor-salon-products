@@ -24,6 +24,8 @@ import {
   Tooltip,
   Progress,
 } from "@chakra-ui/react";
+import { gql } from "graphql-request";
+import { Router, useRouter } from "next/router";
 import React, { useEffect, useContext, useState } from "react";
 import {
   AiOutlineShopping,
@@ -32,10 +34,12 @@ import {
 } from "react-icons/ai";
 import CartContext from "../lib/CartContext";
 import formatter from "../lib/formatter";
+import graphClient from "../lib/graph-client";
 
-const Cart = ({ color }: { color?: string}) => {
+const Cart = ({ color }: { color?: string }) => {
   const { cart, setCart } = useContext(CartContext);
   const [cartQty, setCartQty] = useState<number | null>(null);
+  const router = useRouter();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -149,33 +153,58 @@ const Cart = ({ color }: { color?: string}) => {
   }
 
   async function handleCheckout() {
-    window.dataLayer.push({
-      event: "begin_checkout",
-      eventCallback: () => (window.location.href = cart.checkoutUrl),
-      eventTimeout: 1200,
-    });
+    if (process.env.NODE_ENV === "production") {
+      window.dataLayer.push({
+        event: "begin_checkout",
+        eventCallback: () => (window.location.href = cart.checkoutUrl),
+        eventTimeout: 1200,
+      });
+    }
+    if (process.env.NODE_ENV === "development") {
+      window.location.href = cart.checkoutUrl;
+    }
   }
 
-  async function addToCart(id:string) {
-    const response = await fetch("/api/addtocart", {
-      method: "POST",
-      body: JSON.stringify({
-        variantId: id,
+  useEffect(() => {
+    if (
+      router.pathname !== "wholesale" && 
+      cart &&
+      cart.estimatedCost &&
+      cart.estimatedCost.totalAmount.amount > 100
+    ) {
+      const mutation = gql`
+        mutation cartDiscountCodesUpdate(
+          $cartId: ID!
+          $discountCodes: [String!]
+        ) {
+          cartDiscountCodesUpdate(
+            cartId: $cartId
+            discountCodes: $discountCodes
+          ) {
+            cart {
+              discountCodes {
+                applicable
+                code
+              }
+            }
+            userErrors {
+              field
+              message
+            }
+          }
+        }
+      `;
+
+      const variables = {
         cartId: cart.id,
-        qty: 1,
-      }),
-    }).then((res) => res.json());
+        discountCodes: ["FREESHIPPING"],
+      };
 
-    setCart({
-      ...cart,
-      status: "dirty",
-      lines: response.response.cartLinesAdd.cart.lines,
-    });
-  }
-
-  const howManyLipBalms = Math.ceil(
-    (100 - cart.estimatedCost?.totalAmount.amount) / 4
-  );
+      graphClient
+        .request(mutation, variables)
+        .then((result) => console.log(result));
+    }
+  }, [cart]);
 
   return (
     <>
@@ -198,7 +227,7 @@ const Cart = ({ color }: { color?: string}) => {
             display: "inline",
           }}
           boxSize={6}
-          color={color ? color : 'black'}
+          color={color ? color : "black"}
         />
         <Text
           fontSize={12}
@@ -224,7 +253,7 @@ const Cart = ({ color }: { color?: string}) => {
                 Your Cart
               </Text>
               <Divider />
-              <Text fontSize={"md"}>Free U.S. shipping on orders of $100+</Text>
+              <Text fontSize={"md"}>Free U.S. shipping on orders of {router.pathname !== "/wholesale" ? "$100+" : "$250+"}</Text>
               <Divider />
             </Stack>
           </DrawerHeader>
@@ -245,54 +274,53 @@ const Cart = ({ color }: { color?: string}) => {
                     </React.Fragment>
                   ))}
                   <Box py={4} w="full">
-                    {cart.estimatedCost.totalAmount.amount < 100 ? (
-                      <Text textAlign={"center"}>
-                        Add ${100 - cart.estimatedCost.totalAmount.amount} for
-                        free shipping!
-                      </Text>
-                    ) : (
-                      <Text>Free shipping unlocked!</Text>
+                    {router.pathname !== "/wholesale" && (
+                      <Box>
+                        {cart.estimatedCost.totalAmount.amount < 100 ? (
+                          <Text textAlign={"center"}>
+                            Add ${100 - cart.estimatedCost.totalAmount.amount}{" "}
+                            for free shipping!
+                          </Text>
+                        ) : (
+                          <Text>Free shipping unlocked!</Text>
+                        )}
+                      </Box>
+                    )}
+                    {router.pathname === "/wholesale" && (
+                      <Box>
+                        {cart.estimatedCost.totalAmount.amount < 250 ? (
+                          <Text textAlign={"center"}>
+                            Add ${250 - cart.estimatedCost.totalAmount.amount}{" "}
+                            for free shipping!
+                          </Text>
+                        ) : (
+                          <Text>Free shipping unlocked!</Text>
+                        )}
+                      </Box>
                     )}
                     <Text textAlign={"right"} fontSize="xs">
-                      $100
+                      {router.pathname !== "/wholesale" ? "$100" : "$250"}
                     </Text>
-                    <Progress
-                      value={cart.estimatedCost.totalAmount.amount}
-                      colorScheme={
-                        cart.estimatedCost.totalAmount.amount < 100
-                          ? "blackAlpha"
-                          : "green"
-                      }
-                    />
-                    {cart.estimatedCost.totalAmount.amount < 100 && (
-                      <Stack spacing={2} mt={4} align={"center"}>
-                        <Text>
-                          That&apos;s only <strong>{howManyLipBalms}</strong>{" "}
-                          lip balms! Add for only $4!
-                        </Text>
-                        <Stack direction="row">
-                          <Button
-                            onClick={() =>
-                              addToCart(
-                                "gid://shopify/ProductVariant/43229151625462"
-                              )
-                            }
-                            size="sm"
-                          >
-                            Add Mint Lip Balm!
-                          </Button>
-                          <Button
-                            onClick={() =>
-                              addToCart(
-                                "gid://shopify/ProductVariant/43229151592694"
-                              )
-                            }
-                            size="sm"
-                          >
-                            Add Regular Lip Balm!
-                          </Button>
-                        </Stack>
-                      </Stack>
+                    {router.pathname !== "/wholesale" ? (
+                      <Progress
+                        value={cart.estimatedCost.totalAmount.amount}
+                        colorScheme={
+                          cart.estimatedCost.totalAmount.amount < 100
+                            ? "blackAlpha"
+                            : "green"
+                        }
+                      />
+                    ) : (
+                      <Progress
+                        value={
+                          (cart.estimatedCost.totalAmount.amount / 250) * 100
+                        }
+                        colorScheme={
+                          cart.estimatedCost.totalAmount.amount < 250
+                            ? "blackAlpha"
+                            : "green"
+                        }
+                      />
                     )}
                   </Box>
                   <Divider />

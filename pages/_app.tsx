@@ -38,7 +38,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [cart, setCart] = useState<any>({ id: null, lines: [] });
   const shop = { name: "TOR Salon Products" };
-  const [user, setUser, token] = useUser();
+  const [user, setUser, token, setToken] = useUser();
 
   const bannerPortal = useRef<HTMLDivElement | null>(null);
 
@@ -54,7 +54,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <ChakraProvider theme={customTheme}>
-        <AuthContext.Provider value={{ user, setUser, token }}>
+        <AuthContext.Provider value={{ user, setUser, token, setToken }}>
           <ShopContext.Provider value={{ shop }}>
             <Head>
               <meta name="theme-color" content="#ffffff" />

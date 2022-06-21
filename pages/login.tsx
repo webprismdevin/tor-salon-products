@@ -95,6 +95,7 @@ function SignIn({
   const [loading, setLoading] = useState(false);
   const [email, handleEmail] = useState("");
   const [password, handlePassword] = useState("");
+  const { user, setUser, setToken } = useContext(AuthContext)
 
   async function handleAuth() {
     setFailed(false);
@@ -108,6 +109,10 @@ function SignIn({
     }).then((res) => res.json());
 
     if (response.customerAccessToken) {
+
+      setToken({
+        ...response
+      })
 
       window.localStorage.setItem(
         `${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:accessToken`,

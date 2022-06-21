@@ -56,7 +56,7 @@ function useUser() {
     }
   }, [token]);
 
-  return [user, setUser, token];
+  return [user, setUser, token, setToken];
 }
 
 export default useUser;

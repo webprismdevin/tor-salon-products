@@ -34,7 +34,7 @@ export default async function handler(
   }
 
   res.send({
-          id: response.cartCreate?.cart?.id,
-          checkoutUrl: response.cartCreate?.cart?.checkoutUrl
+        id: response.cartCreate?.cart?.id,
+        checkoutUrl: response.cartCreate?.cart?.checkoutUrl
   });
 }

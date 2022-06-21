@@ -9,6 +9,8 @@ const AuthContext = createContext<any>({
         is_pro: false,
     },
     updateUser: () => null,
+    token: {},
+    setToken: () => null
 })
 
 export default AuthContext

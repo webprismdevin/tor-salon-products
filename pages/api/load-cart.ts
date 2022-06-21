@@ -22,6 +22,9 @@ export default async function handler(
             code
           }
           estimatedCost {
+            subtotalAmount {
+              amount
+            }
             totalAmount {
               amount
             }
