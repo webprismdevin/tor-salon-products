@@ -16,6 +16,7 @@ export default async function handler(
         firstName
         lastName
         email
+        tags
         orders(first: 100, reverse: true) {
           edges {
             node {

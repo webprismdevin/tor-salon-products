@@ -17,6 +17,10 @@ export default async function handler(
       query GetCart {
         cart(id: "${req.query.cartId}") {
           checkoutUrl
+          discountCodes {
+            applicable
+            code
+          }
           estimatedCost {
             totalAmount {
               amount

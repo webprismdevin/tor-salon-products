@@ -17,6 +17,7 @@ import { NextRouter, useRouter } from "next/router";
 import NextLink from "next/link";
 import Head from "next/head";
 import ShopContext from "../lib/shop-context";
+import AuthContext from "../lib/auth-context";
 
 function returnToast(response: any) {
   if (

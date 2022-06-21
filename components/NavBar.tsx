@@ -9,9 +9,10 @@ import {
   MenuList,
   MenuItem,
   MenuButton,
+  Button,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { AiOutlineUser } from "react-icons/ai";
 import { useRouter } from "next/router";
 import { Search } from "./Search";
@@ -19,29 +20,12 @@ import MobileMenu from "./Menu/MobileMenu";
 import DesktopMenu from "./Menu/DesktopMenu";
 import MenuLink from "./Menu/MenuLink";
 import Cart from "./Cart";
+import Login from "./Login";
+import useUser from "../lib/useUser";
+import AuthContext from "../lib/auth-context";
 
 const NavBar = () => {
-  const [auth, setAuth] = useState(false);
   const router = useRouter();
-
-  useEffect(() => {
-    async function checkToken() {
-      let token = JSON.parse(
-        window.localStorage.getItem(
-          `${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:accessToken`
-        ) as any
-      );
-
-      if (token) setAuth(true);
-    }
-
-    checkToken();
-  }, []);
-
-  function handleLoginOrAccount() {
-    if (auth) router.push("/account");
-    else router.push("/login");
-  }
 
   return (
     <Box
@@ -61,7 +45,6 @@ const NavBar = () => {
           align={["center"]}
           justify={"flex-start"}
         >
-          
           <MobileMenu />
           <StoreName />
           <DesktopMenu />
@@ -90,20 +73,34 @@ const NavBar = () => {
               <Link>Blog</Link>
             </NextLink>
           </Box>
-          <Icon
-            as={AiOutlineUser}
-            boxSize={6}
-            onClick={handleLoginOrAccount}
-            _hover={{
-              opacity: 0.4,
-            }}
-            transition={"opacity 200ms ease"}
-          />
+          <Auth router={router} />
+          {/* <Login /> */}
           <Search router={router} />
           <Cart />
         </Stack>
       </Flex>
     </Box>
+  );
+};
+
+const Auth = ({ router }: any) => {
+  const { user } = useContext(AuthContext)
+
+  function handleLoginOrAccount() {
+    if (user.id) router.push("/account");
+    else router.push("/login");
+  }
+
+  return (
+    <Icon
+      as={AiOutlineUser}
+      boxSize={6}
+      onClick={handleLoginOrAccount}
+      _hover={{
+        opacity: 0.4,
+      }}
+      transition={"opacity 200ms ease"}
+    />
   );
 };
 

@@ -14,53 +14,29 @@ import {
   HStack,
   SimpleGrid,
   GridItem,
+  Tag,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import formatter from "../lib/formatter";
+import { useContext, useEffect, useState } from "react";
 import NextLink from "next/link";
 import Head from "next/head";
 import Loader from "../components/Loader";
+import useUser from "../lib/useUser";
+import AuthContext from "../lib/auth-context";
 
 declare interface CustData {
   firstName: string;
   lastName: string;
   email: string;
   displayAddress: any;
+  tags: [string];
 }
 
 export default function Account() {
   const [authenticated, setAuth] = useState(false);
   const router = useRouter();
   const [userData, setUserData] = useState<CustData | null>(null);
-  const [userAccess, setUserAccess] = useState({});
-
-  useEffect(() => {
-    async function checkToken() {
-      let token = JSON.parse(
-        //@ts-ignore
-        window.localStorage.getItem(
-          `${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:accessToken`
-        )
-      );
-
-      if (token) {
-        setAuth(true);
-
-        if (process.env.NODE_ENV === "production") {
-          window.dataLayer.push({
-            event: "login",
-            loginMethod: "email",
-          });
-        }
-      }
-      //todo: check expiresAt
-
-      if (token === null) router.push("/login");
-    }
-
-    checkToken();
-  }, []);
+  const { user, token } = useContext(AuthContext);
 
   function logout() {
     window.localStorage.removeItem(
@@ -79,21 +55,17 @@ export default function Account() {
   }
 
   useEffect(() => {
-    if (authenticated) {
-      let token = JSON.parse(
-        //@ts-ignore
-        window.localStorage.getItem(
-          `${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:accessToken`
-        )
-      );
+    if (!token) router.push("/login");
 
-      console.log(token);
+    getUser(token?.customerAccessToken.accessToken);
+  }, []);
 
-      getUser(token.customerAccessToken.accessToken);
-    }
-  }, [authenticated]);
-
-  if (!authenticated) return <Loader />;
+  if (!userData)
+    return (
+      <Container py={20} centerContent>
+        <Loader />
+      </Container>
+    );
 
   if (userData)
     return (
@@ -104,16 +76,31 @@ export default function Account() {
         <Container maxW="container.xl" centerContent>
           <Stack spacing={10} w="full">
             <Flex justify={"space-between"}>
-              <Heading>My Account</Heading>
-              <Button onClick={logout}>Logout</Button>
+              <Heading>Account</Heading>
+              <Stack direction="row" spacing={6}>
+                {user.isPro && (
+                  <Button onClick={() => router.push("/wholesale")}>
+                    Shop Wholesale
+                  </Button>
+                )}
+                <Button variant="outline" onClick={logout}>
+                  Logout
+                </Button>
+              </Stack>
             </Flex>
             <Divider />
             <SimpleGrid templateColumns={"repeat(3, 1fr)"}>
               <GridItem colSpan={[3, 1]}>
                 <Stack>
+                  {user.isPro && (
+                    <Tag alignSelf="flex-start" size="lg">
+                      Professional
+                    </Tag>
+                  )}
                   <Text fontWeight={500}>
                     {userData.firstName} {userData.lastName}
                   </Text>
+                  <Text>{userData.email}</Text>
                   <Text>
                     {userData.displayAddress
                       ? userData.displayAddress

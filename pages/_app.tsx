@@ -18,6 +18,8 @@ import "../styles/globals.css";
 import Script from "next/script";
 import { useRouter } from "next/router";
 import Follow from "../components/Follow";
+import AuthContext from "../lib/auth-context";
+import useUser from "../lib/useUser";
 
 const NavBar = dynamic(() => import("../components/NavBar"));
 const Footer = dynamic(() => import("../components/Footer"));
@@ -35,9 +37,8 @@ const customTheme: ThemeConfig = extendTheme(defaultTheme, themeConfig);
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [cart, setCart] = useState<any>({ id: null, lines: [] });
-  const shop = {
-    name: "TOR Salon Products",
-  };
+  const shop = { name: "TOR Salon Products" };
+  const [user, setUser, token] = useUser();
 
   const bannerPortal = useRef<HTMLDivElement | null>(null);
 
@@ -53,32 +54,36 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <ChakraProvider theme={customTheme}>
-        <ShopContext.Provider value={{ shop }}>
-          <Head>
-            <meta name="theme-color" content="#ffffff" />
-            <link rel="shortcut icon" href="/favicon.png" />
-            <meta
-              name="facebook-domain-verification"
-              content="bk02y72cdwvcwzina508gmb7xv87g6"
-            />
-          </Head>
-          <CartContext.Provider value={{ cart, setCart }}>
-            <Box ref={bannerPortal}></Box>
-            {!router.asPath.includes("/landing-page") && <NavBar />}
-            <Component key={router.asPath} {...pageProps} bannerPortal={bannerPortal}/>
-          </CartContext.Provider>
-          {!router.asPath.includes("/landing-page")&& <Follow />}
-          {!router.asPath.includes("/landing-page")&& <Footer />}
-        </ShopContext.Provider>
+        <AuthContext.Provider value={{ user, setUser, token }}>
+          <ShopContext.Provider value={{ shop }}>
+            <Head>
+              <meta name="theme-color" content="#ffffff" />
+              <link rel="shortcut icon" href="/favicon.png" />
+              <meta
+                name="facebook-domain-verification"
+                content="bk02y72cdwvcwzina508gmb7xv87g6"
+              />
+            </Head>
+            <CartContext.Provider value={{ cart, setCart }}>
+              <Box ref={bannerPortal}></Box>
+              {!router.asPath.includes("/landing-page") && <NavBar />}
+              <Component
+                key={router.asPath}
+                {...pageProps}
+                bannerPortal={bannerPortal}
+              />
+            </CartContext.Provider>
+            {!router.asPath.includes("/landing-page") && <Follow />}
+            {!router.asPath.includes("/landing-page") && <Footer />}
+          </ShopContext.Provider>
+        </AuthContext.Provider>
         <ColorModeScript initialColorMode={customTheme.initialColorMode} />
         {process.env.NODE_ENV === "production" && (
           <>
             <Tawk src="https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu" />
           </>
         )}
-        {process.env.NODE_ENV === "production" && (
-            <MailingList />
-        )}
+        {process.env.NODE_ENV === "production" && <MailingList />}
       </ChakraProvider>
       {process.env.NODE_ENV === "production" && (
         <Script
@@ -93,9 +98,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           }}
         />
       )}
-      <Script
-        src="https://dttrk.com/shopify/track.js?shop=tor-salon-products.myshopify.com"
-      />
+      <Script src="https://dttrk.com/shopify/track.js?shop=tor-salon-products.myshopify.com" />
       <noscript
         dangerouslySetInnerHTML={{
           __html: `<img src="//api.yotpo.com/conversion_tracking.gif?app_key=bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l&order_id={{order_name|handleize}}&order_amount={{subtotal_price|money_without_currency}}&order_currency={{ shop.currency }}" width="1" height="1" />`,
