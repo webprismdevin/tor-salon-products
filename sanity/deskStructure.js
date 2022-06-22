@@ -2,25 +2,36 @@
 // studio/deskStructure.js
 
 import S from "@sanity/desk-tool/structure-builder";
-import { ImBook, ImHome, ImQuestion } from 'react-icons/im';
+import { ImCog, ImHome, ImQuestion } from "react-icons/im";
+import { BsBoxSeam, BsBookHalf } from 'react-icons/bs'
 
 export default () =>
   S.list()
     .title("Menu")
     .items([
       S.listItem()
-        .title("Homepage")
+        .title("Site Settings")
+        .icon(ImCog)
+        .child(
+          S.editor()
+            .id("siteSettings")
+            .schemaType("siteSettings")
+            .documentId("siteSettings")
+            .title("Site Settings")
+        ),
+      S.listItem()
+        .title("Home")
         .icon(ImHome)
         .child(
           S.editor()
             .id("homepage")
             .schemaType("homepage")
             .documentId("homepage")
-            .title("Homepage")
+            .title("Home Page")
         ),
-        S.listItem()
+      S.listItem()
         .title("About")
-        .icon(ImBook)
+        .icon(BsBookHalf)
         .child(
           S.editor()
             .id("about")
@@ -28,7 +39,7 @@ export default () =>
             .documentId("about")
             .title("About Us")
         ),
-        S.listItem()
+      S.listItem()
         .title("Help")
         .icon(ImQuestion)
         .child(
@@ -38,8 +49,18 @@ export default () =>
             .documentId("help")
             .title("Help")
         ),
-        S.divider(),
+        S.listItem()
+        .title("Wholesale")
+        .icon(BsBoxSeam)
+        .child(
+          S.editor()
+            .id("wholesale")
+            .schemaType("wholesale")
+            .documentId("wholesale")
+            .title("Wholesale")
+        ),
+      S.divider(),
       ...S.documentTypeListItems().filter(
-        (listItem) => !["homepage", "about", "help"].includes(listItem.getId())
+        (listItem) => !["homepage", "about", "help", "siteSettings", "wholesale"].includes(listItem.getId())
       ),
     ]);

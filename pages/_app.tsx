@@ -24,6 +24,7 @@ import useUser from "../lib/useUser";
 const NavBar = dynamic(() => import("../components/NavBar"));
 const Footer = dynamic(() => import("../components/Footer"));
 const Tawk = dynamic(() => import("../lib/tawk"));
+const Banner = dynamic(() => import("../components/Banner"))
 
 declare global {
   interface Window {
@@ -65,12 +66,11 @@ function MyApp({ Component, pageProps }: AppProps) {
               />
             </Head>
             <CartContext.Provider value={{ cart, setCart }}>
-              <Box ref={bannerPortal}></Box>
+              {router.pathname !== "/wholesale" && <Banner />}
               {!router.asPath.includes("/landing-page") && <NavBar />}
               <Component
                 key={router.asPath}
                 {...pageProps}
-                bannerPortal={bannerPortal}
               />
             </CartContext.Provider>
             {!router.asPath.includes("/landing-page") && <Follow />}

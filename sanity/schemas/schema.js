@@ -17,6 +17,8 @@ import salon from './salon'
 import landing from './landing'
 import reviews from './reviews'
 import landingSection from './landingSection'
+import siteSettings from './siteSettings'
+import wholesale from './wholesale'
 
 // Then we give our schema to the builder and provide the result to Sanity
 export default createSchema({
@@ -27,9 +29,11 @@ export default createSchema({
   types: schemaTypes.concat([
     // The following are document types which will appear
     // in the studio.
+    siteSettings,
     homepage,
     about,
     landing,
+    wholesale,
     salon,
     post,
     // author,

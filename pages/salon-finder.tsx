@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { groq } from "next-sanity";
 import { useState } from "react";
-import { getClient, imageBuilder } from "../lib/sanity";
+import { getClient } from "../lib/sanity";
 import Search from "@smakss/search";
 import { FiDelete, FiGlobe } from "react-icons/fi";
 import Head from "next/head";

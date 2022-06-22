@@ -12,20 +12,17 @@ import {
   SimpleGrid,
   Icon,
   BoxProps,
-  TextProps,
-  Portal,
 } from "@chakra-ui/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import NextImage from "next/image";
 import Head from "next/head";
 import NextLink from "next/link";
 import { gql, GraphQLClient } from "graphql-request";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { FiArrowRight, FiBookOpen, FiCreditCard, FiGift } from "react-icons/fi";
 import dynamic from "next/dynamic";
 import { getClient } from "../lib/sanity";
 import { groq } from "next-sanity";
-import { wrap } from "@popmotion/popcorn";
 
 const Testimonials = dynamic(() => import("../components/Home/Testimonials"));
 const ProductFeature = dynamic(() => import("../components/Home/HomeFeature"));
@@ -33,32 +30,14 @@ const GridFeature = dynamic(() => import("../components/Home/GridFeature"));
 const HairType = dynamic(() => import("../components/Home/HairType"));
 
 const MotionBox = motion<BoxProps>(Box);
-const MotionText = motion<TextProps>(Text);
 
 function HomePage({
   products,
   styling,
   body,
   homepageData,
-  bannerPortal,
 }: any) {
-  const [[page, direction], setPage] = useState([0, 0]);
-
   const hairTypeSelect = useRef<HTMLDivElement | null>(null);
-
-  const index = wrap(0, homepageData.banner.length, page);
-
-  const paginate = (newDirection: number) => {
-    setPage([page + newDirection, newDirection]);
-  };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      paginate(1);
-    }, 2900);
-
-    return () => clearInterval(interval);
-  }, [page]);
 
   return (
     <>
@@ -66,32 +45,6 @@ function HomePage({
         <title>{homepageData.seo_title} | TOR Salon Products</title>
         <meta name="description" content={homepageData.seo_description} />
       </Head>
-      <Portal containerRef={bannerPortal}>
-        <MotionBox py={2} bg="black" color="white">
-          <AnimatePresence
-            initial={true}
-            custom={direction}
-            exitBeforeEnter={true}
-          >
-            <MotionBox
-              custom={direction}
-              initial={{
-                opacity: 0,
-              }}
-              animate={{
-                opacity: 1,
-                transition: { duration: 0.2 },
-              }}
-              exit={{
-                opacity: 0,
-              }}
-              key={page}
-            >
-              <Text textAlign={"center"}>{homepageData.banner[index]}</Text>
-            </MotionBox>
-          </AnimatePresence>
-        </MotionBox>
-      </Portal>
       <Container py={20} centerContent pos="relative" maxW="container.xl">
         <Stack spacing={4} textAlign={"center"}>
           <Heading fontSize={[42, 84, null, null, 144]} as="h1">
@@ -689,9 +642,9 @@ export async function getStaticProps() {
     throw Error("Unable to retrieve Shopify Products. Please check logs");
   }
 
-  const aboutPageQuery = groq`*[_type == "homepage"][0]`;
+  const homepageQuery = groq`*[_type == "homepage"][0]`;
 
-  const homepageData = await getClient(false).fetch(aboutPageQuery, {});
+  const homepageData = await getClient(false).fetch(homepageQuery, {});
 
   return {
     props: {

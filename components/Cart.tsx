@@ -18,14 +18,14 @@ import {
   useNumberInput,
   HStack,
   Input,
-  AspectRatio,
+  AspectRatio, 
   CloseButton,
   Stack,
   Tooltip,
   Progress,
 } from "@chakra-ui/react";
 import { gql } from "graphql-request";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import React, { useEffect, useContext, useState } from "react";
 import {
   AiOutlineShopping,
@@ -167,7 +167,7 @@ const Cart = ({ color }: { color?: string }) => {
 
   useEffect(() => {
     if (
-      router.pathname !== "wholesale" && 
+      router.pathname !== "/wholesale" &&
       cart &&
       cart.estimatedCost &&
       cart.estimatedCost.totalAmount.amount > 100
@@ -253,7 +253,11 @@ const Cart = ({ color }: { color?: string }) => {
                 Your Cart
               </Text>
               <Divider />
-              <Text fontSize={"md"}>Free U.S. shipping on orders of {router.pathname !== "/wholesale" ? "$100+" : "$250+"}</Text>
+              <Text fontSize={"md"}>
+                Free U.S. shipping on orders of{" "}
+                {router.pathname !== "/wholesale" ? "$100+" : "$250+"}
+              </Text>
+              <FreeShippingProgress cart={cart} />
               <Divider />
             </Stack>
           </DrawerHeader>
@@ -273,57 +277,6 @@ const Cart = ({ color }: { color?: string }) => {
                       <Divider />
                     </React.Fragment>
                   ))}
-                  <Box py={4} w="full">
-                    {router.pathname !== "/wholesale" && (
-                      <Box>
-                        {cart.estimatedCost.totalAmount.amount < 100 ? (
-                          <Text textAlign={"center"}>
-                            Add ${100 - cart.estimatedCost.totalAmount.amount}{" "}
-                            for free shipping!
-                          </Text>
-                        ) : (
-                          <Text>Free shipping unlocked!</Text>
-                        )}
-                      </Box>
-                    )}
-                    {router.pathname === "/wholesale" && (
-                      <Box>
-                        {cart.estimatedCost.totalAmount.amount < 250 ? (
-                          <Text textAlign={"center"}>
-                            Add ${250 - cart.estimatedCost.totalAmount.amount}{" "}
-                            for free shipping!
-                          </Text>
-                        ) : (
-                          <Text>Free shipping unlocked!</Text>
-                        )}
-                      </Box>
-                    )}
-                    <Text textAlign={"right"} fontSize="xs">
-                      {router.pathname !== "/wholesale" ? "$100" : "$250"}
-                    </Text>
-                    {router.pathname !== "/wholesale" ? (
-                      <Progress
-                        value={cart.estimatedCost.totalAmount.amount}
-                        colorScheme={
-                          cart.estimatedCost.totalAmount.amount < 100
-                            ? "blackAlpha"
-                            : "green"
-                        }
-                      />
-                    ) : (
-                      <Progress
-                        value={
-                          (cart.estimatedCost.totalAmount.amount / 250) * 100
-                        }
-                        colorScheme={
-                          cart.estimatedCost.totalAmount.amount < 250
-                            ? "blackAlpha"
-                            : "green"
-                        }
-                      />
-                    )}
-                  </Box>
-                  <Divider />
                 </>
               )}
             </VStack>
@@ -374,6 +327,61 @@ const Cart = ({ color }: { color?: string }) => {
     </>
   );
 };
+
+function FreeShippingProgress({ cart }: { cart?: any }) {
+  const router = useRouter();
+
+  return (
+    <Box py={4} w="full">
+      <Stack direction="row" w="full" justify={"space-between"}>
+        <Box>
+          {router.pathname === "/wholesale" && (
+            <Box>
+              {cart.estimatedCost.totalAmount.amount < 250 ? (
+                <Text textAlign={"center"}>
+                  Add ${250 - cart.estimatedCost.totalAmount.amount} for free
+                  shipping!
+                </Text>
+              ) : (
+                <Text>Free shipping unlocked!</Text>
+              )}
+            </Box>
+          )}
+          {router.pathname !== "/wholesale" && (
+            <Box>
+              {cart.estimatedCost.totalAmount.amount < 100 ? (
+                <Text textAlign={"center"}>
+                  Add ${100 - cart.estimatedCost.totalAmount.amount} for free
+                  shipping!
+                </Text>
+              ) : (
+                <Text>Free shipping unlocked!</Text>
+              )}
+            </Box>
+          )}
+        </Box>
+        <Text textAlign={"right"}>
+          {router.pathname !== "/wholesale" ? "$100" : "$250"}
+        </Text>
+      </Stack>
+      {router.pathname !== "/wholesale" ? (
+        <Progress
+          value={cart.estimatedCost.totalAmount.amount}
+          colorScheme={
+            cart.estimatedCost.totalAmount.amount < 100 ? "blackAlpha" : "green"
+          }
+        />
+      ) : (
+        <Progress
+          value={(cart.estimatedCost.totalAmount.amount / 250) * 100}
+          colorScheme={
+            cart.estimatedCost.totalAmount.amount < 250 ? "blackAlpha" : "green"
+          }
+        />
+      )}
+    </Box>
+  );
+}
 
 function CartLineItem({
   product,
