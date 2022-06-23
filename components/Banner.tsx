@@ -28,6 +28,8 @@ export default function Banner() {
 
   if(error) return null
 
+  if (!data) return null
+
   return (
     <MotionBox py={2} bg="black" color="white">
       <AnimatePresence initial={true} custom={direction} exitBeforeEnter={true}>

@@ -9,7 +9,7 @@ import {
   MenuList,
   MenuItem,
   MenuButton,
-  Button,
+  chakra,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useState, useEffect, useContext } from "react";
@@ -20,8 +20,6 @@ import MobileMenu from "./Menu/MobileMenu";
 import DesktopMenu from "./Menu/DesktopMenu";
 import MenuLink from "./Menu/MenuLink";
 import Cart from "./Cart";
-import Login from "./Login";
-import useUser from "../lib/useUser";
 import AuthContext from "../lib/auth-context";
 
 const NavBar = () => {

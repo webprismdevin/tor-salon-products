@@ -20,8 +20,9 @@ import { useRouter } from "next/router";
 import Follow from "../components/Follow";
 import AuthContext from "../lib/auth-context";
 import useUser from "../lib/useUser";
+import NavBar from "../components/NavBar";
 
-const NavBar = dynamic(() => import("../components/NavBar"));
+// const NavBar = dynamic(() => import("../components/NavBar"), { ssr: false});
 const Footer = dynamic(() => import("../components/Footer"));
 const Tawk = dynamic(() => import("../lib/tawk"));
 const Banner = dynamic(() => import("../components/Banner"))
@@ -40,8 +41,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [cart, setCart] = useState<any>({ id: null, lines: [] });
   const shop = { name: "TOR Salon Products" };
   const [user, setUser, token, setToken] = useUser();
-
-  const bannerPortal = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (typeof window) {
@@ -67,7 +66,8 @@ function MyApp({ Component, pageProps }: AppProps) {
             </Head>
             <CartContext.Provider value={{ cart, setCart }}>
               {router.pathname !== "/wholesale" && <Banner />}
-              {!router.asPath.includes("/landing-page") && <NavBar />}
+              {/* {!router.asPath.includes("/landing-page") && <NavBar />} */}
+              <NavBar />
               <Component
                 key={router.asPath}
                 {...pageProps}
@@ -91,10 +91,10 @@ function MyApp({ Component, pageProps }: AppProps) {
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-          'https://metrics.torsalonproducts.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-          })(window,document,'script','dataLayer','GTM-MKG7C6H');`,
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://gtm.torsalonproducts.com/kthlknzv.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-MKG7C6H');`,
           }}
         />
       )}
@@ -104,11 +104,11 @@ function MyApp({ Component, pageProps }: AppProps) {
           __html: `<img src="//api.yotpo.com/conversion_tracking.gif?app_key=bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l&order_id={{order_name|handleize}}&order_amount={{subtotal_price|money_without_currency}}&order_currency={{ shop.currency }}" width="1" height="1" />`,
         }}
       />
-      {process.env.NODE_ENV === "development" && (
+      {process.env.NODE_ENV === "production" && (
         <noscript
           dangerouslySetInnerHTML={{
-            __html: `<iframe src="https://metrics.torsalonproducts.com/ns.html?id=GTM-MKG7C6H"
-          height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
+            __html: `<iframe src="https://gtm.torsalonproducts.com/ns.html?id=GTM-MKG7C6H"
+            height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
           }}
         />
       )}

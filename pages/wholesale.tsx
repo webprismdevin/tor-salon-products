@@ -23,12 +23,6 @@ import formatter from "../lib/formatter";
 import graphClient from "../lib/graph-client";
 import { getClient } from "../lib/sanity";
 
-interface OrderObject {
-  pid: string;
-  vid: string;
-  qty: number;
-}
-
 // add link to instruction video in header
 // add other benefits
 // add shipping policy for wholesale orders
