@@ -27,7 +27,7 @@ import {
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
-import React, { useState, useContext, useRef } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import CartContext from "../../lib/CartContext";
 import formatter from "../../lib/formatter";
 import { GetStaticProps } from "next";
@@ -123,6 +123,29 @@ const ProductPage = ({
     setActiveVariant(cv[0].node);
   }
 
+  useEffect(() => {
+    if (window.dataLayer) {
+      window.dataLayer.push({ ecommerce: null }); // Clear the previous ecommerce object.
+      window.dataLayer.push({
+        event: "view_item",
+        ecommerce: {
+          items: [
+            {
+              item_id: activeVariant.id,
+              item_name: product.title,
+              affiliation: "Storefront",
+              item_brand: "TOR",
+              value: activeVariant.priceV2.amount,
+              item_variant: activeVariant.title,
+              currency: "USD",
+              item_category: product.productType
+            },
+          ],
+        },
+      });
+    }
+  }, [activeVariant]);
+
   if (!product) return null;
 
   return (
@@ -139,7 +162,12 @@ const ProductPage = ({
           <PhotoCarousel images={product.images.edges} />
         </GridItem>
         <GridItem colSpan={[2, 1]}>
-          <Stack py={[4, 20]} pl={[4, null, 4, 8]} pr={[4,null, 10, 20]} spacing={6}>
+          <Stack
+            py={[4, 20]}
+            pl={[4, null, 4, 8]}
+            pr={[4, null, 10, 20]}
+            spacing={6}
+          >
             <Stack direction={"row"} justify={"space-between"}>
               <Heading>{product.title}</Heading>
               <Heading fontWeight={600}>
@@ -149,9 +177,9 @@ const ProductPage = ({
             <Divider />
             <HStack justify={"space-between"}>
               <Stack
-              direction={["column", null, "column", "row"]}
-              align="center"
-              justify={"center"}
+                direction={["column", null, "column", "row"]}
+                align="center"
+                justify={"center"}
                 w={["100%", "50%"]}
                 onClick={() =>
                   reviewsSection.current?.scrollIntoView({
@@ -169,9 +197,19 @@ const ProductPage = ({
                 </Text>
               </Stack>
               <Divider orientation="vertical" height={"60px"} />
-              <Link w={["100%", "50%"]} textAlign={"center"} onClick={() => window.open("https://notionforms.io/forms/leave-us-a-review", "status=no,toolbar=no,menubar=no,location=no")}>
+              <Link
+                w={["100%", "50%"]}
+                textAlign={"center"}
+                onClick={() =>
+                  window.open(
+                    "https://notionforms.io/forms/leave-us-a-review",
+                    "status=no,toolbar=no,menubar=no,location=no"
+                  )
+                }
+              >
                 <Stack direction="row" align={"center"} justify="center">
-                  <Icon as={AiFillEdit} boxSize={6} display="inline" /><Text>Write a review</Text>
+                  <Icon as={AiFillEdit} boxSize={6} display="inline" />
+                  <Text>Write a review</Text>
                 </Stack>
               </Link>
             </HStack>
@@ -262,49 +300,50 @@ const ProductPage = ({
                   </AccordionPanel>
                 </AccordionItem>
               )}
-                          <AccordionItem>
-              <h2>
-                <AccordionButton>
-                  <Box flex="1" textAlign="left">
-                    Money-back Guarantee
-                  </Box>
-                  <AccordionIcon />
-                </AccordionButton>
-              </h2>
-              <AccordionPanel p={4}>
-                We believe in our products. If you&apos;re not satisfied with
-                your first few washes, or you don&apos;t find our products work
-                for you, we&apos;ll buy it back. No hassles. Just pay return
-                shipping and we&apos;ll refund your purchase.
-              </AccordionPanel>
-            </AccordionItem>
-            <AccordionItem>
-              <h2>
-                <AccordionButton>
-                  <Box flex="1" textAlign="left">
-                    Shipping Policy
-                  </Box>
-                  <AccordionIcon />
-                </AccordionButton>
-              </h2>
-              <AccordionPanel p={4}>
-                <Stack spacing={2}>
-                  <Text>
-                    We want to get everyone their orders as soon as possible,
-                    and make our best effort to do so.
-                  </Text>
-                  <Text>
-                    Orders placed after 12pm (Mountain Time) Monday - Thursday,
-                    will ship the following morning. Orders placed after 11pm
-                    (Mountain Time) on Friday will ship the following Monday.
-                  </Text>
-                  <Text>
-                    The shipping companies in our town aren&apos;t open past
-                    noon on Friday. We appreciate your patience.
-                  </Text>
-                </Stack>
-              </AccordionPanel>
-            </AccordionItem>
+              <AccordionItem>
+                <h2>
+                  <AccordionButton>
+                    <Box flex="1" textAlign="left">
+                      Money-back Guarantee
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                </h2>
+                <AccordionPanel p={4}>
+                  We believe in our products. If you&apos;re not satisfied with
+                  your first few washes, or you don&apos;t find our products
+                  work for you, we&apos;ll buy it back. No hassles. Just pay
+                  return shipping and we&apos;ll refund your purchase.
+                </AccordionPanel>
+              </AccordionItem>
+              <AccordionItem>
+                <h2>
+                  <AccordionButton>
+                    <Box flex="1" textAlign="left">
+                      Shipping Policy
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                </h2>
+                <AccordionPanel p={4}>
+                  <Stack spacing={2}>
+                    <Text>
+                      We want to get everyone their orders as soon as possible,
+                      and make our best effort to do so.
+                    </Text>
+                    <Text>
+                      Orders placed after 12pm (Mountain Time) Monday -
+                      Thursday, will ship the following morning. Orders placed
+                      after 11pm (Mountain Time) on Friday will ship the
+                      following Monday.
+                    </Text>
+                    <Text>
+                      The shipping companies in our town aren&apos;t open past
+                      noon on Friday. We appreciate your patience.
+                    </Text>
+                  </Stack>
+                </AccordionPanel>
+              </AccordionItem>
             </Accordion>
           </Stack>
         </GridItem>
@@ -446,7 +485,13 @@ function PhotoCarousel({ images }: any) {
   };
 
   return (
-    <Box pos="sticky" top={20} maxW={["100%"]} minW={["100%"]} maxH={["400px", "100%"]}>
+    <Box
+      pos="sticky"
+      top={20}
+      maxW={["100%"]}
+      minW={["100%"]}
+      maxH={["400px", "100%"]}
+    >
       <AspectRatio ratio={1}>
         <AnimatePresence exitBeforeEnter>
           <MotionImage
@@ -583,6 +628,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       descriptionHtml
       description
       tags
+      productType
       collectionToPull: metafield(namespace: "product", key:"featured_collection"){
         value
       }

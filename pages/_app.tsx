@@ -6,7 +6,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { theme as defaultTheme, ThemeConfig } from "@chakra-ui/theme";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import CartContext from "../lib/CartContext";
 import ShopContext from "../lib/shop-context";
 import Head from "next/head";
@@ -17,15 +17,14 @@ import "@fontsource/raleway/400.css";
 import "../styles/globals.css";
 import Script from "next/script";
 import { useRouter } from "next/router";
-import Follow from "../components/Follow";
 import AuthContext from "../lib/auth-context";
 import useUser from "../lib/useUser";
-import NavBar from "../components/NavBar";
 
-// const NavBar = dynamic(() => import("../components/NavBar"), { ssr: false});
-const Footer = dynamic(() => import("../components/Footer"));
-const Tawk = dynamic(() => import("../lib/tawk"));
 const Banner = dynamic(() => import("../components/Banner"))
+const NavBar = dynamic(() => import("../components/NavBar"))
+const Tawk = dynamic(() => import("../lib/tawk"), { ssr: false})
+const Follow = dynamic(() => import("../components/Follow"), { ssr: false})
+const Footer = dynamic(() => import("../components/Footer"))
 
 declare global {
   interface Window {
@@ -66,8 +65,8 @@ function MyApp({ Component, pageProps }: AppProps) {
             </Head>
             <CartContext.Provider value={{ cart, setCart }}>
               {router.pathname !== "/wholesale" && <Banner />}
-              {/* {!router.asPath.includes("/landing-page") && <NavBar />} */}
-              <NavBar />
+              {!router.asPath.includes("/landing-page") && <NavBar />}
+              {/* <NavBar /> */}
               <Component
                 key={router.asPath}
                 {...pageProps}

@@ -109,7 +109,7 @@ const StoreName = () => {
   return (
     <Box order={[2]}>
       <NextLink href="/" passHref>
-        <Image src={"/logo_800.png"} h={7} alt="TOR logo" />
+        <Image src={"/logo_240.png"} h={7} alt="TOR logo" />
       </NextLink>
     </Box>
   );

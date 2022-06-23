@@ -1,17 +1,15 @@
 import {
-  Heading,
   Box,
   BoxProps,
-  Image,
-  ImageProps,
-  Text
+  Text,
+  AspectRatio,
 } from "@chakra-ui/react";
 import React from "react";
 import NextLink from "next/link";
+import NextImage from "next/image";
 import { motion } from "framer-motion";
 
 const MotionBox = motion<BoxProps>(Box);
-const MotionImage = motion<ImageProps>(Image);
 
 const HairType = ({
   typeImage,
@@ -35,13 +33,7 @@ const HairType = ({
         initial="initial"
         whileHover="hover"
       >
-        <MotionImage
-          src={photo}
-          objectFit={["contain", "fill"]}
-          pos="absolute"
-          loading="lazy"
-          zIndex={0}
-          alt=""
+        <MotionBox
           variants={{
             initial: {
               opacity: 0,
@@ -50,16 +42,27 @@ const HairType = ({
               opacity: 1,
             },
           }}
-        />
-        <MotionImage
-          src={typeImage}
-          objectFit={["contain", "fill"]}
           pos="absolute"
-          maxH={["full", "auto"]}
-          loading="lazy"
+          zIndex={0}
+          h={"full"}
+          w={"full"}
+        >
+          <AspectRatio ratio={1 / 1} h={"full"} w={"full"}>
+            <NextImage
+              src={photo}
+              objectFit={"cover"}
+              layout={"fill"}
+              alt={`${title}`}
+              sizes={"33vw"}
+            />
+          </AspectRatio>
+        </MotionBox>
+        <MotionBox
           zIndex={-1}
           transform={"rotate(35deg)"}
-          alt=""
+          maxH={["full", "auto"]}
+          pos="absolute"
+          boxSize={"75%"}
           variants={{
             initial: {
               opacity: 0.15,
@@ -68,8 +71,19 @@ const HairType = ({
               opacity: 0,
             },
           }}
-        />
-        <Text px={2} fontSize={["2xl", "4xl"]} textAlign={"center"}>{title}</Text>
+        >
+          <NextImage
+            src={typeImage}
+            objectFit={"cover"}
+            layout={"fill"}
+            loading="lazy"
+            alt=""
+            sizes={"33vw"}
+          />
+        </MotionBox>
+        <Text px={2} fontSize={["2xl", "4xl"]} textAlign={"center"}>
+          {title}
+        </Text>
       </MotionBox>
     </NextLink>
   );
