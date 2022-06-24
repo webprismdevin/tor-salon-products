@@ -70,7 +70,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               <Component key={router.asPath} {...pageProps} />
             </CartContext.Provider>
             {!router.asPath.includes("/offer") && <Follow />}
-            <Footer />
+            {!router.asPath.includes("/offer") && <Footer />}
           </ShopContext.Provider>
         </AuthContext.Provider>
         <ColorModeScript initialColorMode={customTheme.initialColorMode} />

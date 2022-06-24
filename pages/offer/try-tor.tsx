@@ -12,10 +12,20 @@ import {
   ListItem,
   ListIcon,
   Stack,
+  Link,
+  chakra,
+  AspectRatio,
 } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import NextImage from "next/image";
+import NextLink from "next/link";
+import Head from "next/head";
+import CartContext from "../../lib/CartContext";
+import graphClient from "../../lib/graph-client";
+import { gql } from "graphql-request";
+
+const CharkaNI = chakra(NextImage);
 
 const hairTypeData = {
   curly: {
@@ -23,42 +33,60 @@ const hairTypeData = {
     color: "#E4D5D4",
     title: "TOR for Curly Hair",
     description:
-      "TOR's Fine/Thin Line has been specifically formulated to address the unique needs of fine and thin hair, to create voluptuous, soft, manageable hair with shine.",
+      "TOR's Curly Line has been specifically formulated to address the unique needs of curly hair - to balance curls, increase definition, bounce, shine, and moisture, while protecting against breakage and frizz.",
     benefits: [
       {
         icon: "",
-        text: "No build-up",
+        text: "Longer-lasting style",
       },
       {
         icon: "",
-        text: "Naturally moisturizing",
+        text: "Amazing Frizz Control",
       },
       {
         icon: "",
-        text: "Maximum volume",
+        text: "Superior Breakage Protection",
       },
     ],
+    photo: "/images/hairtypes/curly-hair-girl.jpg",
+    styling: {
+      variantId: "gid://shopify/Product/7668184285430",
+      photo: "/images/trytor/styling/CHD150ml.png",
+      title: "HD Curl Cream",
+      description:
+        "TOR HD Curl Cream for Curly Hair is designed to make curls stand out with a soft hold while conditioning and defining both curls and waves. This versatile cream was designed for consumers that have naturally curly or permed hair. It enhances natural texture and provides incredible humidity resistance while making curls touchable and frizz free.",
+      price: 27,
+    },
   },
   medium: {
     variantId: "gid://shopify/ProductVariant/43618533441782",
     color: "#D7E1DC",
     title: "TOR for Medium & Thick Hair",
     description:
-      "TOR's Fine/Thin Line has been specifically formulated to address the unique needs of fine and thin hair, to create voluptuous, soft, manageable hair with shine.",
+      "TOR's Medium/Thick Line has been specifically formulated to address the unique needs of medium density and thick hair, creating shine, protecting, and moisturizing, without added weight. The end result is silky, soft, manageable hair.",
     benefits: [
       {
         icon: "",
-        text: "No build-up",
+        text: "Easier Styling",
       },
       {
         icon: "",
-        text: "Naturally moisturizing",
+        text: "Naturally Detangling",
       },
       {
         icon: "",
-        text: "Maximum volume",
+        text: "Luxe Lather",
       },
     ],
+    photo: "/images/hairtypes/thick-hair-girl.jpg",
+    styling: {
+      variantId: "gid://shopify/Product/7668189823222",
+      photo: "/images/trytor/styling/MTmilk150ml.png",
+      title: "Styling Milk",
+      description:
+        "TOR Styling Milk for Medium/Thick hair is designed to provide maximum styling versatility. It can help create any desired style while keeping a natural look and movement. Styling Milk works equally well for diffusing to create natural waves or a beach look, increasing volume, or smoothing straight hair. This all-in-one styling provides all the benefits of a cream with the control of the gel and the definition of a mousse in a cream base.",
+      price: 24,
+    },
   },
   fine: {
     variantId: "gid://shopify/ProductVariant/43618533409014",
@@ -80,6 +108,15 @@ const hairTypeData = {
         text: "Maximum volume",
       },
     ],
+    photo: "/images/hairtypes/fine-hair-girl.jpg",
+    styling: {
+      variantId: "gid://shopify/Product/7668183367926",
+      photo: "/images/trytor/styling/FTSpray_300ml.png",
+      title: "Anti-Static Hair Spray",
+      description:
+        "TOR Anti-Static Styling spray help you build that body/style without the fear of static. This light hold spray provides flexible styling and manageability without stiff hold. It provides flexible control so the style is held in place; yet comb and brush easily without flaking. After brushing, hair is soft, flexible and fuller with a natural, healthy look.",
+      price: 24,
+    },
   },
 } as any;
 
@@ -92,45 +129,145 @@ const MotionBox = motion(Box);
 // styling product feature switch based on hair type
 // handle discounts for shipping & price discounts
 // hide styling product & show a select if hair type is not selected
+// setup opitmize to test Tresemme vs Nexxus
 
 export default function TryTor() {
   const [hairType, setHairType] = useState<null | string>(null);
+  const { cart, setCart } = useContext(CartContext);
+
+  useEffect(() => {
+    if (cart && cart.id) {
+      const mutation = gql`
+        mutation cartDiscountCodesUpdate(
+          $cartId: ID!
+          $discountCodes: [String!]
+        ) {
+          cartDiscountCodesUpdate(
+            cartId: $cartId
+            discountCodes: $discountCodes
+          ) {
+            cart {
+              discountCodes {
+                applicable
+                code
+              }
+            }
+            userErrors {
+              field
+              message
+            }
+          }
+        }
+      `;
+
+      const variables = {
+        cartId: cart.id,
+        discountCodes: ["TRYTORFOR12"],
+      };
+
+      graphClient
+        .request(mutation, variables)
+        .then((result) => console.log(result));
+    }
+  }, [cart]);
+
+  function addFreeShipping() {
+    const mutation = gql`
+      mutation cartDiscountCodesUpdate(
+        $cartId: ID!
+        $discountCodes: [String!]
+      ) {
+        cartDiscountCodesUpdate(
+          cartId: $cartId
+          discountCodes: $discountCodes
+        ) {
+          cart {
+            discountCodes {
+              applicable
+              code
+            }
+          }
+          userErrors {
+            field
+            message
+          }
+        }
+      }
+    `;
+
+    const variables = {
+      cartId: cart.id,
+      discountCodes: ["TRYTORFREESHIPPING"],
+    };
+
+    graphClient
+      .request(mutation, variables)
+      .then((result) => console.log(result));
+  }
 
   return (
-    <>
-      <Box h={[350, 500]}>
-        <Container h="full" display="flex" flexDir="column">
-          <Flex align="center" justify="stretch" flexGrow={1}>
-            <Heading size="3xl" lineHeight={1.2}>
-              Try TOR&apos;s Custom Hair Care for $12!
-            </Heading>
-          </Flex>
-          <Text textAlign={"right"}>+ shipping &amp; taxes</Text>
+    <Box
+      bgColor={hairType ? hairTypeData[hairType].color : "white"}
+      transition={"background-color 0.3s ease"}
+    >
+      <Head>
+        <title>Try TOR for $12! | TOR Salon Products</title>
+        <meta name="description" content="" />
+      </Head>
+      <Box>
+        <Container
+          h="full"
+          display="flex"
+          flexDir="column"
+          maxW="container.xl"
+          py={[20]}
+        >
+          <Stack
+            direction={["column"]}
+            h="full"
+            maxW={["full", "50%"]}
+            justify={"center"}
+            spacing={8}
+          >
+            <Box>
+              <Heading size="3xl" lineHeight={1.2}>
+                Try TOR&apos;s Custom Hair Care for $12!
+              </Heading>
+              <Text textAlign={["left", "right"]} pr={[0, null, null, 20]}>
+                + shipping &amp; taxes
+              </Text>
+            </Box>
+            <Box maxW={[470]}>
+              <Select
+                placeholder="Select your hair type"
+                onChange={(e) => setHairType(e.target.value)}
+                value={hairType ? hairType : ""}
+              >
+                <option value="curly">Your Type: Curly</option>
+                <option value="fine">Your Type: Fine/Thin</option>
+                <option value="medium">Your Type: Medium/Thick</option>
+              </Select>
+              <Button
+                mt={5}
+                disabled={!hairType}
+                size="lg"
+                w={["full", "initial"]}
+              >
+                {!hairType ? "Select your hair type" : "Add To Cart"}
+              </Button>
+            </Box>
+          </Stack>
         </Container>
       </Box>
-      <Container py={[10, 20]} centerContent>
-        <Select
-          placeholder="Select your hair type"
-          onChange={(e) => setHairType(e.target.value)}
-          value={hairType ? hairType : ""}
-        >
-          <option value="curly">Your Type: Curly</option>
-          <option value="fine">Your Type: Fine/Thin</option>
-          <option value="medium">Your Type: Medium/Thick</option>
-        </Select>
-        <Button my={5} disabled={!hairType} size="lg">
-          {!hairType ? "Select your hair type" : "Add To Cart"}
-        </Button>
-      </Container>
-      <Box>
+      {/* <Box>
         <Container py={[10, 20]}>
           <Heading size="2xl" textAlign={"center"}>
             Made Just For You
           </Heading>
         </Container>
-      </Box>
+      </Box> */}
       <Box bgColor={hairType ? hairTypeData[hairType].color : "white"}>
-        <SimpleGrid templateColumns={"repeat(3, 1fr)"} textAlign="center">
+        {/* <SimpleGrid templateColumns={"repeat(3, 1fr)"} textAlign="center">
           <GridItem
             onClick={() => setHairType("curly")}
             display="grid"
@@ -138,7 +275,12 @@ export default function TryTor() {
             p={8}
             bgColor={hairTypeData.curly.color}
           >
-            <Text>Curly</Text>
+            <Text
+              opacity={hairType === "curly" ? 1 : 0.6}
+              transition={"opacity 0.3s ease"}
+            >
+              Curly
+            </Text>
           </GridItem>
           <GridItem
             onClick={() => setHairType("fine")}
@@ -147,7 +289,12 @@ export default function TryTor() {
             p={8}
             bgColor={hairTypeData.fine.color}
           >
-            <Text>Fine &amp; Thin</Text>
+            <Text
+              opacity={hairType === "fine" ? 1 : 0.6}
+              transition={"opacity 0.3s ease"}
+            >
+              Fine &amp; Thin
+            </Text>
           </GridItem>
           <GridItem
             onClick={() => setHairType("medium")}
@@ -156,29 +303,50 @@ export default function TryTor() {
             p={8}
             bgColor={hairTypeData.medium.color}
           >
-            <Text>Medium &amp; Thick</Text>
+            <Text
+              opacity={hairType === "medium" ? 1 : 0.6}
+              transition={"opacity 0.3s ease"}
+            >
+              Medium &amp; Thick
+            </Text>
           </GridItem>
-        </SimpleGrid>
+        </SimpleGrid> */}
         {hairType && (
           <AnimatePresence exitBeforeEnter>
             <MotionBox
               key={hairTypeData[hairType].color}
               bgColor={hairTypeData[hairType].color}
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              animate={{ opacity: 1, transition: { duration: 0.3 } }}
               exit={{ opacity: 0 }}
             >
-              <Container py={[10, 20]}>
-                <Heading mb={3}>{hairTypeData[hairType].title}</Heading>
-                <Text>{hairTypeData[hairType].description}</Text>
-                <List spacing={3} pt={5}>
-                  {hairTypeData[hairType].benefits.map((benefit: any) => (
-                    <ListItem key={benefit.text}>
-                      <ListIcon as={benefit.icon}></ListIcon>
-                      {benefit.text}
-                    </ListItem>
-                  ))}
-                </List>
+              <Container py={[10, 20]} maxW="container.lg">
+                <Stack direction={["column", "row"]} spacing={[10, 20]}>
+                  <Box flexShrink={0} minW="30%">
+                    <AspectRatio ratio={1}>
+                      <NextImage
+                        src={
+                          !hairType
+                            ? "/images/hairtypes/curly-hair-girl.jpg"
+                            : hairTypeData[hairType].photo
+                        }
+                        layout="fill"
+                      />
+                    </AspectRatio>
+                  </Box>
+                  <Box>
+                    <Heading mb={3}>{hairTypeData[hairType].title}</Heading>
+                    <Text>{hairTypeData[hairType].description}</Text>
+                    <List spacing={3} pt={5}>
+                      {hairTypeData[hairType].benefits.map((benefit: any) => (
+                        <ListItem key={benefit.text}>
+                          <ListIcon as={benefit.icon}></ListIcon>
+                          {benefit.text}
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Box>
+                </Stack>
               </Container>
             </MotionBox>
           </AnimatePresence>
@@ -186,13 +354,31 @@ export default function TryTor() {
       </Box>
       <Container py={[10, 20]}>
         {/* add image of specific travel size bottle */}
-        <Heading size="md">TOR Shampoo</Heading>
-        <Text>Insert description for hair type specific shampoo?</Text>
+        <Box>
+          <Heading size="md">About TOR Shampoo</Heading>
+          <Text my={5}>
+            TOR Shampoo creates a gentle, luxurious lather. Formulated from
+            natural ingredients, our shampoos are color-safe, and gentle, while
+            removing build-up and residue.
+          </Text>
+          <Text>
+            Designed to be paired with our conditioning products, TOR Shampoo
+            will leave your hair feeling like you just left the salon, and keep
+            it that way for days.
+          </Text>
+        </Box>
       </Container>
-      <Container py={[10, 20]}>
+      <Container pb={[10, 20]}>
         {/* add image of specific travel size bottle */}
-        <Heading size="md">TOR Conditioner</Heading>
-        <Text>Insert description for hair type specific conditioner?</Text>
+        <Box>
+          <Heading size="md">About TOR Conditioner</Heading>
+          <Text mt={5}>
+            TOR conditioners are engineered with the needs of different hair
+            types in mind. Made without dimethicone, TOR conditioners leave your
+            hair lighter, and naturally-moist, not weighted down with a layer of
+            silicone.
+          </Text>
+        </Box>
       </Container>
       <Box bg="black" color="white">
         <Container py={[10, 20]}>
@@ -209,50 +395,45 @@ export default function TryTor() {
         </Container>
       </Box>
       <Box>
-        <Container py={[10, 20]}>
-          <Stack spacing={3} align="flex-start">
-            <Box>
-              <Text>Just for you</Text>
-              <Heading>HD Curl Cream</Heading>
-            </Box>
-            <Stack direction="row" align="center">
-              <Text
-                fontSize="2xl"
-                textDecor={"line-through"}
-                color={"gray.500"}
-              >
-                $27.00
-              </Text>
-              <Text size="xl">$13.50</Text>
+        {hairType && (
+          <Container py={[10, 20]} maxW="container.lg">
+            <Stack direction={["column", "row"]} align="center">
+              <Box flexShrink={0} minW={["full", "50%"]}>
+                <AspectRatio ratio={1}>
+                  <NextImage
+                    src={hairTypeData[hairType].styling.photo}
+                    layout="fill"
+                  />
+                </AspectRatio>
+              </Box>
+              <Stack spacing={4}>
+                <Box>
+                  <Text>Just for you</Text>
+                  <Heading>{hairTypeData[hairType].styling.title}</Heading>
+                </Box>
+                <Stack direction="row" align="center">
+                  <Text
+                    fontSize="2xl"
+                    textDecor={"line-through"}
+                    color={"gray.500"}
+                  >
+                    {hairTypeData[hairType].styling.price}
+                  </Text>
+                  <Text size="xl">
+                    {hairTypeData[hairType].styling.price / 2}
+                  </Text>
+                </Stack>
+                <Text>{hairTypeData[hairType].styling.description}</Text>
+                <Button size="lg" alignSelf="flex-start">Add To Cart</Button>
+              </Stack>
             </Stack>
-            <Text>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Soluta
-              sed quasi officiis adipisci dolor distinctio.
-            </Text>
-            <Button size="lg">Add To Cart</Button>
-          </Stack>
-        </Container>
+          </Container>
+        )}
       </Box>
-      {/* <Container>
-        <SimpleGrid templateColumns={"repeat(2, 1fr)"}>
-          <GridItem py={8}>
-            <Text>Mousse</Text>
-          </GridItem>
-          <GridItem py={8}>
-            <Text>Gel 2.0</Text>
-          </GridItem>
-          <GridItem py={8}>
-            <Text>Defining Lotion</Text>
-          </GridItem>
-          <GridItem py={8}>
-            <Text>Hair Spray</Text>
-          </GridItem>
-        </SimpleGrid>
-      </Container> */}
       <Container py={20}>
         <Stack spacing={4}>
           <Heading textAlign={"center"}>
-            Created by a former TreSemme Chemist
+            Created by a TreSemme Chemist
           </Heading>
           <Text textAlign={"center"}>
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab sed
@@ -262,25 +443,40 @@ export default function TryTor() {
           </Text>
         </Stack>
       </Container>
-      <Container py={[10, 20]}>
+      <Container maxW="container.lg" pt={[10, 20]} pb={[20, 40]} centerContent>
         <Stack spacing={4}>
           <Heading textAlign={"center"} size="3xl" lineHeight={1.2}>
             Ready to feel the difference?
           </Heading>
           <Select
+            alignSelf={[null, "center"]}
             placeholder="Select your hair type"
             onChange={(e) => setHairType(e.target.value)}
             value={hairType ? hairType : ""}
+            maxW={480}
           >
             <option value="curly">Your Type: Curly</option>
             <option value="fine">Your Type: Fine/Thin</option>
             <option value="medium">Your Type: Medium/Thick</option>
           </Select>
-          <Button disabled={!hairType} size="lg">
+          <Button
+            disabled={!hairType}
+            size="lg"
+            maxW={480}
+            alignSelf={[null, "center"]}
+          >
             {!hairType ? "Select your hair type" : "Buy Now"}
           </Button>
         </Stack>
       </Container>
-    </>
+      <Box py={20} bgColor={"black"} color={"white"}>
+        <Text w="full" textAlign={"center"} fontSize="xs">
+          © TOR Salon &amp; Spa Products. 2022. Crafted by{" "}
+          <NextLink href="https://webprism.co" passHref>
+            <Link>WEBPRISM</Link>
+          </NextLink>
+        </Text>
+      </Box>
+    </Box>
   );
 }

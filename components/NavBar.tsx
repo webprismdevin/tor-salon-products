@@ -43,34 +43,40 @@ const NavBar = () => {
           align={["center"]}
           justify={"flex-start"}
         >
-          <MobileMenu />
+          {!router.asPath.includes("/offer") &&<MobileMenu />}
           <StoreName />
-          <DesktopMenu />
+          {!router.asPath.includes("/offer") &&<DesktopMenu />}
         </Stack>
         <Stack direction="row" spacing={4}>
-          <Box display={["none", "inherit"]}>
-            <Menu>
-              <MenuButton>Salons</MenuButton>
-              <MenuList>
-                <MenuItem>
-                  <MenuLink href="/salon-finder" text="Salon Finder" />
-                </MenuItem>
-                <MenuItem>
-                  <MenuLink href="/professionals" text="Professionals" />
-                </MenuItem>
-              </MenuList>
-            </Menu>
-          </Box>
-          <Box display={["none", "inherit"]}>
-            <NextLink href="/about" passHref>
-              <Link>About</Link>
-            </NextLink>
-          </Box>
-          <Box display={["none", "inherit"]}>
-            <NextLink href="/blog" passHref>
-              <Link>Blog</Link>
-            </NextLink>
-          </Box>
+          {!router.asPath.includes("/offer") && (
+            <Box display={["none", "inherit"]}>
+              <Menu>
+                <MenuButton>Salons</MenuButton>
+                <MenuList>
+                  <MenuItem>
+                    <MenuLink href="/salon-finder" text="Salon Finder" />
+                  </MenuItem>
+                  <MenuItem>
+                    <MenuLink href="/professionals" text="Professionals" />
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            </Box>
+          )}
+          {!router.asPath.includes("/offer") && (
+            <Box display={["none", "inherit"]}>
+              <NextLink href="/about" passHref>
+                <Link>About</Link>
+              </NextLink>
+            </Box>
+          )}
+          {!router.asPath.includes("/offer") && (
+            <Box display={["none", "inherit"]}>
+              <NextLink href="/blog" passHref>
+                <Link>Blog</Link>
+              </NextLink>
+            </Box>
+          )}
           {!router.asPath.includes("/offer") && <Auth />}
           {!router.asPath.includes("/offer") && <Search router={router} />}
           <Cart />
