@@ -116,6 +116,27 @@ const ProductPage = ({
       status: "dirty",
       lines: response.response.cartLinesAdd.cart.lines,
     });
+
+    if (window.dataLayer) {
+      window.dataLayer.push({ ecommerce: null }); // Clear the previous ecommerce object.
+      window.dataLayer.push({
+        event: "add_to_cart",
+        ecommerce: {
+          items: [
+            {
+              item_id: product.id,
+              item_name: product.title,
+              affiliation: "Storefront",
+              item_brand: "TOR",
+              value: activeVariant.priceV2.amount,
+              item_variant: activeVariant.title,
+              currency: "USD",
+              item_category: product.productType,
+            },
+          ],
+        },
+      });
+    }
   }
 
   function handleActiveVariantChange(id: string) {
@@ -131,14 +152,14 @@ const ProductPage = ({
         ecommerce: {
           items: [
             {
-              item_id: activeVariant.id,
+              item_id: product.id,
               item_name: product.title,
               affiliation: "Storefront",
               item_brand: "TOR",
               value: activeVariant.priceV2.amount,
               item_variant: activeVariant.title,
               currency: "USD",
-              item_category: product.productType
+              item_category: product.productType,
             },
           ],
         },

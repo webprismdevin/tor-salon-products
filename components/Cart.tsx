@@ -18,7 +18,7 @@ import {
   useNumberInput,
   HStack,
   Input,
-  AspectRatio, 
+  AspectRatio,
   CloseButton,
   Stack,
   Tooltip,
@@ -98,28 +98,6 @@ const Cart = ({ color }: { color?: string }) => {
     }
 
     localCartData = await fetch("/api/create-cart").then((res) => res.json());
-
-    setCart({
-      id: localCartData.id,
-      checkoutUrl: localCartData.checkoutUrl,
-      estimatedCost: null,
-      lines: [],
-    });
-
-    window.localStorage.setItem(
-      `${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:cart`,
-      JSON.stringify(localCartData)
-    );
-  }
-
-  async function emptyCart() {
-    window.localStorage.removeItem(
-      `${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:cart`
-    );
-
-    const localCartData = await fetch("/api/create-cart").then((res) =>
-      res.json()
-    );
 
     setCart({
       id: localCartData.id,
@@ -391,14 +369,7 @@ function CartLineItem({
   removeItem: any;
 }) {
   return (
-    <Stack
-      direction="row"
-      w="full"
-      justify={"space-between"}
-      pb={[4, 2]}
-      // borderBottom={"2px solid"}
-      // borderBottomColor={"gray.400"}
-    >
+    <Stack direction="row" w="full" justify={"space-between"} pb={[4, 2]}>
       <AspectRatio
         ratio={1 / 1}
         flexGrow={0}
