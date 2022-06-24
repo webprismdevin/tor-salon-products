@@ -91,6 +91,7 @@ const Cart = ({ color }: { color?: string }) => {
           status: "clean",
           estimatedCost: existingCart.cart.estimatedCost,
           lines: existingCart.cart.lines.edges,
+          discount: existingCart.cart.discountCodes
         });
 
         return;
@@ -231,11 +232,18 @@ const Cart = ({ color }: { color?: string }) => {
                 Your Cart
               </Text>
               <Divider />
-              <Text fontSize={"md"}>
-                Free U.S. shipping on orders of{" "}
-                {router.pathname !== "/wholesale" ? "$100+" : "$250+"}
-              </Text>
-              <FreeShippingProgress cart={cart} />
+              {!router.asPath.includes("/offer") && (
+                <>
+                  <Text fontSize={"md"}>
+                    Free U.S. shipping on orders of{" "}
+                    {router.pathname !== "/wholesale" ? "$100+" : "$250+"}
+                  </Text>
+                  <FreeShippingProgress cart={cart} />
+                </>
+              )}
+              {router.asPath.includes("/offer") && (
+                <Text>Get FREE Shipping when you claim your 50% off styling product!</Text>
+              )}  
               <Divider />
             </Stack>
           </DrawerHeader>

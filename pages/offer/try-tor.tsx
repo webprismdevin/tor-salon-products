@@ -3,17 +3,13 @@ import {
   Heading,
   Text,
   Container,
-  Flex,
   Select,
   Button,
-  SimpleGrid,
-  GridItem,
   List,
   ListItem,
   ListIcon,
   Stack,
   Link,
-  chakra,
   AspectRatio,
 } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -24,152 +20,103 @@ import Head from "next/head";
 import CartContext from "../../lib/CartContext";
 import graphClient from "../../lib/graph-client";
 import { gql } from "graphql-request";
-
-const CharkaNI = chakra(NextImage);
-
-const hairTypeData = {
-  curly: {
-    variantId: "gid://shopify/ProductVariant/43618533409014",
-    color: "#E4D5D4",
-    title: "TOR for Curly Hair",
-    description:
-      "TOR's Curly Line has been specifically formulated to address the unique needs of curly hair - to balance curls, increase definition, bounce, shine, and moisture, while protecting against breakage and frizz.",
-    benefits: [
-      {
-        icon: "",
-        text: "Longer-lasting style",
-      },
-      {
-        icon: "",
-        text: "Amazing Frizz Control",
-      },
-      {
-        icon: "",
-        text: "Superior Breakage Protection",
-      },
-    ],
-    photo: "/images/hairtypes/curly-hair-girl.jpg",
-    styling: {
-      variantId: "gid://shopify/Product/7668184285430",
-      photo: "/images/trytor/styling/CHD150ml.png",
-      title: "HD Curl Cream",
-      description:
-        "TOR HD Curl Cream for Curly Hair is designed to make curls stand out with a soft hold while conditioning and defining both curls and waves. This versatile cream was designed for consumers that have naturally curly or permed hair. It enhances natural texture and provides incredible humidity resistance while making curls touchable and frizz free.",
-      price: 27,
-    },
-  },
-  medium: {
-    variantId: "gid://shopify/ProductVariant/43618533441782",
-    color: "#D7E1DC",
-    title: "TOR for Medium & Thick Hair",
-    description:
-      "TOR's Medium/Thick Line has been specifically formulated to address the unique needs of medium density and thick hair, creating shine, protecting, and moisturizing, without added weight. The end result is silky, soft, manageable hair.",
-    benefits: [
-      {
-        icon: "",
-        text: "Easier Styling",
-      },
-      {
-        icon: "",
-        text: "Naturally Detangling",
-      },
-      {
-        icon: "",
-        text: "Luxe Lather",
-      },
-    ],
-    photo: "/images/hairtypes/thick-hair-girl.jpg",
-    styling: {
-      variantId: "gid://shopify/Product/7668189823222",
-      photo: "/images/trytor/styling/MTmilk150ml.png",
-      title: "Styling Milk",
-      description:
-        "TOR Styling Milk for Medium/Thick hair is designed to provide maximum styling versatility. It can help create any desired style while keeping a natural look and movement. Styling Milk works equally well for diffusing to create natural waves or a beach look, increasing volume, or smoothing straight hair. This all-in-one styling provides all the benefits of a cream with the control of the gel and the definition of a mousse in a cream base.",
-      price: 24,
-    },
-  },
-  fine: {
-    variantId: "gid://shopify/ProductVariant/43618533409014",
-    color: "#E4E2DB",
-    title: "TOR for Fine & Thin Hair",
-    description:
-      "TOR's Fine/Thin Line has been specifically formulated to address the unique needs of fine and thin hair, to create voluptuous, soft, manageable hair with shine.",
-    benefits: [
-      {
-        icon: "",
-        text: "No build-up",
-      },
-      {
-        icon: "",
-        text: "Naturally moisturizing",
-      },
-      {
-        icon: "",
-        text: "Maximum volume",
-      },
-    ],
-    photo: "/images/hairtypes/fine-hair-girl.jpg",
-    styling: {
-      variantId: "gid://shopify/Product/7668183367926",
-      photo: "/images/trytor/styling/FTSpray_300ml.png",
-      title: "Anti-Static Hair Spray",
-      description:
-        "TOR Anti-Static Styling spray help you build that body/style without the fear of static. This light hold spray provides flexible styling and manageability without stiff hold. It provides flexible control so the style is held in place; yet comb and brush easily without flaking. After brushing, hair is soft, flexible and fuller with a natural, healthy look.",
-      price: 24,
-    },
-  },
-} as any;
+import formatter from "../../lib/formatter";
+import { hairTypeData } from "../../lib/tryTorData";
 
 const MotionBox = motion(Box);
 
-// todo
 // header image
-// add to cart function
-// get styling products ids
-// styling product feature switch based on hair type
-// handle discounts for shipping & price discounts
-// hide styling product & show a select if hair type is not selected
 // setup opitmize to test Tresemme vs Nexxus
+
+
+// add to cart function DONE
+// get styling products ids DONE
+// styling product feature switch based on hair type DONE
+// handle discounts for shipping & price discounts DONE
+// hide styling product & show a select if hair type is not selected DONE
 
 export default function TryTor() {
   const [hairType, setHairType] = useState<null | string>(null);
   const { cart, setCart } = useContext(CartContext);
 
   useEffect(() => {
-    if (cart && cart.id) {
-      const mutation = gql`
-        mutation cartDiscountCodesUpdate(
-          $cartId: ID!
-          $discountCodes: [String!]
+    if(hairType) window.localStorage.setItem("tor_hairType", hairType)
+  }, [hairType])
+
+  useEffect(() => {
+    let storedType = window.localStorage.getItem("tor_hairType");
+
+    if(storedType) setHairType(storedType)
+  }, [])
+
+  async function addTryBundleToCart(variantId: string) {
+    const response = await fetch("/api/addtocart", {
+      method: "POST",
+      body: JSON.stringify({
+        variantId: variantId,
+        cartId: cart.id,
+        qty: 1,
+      }),
+    }).then((res) => res.json());
+
+    const mutation = gql`
+      mutation cartDiscountCodesUpdate(
+        $cartId: ID!
+        $discountCodes: [String!]
+      ) {
+        cartDiscountCodesUpdate(
+          cartId: $cartId
+          discountCodes: $discountCodes
         ) {
-          cartDiscountCodesUpdate(
-            cartId: $cartId
-            discountCodes: $discountCodes
-          ) {
-            cart {
-              discountCodes {
-                applicable
-                code
-              }
-            }
-            userErrors {
-              field
-              message
+          cart {
+            discountCodes {
+              applicable
+              code
             }
           }
+          userErrors {
+            field
+            message
+          }
         }
-      `;
+      }
+    `;
 
-      const variables = {
-        cartId: cart.id,
-        discountCodes: ["TRYTORFOR12"],
-      };
+    const variables = {
+      cartId: cart.id,
+      discountCodes: ["TRYTORFOR12"],
+    };
 
-      graphClient
-        .request(mutation, variables)
-        .then((result) => console.log(result));
+    graphClient.request(mutation, variables).then((result) => {
+      setCart({
+        ...cart,
+        status: "dirty",
+      });
+    });
+
+    setCart({
+      ...cart,
+      status: "dirty",
+    });
+  }
+
+  async function addStylingToCart() {
+    if (hairType) {
+      const response = await fetch("/api/addtocart", {
+        method: "POST",
+        body: JSON.stringify({
+          variantId: hairTypeData[hairType].styling.variantId,
+          cartId: cart.id,
+          qty: 1,
+        }),
+      }).then((res) => res.json());
+
+      if (response) {
+        addFreeShipping()
+        console.log(response)
+      }
     }
-  }, [cart]);
+  }
 
   function addFreeShipping() {
     const mutation = gql`
@@ -200,9 +147,14 @@ export default function TryTor() {
       discountCodes: ["TRYTORFREESHIPPING"],
     };
 
-    graphClient
-      .request(mutation, variables)
-      .then((result) => console.log(result));
+    graphClient.request(mutation, variables).then((result) => {
+      console.log(result, " addFreeShipping")
+
+      setCart({
+        ...cart,
+        status: "dirty",
+      });
+    });
   }
 
   return (
@@ -252,6 +204,10 @@ export default function TryTor() {
                 disabled={!hairType}
                 size="lg"
                 w={["full", "initial"]}
+                onClick={() => {
+                  if (hairType)
+                    addTryBundleToCart(hairTypeData[hairType].variantId);
+                }}
               >
                 {!hairType ? "Select your hair type" : "Add To Cart"}
               </Button>
@@ -259,58 +215,7 @@ export default function TryTor() {
           </Stack>
         </Container>
       </Box>
-      {/* <Box>
-        <Container py={[10, 20]}>
-          <Heading size="2xl" textAlign={"center"}>
-            Made Just For You
-          </Heading>
-        </Container>
-      </Box> */}
       <Box bgColor={hairType ? hairTypeData[hairType].color : "white"}>
-        {/* <SimpleGrid templateColumns={"repeat(3, 1fr)"} textAlign="center">
-          <GridItem
-            onClick={() => setHairType("curly")}
-            display="grid"
-            placeItems="center"
-            p={8}
-            bgColor={hairTypeData.curly.color}
-          >
-            <Text
-              opacity={hairType === "curly" ? 1 : 0.6}
-              transition={"opacity 0.3s ease"}
-            >
-              Curly
-            </Text>
-          </GridItem>
-          <GridItem
-            onClick={() => setHairType("fine")}
-            display="grid"
-            placeItems="center"
-            p={8}
-            bgColor={hairTypeData.fine.color}
-          >
-            <Text
-              opacity={hairType === "fine" ? 1 : 0.6}
-              transition={"opacity 0.3s ease"}
-            >
-              Fine &amp; Thin
-            </Text>
-          </GridItem>
-          <GridItem
-            onClick={() => setHairType("medium")}
-            display="grid"
-            placeItems="center"
-            p={8}
-            bgColor={hairTypeData.medium.color}
-          >
-            <Text
-              opacity={hairType === "medium" ? 1 : 0.6}
-              transition={"opacity 0.3s ease"}
-            >
-              Medium &amp; Thick
-            </Text>
-          </GridItem>
-        </SimpleGrid> */}
         {hairType && (
           <AnimatePresence exitBeforeEnter>
             <MotionBox
@@ -417,14 +322,22 @@ export default function TryTor() {
                     textDecor={"line-through"}
                     color={"gray.500"}
                   >
-                    {hairTypeData[hairType].styling.price}
+                    {formatter.format(hairTypeData[hairType].styling.price)}
                   </Text>
                   <Text size="xl">
-                    {hairTypeData[hairType].styling.price / 2}
+                    {formatter.format(hairTypeData[hairType].styling.price / 2)}
                   </Text>
                 </Stack>
                 <Text>{hairTypeData[hairType].styling.description}</Text>
-                <Button size="lg" alignSelf="flex-start">Add To Cart</Button>
+                <Button
+                  size="lg"
+                  alignSelf="flex-start"
+                  onClick={() =>
+                    addStylingToCart()
+                  }
+                >
+                  Add To Cart
+                </Button>
               </Stack>
             </Stack>
           </Container>
@@ -432,9 +345,7 @@ export default function TryTor() {
       </Box>
       <Container py={20}>
         <Stack spacing={4}>
-          <Heading textAlign={"center"}>
-            Created by a TreSemme Chemist
-          </Heading>
+          <Heading textAlign={"center"}>Created by a TreSemme Chemist</Heading>
           <Text textAlign={"center"}>
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab sed
             repellat incidunt sint vero, impedit rem nesciunt veniam architecto

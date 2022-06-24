@@ -64,9 +64,8 @@ function MyApp({ Component, pageProps }: AppProps) {
               />
             </Head>
             <CartContext.Provider value={{ cart, setCart }}>
-              {router.pathname !== "/wholesale" && <Banner />}
+              {router.pathname !== "/wholesale" && !router.asPath.includes("/offer") && <Banner />}
               <NavBar />
-              {/* <NavBar /> */}
               <Component key={router.asPath} {...pageProps} />
             </CartContext.Provider>
             {!router.asPath.includes("/offer") && <Follow />}

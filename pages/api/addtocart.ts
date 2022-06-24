@@ -23,6 +23,10 @@ export default async function handler(
         lines: [{ quantity: ${qty ? qty : 1}, merchandiseId: $variantId }]
       ) {
         cart {
+          discountCodes {
+            applicable
+            code
+          }
           lines(first: 100) {
             edges {
               node {
