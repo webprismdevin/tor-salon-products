@@ -119,7 +119,7 @@ export default function TryTor() {
           <option value="medium">Your Type: Medium/Thick</option>
         </Select>
         <Button my={5} disabled={!hairType} size="lg">
-          {!hairType ? "Select your hair type" : "Buy Now"}
+          {!hairType ? "Select your hair type" : "Add To Cart"}
         </Button>
       </Container>
       <Box>
