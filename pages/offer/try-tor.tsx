@@ -114,9 +114,9 @@ export default function TryTor() {
           onChange={(e) => setHairType(e.target.value)}
           value={hairType ? hairType : ""}
         >
-          <option value="curly">Curly</option>
-          <option value="fine">Fine/Thin</option>
-          <option value="medium">Medium/Thick</option>
+          <option value="curly">Your Type: Curly</option>
+          <option value="fine">Your Type: Fine/Thin</option>
+          <option value="medium">Your Type: Medium/Thick</option>
         </Select>
         <Button my={5} disabled={!hairType} size="lg">
           {!hairType ? "Select your hair type" : "Buy Now"}
@@ -198,7 +198,8 @@ export default function TryTor() {
         <Container py={[10, 20]}>
           <Stack spacing={4}>
             <Heading size="lg">
-              Add a styling product for 50% OFF. Unlock FREE SHIPPING for your entire order!
+              Add a styling product for 50% OFF. Unlock FREE SHIPPING for your
+              entire order!
             </Heading>
             <Text>
               TOR styling products work best when paired with our shampoo &amp;
@@ -215,7 +216,13 @@ export default function TryTor() {
               <Heading>HD Curl Cream</Heading>
             </Box>
             <Stack direction="row" align="center">
-              <Text fontSize="2xl" textDecor={"line-through"} color={"gray.500"}>$27.00</Text>
+              <Text
+                fontSize="2xl"
+                textDecor={"line-through"}
+                color={"gray.500"}
+              >
+                $27.00
+              </Text>
               <Text size="xl">$13.50</Text>
             </Stack>
             <Text>
@@ -265,9 +272,9 @@ export default function TryTor() {
             onChange={(e) => setHairType(e.target.value)}
             value={hairType ? hairType : ""}
           >
-            <option value="curly">Curly</option>
-            <option value="fine">Fine/Thin</option>
-            <option value="medium">Medium/Thick</option>
+            <option value="curly">Your Type: Curly</option>
+            <option value="fine">Your Type: Fine/Thin</option>
+            <option value="medium">Your Type: Medium/Thick</option>
           </Select>
           <Button disabled={!hairType} size="lg">
             {!hairType ? "Select your hair type" : "Buy Now"}
