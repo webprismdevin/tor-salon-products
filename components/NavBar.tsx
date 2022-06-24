@@ -71,8 +71,8 @@ const NavBar = () => {
               <Link>Blog</Link>
             </NextLink>
           </Box>
-          <Auth />
-          <Search router={router} />
+          {!router.asPath.includes("/offer") && <Auth />}
+          {!router.asPath.includes("/offer") && <Search router={router} />}
           <Cart />
         </Stack>
       </Flex>

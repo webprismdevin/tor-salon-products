@@ -20,11 +20,11 @@ import { useRouter } from "next/router";
 import AuthContext from "../lib/auth-context";
 import useUser from "../lib/useUser";
 
-const Banner = dynamic(() => import("../components/Banner"))
-const NavBar = dynamic(() => import("../components/NavBar"))
-const Tawk = dynamic(() => import("../lib/tawk"), { ssr: false})
-const Follow = dynamic(() => import("../components/Follow"), { ssr: false})
-const Footer = dynamic(() => import("../components/Footer"))
+const Banner = dynamic(() => import("../components/Banner"));
+const NavBar = dynamic(() => import("../components/NavBar"));
+const Tawk = dynamic(() => import("../lib/tawk"), { ssr: false });
+const Follow = dynamic(() => import("../components/Follow"), { ssr: false });
+const Footer = dynamic(() => import("../components/Footer"));
 
 declare global {
   interface Window {
@@ -65,15 +65,12 @@ function MyApp({ Component, pageProps }: AppProps) {
             </Head>
             <CartContext.Provider value={{ cart, setCart }}>
               {router.pathname !== "/wholesale" && <Banner />}
-              {!router.asPath.includes("/landing-page") && <NavBar />}
+              <NavBar />
               {/* <NavBar /> */}
-              <Component
-                key={router.asPath}
-                {...pageProps}
-              />
+              <Component key={router.asPath} {...pageProps} />
             </CartContext.Provider>
-            {!router.asPath.includes("/landing-page") && <Follow />}
-            {!router.asPath.includes("/landing-page") && <Footer />}
+            {!router.asPath.includes("/offer") && <Follow />}
+            <Footer />
           </ShopContext.Provider>
         </AuthContext.Provider>
         <ColorModeScript initialColorMode={customTheme.initialColorMode} />
@@ -82,7 +79,8 @@ function MyApp({ Component, pageProps }: AppProps) {
             <Tawk src="https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu" />
           </>
         )}
-        {process.env.NODE_ENV === "production" && <MailingList />}
+        {process.env.NODE_ENV === "production" &&
+          !router.asPath.includes("/offer") && <MailingList />}
       </ChakraProvider>
       {process.env.NODE_ENV === "production" && (
         <Script
