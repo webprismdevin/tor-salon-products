@@ -12,6 +12,11 @@ import {
   Link,
   AspectRatio,
   HStack,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
 } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -59,40 +64,13 @@ export default function TryTor() {
       }),
     }).then((res) => res.json());
 
-    const mutation = gql`
-      mutation cartDiscountCodesUpdate(
-        $cartId: ID!
-        $discountCodes: [String!]
-      ) {
-        cartDiscountCodesUpdate(
-          cartId: $cartId
-          discountCodes: $discountCodes
-        ) {
-          cart {
-            discountCodes {
-              applicable
-              code
-            }
-          }
-          userErrors {
-            field
-            message
-          }
-        }
-      }
-    `;
-
-    const variables = {
-      cartId: cart.id,
-      discountCodes: ["TRYTORFOR12"],
-    };
-
-    graphClient.request(mutation, variables).then((result) => {
+    if (response) {
       setCart({
         ...cart,
+        lines: response.response.cartLinesAdd.cart.lines,
         status: "dirty",
       });
-    });
+    }
   }
 
   async function addStylingToCart() {
@@ -152,6 +130,23 @@ export default function TryTor() {
     });
   }
 
+  function handleButton() {
+    if (cart.lines.length === 0)
+      addTryBundleToCart(hairTypeData[hairType!].variantId);
+    if (cart.lines.length > 0) {
+      if (process.env.NODE_ENV === "production") {
+        window.dataLayer.push({
+          event: "begin_checkout",
+          eventCallback: () => (window.location.href = cart.checkoutUrl),
+          eventTimeout: 1200,
+        });
+      }
+      if (process.env.NODE_ENV === "development") {
+        window.location.href = cart.checkoutUrl;
+      }
+    }
+  }
+
   return (
     <Box
       bgColor={hairType ? hairTypeData[hairType].color : "white"}
@@ -162,7 +157,7 @@ export default function TryTor() {
         <meta name="description" content="" />
       </Head>
       <Box position="relative" overflow={"hidden"}>
-        <Container maxW="container.lg" py={[10, 20]}>
+        <Container maxW="container.lg" py={[5, 20]}>
           <Stack
             direction={["column-reverse", "row"]}
             justify="space-between"
@@ -202,6 +197,7 @@ export default function TryTor() {
                   bg="white"
                   shadow={"lg"}
                   size="lg"
+                  outline={"1px solid rgba(0,0,0,0.05)"}
                 >
                   <option value="curly">Your Hair Type: Curly</option>
                   <option value="fine">Your Hair Type: Fine/Thin</option>
@@ -231,21 +227,23 @@ export default function TryTor() {
                         w={["full", "initial"]}
                         color="black"
                         bgColor="white"
-                        shadow="xl"
-                        onClick={() => {
-                          if (hairType)
-                            addTryBundleToCart(
-                              hairTypeData[hairType].variantId
-                            );
-                        }}
+                        shadow="lg"
+                        onClick={handleButton}
+                        outline={"1px solid rgba(0,0,0,0.05)"}
                       >
-                        {!hairType ? "Select your hair type" : "Add To Cart"}
+                        {cart.lines.length > 0 ? "Checkout" : "Add To Cart"}
                       </Button>
                     </MotionBox>
                   )}
                 </AnimatePresence>
               </Box>
-              <Box padding={8} bgColor="white" shadow="lg" borderRadius={6}>
+              <Box
+                padding={8}
+                bgColor="white"
+                shadow="lg"
+                borderRadius={6}
+                outline={"1px solid rgba(0,0,0,0.05)"}
+              >
                 <HStack>
                   <Text>★</Text>
                   <Text>★</Text>
@@ -302,7 +300,6 @@ export default function TryTor() {
             }}
           >
             <Box bgColor={hairType ? hairTypeData[hairType].color : "white"}>
-              {/* {hairType && ( */}
               <AnimatePresence exitBeforeEnter>
                 <MotionBox
                   key={hairTypeData[hairType].color}
@@ -337,7 +334,7 @@ export default function TryTor() {
                         <List spacing={3} pt={5}>
                           {hairTypeData[hairType].benefits.map(
                             (benefit: any) => (
-                              <ListItem key={benefit.text} fontSize="lg" >
+                              <ListItem key={benefit.text} fontSize="lg">
                                 <ListIcon as={benefit.icon}></ListIcon>
                                 {benefit.text}
                               </ListItem>
@@ -349,38 +346,55 @@ export default function TryTor() {
                   </Container>
                 </MotionBox>
               </AnimatePresence>
-              {/* )} */}
             </Box>
           </MotionBox>
         )}
       </AnimatePresence>
-      <Container py={[10, 20]}>
+      <Container pt={[10, 20]} pb={[20]}>
         {/* add image of specific travel size bottle */}
-        <Box>
-          <Heading size="md">About TOR Shampoo</Heading>
-          <Text my={5}>
-            TOR Shampoo creates a gentle, luxurious lather. Formulated from
-            natural ingredients, our shampoos are color-safe, and gentle, while
-            removing build-up and residue.
-          </Text>
-          <Text>
-            Designed to be paired with our conditioning products, TOR Shampoo
-            will leave your hair feeling like you just left the salon, and keep
-            it that way for days.
-          </Text>
-        </Box>
-      </Container>
-      <Container pb={[10, 20]}>
-        {/* add image of specific travel size bottle */}
-        <Box>
-          <Heading size="md">About TOR Conditioner</Heading>
-          <Text mt={5}>
-            TOR conditioners are engineered with the needs of different hair
-            types in mind. Made without dimethicone, TOR conditioners leave your
-            hair lighter, and naturally-moist, not weighted down with a layer of
-            silicone.
-          </Text>
-        </Box>
+        <Accordion allowMultiple allowToggle borderColor={"gray.400"}>
+          <AccordionItem>
+            <h2>
+              <AccordionButton>
+                <Box flex="1" textAlign="left">
+                  About TOR Shampoo
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+            </h2>
+            <AccordionPanel pb={4}>
+              <Text>
+                TOR Shampoo creates a gentle, luxurious lather. Formulated from
+                natural ingredients, our shampoos are color-safe, and gentle,
+                while removing build-up and residue.
+              </Text>
+              <Text>
+                Designed to be paired with our conditioning products, TOR
+                Shampoo will leave your hair feeling like you just left the
+                salon, and keep it that way for days.
+              </Text>
+            </AccordionPanel>
+          </AccordionItem>
+
+          <AccordionItem>
+            <h2>
+              <AccordionButton>
+                <Box flex="1" textAlign="left">
+                  About TOR Conditioner
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+            </h2>
+            <AccordionPanel pb={4}>
+              <Text>
+                TOR conditioners are engineered with the needs of different hair
+                types in mind. Made without dimethicone, TOR conditioners leave
+                your hair lighter, and naturally-moist, not weighted down with a
+                layer of silicone.
+              </Text>
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
       </Container>
       <AnimatePresence>
         {hairType && (
@@ -455,7 +469,7 @@ export default function TryTor() {
           </MotionBox>
         )}
       </AnimatePresence>
-      <Container py={20}>
+      <Container pt={[10]} pb={[20]}>
         <Stack spacing={4}>
           <Heading textAlign={"center"}>
             Created by an award winning beauty-industry chemist.
@@ -497,22 +511,20 @@ export default function TryTor() {
                   maxW={480}
                   display={["none", "initial"]}
                   alignSelf={[null, "center"]}
-                  onClick={() =>
-                    window.scrollTo({
-                      top: 0,
-                      left: 0,
-                      behavior: "smooth",
-                    })
-                  }
+                  shadow="lg"
+                  onClick={handleButton}
+                  outline={"1px solid rgba(0,0,0,0.05)"}
                 >
-                  Scroll To Top
+                  {cart.lines.length > 0 ? "Checkout" : "Add To Cart"}
                 </Button>
                 <Box
                   maxW={[560]}
                   alignSelf="center"
                   padding={8}
+                  borderRadius={6}
                   bgColor="white"
                   shadow="lg"
+                  outline={"1px solid rgba(0,0,0,0.1)"}
                 >
                   <HStack>
                     <Text>★</Text>
@@ -529,6 +541,7 @@ export default function TryTor() {
                       paddingLeft: "3rem 0",
                     }}
                     fontStyle={"italic"}
+                    
                   >
                     &quot;I&apos;m hooked! Ever since Shanon brought the shampoo
                     &amp; conditoner into our salon, we&apos;ve pretty much
