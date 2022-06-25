@@ -82,7 +82,7 @@ const Cart = ({ color }: { color?: string }) => {
           existingCart.cart.lines.edges.length > 0 &&
           cart.status === "dirty"
         ) {
-          onOpen();
+          if(!router.asPath.includes("/offer")) onOpen();
         }
 
         setCart({
@@ -218,7 +218,7 @@ const Cart = ({ color }: { color?: string }) => {
           {cart.lines.length > 0 && cartQty}
         </Text>
       </Box>
-      <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="md">
+      <Drawer isOpen={isOpen} placement="right" onClose={onClose} size={"md"}>
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />

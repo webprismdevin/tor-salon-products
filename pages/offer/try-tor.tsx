@@ -41,8 +41,11 @@ const MotionBox = motion(Box);
 // hide styling product & show a select if hair type is not selected DONE
 
 export default function TryTor() {
-  const [hairType, setHairType] = useState<null | string>(null);
+  const [hairType, setHairType] = useState<null | string>("");
   const { cart, setCart } = useContext(CartContext);
+
+  const moreInfoRef = useRef<HTMLDivElement | null>(null);
+  const typeSelectionRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (hairType) window.localStorage.setItem("tor_hairType", hairType);
@@ -131,20 +134,36 @@ export default function TryTor() {
   }
 
   function handleButton() {
-    if (cart.lines.length === 0)
-      addTryBundleToCart(hairTypeData[hairType!].variantId);
-    if (cart.lines.length > 0) {
-      if (process.env.NODE_ENV === "production") {
-        window.dataLayer.push({
-          event: "begin_checkout",
-          eventCallback: () => (window.location.href = cart.checkoutUrl),
-          eventTimeout: 1200,
-        });
-      }
-      if (process.env.NODE_ENV === "development") {
-        window.location.href = cart.checkoutUrl;
+    if (hairType) {
+      if (cart.lines.length === 0)
+        addTryBundleToCart(hairTypeData[hairType!].variantId);
+      if (cart.lines.length > 0) {
+        if (process.env.NODE_ENV === "production") {
+          window.dataLayer.push({
+            event: "begin_checkout",
+            eventCallback: () => (window.location.href = cart.checkoutUrl),
+            eventTimeout: 1200,
+          });
+        }
+        if (process.env.NODE_ENV === "development") {
+          window.location.href = cart.checkoutUrl;
+        }
       }
     }
+    if (!hairType) {
+      typeSelectionRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
+  function handleSelection(e: any) {
+    setHairType(e.target.value);
+
+  }
+
+  function returnButtonText() {
+    if (cart.lines.length > 0 && hairType) return "Checkout";
+    if (cart.lines.length === 0 && hairType) return "Add To Cart";
+    if (!hairType) return "Select Your Hair Type";
   }
 
   return (
@@ -171,7 +190,7 @@ export default function TryTor() {
               justify={"center"}
               spacing={8}
             >
-              <Box>
+              <Box ref={typeSelectionRef}>
                 <Heading size={["xl", "2xl"]}>
                   Try TOR Shampoo &amp; Conditioner for $12!
                 </Heading>
@@ -189,9 +208,10 @@ export default function TryTor() {
                 </Text>
               </Box>
               <Box>
+                <div ref={moreInfoRef} />
                 <Select
-                  placeholder="Select your hair type to see more"
-                  onChange={(e) => setHairType(e.target.value)}
+                  placeholder="❓ Select your hair type ❓"
+                  onChange={handleSelection}
                   value={hairType ? hairType : ""}
                   variant="filled"
                   bg="white"
@@ -199,42 +219,44 @@ export default function TryTor() {
                   size="lg"
                   outline={"1px solid rgba(0,0,0,0.05)"}
                 >
-                  <option value="curly">Your Hair Type: Curly</option>
-                  <option value="fine">Your Hair Type: Fine/Thin</option>
-                  <option value="medium">Your Hair Type: Medium/Thick</option>
+                  <option value="curly">Your Hair Type: Curly ✅</option>
+                  <option value="fine">Your Hair Type: Fine/Thin ✅</option>
+                  <option value="medium">
+                    Your Hair Type: Medium/Thick ✅
+                  </option>
                 </Select>
                 <AnimatePresence>
-                  {hairType && (
-                    <MotionBox
-                      position={["fixed", "static"]}
-                      bottom={4}
-                      left={0}
-                      w="full"
-                      px={[2, 0]}
-                      mt={5}
-                      zIndex={2}
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{
-                        opacity: 1,
-                        height: "auto",
-                        transition: { duration: 0.3 },
-                      }}
-                      exit={{ opacity: 0, height: 0 }}
+                  {/* {hairType && ( */}
+                  <MotionBox
+                    position={["fixed", "static"]}
+                    bottom={4}
+                    left={0}
+                    w="full"
+                    px={[2, 0]}
+                    mt={5}
+                    zIndex={2}
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{
+                      opacity: 1,
+                      height: "auto",
+                      transition: { duration: 0.3 },
+                    }}
+                    exit={{ opacity: 0, height: 0 }}
+                  >
+                    <Button
+                      // disabled={!hairType}
+                      size="lg"
+                      w={["full", "initial"]}
+                      color="black"
+                      bgColor="white"
+                      shadow="lg"
+                      onClick={handleButton}
+                      outline={"1px solid rgba(0,0,0,0.05)"}
                     >
-                      <Button
-                        disabled={!hairType}
-                        size="lg"
-                        w={["full", "initial"]}
-                        color="black"
-                        bgColor="white"
-                        shadow="lg"
-                        onClick={handleButton}
-                        outline={"1px solid rgba(0,0,0,0.05)"}
-                      >
-                        {cart.lines.length > 0 ? "Checkout" : "Add To Cart"}
-                      </Button>
-                    </MotionBox>
-                  )}
+                      {returnButtonText()}
+                    </Button>
+                  </MotionBox>
+                  {/* )} */}
                 </AnimatePresence>
               </Box>
               <Box
@@ -273,6 +295,7 @@ export default function TryTor() {
             >
               <AspectRatio ratio={1 / 1}>
                 <NextImage
+                  priority
                   src={
                     !hairType
                       ? "/images/trytor/AllMinis3.jpg"
@@ -541,7 +564,6 @@ export default function TryTor() {
                       paddingLeft: "3rem 0",
                     }}
                     fontStyle={"italic"}
-                    
                   >
                     &quot;I&apos;m hooked! Ever since Shanon brought the shampoo
                     &amp; conditoner into our salon, we&apos;ve pretty much
