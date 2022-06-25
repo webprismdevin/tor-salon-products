@@ -386,7 +386,7 @@ function CartLineItem({
       >
         <Image
           borderRadius={6}
-          src={product.node.merchandise.product.images.edges[0].node.url}
+          src={product.node.merchandise.image.url}
           alt={product.node.merchandise.product.title}
         />
       </AspectRatio>

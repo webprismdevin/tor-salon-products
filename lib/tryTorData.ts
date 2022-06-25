@@ -1,3 +1,5 @@
+import { FaGripLinesVertical, FaHandsWash, FaCut, FaClock, FaLifeRing, FaShieldAlt, FaFeather, FaWater, FaArrowsAlt, FaExpandArrowsAlt } from 'react-icons/fa'
+
 export const hairTypeData = {
     curly: {
       variantId: "gid://shopify/ProductVariant/43618533409014",
@@ -7,19 +9,20 @@ export const hairTypeData = {
         "TOR's Curly Line has been specifically formulated to address the unique needs of curly hair - to balance curls, increase definition, bounce, shine, and moisture, while protecting against breakage and frizz.",
       benefits: [
         {
-          icon: "",
+          icon: FaClock,
           text: "Longer-lasting style",
         },
         {
-          icon: "",
+          icon: FaLifeRing,
           text: "Amazing Frizz Control",
         },
         {
-          icon: "",
+          icon: FaShieldAlt,
           text: "Superior Breakage Protection",
         },
       ],
       photo: "/images/hairtypes/curly-hair-girl.jpg",
+      headerImg: "/images/trytor/CurlyMinis.jpg",
       styling: {
         variantId: "gid://shopify/ProductVariant/44022272458998",
         photo: "/images/trytor/styling/CHD150ml.png",
@@ -37,19 +40,20 @@ export const hairTypeData = {
         "TOR's Medium/Thick Line has been specifically formulated to address the unique needs of medium density and thick hair, creating shine, protecting, and moisturizing, without added weight. The end result is silky, soft, manageable hair.",
       benefits: [
         {
-          icon: "",
+          icon: FaCut,
           text: "Easier Styling",
         },
         {
-          icon: "",
+          icon: FaGripLinesVertical,
           text: "Naturally Detangling",
         },
         {
-          icon: "",
+          icon: FaHandsWash,
           text: "Luxe Lather",
         },
       ],
       photo: "/images/hairtypes/thick-hair-girl.jpg",
+      headerImg: "/images/trytor/Med-ThickMinis3.jpg",
       styling: {
         variantId: "gid://shopify/ProductVariant/44022245556470",
         photo: "/images/trytor/styling/MTmilk150ml.png",
@@ -67,19 +71,20 @@ export const hairTypeData = {
         "TOR's Fine/Thin Line has been specifically formulated to address the unique needs of fine and thin hair, to create voluptuous, soft, manageable hair with shine.",
       benefits: [
         {
-          icon: "",
+          icon: FaFeather,
           text: "No build-up",
         },
         {
-          icon: "",
+          icon: FaWater,
           text: "Naturally moisturizing",
         },
         {
-          icon: "",
+          icon: FaExpandArrowsAlt,
           text: "Maximum volume",
         },
       ],
       photo: "/images/hairtypes/fine-hair-girl.jpg",
+      headerImg: "/images/trytor/FineThinMinis.jpg",
       styling: {
         variantId: "gid://shopify/ProductVariant/44022270951670",
         photo: "/images/trytor/styling/FTSpray_300ml.png",

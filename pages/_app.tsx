@@ -73,7 +73,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           </ShopContext.Provider>
         </AuthContext.Provider>
         <ColorModeScript initialColorMode={customTheme.initialColorMode} />
-        {process.env.NODE_ENV === "production" && (
+        {process.env.NODE_ENV === "production" && !router.asPath.includes("/offer") && (
           <>
             <Tawk src="https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu" />
           </>
