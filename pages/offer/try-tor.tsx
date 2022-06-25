@@ -46,6 +46,7 @@ export default function TryTor() {
 
   const moreInfoRef = useRef<HTMLDivElement | null>(null);
   const typeSelectionRef = useRef<HTMLDivElement | null>(null);
+  const refAddStyling = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (hairType) window.localStorage.setItem("tor_hairType", hairType);
@@ -433,7 +434,7 @@ export default function TryTor() {
               opacity: 0,
             }}
           >
-            <Box bg="black" color="white">
+            <Box bg="black" color="white" ref={refAddStyling} >
               <Container py={[10, 20]}>
                 <Stack spacing={4}>
                   <Heading size="lg">
@@ -538,7 +539,7 @@ export default function TryTor() {
                   onClick={handleButton}
                   outline={"1px solid rgba(0,0,0,0.05)"}
                 >
-                  {cart.lines.length > 0 ? "Checkout" : "Add To Cart"}
+                  {returnButtonText()}
                 </Button>
                 <Box
                   maxW={[560]}

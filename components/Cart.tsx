@@ -82,7 +82,8 @@ const Cart = ({ color }: { color?: string }) => {
           existingCart.cart.lines.edges.length > 0 &&
           cart.status === "dirty"
         ) {
-          if(!router.asPath.includes("/offer")) onOpen();
+          // if(!router.asPath.includes("/offer"))
+          onOpen();
         }
 
         setCart({
@@ -91,7 +92,7 @@ const Cart = ({ color }: { color?: string }) => {
           status: "clean",
           estimatedCost: existingCart.cart.estimatedCost,
           lines: existingCart.cart.lines.edges,
-          discount: existingCart.cart.discountCodes
+          discount: existingCart.cart.discountCodes,
         });
 
         return;
@@ -242,8 +243,10 @@ const Cart = ({ color }: { color?: string }) => {
                 </>
               )}
               {router.asPath.includes("/offer") && (
-                <Text>Get FREE Shipping when you claim your 50% off styling product!</Text>
-              )}  
+                <Text>
+                  Get FREE Shipping when you claim your 50% off styling product!
+                </Text>
+              )}
               <Divider />
             </Stack>
           </DrawerHeader>
@@ -386,7 +389,7 @@ function CartLineItem({
       >
         <Image
           borderRadius={6}
-          src={product.node.merchandise.image.url}
+          src={product.node.merchandise.image?.url}
           alt={product.node.merchandise.product.title}
         />
       </AspectRatio>
