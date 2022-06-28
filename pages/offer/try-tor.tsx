@@ -187,20 +187,26 @@ export default function TryTor({ page }: any) {
             <Stack
               direction={["column"]}
               h="full"
-              maxW={["full", "50%"]}
+              maxW={["full", "55%"]}
               justify={"center"}
               spacing={8}
             >
               <Box ref={typeSelectionRef}>
-                <Heading size={["xl", "2xl"]}>{page.hero.title}</Heading>
+                <Heading size={["xl", "2xl"]} as="h1">
+                  Salon Quality Hair Care. Try for <span style={{ textDecoration: "line-through", opacity: 0.6 }}>$24</span> $12.
+                </Heading>
                 <Text
                   textAlign={["left", "right"]}
                   mt={3}
                   pr={[0, null, null, 4]}
                 >
-                  {page.hero.subtext}
+                  + shipping &amp; taxes
                 </Text>
-                <Text mt={[5]}>{page.hero.text}</Text>
+                <Text mt={[5]} fontSize="lg">
+                  Say hello to the sexiest second-day hair you&apos;ve ever had.
+                  Try our shampoo and conditioner, formulated for your hair
+                  type. Only $12!
+                </Text>
               </Box>
               <Box>
                 <div ref={moreInfoRef} />
@@ -280,10 +286,10 @@ export default function TryTor({ page }: any) {
                   style={{ hangingPunctuation: "first", paddingLeft: "3rem 0" }}
                   fontStyle={"italic"}
                 >
-                  &quot;{page.hero.testimonial.text}&quot;
+                  &quot;I have been using Tor products for the last few years. My hair is so amazingly healthy and shiny. Love the timely delivery on this product also. Highly recommend!&quot;
                 </Text>
                 <Text textAlign={"right"} fontStyle="italic">
-                  - {page.hero.testimonial.name}
+                  - Kelly. K
                 </Text>
               </MotionBox>
             </Stack>
