@@ -19,6 +19,7 @@ import reviews from './reviews'
 import landingSection from './landingSection'
 import siteSettings from './siteSettings'
 import wholesale from './wholesale'
+import tryTor from './tryTor'
 
 // Then we give our schema to the builder and provide the result to Sanity
 export default createSchema({
@@ -34,6 +35,7 @@ export default createSchema({
     about,
     landing,
     wholesale,
+    tryTor,
     salon,
     post,
     // author,

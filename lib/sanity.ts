@@ -1,6 +1,6 @@
 // web/lib/sanity.js
 
-import { groq, createClient } from "next-sanity";
+import sanityClient from "@sanity/client";
 import createImageUrlBuilder from '@sanity/image-url'
 
 const config = {
@@ -28,9 +28,9 @@ export const imageBuilder = (source: any) =>
   createImageUrlBuilder(config).image(source);
 
 // Set up the client for fetching data in the getProps page functions
-export const sanityClient = createClient(config);
+export const sanity = sanityClient(config);
 // Set up a preview client with serverless authentication for drafts
-export const previewClient = createClient({
+export const previewClient = sanityClient({
   ...config,
   useCdn: false,
   token: process.env.SANITY_API_TOKEN,

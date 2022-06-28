@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { groq } from "next-sanity";
 import { useState } from "react";
-import { getClient } from "../lib/sanity";
+import { sanity } from "../lib/sanity";
 import Search from "@smakss/search";
 import { FiDelete, FiGlobe } from "react-icons/fi";
 import Head from "next/head";
@@ -106,7 +106,7 @@ export default function SalonFinder({ salons }: SalonPageData) {
 export const getStaticProps = async () => {
   const salonQuery = groq`*[_type == "salon"]`;
 
-  const salons = await getClient(false).fetch(salonQuery, {});
+  const salons = await sanity.fetch(salonQuery, {});
 
   return {
     props: {

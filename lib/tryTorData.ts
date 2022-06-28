@@ -2,7 +2,7 @@ import { FaGripLinesVertical, FaHandsWash, FaCut, FaClock, FaLifeRing, FaShieldA
 
 export const hairTypeData = {
     curly: {
-      variantId: "gid://shopify/ProductVariant/43618533409014",
+      variantId: "gid://shopify/ProductVariant/43618533376246",
       color: "#E4D5D4",
       title: "TOR for Curly Hair",
       description:

@@ -12,7 +12,7 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { groq } from "next-sanity";
-import { getClient } from "../lib/sanity";
+import { sanity } from "../lib/sanity";
 import Head from "next/head";
 
 export default function FAQ({ data }: any) {
@@ -69,7 +69,7 @@ export async function getStaticProps() {
     faqs[]->
   }[0]`;
 
-  const helpPageData = await getClient(false).fetch(helpPageQuery, {});
+  const helpPageData = await sanity.fetch(helpPageQuery, {});
 
   return {
     props: {

@@ -19,7 +19,7 @@ import {
   AccordionIcon,
 } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useContext, useEffect, useRef, useState } from "react";
+import { Suspense, useContext, useEffect, useRef, useState } from "react";
 import NextImage from "next/image";
 import NextLink from "next/link";
 import Head from "next/head";
@@ -28,6 +28,7 @@ import graphClient from "../../lib/graph-client";
 import { gql } from "graphql-request";
 import formatter from "../../lib/formatter";
 import { hairTypeData } from "../../lib/tryTorData";
+import { sanity } from "../../lib/sanity";
 
 const MotionBox = motion(Box);
 
@@ -40,7 +41,7 @@ const MotionBox = motion(Box);
 // handle discounts for shipping & price discounts DONE
 // hide styling product & show a select if hair type is not selected DONE
 
-export default function TryTor() {
+export default function TryTor({ page }: any) {
   const [hairType, setHairType] = useState<null | string>("");
   const { cart, setCart } = useContext(CartContext);
 
@@ -158,7 +159,6 @@ export default function TryTor() {
 
   function handleSelection(e: any) {
     setHairType(e.target.value);
-
   }
 
   function returnButtonText() {
@@ -192,21 +192,15 @@ export default function TryTor() {
               spacing={8}
             >
               <Box ref={typeSelectionRef}>
-                <Heading size={["xl", "2xl"]}>
-                  Try TOR Shampoo &amp; Conditioner for $12!
-                </Heading>
+                <Heading size={["xl", "2xl"]}>{page.hero.title}</Heading>
                 <Text
                   textAlign={["left", "right"]}
                   mt={3}
                   pr={[0, null, null, 4]}
                 >
-                  + shipping &amp; taxes
+                  {page.hero.subtext}
                 </Text>
-                <Text mt={[5]}>
-                  Say hello to the sexiest second-day hair you&apos;ve ever had.
-                  Try our shampoo and conditioner, formulated for your hair
-                  type. Only $12!
-                </Text>
+                <Text mt={[5]}>{page.hero.text}</Text>
               </Box>
               <Box>
                 <div ref={moreInfoRef} />
@@ -260,14 +254,21 @@ export default function TryTor() {
                   {/* )} */}
                 </AnimatePresence>
               </Box>
-              <Box
+              <MotionBox
                 padding={8}
                 bgColor="white"
                 shadow="lg"
                 borderRadius={6}
                 outline={"1px solid rgba(0,0,0,0.05)"}
+                initial={{
+                  opacity: 0,
+                }}
+                animate={{
+                  opacity: 1,
+                }}
+                transition={{ delay: 1.2, duration: 0.3 }}
               >
-                <HStack>
+                <HStack color={"gold"}>
                   <Text>★</Text>
                   <Text>★</Text>
                   <Text>★</Text>
@@ -279,14 +280,12 @@ export default function TryTor() {
                   style={{ hangingPunctuation: "first", paddingLeft: "3rem 0" }}
                   fontStyle={"italic"}
                 >
-                  &quot;I have been using Tor products for the last few years.
-                  My hair is so amazingly healthy and shiny . Love the timely
-                  delivery on this product also. Highly recommend!&quot;
+                  &quot;{page.hero.testimonial.text}&quot;
                 </Text>
                 <Text textAlign={"right"} fontStyle="italic">
-                  - Kelly. K
+                  - {page.hero.testimonial.name}
                 </Text>
-              </Box>
+              </MotionBox>
             </Stack>
             <Box
               width={["full", "40%"]}
@@ -420,79 +419,85 @@ export default function TryTor() {
           </AccordionItem>
         </Accordion>
       </Container>
-      <AnimatePresence>
-        {hairType && (
-          <MotionBox
-            key={"offer_options"}
-            initial={{
-              opacity: 0,
-            }}
-            animate={{
-              opacity: 1,
-            }}
-            exit={{
-              opacity: 0,
-            }}
-          >
-            <Box bg="black" color="white" ref={refAddStyling} >
-              <Container py={[10, 20]}>
-                <Stack spacing={4}>
-                  <Heading size="lg">
-                    Add a FULL-SIZE styling product for 50% OFF. Unlock FREE
-                    SHIPPING for your entire order!
-                  </Heading>
-                  <Text>
-                    TOR styling products work best when paired with our shampoo
-                    &amp; conditioner!
-                  </Text>
-                </Stack>
-              </Container>
-            </Box>
-            <Box>
-              <Container py={[10, 20]} maxW="container.lg">
-                <Stack direction={["column", "row"]} align="center">
-                  <Box flexShrink={0} minW={["full", "50%"]}>
-                    <AspectRatio ratio={1}>
-                      <NextImage
-                        src={hairTypeData[hairType].styling.photo}
-                        layout="fill"
-                      />
-                    </AspectRatio>
-                  </Box>
+      <Suspense fallback={`Loading...`}>
+        <AnimatePresence>
+          {hairType && (
+            <MotionBox
+              key={"offer_options"}
+              initial={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+              exit={{
+                opacity: 0,
+              }}
+            >
+              <Box bg="black" color="white" ref={refAddStyling}>
+                <Container py={[10, 20]}>
                   <Stack spacing={4}>
-                    <Box>
-                      <Text>Just for you</Text>
-                      <Heading>{hairTypeData[hairType].styling.title}</Heading>
-                    </Box>
-                    <Stack direction="row" align="center">
-                      <Text
-                        fontSize="2xl"
-                        textDecor={"line-through"}
-                        color={"gray.500"}
-                      >
-                        {formatter.format(hairTypeData[hairType].styling.price)}
-                      </Text>
-                      <Text size="xl">
-                        {formatter.format(
-                          hairTypeData[hairType].styling.price / 2
-                        )}
-                      </Text>
-                    </Stack>
-                    <Text>{hairTypeData[hairType].styling.description}</Text>
-                    <Button
-                      size="lg"
-                      alignSelf="flex-start"
-                      onClick={() => addStylingToCart()}
-                    >
-                      Add To Cart
-                    </Button>
+                    <Heading size="lg">
+                      Add a FULL-SIZE styling product for 50% OFF. Unlock FREE
+                      SHIPPING for your entire order!
+                    </Heading>
+                    <Text>
+                      TOR styling products work best when paired with our
+                      shampoo &amp; conditioner!
+                    </Text>
                   </Stack>
-                </Stack>
-              </Container>
-            </Box>
-          </MotionBox>
-        )}
-      </AnimatePresence>
+                </Container>
+              </Box>
+              <Box>
+                <Container py={[10, 20]} maxW="container.lg">
+                  <Stack direction={["column", "row"]} align="center">
+                    <Box flexShrink={0} minW={["full", "50%"]}>
+                      <AspectRatio ratio={1}>
+                        <NextImage
+                          src={hairTypeData[hairType].styling.photo}
+                          layout="fill"
+                        />
+                      </AspectRatio>
+                    </Box>
+                    <Stack spacing={4}>
+                      <Box>
+                        <Text>Just for you</Text>
+                        <Heading>
+                          {hairTypeData[hairType].styling.title}
+                        </Heading>
+                      </Box>
+                      <Stack direction="row" align="center">
+                        <Text
+                          fontSize="2xl"
+                          textDecor={"line-through"}
+                          color={"gray.500"}
+                        >
+                          {formatter.format(
+                            hairTypeData[hairType].styling.price
+                          )}
+                        </Text>
+                        <Text size="xl">
+                          {formatter.format(
+                            hairTypeData[hairType].styling.price / 2
+                          )}
+                        </Text>
+                      </Stack>
+                      <Text>{hairTypeData[hairType].styling.description}</Text>
+                      <Button
+                        size="lg"
+                        alignSelf="flex-start"
+                        onClick={() => addStylingToCart()}
+                      >
+                        Add To Cart
+                      </Button>
+                    </Stack>
+                  </Stack>
+                </Container>
+              </Box>
+            </MotionBox>
+          )}
+        </AnimatePresence>
+      </Suspense>
       <Container pt={[10]} pb={[20]}>
         <Stack spacing={4}>
           <Heading textAlign={"center"}>
@@ -505,82 +510,84 @@ export default function TryTor() {
           </Text>
         </Stack>
       </Container>
-      <AnimatePresence>
-        {hairType && (
-          <MotionBox
-            key={"offer_options"}
-            initial={{
-              opacity: 0,
-            }}
-            animate={{
-              opacity: 1,
-            }}
-            exit={{
-              opacity: 0,
-            }}
-          >
-            <Container
-              maxW="container.lg"
-              pt={[10, 20]}
-              pb={[20, 40]}
-              centerContent
+      <Suspense fallback={`Loading...`}>
+        <AnimatePresence>
+          {hairType && (
+            <MotionBox
+              key={"offer_options"}
+              initial={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+              exit={{
+                opacity: 0,
+              }}
             >
-              <Stack spacing={4}>
-                <Heading textAlign={"center"} size="3xl" lineHeight={1.2}>
-                  Ready to feel the difference?
-                </Heading>
-                <Button
-                  disabled={!hairType}
-                  size="lg"
-                  maxW={480}
-                  display={["none", "initial"]}
-                  alignSelf={[null, "center"]}
-                  shadow="lg"
-                  onClick={handleButton}
-                  outline={"1px solid rgba(0,0,0,0.05)"}
-                >
-                  {returnButtonText()}
-                </Button>
-                <Box
-                  maxW={[560]}
-                  alignSelf="center"
-                  padding={8}
-                  borderRadius={6}
-                  bgColor="white"
-                  shadow="lg"
-                  outline={"1px solid rgba(0,0,0,0.1)"}
-                >
-                  <HStack>
-                    <Text>★</Text>
-                    <Text>★</Text>
-                    <Text>★</Text>
-                    <Text>★</Text>
-                    <Text>★</Text>
-                  </HStack>
-                  <Text
-                    borderRadius={6}
-                    mt={2}
-                    style={{
-                      hangingPunctuation: "first",
-                      paddingLeft: "3rem 0",
-                    }}
-                    fontStyle={"italic"}
+              <Container
+                maxW="container.lg"
+                pt={[10, 20]}
+                pb={[20, 40]}
+                centerContent
+              >
+                <Stack spacing={4}>
+                  <Heading textAlign={"center"} size="3xl" lineHeight={1.2}>
+                    Ready to feel the difference?
+                  </Heading>
+                  <Button
+                    disabled={!hairType}
+                    size="lg"
+                    maxW={480}
+                    display={["none", "initial"]}
+                    alignSelf={[null, "center"]}
+                    shadow="lg"
+                    onClick={handleButton}
+                    outline={"1px solid rgba(0,0,0,0.05)"}
                   >
-                    &quot;I&apos;m hooked! Ever since Shanon brought the shampoo
-                    &amp; conditoner into our salon, we&apos;ve pretty much
-                    stopped using everything else. Great product, keeps its
-                    promises, great for the environment, and wonderful people to
-                    do business with!&quot;
-                  </Text>
-                  <Text textAlign={"right"} fontStyle="italic">
-                    - Lee W.S.
-                  </Text>
-                </Box>
-              </Stack>
-            </Container>
-          </MotionBox>
-        )}
-      </AnimatePresence>
+                    {returnButtonText()}
+                  </Button>
+                  <Box
+                    maxW={[560]}
+                    alignSelf="center"
+                    padding={8}
+                    borderRadius={6}
+                    bgColor="white"
+                    shadow="lg"
+                    outline={"1px solid rgba(0,0,0,0.1)"}
+                  >
+                    <HStack color={"gold"}>
+                      <Text>★</Text>
+                      <Text>★</Text>
+                      <Text>★</Text>
+                      <Text>★</Text>
+                      <Text>★</Text>
+                    </HStack>
+                    <Text
+                      borderRadius={6}
+                      mt={2}
+                      style={{
+                        hangingPunctuation: "first",
+                        paddingLeft: "3rem 0",
+                      }}
+                      fontStyle={"italic"}
+                    >
+                      &quot;I&apos;m hooked! Ever since Shanon brought the
+                      shampoo &amp; conditoner into our salon, we&apos;ve pretty
+                      much stopped using everything else. Great product, keeps
+                      its promises, great for the environment, and wonderful
+                      people to do business with!&quot;
+                    </Text>
+                    <Text textAlign={"right"} fontStyle="italic">
+                      - Lee W.S.
+                    </Text>
+                  </Box>
+                </Stack>
+              </Container>
+            </MotionBox>
+          )}
+        </AnimatePresence>
+      </Suspense>
       <Box py={20} bgColor={"black"} color={"white"}>
         <Text w="full" textAlign={"center"} fontSize="xs">
           © TOR Salon &amp; Spa Products. 2022. Crafted by{" "}
@@ -591,4 +598,16 @@ export default function TryTor() {
       </Box>
     </Box>
   );
+}
+
+export async function getStaticProps() {
+  const query = `*[_type == "tryTor"][0]`;
+
+  const result = await sanity.fetch(query);
+
+  return {
+    props: {
+      page: result,
+    },
+  };
 }

@@ -21,7 +21,7 @@ import AuthContext from "../lib/auth-context";
 import CartContext from "../lib/CartContext";
 import formatter from "../lib/formatter";
 import graphClient from "../lib/graph-client";
-import { getClient } from "../lib/sanity";
+import { getClient, sanity } from "../lib/sanity";
 
 // add link to instruction video in header
 // add other benefits
@@ -294,7 +294,7 @@ export async function getStaticProps() {
     "wholesaleGuideUrl": wholesaleGuide.asset->url,
   }[0]`;
 
-  const page = await getClient(false).fetch(wholesaleQuery, {});
+  const page = await sanity.fetch(wholesaleQuery, {});
 
   return {
     props: {

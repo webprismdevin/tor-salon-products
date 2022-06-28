@@ -21,7 +21,7 @@ import { gql, GraphQLClient } from "graphql-request";
 import { motion } from "framer-motion";
 import { FiArrowRight, FiBookOpen, FiCreditCard, FiGift } from "react-icons/fi";
 import dynamic from "next/dynamic";
-import { getClient } from "../lib/sanity";
+import { sanity } from "../lib/sanity";
 import { groq } from "next-sanity";
 
 const Testimonials = dynamic(() => import("../components/Home/Testimonials"));
@@ -644,7 +644,7 @@ export async function getStaticProps() {
 
   const homepageQuery = groq`*[_type == "homepage"][0]`;
 
-  const homepageData = await getClient(false).fetch(homepageQuery, {});
+  const homepageData = await sanity.fetch(homepageQuery, {});
 
   return {
     props: {

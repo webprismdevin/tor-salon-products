@@ -3,10 +3,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { wrap } from "@popmotion/popcorn";
 import useSWR from "swr";
-import { getClient } from "../lib/sanity";
+import { sanity } from "../lib/sanity";
 
 const MotionBox = motion<BoxProps>(Box);
-const groqFetcher = (query:any) => getClient(false).fetch(query, {});
+const groqFetcher = (query:any) => sanity.fetch(query, {});
 
 export default function Banner() {
   const { data, error } = useSWR(`*[_type == "siteSettings"][0]`, groqFetcher, { refreshInterval: 60 } )

@@ -11,7 +11,7 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { groq } from "next-sanity";
-import { getClient } from "../lib/sanity";
+import { getClient, sanity } from "../lib/sanity";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 import { PortableText } from "@portabletext/react";
@@ -174,7 +174,7 @@ const About = ({ data }: AboutPageData) => {
 export async function getStaticProps() {
   const aboutPageQuery = groq`*[_type == "about"][0]`;
 
-  const aboutPageData = await getClient(false).fetch(aboutPageQuery, {});
+  const aboutPageData = await sanity.fetch(aboutPageQuery, {});
 
   return {
     props: {

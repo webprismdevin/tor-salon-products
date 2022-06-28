@@ -6,7 +6,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { theme as defaultTheme, ThemeConfig } from "@chakra-ui/theme";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import CartContext from "../lib/CartContext";
 import ShopContext from "../lib/shop-context";
 import Head from "next/head";
@@ -21,7 +21,7 @@ import AuthContext from "../lib/auth-context";
 import useUser from "../lib/useUser";
 
 const Banner = dynamic(() => import("../components/Banner"));
-const NavBar = dynamic(() => import("../components/NavBar"));
+const NavBar = dynamic(() => import("../components/NavBar"), { suspense: true});
 const Tawk = dynamic(() => import("../lib/tawk"), { ssr: false });
 const Follow = dynamic(() => import("../components/Follow"), { ssr: false });
 const Footer = dynamic(() => import("../components/Footer"));
@@ -65,7 +65,9 @@ function MyApp({ Component, pageProps }: AppProps) {
             </Head>
             <CartContext.Provider value={{ cart, setCart }}>
               {router.pathname !== "/wholesale" && !router.asPath.includes("/offer") && <Banner />}
-              <NavBar />
+              <Suspense fallback={`...`}>
+                <NavBar />
+              </Suspense>
               <Component key={router.asPath} {...pageProps} />
             </CartContext.Provider>
             {!router.asPath.includes("/offer") && <Follow />}
