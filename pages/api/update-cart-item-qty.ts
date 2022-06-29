@@ -43,6 +43,9 @@ export default async function handler(
                 merchandise {
                   ... on ProductVariant {
                     title
+                    image {
+                      url
+                    }
                     product {
                       title
                       images(first: 1) {

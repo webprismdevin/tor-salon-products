@@ -248,8 +248,8 @@ export default function TryTor({ page }: any) {
                       // disabled={!hairType}
                       size="lg"
                       w={["full", "initial"]}
-                      color="black"
-                      bgColor="white"
+                      // color="black"
+                      // bgColor="white"
                       shadow="lg"
                       onClick={handleButton}
                       outline={"1px solid rgba(0,0,0,0.05)"}
