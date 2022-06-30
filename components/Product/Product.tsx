@@ -1,7 +1,7 @@
 import { Text, GridItem, AspectRatio, Image } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-import formatter from "../lib/formatter";
+import formatter from "../../lib/formatter";
 
 const Product = ({
   product,

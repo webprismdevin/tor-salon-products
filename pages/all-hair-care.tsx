@@ -6,7 +6,7 @@ import {
   Container,
   SimpleGrid,
 } from "@chakra-ui/react";
-import Product from "../components/Product";
+import Product from "../components/Product/Product";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
 

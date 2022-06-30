@@ -1,6 +1,6 @@
 import { Heading, Container, Box, Flex, SimpleGrid, GridItem } from "@chakra-ui/react";
 import { gql, GraphQLClient } from "graphql-request";
-import Product from "../components/Product";
+import Product from "../components/Product/Product";
 import Head from "next/head";
 import { GetServerSideProps } from "next";
 

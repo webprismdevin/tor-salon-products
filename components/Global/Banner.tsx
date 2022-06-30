@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { wrap } from "@popmotion/popcorn";
 import useSWR from "swr";
-import { sanity } from "../lib/sanity";
+import { sanity } from "../../lib/sanity";
 
 const MotionBox = motion<BoxProps>(Box);
 const groqFetcher = (query:any) => sanity.fetch(query, {});

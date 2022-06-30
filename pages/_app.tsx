@@ -3,32 +3,31 @@ import {
   extendTheme,
   ChakraProvider,
   ColorModeScript,
-  Box,
 } from "@chakra-ui/react";
-import { theme as defaultTheme, ThemeConfig } from "@chakra-ui/theme";
-import { Suspense, useEffect, useState } from "react";
 import CartContext from "../lib/CartContext";
 import ShopContext from "../lib/shop-context";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 import themeConfig from "../lib/theme";
-// import MailingList from "../components/MailingList";
-import "@fontsource/raleway/400.css";
-import "../styles/globals.css";
-import Script from "next/script";
-import { useRouter } from "next/router";
 import AuthContext from "../lib/auth-context";
 import useUser from "../lib/useUser";
 import Loader from "../components/Loader";
+import Script from "next/script";
+import { theme as defaultTheme, ThemeConfig } from "@chakra-ui/theme";
+import { Suspense, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import "@fontsource/raleway/400.css";
+import "../styles/globals.css";
 
-const Banner = dynamic(() => import("../components/Banner"));
-const NavBar = dynamic(() => import("../components/NavBar"));
-const Tawk = dynamic(() => import("../lib/tawk"), { ssr: false });
-const Follow = dynamic(() => import("../components/Follow"), { ssr: false });
-const Footer = dynamic(() => import("../components/Footer"), {
+const Banner = dynamic(() => import("../components/Global/Banner"));
+const NavBar = dynamic(() => import("../components/Global/NavBar"));
+const Follow = dynamic(() => import("../components/Global/Follow"), {
+  ssr: false,
+});
+const Footer = dynamic(() => import("../components/Global/Footer"), {
   suspense: true,
 });
-const MailingList = dynamic(() => import("../components/MailingList"), {
+const MailingList = dynamic(() => import("../components/Global/MailingList"), {
   suspense: true,
 });
 
@@ -84,9 +83,13 @@ function MyApp({ Component, pageProps }: AppProps) {
         <ColorModeScript initialColorMode={customTheme.initialColorMode} />
         {process.env.NODE_ENV === "production" &&
           !router.asPath.includes("/offer") && (
-            <>
-              <Tawk src="https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu" />
-            </>
+            <Script
+              id="tawk_tag"
+              strategy="lazyOnload"
+              dangerouslySetInnerHTML={{
+                __html: `var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();`,
+              }}
+            />
           )}
         {process.env.NODE_ENV === "production" &&
           !router.asPath.includes("/offer") && (

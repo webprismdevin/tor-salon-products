@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import getCollections from "../../lib/get-collections";
 import ProductFeature from "../../components/ProductFeature";
-import Product from "../../components/Product";
+import Product from "../../components/Product/Product";
 
 export default function CollectionPage({
   handle,

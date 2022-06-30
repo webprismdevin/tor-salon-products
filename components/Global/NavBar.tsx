@@ -15,12 +15,12 @@ import NextLink from "next/link";
 import { useState, useEffect, useContext } from "react";
 import { AiOutlineUser } from "react-icons/ai";
 import { useRouter } from "next/router";
-import { Search } from "./Search";
-import MobileMenu from "./Menu/MobileMenu";
-import DesktopMenu from "./Menu/DesktopMenu";
-import MenuLink from "./Menu/MenuLink";
-import Cart from "./Cart";
-import AuthContext from "../lib/auth-context";
+import { Search } from "../Search";
+import MobileMenu from "../Menu/MobileMenu";
+import DesktopMenu from "../Menu/DesktopMenu";
+import MenuLink from "../Menu/MenuLink";
+import Cart from "../Cart";
+import AuthContext from "../../lib/auth-context";
 
 const NavBar = () => {
   const router = useRouter();

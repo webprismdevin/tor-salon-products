@@ -16,7 +16,7 @@ import Head from "next/head";
 import dynamic from "next/dynamic";
 import { PortableText } from "@portabletext/react";
 
-const Follow = dynamic(() => import("../components/Follow"), { ssr: false });
+const Follow = dynamic(() => import("../components/Global/Follow"), { ssr: false });
 
 type AboutPageData = {
   data: {

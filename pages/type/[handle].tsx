@@ -13,7 +13,7 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import ProductFeature from "../../components/ProductFeature";
-import Product from "../../components/Product";
+import Product from "../../components/Product/Product";
 
 export default function CollectionPage({
   handle,

@@ -21,7 +21,7 @@ import React, { useState, useContext, useEffect } from "react";
 import CartContext from "../lib/CartContext";
 import formatter from "../lib/formatter";
 import { GetStaticProps } from "next";
-import Product from "../components/Product";
+import Product from "../components/Product/Product";
 import Script from "next/script";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { wrap } from "@popmotion/popcorn";

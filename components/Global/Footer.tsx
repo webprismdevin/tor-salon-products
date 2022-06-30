@@ -22,13 +22,13 @@ import {
   SiInstagram,
   SiYoutube,
 } from "react-icons/si";
-import ShopContext from "../lib/shop-context";
+import ShopContext from "../../lib/shop-context";
 import {
   BodyAndSkin,
   ByHairType,
   ByProductTypes,
   MoreLinks,
-} from "./Menu/MenuSections";
+} from "../Menu/MenuSections";
 
 const Footer = () => {
   const { shop } = useContext(ShopContext);
