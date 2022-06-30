@@ -4,7 +4,7 @@ import {
   Link,
   Stack,
   AspectRatio,
-  Image,
+  Img,
   Divider,
   Icon,
   Box,
@@ -29,6 +29,7 @@ import {
   ByProductTypes,
   MoreLinks,
 } from "../Menu/MenuSections";
+import NextImage from 'next/image'
 
 const Footer = () => {
   const { shop } = useContext(ShopContext);
@@ -105,7 +106,7 @@ const Footer = () => {
         >
           <Stack direction={["column", "row"]} spacing={[12, 20]}>
             <AspectRatio ratio={8 / 10} w={"126px"}>
-              <Image src="/tor-gif.gif" alt="TOR brand hairtypes gif" />
+              <NextImage src="/tor-gif.gif" alt="TOR brand hairtypes gif" />
             </AspectRatio>
             <Stack>
               <Text fontSize="lg" fontFamily={"Futura"}>
@@ -169,7 +170,8 @@ const Footer = () => {
                 <Icon as={SiGooglemybusiness} boxSize={6} />
               </Link>
               <Link href="https://www.gab.com/TORProducts" target={"_blank"}>
-                <Image
+                <Img
+                  loading="lazy"
                   src="/gs-footer-icon.jpg"
                   alt="Gab Social Icon"
                   boxSize={6}

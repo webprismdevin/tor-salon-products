@@ -79,7 +79,7 @@ function HomePage({ products, styling, body, homepageData }: any) {
             // width={555}
             alt="girl with curly hair"
             priority
-            quality={100}
+            quality={85}
           />
         </Box>
         <Box
@@ -93,8 +93,7 @@ function HomePage({ products, styling, body, homepageData }: any) {
             height={800}
             width={555}
             alt="girl with wavy hair"
-            priority
-            quality={100}
+            quality={85}
           />
         </Box>
       </Box>
