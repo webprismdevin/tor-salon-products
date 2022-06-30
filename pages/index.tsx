@@ -23,6 +23,7 @@ import { FiArrowRight, FiBookOpen, FiCreditCard, FiGift } from "react-icons/fi";
 import dynamic from "next/dynamic";
 import { sanity } from "../lib/sanity";
 import { groq } from "next-sanity";
+import curlyHairGirl from "../public/images/home/img1.png";
 
 const Testimonials = dynamic(() => import("../components/Home/Testimonials"));
 const ProductFeature = dynamic(() => import("../components/Home/HomeFeature"));
@@ -73,9 +74,9 @@ function HomePage({ products, styling, body, homepageData }: any) {
           mr={[4, 0]}
         >
           <NextImage
-            src={"/images/home/img1.png"}
-            height={639}
-            width={555}
+            src={curlyHairGirl}
+            // height={639}
+            // width={555}
             alt="girl with curly hair"
             priority
             quality={100}
