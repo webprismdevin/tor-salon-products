@@ -37,6 +37,7 @@ import { wrap } from "@popmotion/popcorn";
 import NextLink from "next/link";
 import { RatingStar } from "rating-star";
 import { AiFillEdit } from "react-icons/ai";
+import ReviewSubmit from "../../components/Product/ReviewSubmit";
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -196,7 +197,7 @@ const ProductPage = ({
               </Heading>
             </Stack>
             <Divider />
-            <HStack justify={"space-between"}>
+            <HStack justify={"space-around"}>
               <Stack
                 direction={["column", null, "column", "row"]}
                 align="center"
@@ -218,21 +219,7 @@ const ProductPage = ({
                 </Text>
               </Stack>
               <Divider orientation="vertical" height={"60px"} />
-              <Link
-                w={["100%", "50%"]}
-                textAlign={"center"}
-                onClick={() =>
-                  window.open(
-                    "https://notionforms.io/forms/leave-us-a-review",
-                    "status=no,toolbar=no,menubar=no,location=no"
-                  )
-                }
-              >
-                <Stack direction="row" align={"center"} justify="center">
-                  <Icon as={AiFillEdit} boxSize={6} display="inline" />
-                  <Text>Write a review</Text>
-                </Stack>
-              </Link>
+              <ReviewSubmit product={product} />
             </HStack>
             <Divider />
             <Box
