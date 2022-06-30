@@ -12,19 +12,25 @@ import ShopContext from "../lib/shop-context";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 import themeConfig from "../lib/theme";
-import MailingList from "../components/MailingList";
+// import MailingList from "../components/MailingList";
 import "@fontsource/raleway/400.css";
 import "../styles/globals.css";
 import Script from "next/script";
 import { useRouter } from "next/router";
 import AuthContext from "../lib/auth-context";
 import useUser from "../lib/useUser";
+import Loader from "../components/Loader";
 
 const Banner = dynamic(() => import("../components/Banner"));
 const NavBar = dynamic(() => import("../components/NavBar"));
 const Tawk = dynamic(() => import("../lib/tawk"), { ssr: false });
 const Follow = dynamic(() => import("../components/Follow"), { ssr: false });
-const Footer = dynamic(() => import("../components/Footer"));
+const Footer = dynamic(() => import("../components/Footer"), {
+  suspense: true,
+});
+const MailingList = dynamic(() => import("../components/MailingList"), {
+  suspense: true,
+});
 
 declare global {
   interface Window {
@@ -70,7 +76,9 @@ function MyApp({ Component, pageProps }: AppProps) {
               <Component key={router.asPath} {...pageProps} />
             </CartContext.Provider>
             {!router.asPath.includes("/offer") && <Follow />}
-            {!router.asPath.includes("/offer") && <Footer />}
+            <Suspense fallback={<Loader />}>
+              {!router.asPath.includes("/offer") && <Footer />}
+            </Suspense>
           </ShopContext.Provider>
         </AuthContext.Provider>
         <ColorModeScript initialColorMode={customTheme.initialColorMode} />
@@ -81,12 +89,16 @@ function MyApp({ Component, pageProps }: AppProps) {
             </>
           )}
         {process.env.NODE_ENV === "production" &&
-          !router.asPath.includes("/offer") && <MailingList />}
+          !router.asPath.includes("/offer") && (
+            <Suspense fallback={`...`}>
+              <MailingList />
+            </Suspense>
+          )}
       </ChakraProvider>
       {process.env.NODE_ENV === "production" && (
         <Script
           id="tagManager"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],

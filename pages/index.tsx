@@ -31,12 +31,7 @@ const HairType = dynamic(() => import("../components/Home/HairType"));
 
 const MotionBox = motion<BoxProps>(Box);
 
-function HomePage({
-  products,
-  styling,
-  body,
-  homepageData,
-}: any) {
+function HomePage({ products, styling, body, homepageData }: any) {
   const hairTypeSelect = useRef<HTMLDivElement | null>(null);
 
   return (
@@ -58,7 +53,7 @@ function HomePage({
               onClick={() =>
                 hairTypeSelect.current?.scrollIntoView({
                   behavior: "smooth",
-                  block: "center"
+                  block: "center",
                 })
               }
             >
@@ -219,12 +214,17 @@ function HomePage({
           </Box>
         </Stack>
       </Container>
-      <Box
-        bgImage={"/images/home/skin-bg.jpeg"}
-        bgSize="cover"
-        bgPos={["center", "bottom left"]}
-      >
-        <Container py={200} maxW="container.lg">
+      <Box pos="relative" overflow={"hidden"}>
+        <Box pos="absolute" top={0} left={0} w={"100%"} zIndex={0}>
+          <NextImage
+            src="/images/home/skin-bg.jpeg"
+            alt="girl putting looking in a mirror"
+            layout="responsive"
+            width={1800}
+            height={1200}
+          />
+        </Box>
+        <Container py={200} maxW="container.lg" pos="relative" zIndex="1">
           <Stack align={"center"} textAlign={"center"}>
             <Text fontSize={22} textTransform="uppercase" fontFamily={"Futura"}>
               - Results Driven -
@@ -261,15 +261,21 @@ function HomePage({
       </Container>
       <Box
         height={["auto", 760]}
-        bgImage="/images/tor-cbd-2.jpg"
         borderTop="10px solid #000000"
-        bgSize={"cover"}
-        bgAttachment={["scroll", "fixed"]}
-        backgroundPosition={["bottom right", "right"]}
         pos="relative"
         px={[2, 0]}
         py={[2, 0]}
+        overflow="hidden"
       >
+        <Box pos={"absolute"} top={0} left={0} width={"100%"} zIndex={0}>
+          <NextImage
+            src="/images/tor-cbd-2.jpg"
+            alt="cbd-tincture"
+            layout="responsive"
+            width={1800}
+            height={1200}
+          />
+        </Box>
         <Stack
           maxW="520px"
           px={[4, 8]}

@@ -19,15 +19,12 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
-  Link,
   Divider,
-  Tooltip,
-  Icon,
   GridItem,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
-import React, { useState, useContext, useRef, useEffect } from "react";
+import React, { useState, useContext, useRef, useEffect, Suspense } from "react";
 import CartContext from "../../lib/CartContext";
 import formatter from "../../lib/formatter";
 import { GetStaticProps } from "next";
@@ -36,8 +33,8 @@ import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { wrap } from "@popmotion/popcorn";
 import NextLink from "next/link";
 import { RatingStar } from "rating-star";
-import { AiFillEdit } from "react-icons/ai";
 import ReviewSubmit from "../../components/Product/ReviewSubmit";
+import Loader from "../../components/Loader";
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -359,89 +356,89 @@ const ProductPage = ({
           </Stack>
         </GridItem>
       </SimpleGrid>
-      {collection && (
-        <Box bg={collection.color?.value ? collection.color.value : "white"}>
-          <Flex flexDir={["column-reverse", "row"]}>
-            <Box
-              w={["full", "50%"]}
-              pl={[8, 20]}
-              pr={[8, 40]}
-              py={[20, 40]}
-              pos="relative"
-            >
-              <Image
-                src={collection.typeImage?.reference.image.url}
-                alt=""
-                pos="absolute"
-                top={[0, 10]}
-                opacity={0.1}
-                w="70%"
-                left={[0, 20]}
-                zIndex={0}
-              />
-              <Stack
-                direction={["column"]}
-                spacing={6}
+        {collection && (
+          <Box bg={collection.color?.value ? collection.color.value : "white"}>
+            <Flex flexDir={["column-reverse", "row"]}>
+              <Box
+                w={["full", "50%"]}
+                pl={[8, 20]}
+                pr={[8, 40]}
+                py={[20, 40]}
                 pos="relative"
-                zIndex={1}
               >
-                <Heading>{collection.title}</Heading>
-                <Text>{collection.description}</Text>
+                <Image
+                  src={collection.typeImage?.reference.image.url}
+                  alt=""
+                  pos="absolute"
+                  top={[0, 10]}
+                  opacity={0.1}
+                  w="70%"
+                  left={[0, 20]}
+                  zIndex={0}
+                />
                 <Stack
-                  direction={"row"}
-                  textAlign="left"
-                  justify="flex-start"
+                  direction={["column"]}
                   spacing={6}
+                  pos="relative"
+                  zIndex={1}
                 >
-                  <Box w="120px">
-                    <Image
-                      mb={2}
-                      boxSize={6}
-                      src={collection?.benefitOneIcon?.reference.image?.url}
-                      alt={collection?.benefitOneText?.value}
-                    />
-                    <Text>{collection?.benefitOneText?.value}</Text>
-                  </Box>
-                  <Box w="120px">
-                    <Image
-                      mb={2}
-                      boxSize={6}
-                      src={collection?.benefitTwoIcon?.reference.image.url}
-                      alt={collection?.benefitTwoText?.value}
-                    />
-                    <Text>{collection?.benefitTwoText?.value}</Text>
-                  </Box>
-                  <Box w="120px">
-                    <Image
-                      mb={2}
-                      boxSize={6}
-                      src={collection?.benefitThreeIcon?.reference.image.url}
-                      alt={collection?.benefitThreeText?.value}
-                    />
-                    <Text>{collection?.benefitThreeText?.value}</Text>
-                  </Box>
+                  <Heading>{collection.title}</Heading>
+                  <Text>{collection.description}</Text>
+                  <Stack
+                    direction={"row"}
+                    textAlign="left"
+                    justify="flex-start"
+                    spacing={6}
+                  >
+                    <Box w="120px">
+                      <Image
+                        mb={2}
+                        boxSize={6}
+                        src={collection?.benefitOneIcon?.reference.image?.url}
+                        alt={collection?.benefitOneText?.value}
+                      />
+                      <Text>{collection?.benefitOneText?.value}</Text>
+                    </Box>
+                    <Box w="120px">
+                      <Image
+                        mb={2}
+                        boxSize={6}
+                        src={collection?.benefitTwoIcon?.reference.image.url}
+                        alt={collection?.benefitTwoText?.value}
+                      />
+                      <Text>{collection?.benefitTwoText?.value}</Text>
+                    </Box>
+                    <Box w="120px">
+                      <Image
+                        mb={2}
+                        boxSize={6}
+                        src={collection?.benefitThreeIcon?.reference.image.url}
+                        alt={collection?.benefitThreeText?.value}
+                      />
+                      <Text>{collection?.benefitThreeText?.value}</Text>
+                    </Box>
+                  </Stack>
                 </Stack>
-              </Stack>
-            </Box>
-            <AspectRatio ratio={1 / 1} w={["full", "50%"]}>
-              <Image src={collection?.image?.url} alt="" />
-            </AspectRatio>
-          </Flex>
-          <Container maxW="container.xl" centerContent py={20}>
-            <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
-              {collection.products.edges.map((p: any, i: number) => (
-                <Product product={p} fontSize={24} key={i} />
-              ))}
-            </SimpleGrid>
-            <NextLink
-              href={returnCollection(collection.handle) as string}
-              passHref
-            >
-              <Button mt={[8]}>See Collection</Button>
-            </NextLink>
-          </Container>
-        </Box>
-      )}
+              </Box>
+              <AspectRatio ratio={1 / 1} w={["full", "50%"]}>
+                <Image src={collection?.image?.url} alt="" />
+              </AspectRatio>
+            </Flex>
+            <Container maxW="container.xl" centerContent py={20}>
+              <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
+                {collection.products.edges.map((p: any, i: number) => (
+                  <Product product={p} fontSize={24} key={i} />
+                ))}
+              </SimpleGrid>
+              <NextLink
+                href={returnCollection(collection.handle) as string}
+                passHref
+              >
+                <Button mt={[8]}>See Collection</Button>
+              </NextLink>
+            </Container>
+          </Box>
+        )}
       {reviews && reviews.reviews.length > 0 && (
         <Container
           ref={reviewsSection}
