@@ -106,7 +106,7 @@ const Footer = () => {
         >
           <Stack direction={["column", "row"]} spacing={[12, 20]}>
             <AspectRatio ratio={8 / 10} w={"126px"}>
-              <NextImage src="/tor-gif.gif" alt="TOR brand hairtypes gif" />
+              <NextImage src="/tor-gif.gif" alt="TOR brand hairtypes gif" layout="fill" />
             </AspectRatio>
             <Stack>
               <Text fontSize="lg" fontFamily={"Futura"}>

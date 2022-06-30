@@ -2,17 +2,16 @@ import {
   Box,
   Icon,
   Stack,
-  Image,
+  Img,
   Flex,
   Link,
   Menu,
   MenuList,
   MenuItem,
   MenuButton,
-  chakra,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { useState, useEffect, useContext } from "react";
+import { useContext } from "react";
 import { AiOutlineUser } from "react-icons/ai";
 import { useRouter } from "next/router";
 import { Search } from "../Search";
@@ -115,7 +114,7 @@ const StoreName = () => {
   return (
     <Box order={[2]}>
       <NextLink href="/" passHref>
-        <Image src={"/logo_240.png"} h={7} alt="TOR logo" />
+        <Img src={"/logo_240.png"} h={7} alt="TOR logo" />
       </NextLink>
     </Box>
   );
