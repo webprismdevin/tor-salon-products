@@ -21,9 +21,7 @@ import AuthContext from "../lib/auth-context";
 import useUser from "../lib/useUser";
 
 const Banner = dynamic(() => import("../components/Banner"));
-const NavBar = dynamic(() => import("../components/NavBar"), {
-  suspense: true,
-});
+const NavBar = dynamic(() => import("../components/NavBar"));
 const Tawk = dynamic(() => import("../lib/tawk"), { ssr: false });
 const Follow = dynamic(() => import("../components/Follow"), { ssr: false });
 const Footer = dynamic(() => import("../components/Footer"));

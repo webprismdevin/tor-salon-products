@@ -208,6 +208,7 @@ const ProductPage = ({
                     behavior: "smooth",
                   })
                 }
+                flexShrink={1}
               >
                 <RatingStar
                   id={product.id.split("/")[4]}
@@ -215,11 +216,13 @@ const ProductPage = ({
                 />
                 <Text>
                   {reviews.bottomline.total_review} Review
-                  {reviews.bottomline.totalReviews !== 1 ? "s" : ""}
+                  {reviews.bottomline.totalReviews === 1 ? "s" : ""}
                 </Text>
               </Stack>
-              <Divider orientation="vertical" height={"60px"} />
-              <ReviewSubmit product={product} />
+              <Divider orientation="vertical" height={"60px"} px={[2, 0]} />
+              <Box w={["100%", "50%"]}>
+                <ReviewSubmit product={product} />
+              </Box>
             </HStack>
             <Divider />
             <Box
