@@ -145,46 +145,46 @@ const Cart = ({ color }: { color?: string }) => {
     }
   }
 
-  useEffect(() => {
-    if (
-      router.pathname !== "/wholesale" &&
-      cart &&
-      cart.estimatedCost &&
-      cart.estimatedCost.totalAmount.amount > 100
-    ) {
-      const mutation = gql`
-        mutation cartDiscountCodesUpdate(
-          $cartId: ID!
-          $discountCodes: [String!]
-        ) {
-          cartDiscountCodesUpdate(
-            cartId: $cartId
-            discountCodes: $discountCodes
-          ) {
-            cart {
-              discountCodes {
-                applicable
-                code
-              }
-            }
-            userErrors {
-              field
-              message
-            }
-          }
-        }
-      `;
+  // useEffect(() => {
+  //   if (
+  //     router.pathname !== "/wholesale" &&
+  //     cart &&
+  //     cart.estimatedCost &&
+  //     cart.estimatedCost.totalAmount.amount > 100
+  //   ) {
+  //     const mutation = gql`
+  //       mutation cartDiscountCodesUpdate(
+  //         $cartId: ID!
+  //         $discountCodes: [String!]
+  //       ) {
+  //         cartDiscountCodesUpdate(
+  //           cartId: $cartId
+  //           discountCodes: $discountCodes
+  //         ) {
+  //           cart {
+  //             discountCodes {
+  //               applicable
+  //               code
+  //             }
+  //           }
+  //           userErrors {
+  //             field
+  //             message
+  //           }
+  //         }
+  //       }
+  //     `;
 
-      const variables = {
-        cartId: cart.id,
-        discountCodes: ["FREESHIPPING"],
-      };
+  //     const variables = {
+  //       cartId: cart.id,
+  //       discountCodes: ["FREESHIPPING"],
+  //     };
 
-      graphClient
-        .request(mutation, variables)
-        .then((result) => console.log(result));
-    }
-  }, [cart]);
+  //     graphClient
+  //       .request(mutation, variables)
+  //       .then((result) => console.log(result));
+  //   }
+  // }, [cart]);
 
   return (
     <>
