@@ -44,7 +44,24 @@ export default function ProductFeature({ reference }: any) {
                   ? ` - ${formatter.format(
                       reference.priceRange.maxVariantPrice.amount
                     )}`
-                  : ""}{reference.compareAtPriceRange.maxVariantPrice.amount !== "0.0" && <span style={{textDecoration: 'line-through', marginLeft: 12, opacity: 0.4, fontSize: 18}}>{formatter.format(reference.compareAtPriceRange.maxVariantPrice.amount)}</span>}
+                  : ""}
+                {reference.compareAtPriceRange.maxVariantPrice.amount !==
+                  "0.0" &&
+                  reference.compareAtPriceRange.maxVariantPrice.amount !==
+                    reference.compareAtPriceRange.maxVariantPrice.amount && (
+                    <span
+                      style={{
+                        textDecoration: "line-through",
+                        marginLeft: 12,
+                        opacity: 0.4,
+                        fontSize: 18,
+                      }}
+                    >
+                      {formatter.format(
+                        reference.compareAtPriceRange.maxVariantPrice.amount
+                      )}
+                    </span>
+                  )}
               </Text>
             </Stack>
           </NextLink>
