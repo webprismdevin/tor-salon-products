@@ -59,16 +59,16 @@ export default () =>
             .documentId("wholesale")
             .title("Wholesale")
         ),
-        // S.listItem()
-        // .title("Try TOR")
-        // .icon(BsBookHalf)
-        // .child(
-        //   S.editor()
-        //     .id("tryTor")
-        //     .schemaType("tryTor")
-        //     .documentId("tryTor")
-        //     .title("Try TOR")
-        // ),
+        S.listItem()
+        .title("Try TOR")
+        .icon(BsBookHalf)
+        .child(
+          S.editor()
+            .id("tryTor")
+            .schemaType("tryTor")
+            .documentId("tryTor")
+            .title("Try TOR")
+        ),
       S.divider(),
       ...S.documentTypeListItems().filter(
         (listItem) => !["homepage", "about", "help", "siteSettings", "wholesale", "tryTor"].includes(listItem.getId())

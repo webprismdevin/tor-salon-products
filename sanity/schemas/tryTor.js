@@ -4,14 +4,26 @@ export default {
   __experimental_actions: ["update", "create", "publish"],
   groups: [
     {
-      name: "seo",
-    },
-    {
       name: "content",
+      title: 'Content',
       default: true,
     },
+    {
+      name: "seo",
+      title: "SEO"
+    }
   ],
   fields: [
+    {
+      name: 'pageTitle',
+      type: 'string',
+      group: 'seo'
+    },
+    {
+      name: 'metaDescription',
+      type: 'text',
+      group: 'seo'
+    },
     {
       name: "hero",
       type: "object",
@@ -19,7 +31,11 @@ export default {
       fields: [
         {
           name: "title",
-          type: "string",
+          type: "blockContent",
+        },
+        {
+          name: 'subtitle',
+          type: 'blockContent'
         },
         {
           name: "subtext",
@@ -28,30 +44,30 @@ export default {
         {
           name: "text",
           type: "text",
-        },
-        {
-          name: "image",
-          type: "image",
-          options: {
-            hotspot: true,
-          },
-        },
-        {
-          name: "testimonial",
-          type: "object",
-          fields: [
-            {
-              name: "text",
-              type: "text",
-              description: "Testimonial content, do not include quotation marks."
-            },
-            {
-              name: "name",
-              type: "string",
-            },
-          ],
-        },
+        }
       ],
     },
+    {
+      name: 'reviews',
+      type: 'array',
+      group: 'content',
+      of: [{type: 'reference', to: {type: 'review'}}]
+
+    },
+    {
+      name: 'about',
+      type: 'object',
+      group: 'content',
+      fields: [
+        {
+          name: 'title',
+          type: 'string'
+        },
+        {
+          name: 'text',
+          type: 'text'
+        }
+      ]
+    }
   ],
 };

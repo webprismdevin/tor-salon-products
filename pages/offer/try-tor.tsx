@@ -11,7 +11,6 @@ import {
   Stack,
   Link,
   AspectRatio,
-  HStack,
   Accordion,
   AccordionItem,
   AccordionButton,
@@ -29,6 +28,9 @@ import { gql } from "graphql-request";
 import formatter from "../../lib/formatter";
 import { hairTypeData } from "../../lib/tryTorData";
 import { sanity } from "../../lib/sanity";
+import { RatingStar } from "rating-star";
+import { PortableText } from "@portabletext/react";
+import addToCart from "../../lib/Cart/addToCart";
 
 const MotionBox = motion(Box);
 
@@ -60,19 +62,20 @@ export default function TryTor({ page }: any) {
   }, []);
 
   async function addTryBundleToCart(variantId: string) {
-    const response = await fetch("/api/addtocart", {
-      method: "POST",
-      body: JSON.stringify({
-        variantId: variantId,
-        cartId: cart.id,
-        qty: 1,
-      }),
-    }).then((res) => res.json());
+    // const response = await fetch("/api/addtocart", {
+    //   method: "POST",
+    //   body: JSON.stringify({
+    //     variantId: variantId,
+    //     cartId: cart.id,
+    //     qty: 1,
+    //   }),
+    // }).then((res) => res.json());
+    const response = await addToCart(cart.id, variantId);
 
     if (response) {
       setCart({
         ...cart,
-        lines: response.response.cartLinesAdd.cart.lines,
+        lines: response.cartLinesAdd.cart.lines,
         status: "dirty",
       });
     }
@@ -90,50 +93,50 @@ export default function TryTor({ page }: any) {
       }).then((res) => res.json());
 
       if (response) {
-        addFreeShipping();
+        // addFreeShipping();
         console.log(response);
       }
     }
   }
 
-  function addFreeShipping() {
-    const mutation = gql`
-      mutation cartDiscountCodesUpdate(
-        $cartId: ID!
-        $discountCodes: [String!]
-      ) {
-        cartDiscountCodesUpdate(
-          cartId: $cartId
-          discountCodes: $discountCodes
-        ) {
-          cart {
-            discountCodes {
-              applicable
-              code
-            }
-          }
-          userErrors {
-            field
-            message
-          }
-        }
-      }
-    `;
+  // function addFreeShipping() {
+  //   const mutation = gql`
+  //     mutation cartDiscountCodesUpdate(
+  //       $cartId: ID!
+  //       $discountCodes: [String!]
+  //     ) {
+  //       cartDiscountCodesUpdate(
+  //         cartId: $cartId
+  //         discountCodes: $discountCodes
+  //       ) {
+  //         cart {
+  //           discountCodes {
+  //             applicable
+  //             code
+  //           }
+  //         }
+  //         userErrors {
+  //           field
+  //           message
+  //         }
+  //       }
+  //     }
+  //   `;
 
-    const variables = {
-      cartId: cart.id,
-      discountCodes: ["TRYTORFREESHIPPING"],
-    };
+  //   const variables = {
+  //     cartId: cart.id,
+  //     discountCodes: ["TRYTORFREESHIPPING"],
+  //   };
 
-    graphClient.request(mutation, variables).then((result) => {
-      console.log(result, " addFreeShipping");
+  //   graphClient.request(mutation, variables).then((result) => {
+  //     console.log(result, " addFreeShipping");
 
-      setCart({
-        ...cart,
-        status: "dirty",
-      });
-    });
-  }
+  //     setCart({
+  //       ...cart,
+  //       status: "dirty",
+  //     });
+  //   });
+  // }
 
   function handleButton() {
     if (hairType) {
@@ -173,8 +176,8 @@ export default function TryTor({ page }: any) {
       transition={"background-color 0.3s ease"}
     >
       <Head>
-        <title>Try TOR for $12! | TOR Salon Products</title>
-        <meta name="description" content="" />
+        <title>{page.pageTitle} | TOR Salon Products</title>
+        <meta name="description" content={page.metaDescription} />
       </Head>
       <Box position="relative" overflow={"hidden"}>
         <Container maxW="container.lg" py={[5, 20]}>
@@ -192,20 +195,17 @@ export default function TryTor({ page }: any) {
               spacing={8}
             >
               <Box ref={typeSelectionRef}>
-                <Heading size={["xl", "2xl"]} as="h1">
-                  Salon Quality Hair Care. Try for <span style={{ textDecoration: "line-through", opacity: 0.6 }}>$24</span> $12.
+                <Heading size={["xl", "3xl"]} as="h1">
+                  <PortableText value={page.hero.title} />
                 </Heading>
-                <Text
-                  textAlign={["left", "right"]}
-                  mt={3}
-                  pr={[0, null, null, 4]}
-                >
-                  + shipping &amp; taxes
+                <Heading size={["lg", "xl"]} mt={[2]}>
+                  <PortableText value={page.hero.subtitle} />
+                </Heading>
+                <Text mt={3}>
+                  {page.hero.subtext}
                 </Text>
                 <Text mt={[5]} fontSize="lg">
-                  Say hello to the sexiest second-day hair you&apos;ve ever had.
-                  Try our shampoo and conditioner, formulated for your hair
-                  type. Only $12!
+                  {page.hero.text}
                 </Text>
               </Box>
               <Box>
@@ -260,38 +260,6 @@ export default function TryTor({ page }: any) {
                   {/* )} */}
                 </AnimatePresence>
               </Box>
-              <MotionBox
-                padding={8}
-                bgColor="white"
-                shadow="lg"
-                borderRadius={6}
-                outline={"1px solid rgba(0,0,0,0.05)"}
-                initial={{
-                  opacity: 0,
-                }}
-                animate={{
-                  opacity: 1,
-                }}
-                transition={{ delay: 1.2, duration: 0.3 }}
-              >
-                <HStack color={"gold"}>
-                  <Text>★</Text>
-                  <Text>★</Text>
-                  <Text>★</Text>
-                  <Text>★</Text>
-                  <Text>★</Text>
-                </HStack>
-                <Text
-                  mt={2}
-                  style={{ hangingPunctuation: "first", paddingLeft: "3rem 0" }}
-                  fontStyle={"italic"}
-                >
-                  &quot;I have been using Tor products for the last few years. My hair is so amazingly healthy and shiny. Love the timely delivery on this product also. Highly recommend!&quot;
-                </Text>
-                <Text textAlign={"right"} fontStyle="italic">
-                  - Kelly. K
-                </Text>
-              </MotionBox>
             </Stack>
             <Box
               width={["full", "40%"]}
@@ -313,6 +281,42 @@ export default function TryTor({ page }: any) {
             </Box>
           </Stack>
         </Container>
+      </Box>
+      <Box pos="relative" h={"400px"} overflow="hidden">
+        <MotionBox
+          pos="absolute"
+          animate={{
+            x: [0, -2400],
+            transition: {
+              x: {
+                repeat: Infinity,
+                repeatType: "loop",
+                duration: 96,
+                ease: "linear",
+              },
+            },
+          }}
+          minW="4800"
+        >
+          <Stack direction="row" align="stretch">
+            {page.reviews.map((review: any) => (
+              <Review
+                stars={review.rating}
+                key={review._id}
+                review={review.review}
+                name={review.name}
+              />
+            ))}
+            {page.reviews.map((review: any) => (
+              <Review
+                stars={review.rating}
+                key={review._id}
+                review={review.review}
+                name={review.name}
+              />
+            ))}
+          </Stack>
+        </MotionBox>
       </Box>
       <AnimatePresence>
         {hairType && (
@@ -337,7 +341,7 @@ export default function TryTor({ page }: any) {
                   animate={{ opacity: 1, transition: { duration: 0.3 } }}
                   exit={{ opacity: 0 }}
                 >
-                  <Container py={[10, 20]} maxW="container.lg">
+                  <Container pt={[10, 20]} maxW="container.lg">
                     <Stack direction={["column", "row"]} spacing={[10, 20]}>
                       <Box
                         flexShrink={0}
@@ -441,11 +445,10 @@ export default function TryTor({ page }: any) {
               }}
             >
               <Box bg="black" color="white" ref={refAddStyling}>
-                <Container py={[10, 20]}>
-                  <Stack spacing={4}>
+                <Container py={[10, 20]} maxW="container.lg">
+                  <Stack spacing={4} textAlign="center">
                     <Heading size="lg">
-                      Add a FULL-SIZE styling product for 50% OFF. Unlock FREE
-                      SHIPPING for your entire order!
+                      Add a FULL-SIZE styling product for 50% OFF.
                     </Heading>
                     <Text>
                       TOR styling products work best when paired with our
@@ -510,9 +513,7 @@ export default function TryTor({ page }: any) {
             Created by an award winning beauty-industry chemist.
           </Heading>
           <Text textAlign={"center"}>
-            TOR Salon Products was founded by Shannon Tor, a former
-            Alberto-Culver &amp; Avon product who lead product development for
-            Nexxus, Tresemme, and other major beauty brands.{" "}
+            {page.about.text}
           </Text>
         </Stack>
       </Container>
@@ -537,7 +538,7 @@ export default function TryTor({ page }: any) {
                 pb={[20, 40]}
                 centerContent
               >
-                <Stack spacing={4}>
+                <Stack spacing={6}>
                   <Heading textAlign={"center"} size="3xl" lineHeight={1.2}>
                     Ready to feel the difference?
                   </Heading>
@@ -553,40 +554,14 @@ export default function TryTor({ page }: any) {
                   >
                     {returnButtonText()}
                   </Button>
-                  <Box
-                    maxW={[560]}
-                    alignSelf="center"
-                    padding={8}
-                    borderRadius={6}
-                    bgColor="white"
-                    shadow="lg"
-                    outline={"1px solid rgba(0,0,0,0.1)"}
-                  >
-                    <HStack color={"gold"}>
-                      <Text>★</Text>
-                      <Text>★</Text>
-                      <Text>★</Text>
-                      <Text>★</Text>
-                      <Text>★</Text>
-                    </HStack>
-                    <Text
-                      borderRadius={6}
-                      mt={2}
-                      style={{
-                        hangingPunctuation: "first",
-                        paddingLeft: "3rem 0",
-                      }}
-                      fontStyle={"italic"}
-                    >
-                      &quot;I&apos;m hooked! Ever since Shanon brought the
-                      shampoo &amp; conditoner into our salon, we&apos;ve pretty
-                      much stopped using everything else. Great product, keeps
-                      its promises, great for the environment, and wonderful
-                      people to do business with!&quot;
-                    </Text>
-                    <Text textAlign={"right"} fontStyle="italic">
-                      - Lee W.S.
-                    </Text>
+                  <Box alignSelf="center">
+                    <Review
+                      stars={5}
+                      review={
+                        "I'm hooked! Ever since Shanon brought the shampoo & conditoner into our salon, we've pretty much stopped using everything else. Great product, keeps its promises, great for the environment, and wonderful people to do business with!"
+                      }
+                      name={"Lee W.S."}
+                    />
                   </Box>
                 </Stack>
               </Container>
@@ -606,8 +581,36 @@ export default function TryTor({ page }: any) {
   );
 }
 
+function Review({
+  stars,
+  review,
+  name,
+}: {
+  stars: number;
+  review: string;
+  name: string;
+}) {
+  return (
+    <Stack
+      align="flex-start"
+      padding={8}
+      bgColor="white"
+      shadow="lg"
+      borderRadius={6}
+      outline={"1px solid rgba(0,0,0,0.05)"}
+      maxW={["95vw", 400]}
+    >
+      <RatingStar rating={stars} id={"rating_star"} />
+      <Text fontStyle={"italic"}>&quot;{review}&quot;</Text>
+      <Text alignSelf="flex-end" fontStyle="italic">
+        - {name}
+      </Text>
+    </Stack>
+  );
+}
+
 export async function getStaticProps() {
-  const query = `*[_type == "tryTor"][0]`;
+  const query = `*[_type == "tryTor"][0]{..., reviews[]->}`;
 
   const result = await sanity.fetch(query);
 

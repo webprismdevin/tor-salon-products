@@ -88,7 +88,7 @@ export default function ReviewSubmit({ product }: any) {
 
   return (
     <>
-      <Button onClick={onOpen} leftIcon={<AiFillEdit />} variant="ghost">
+      <Button w="full" onClick={onOpen} leftIcon={<AiFillEdit />} variant="ghost">
         Write A Review
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>

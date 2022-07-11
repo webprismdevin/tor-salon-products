@@ -35,6 +35,7 @@ import NextLink from "next/link";
 import { RatingStar } from "rating-star";
 import ReviewSubmit from "../../components/Product/ReviewSubmit";
 import Loader from "../../components/Loader";
+import addToCart from "../../lib/Cart/addToCart";
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -99,20 +100,13 @@ const ProductPage = ({
 
   const variants = product?.variants.edges;
 
-  async function addToCart() {
-    const response = await fetch("/api/addtocart", {
-      method: "POST",
-      body: JSON.stringify({
-        variantId: activeVariant.id,
-        cartId: cart.id,
-        qty: itemQty,
-      }),
-    }).then((res) => res.json());
+  async function handleAddToCart() {
+    const response = await addToCart(cart.id, activeVariant.id, itemQty)
 
     setCart({
       ...cart,
       status: "dirty",
-      lines: response.response.cartLinesAdd.cart.lines,
+      lines: response.cartLinesAdd.cart.lines,
     });
 
     if (window.dataLayer) {
@@ -183,12 +177,12 @@ const ProductPage = ({
         <GridItem colSpan={[2, 1]}>
           <Stack
             py={[4, 20]}
-            pl={[4, null, 4, 8]}
+            pl={[4, null, 4, 0]}
             pr={[4, null, 10, 20]}
             spacing={6}
           >
             <Stack direction={"row"} justify={"space-between"}>
-              <Heading>{product.title}</Heading>
+              <Heading maxW={[480]}>{product.title}</Heading>
               <Heading fontWeight={600}>
                 {formatter.format(parseInt(activeVariant.priceV2.amount))}
               </Heading>
@@ -223,7 +217,7 @@ const ProductPage = ({
             </HStack>
             <Divider />
             <Box
-              className="product_description_hmtl_outer_container"
+              className="product_description_html_outer_container"
               dangerouslySetInnerHTML={{
                 __html: product.descriptionHtml,
               }}
@@ -262,7 +256,7 @@ const ProductPage = ({
               right={[4, 0]}
               zIndex={2}
               w={["70%", "full"]}
-              onClick={addToCart}
+              onClick={handleAddToCart}
               isDisabled={!activeVariant?.availableForSale}
               size="lg"
             >
