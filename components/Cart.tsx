@@ -28,6 +28,7 @@ import createCart from "../lib/Cart/createCart";
 import removeCartItem from "../lib/Cart/removeCartItem";
 import CartRecommendations from "./Cart/CartRecommendations";
 import ShopPayInstallments from "./Cart/ShopPayInstallments";
+import DiscountCodeInput from "./Cart/DiscountCodeInput";
 
 const Cart = ({ color }: { color?: string }) => {
   const { cart, setCart } = useContext(CartContext);
@@ -110,8 +111,7 @@ const Cart = ({ color }: { color?: string }) => {
     console.log(resp.cartLinesRemove);
 
     setCart({
-      id: resp.cartLinesRemove.cart.id,
-      checkoutUrl: resp.cartLinesRemove.cart.checkoutUrl,
+      ...cart,
       status: "clean",
       estimatedCost: resp.cartLinesRemove.cart.estimatedCost,
       lines: resp.cartLinesRemove.cart.lines.edges,
@@ -205,16 +205,18 @@ const Cart = ({ color }: { color?: string }) => {
                       <Divider />
                     </React.Fragment>
                   ))}
+                  <CartRecommendations />
                 </>
               )}
-              <CartRecommendations />
             </VStack>
           </DrawerBody>
+          
           <DrawerFooter>
             <VStack w="full" spacing={2}>
+              <DiscountCodeInput />
               <Divider />
               <ShopPayInstallments />
-              <Flex
+              {cart.lines.length > 0 && <Flex
                 w="100%"
                 justifyContent={"space-between"}
                 fontSize="md"
@@ -222,7 +224,7 @@ const Cart = ({ color }: { color?: string }) => {
               >
                 <Text>Taxes &amp; Shipping:</Text>
                 <Text>Calculated at checkout</Text>
-              </Flex>
+              </Flex>}
               <TotalCost cart={cart} />
               <Button
                 fontSize={"2xl"}

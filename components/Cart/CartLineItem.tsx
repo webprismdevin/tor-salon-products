@@ -77,8 +77,7 @@ function ItemQty({ product }: { product: any; }) {
     console.log(resp.cartLinesUpdate)
 
     setCart({
-      id: resp.cartLinesUpdate.cart.id,
-      checkoutUrl: resp.cartLinesUpdate.cart.checkoutUrl,
+      ...cart,
       status: "clean",
       estimatedCost: resp.cartLinesUpdate.cart.estimatedCost,
       lines: resp.cartLinesUpdate.cart.lines.edges,

@@ -6,8 +6,8 @@ export default async function loadCart(cartId: string) {
         cart(id: "${cartId}") {
             checkoutUrl
             discountCodes {
-            applicable
-            code
+                applicable
+                code
             }
             estimatedCost {
                 subtotalAmount {

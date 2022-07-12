@@ -13,6 +13,10 @@ export default async function removeCartItem(cartId: string, lineItemId: string)
               amount
             }
           }
+          discountCodes {
+            applicable
+            code
+          }
           lines(first: 100) {
             edges {
               node {

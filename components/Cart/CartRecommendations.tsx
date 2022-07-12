@@ -104,7 +104,7 @@ export default function CartRecommendations() {
                 </span>
               )}
             </Text>
-            <Button onClick={() => handleAddToCart(rec)} size="sm">
+            <Button variant="outline" onClick={() => handleAddToCart(rec)} size="sm">
               Add for{" "}
               {formatter.format(rec.variants.edges[0].node.priceV2.amount)}
             </Button>

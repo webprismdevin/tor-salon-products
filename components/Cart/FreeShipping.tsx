@@ -4,6 +4,8 @@ import { Box, Stack, Text, Progress } from "@chakra-ui/react";
 export default function FreeShippingProgress({ cart }: { cart?: any }) {
   const router = useRouter();
 
+  if(cart && cart.lines && cart.lines.length === 0) return null
+
   return (
     <Box pb={4} w="full">
       <Stack direction="row" w="full" justify={"space-between"}>

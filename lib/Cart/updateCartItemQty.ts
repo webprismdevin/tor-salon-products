@@ -17,6 +17,10 @@ export default async function updateCartItemQty(
               amount
             }
           }
+          discountCodes {
+            applicable
+            code
+          }
           lines(first: 100) {
             edges {
               node {

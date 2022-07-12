@@ -4,7 +4,7 @@ import Script from "next/script";
 export default function Follow() {
   return (
     // <Container maxW="container.xl" pb={40} mt={20}>
-      <Box w="full" py={40}>
+      <Box w="full" pt={40}>
         {/* <Heading textAlign={"center"}>Follow us on Instagram!</Heading>
         <Box textAlign={"center"} my={6}>
           <Link

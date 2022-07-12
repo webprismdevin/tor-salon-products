@@ -21,6 +21,12 @@ import {
   SiFacebook,
   SiInstagram,
   SiYoutube,
+  SiVisa,
+  SiMastercard,
+  SiDiscover,
+  SiAmericanexpress,
+  SiApplepay,
+  SiGooglepay,
 } from "react-icons/si";
 import ShopContext from "../../lib/shop-context";
 import {
@@ -29,7 +35,7 @@ import {
   ByProductTypes,
   MoreLinks,
 } from "../Menu/MenuSections";
-import NextImage from 'next/image'
+import NextImage from "next/image";
 
 const Footer = () => {
   const { shop } = useContext(ShopContext);
@@ -106,7 +112,11 @@ const Footer = () => {
         >
           <Stack direction={["column", "row"]} spacing={[12, 20]}>
             <AspectRatio ratio={8 / 10} w={"126px"}>
-              <NextImage src="/tor-gif.gif" alt="TOR brand hairtypes gif" layout="fill" />
+              <NextImage
+                src="/tor-gif.gif"
+                alt="TOR brand hairtypes gif"
+                layout="fill"
+              />
             </AspectRatio>
             <Stack>
               <Text fontSize="lg" fontFamily={"Futura"}>
@@ -187,6 +197,14 @@ const Footer = () => {
               Phone: <Link href="tel:719-275-2582">719-275-2582</Link>
             </Text>
           </Stack>
+        </Stack>
+        <Stack alignSelf={"flex-end"} direction="row" spacing={4}>
+          <Icon as={SiAmericanexpress} boxSize={8} />
+          <Icon as={SiApplepay} boxSize={8} />
+          <Icon as={SiDiscover} boxSize={8} />
+          <Icon as={SiGooglepay} boxSize={8} />
+          <Icon as={SiMastercard} boxSize={8} />
+          <Icon as={SiVisa} boxSize={8} />
         </Stack>
         <Text w="full" textAlign={"center"} fontSize="xs">
           © {shop.name}. 2022. Crafted by{" "}

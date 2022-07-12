@@ -194,6 +194,7 @@ const ProductPage = ({
                 align="center"
                 justify={"center"}
                 w={["100%", "50%"]}
+                cursor="pointer"
                 onClick={() =>
                   reviewsSection.current?.scrollIntoView({
                     behavior: "smooth",
@@ -254,7 +255,7 @@ const ProductPage = ({
               position={["fixed", "static"]}
               bottom={[7, 0]}
               right={[4, 0]}
-              zIndex={2}
+              zIndex={[2, 0]}
               w={["70%", "full"]}
               onClick={handleAddToCart}
               isDisabled={!activeVariant?.availableForSale}
