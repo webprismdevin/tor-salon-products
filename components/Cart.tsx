@@ -92,16 +92,18 @@ const Cart = ({ color }: { color?: string }) => {
 
     localCartData = await createCart();
 
+    console.log(localCartData)
+
     setCart({
-      id: localCartData.id,
-      checkoutUrl: localCartData.checkoutUrl,
+      id: localCartData.cartCreate.cart.id,
+      checkoutUrl: localCartData.cartCreate.cart.checkoutUrl,
       estimatedCost: null,
       lines: [],
     });
 
     window.localStorage.setItem(
       `${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:cart`,
-      JSON.stringify(localCartData)
+      JSON.stringify(localCartData.cartCreate.cart)
     );
   }
 
