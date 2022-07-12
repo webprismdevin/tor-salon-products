@@ -109,7 +109,7 @@ export default function DiscountCodeInput() {
 
   return (
     <Box w="full">
-      {cart && cart.discount.length > 0 && (
+      {cart && cart.discount && cart.discount.length > 0 && (
         <Flex py={2}>
           <Text>Discount Applied:</Text>
           {cart.discount.map((discount: any) => (

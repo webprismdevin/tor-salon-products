@@ -216,7 +216,7 @@ const Cart = ({ color }: { color?: string }) => {
               <DiscountCodeInput />
               <Divider />
               <ShopPayInstallments />
-              {cart.lines.length > 0 && <Flex
+              {cart && cart.lines && cart.lines.length > 0 && <Flex
                 w="100%"
                 justifyContent={"space-between"}
                 fontSize="md"
