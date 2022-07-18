@@ -15,6 +15,7 @@ import {
   DrawerContent,
   DrawerCloseButton,
   Stack,
+  useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useContext, useState } from "react";
@@ -29,11 +30,13 @@ import removeCartItem from "../lib/Cart/removeCartItem";
 import CartRecommendations from "./Cart/CartRecommendations";
 import ShopPayInstallments from "./Cart/ShopPayInstallments";
 import DiscountCodeInput from "./Cart/DiscountCodeInput";
+import applyDiscountToCart from "../lib/Cart/applyDiscountToCart";
 
 const Cart = ({ color }: { color?: string }) => {
   const { cart, setCart } = useContext(CartContext);
   const [cartQty, setCartQty] = useState<number | null>(null);
   const router = useRouter();
+  const toast = useToast();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 

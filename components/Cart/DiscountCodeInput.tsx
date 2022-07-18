@@ -12,61 +12,42 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { gql } from "graphql-request";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import applyDiscountToCart from "../../lib/Cart/applyDiscountToCart";
 import CartContext from "../../lib/CartContext";
 import graphClient from "../../lib/graph-client";
 
 export default function DiscountCodeInput() {
   const [code, setCode] = useState("");
   const { cart, setCart } = useContext(CartContext);
-  const toast = useToast()
+  const toast = useToast();
 
   async function applyDiscount() {
-    const mutation = gql`
-      mutation cartDiscountCodesUpdate(
-        $cartId: ID!
-        $discountCodes: [String!]
-      ) {
-        cartDiscountCodesUpdate(
-          cartId: $cartId
-          discountCodes: $discountCodes
-        ) {
-          cart {
-            discountCodes {
-              applicable
-              code
-            }
-          }
-          userErrors {
-            field
-            message
-          }
-        }
-      }
-    `;
+    const response = await applyDiscountToCart(cart.id, code);
 
-    const variables = {
-      cartId: cart.id,
-      discountCodes: [code],
-    };
-
-    const response = await graphClient.request(mutation, variables);
-
-    setCode("")
+    if (response.error) {
+      toast({
+        title: "Code could not be added!",
+        description: "Hmmm...try again or try a different code",
+        status: "error",
+      });
+    }
 
     toast({
-        title: "Discount applied!",
-        description: "Check your cart total!",
-        status: 'success'
-    })
+      title: "Code added!",
+      description: "Check your cart total!",
+      status: "success",
+    });
 
     setCart({
       ...cart,
       status: "dirty",
     });
+
+    setCode("");
   }
 
-  async function clearCode(){
+  async function clearCode() {
     const mutation = gql`
       mutation cartDiscountCodesUpdate(
         $cartId: ID!
@@ -103,9 +84,9 @@ export default function DiscountCodeInput() {
     });
   }
 
-  const handleKeyDown = (event:any) => {
-    if (event.key === 'Enter') applyDiscount()
-  }
+  const handleKeyDown = (event: any) => {
+    if (event.key === "Enter") applyDiscount();
+  };
 
   return (
     <Box w="full">
