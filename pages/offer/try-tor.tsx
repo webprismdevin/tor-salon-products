@@ -52,24 +52,23 @@ export default function TryTor({ page }: any) {
   const refAddStyling = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (hairType) window.localStorage.setItem("tor_hairType", hairType);
+    if (hairType) {
+      window.localStorage.removeItem(
+        `${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:cart`
+      );
+      setCart({
+        status: "dirty"
+      })
+      window.localStorage.setItem("tor_hairType", hairType);
+    }
   }, [hairType]);
 
   useEffect(() => {
     let storedType = window.localStorage.getItem("tor_hairType");
-
     if (storedType) setHairType(storedType);
   }, []);
 
   async function addTryBundleToCart(variantId: string) {
-    // const response = await fetch("/api/addtocart", {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     variantId: variantId,
-    //     cartId: cart.id,
-    //     qty: 1,
-    //   }),
-    // }).then((res) => res.json());
     const response = await addToCart(cart.id, variantId);
 
     if (response) {
@@ -140,9 +139,9 @@ export default function TryTor({ page }: any) {
 
   function handleButton() {
     if (hairType) {
-      if (cart.lines.length === 0)
+      if (cart.lines && cart.lines.length === 0)
         addTryBundleToCart(hairTypeData[hairType!].variantId);
-      if (cart.lines.length > 0) {
+      if (cart.lines && cart.lines.length > 0) {
         if (process.env.NODE_ENV === "production") {
           window.dataLayer.push({
             event: "begin_checkout",
@@ -165,8 +164,8 @@ export default function TryTor({ page }: any) {
   }
 
   function returnButtonText() {
-    if (cart.lines.length > 0 && hairType) return "Checkout";
-    if (cart.lines.length === 0 && hairType) return "Add To Cart";
+    if (cart.lines?.length > 0 && hairType) return "Checkout";
+    if (cart.lines?.length === 0 && hairType) return "Add To Cart";
     if (!hairType) return "Select Your Hair Type";
   }
 
@@ -201,9 +200,7 @@ export default function TryTor({ page }: any) {
                 <Heading size={["lg", "xl"]} mt={[2]}>
                   <PortableText value={page.hero.subtitle} />
                 </Heading>
-                <Text mt={3}>
-                  {page.hero.subtext}
-                </Text>
+                <Text mt={3}>{page.hero.subtext}</Text>
                 <Text mt={[5]} fontSize="lg">
                   {page.hero.text}
                 </Text>
@@ -512,9 +509,7 @@ export default function TryTor({ page }: any) {
           <Heading textAlign={"center"}>
             Created by an award winning beauty-industry chemist.
           </Heading>
-          <Text textAlign={"center"}>
-            {page.about.text}
-          </Text>
+          <Text textAlign={"center"}>{page.about.text}</Text>
         </Stack>
       </Container>
       <Suspense fallback={`Loading...`}>
