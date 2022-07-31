@@ -25,7 +25,7 @@ import { gql, GraphQLClient } from "graphql-request";
 import CartContext from "../../lib/CartContext";
 import graphClient from "../../lib/graph-client";
 import { RatingStar } from "rating-star";
-import Cart from "../../components/Cart";
+import Cart from "../../components/Cart/Cart";
 import NextLink from "next/link";
 import { imageBuilder } from "../../lib/sanity";
 import { PortableText } from "@portabletext/react";

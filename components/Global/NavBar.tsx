@@ -18,7 +18,7 @@ import { Search } from "../Search";
 import MobileMenu from "../Menu/MobileMenu";
 import DesktopMenu from "../Menu/DesktopMenu";
 import MenuLink from "../Menu/MenuLink";
-import Cart from "../Cart";
+import Cart from "../Cart/Cart";
 import AuthContext from "../../lib/auth-context";
 
 const NavBar = () => {
