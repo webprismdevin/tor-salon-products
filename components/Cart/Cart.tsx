@@ -121,16 +121,16 @@ const Cart = ({ color }: { color?: string }) => {
   }
 
   async function handleCheckout() {
-    // if (process.env.NODE_ENV === "production") {
-    //   window.dataLayer.push({
-    //     event: "begin_checkout",
-    //     eventCallback: () => (window.location.href = cart.checkoutUrl),
-    //     eventTimeout: 1200,
-    //   });
-    // }
-    // if (process.env.NODE_ENV === "development") {
+    if (process.env.NODE_ENV === "production") {
+      window.dataLayer.push({
+        event: "begin_checkout",
+        eventCallback: () => (window.location.href = cart.checkoutUrl),
+        eventTimeout: 1200,
+      });
+    }
+    if (process.env.NODE_ENV === "development") {
       window.location.href = cart.checkoutUrl;
-    // }
+    }
   }
 
   return (
