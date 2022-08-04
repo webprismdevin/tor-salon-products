@@ -17,6 +17,7 @@ import {
   AccordionPanel,
   AccordionIcon,
   chakra,
+  useToast,
 } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Suspense, useContext, useEffect, useRef, useState } from "react";
@@ -47,22 +48,23 @@ const MotionBox = motion(Box);
 export default function TryTor({ page }: any) {
   const [hairType, setHairType] = useState<null | string>("");
   const { cart, setCart } = useContext(CartContext);
+  const toast = useToast()
 
   const moreInfoRef = useRef<HTMLDivElement | null>(null);
   const typeSelectionRef = useRef<HTMLDivElement | null>(null);
   const refAddStyling = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    if (hairType) {
-      window.localStorage.removeItem(
-        `${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:cart`
-      );
-      setCart({
-        status: "dirty",
-      });
-      window.localStorage.setItem("tor_hairType", hairType);
-    }
-  }, [hairType]);
+  // useEffect(() => {
+  //   if (hairType) {
+  //     window.localStorage.removeItem(
+  //       `${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:cart`
+  //     );
+  //     setCart({
+  //       status: "dirty",
+  //     });
+  //     window.localStorage.setItem("tor_hairType", hairType);
+  //   }
+  // }, [hairType]);
 
   useEffect(() => {
     let storedType = window.localStorage.getItem("tor_hairType");
@@ -83,14 +85,12 @@ export default function TryTor({ page }: any) {
 
   async function addStylingToCart() {
     if (hairType) {
-      const response = await fetch("/api/addtocart", {
-        method: "POST",
-        body: JSON.stringify({
-          variantId: hairTypeData[hairType].styling.variantId,
-          cartId: cart.id,
-          qty: 1,
-        }),
-      }).then((res) => res.json());
+      toast({
+        title: 'FREE SHIPPING UNLOCKED',
+        description: 'Congratulations, you unlocked free shipping, and get 50% off your styling product!',
+        status: 'success'
+      })
+      const response = await addToCart(cart.id, hairTypeData[hairType].styling.variantId)
 
       if (response) {
         addFreeShipping();
