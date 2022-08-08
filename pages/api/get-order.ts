@@ -112,7 +112,7 @@ export default async function handler(
     `;
 
   const adminGraphClient = new GraphQLClient(
-    'https://tor-salon-products.myshopify.com/admin/api/2022-01/graphql.json' as string,
+    'https://tor-salon-products.myshopify.com/admin/api/2022-07/graphql.json' as string,
     {
       headers: {
         'X-Shopify-Access-Token': process.env.SHOPIFY_API_PASSWORD as string,

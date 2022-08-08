@@ -3,74 +3,38 @@
 
 import S from "@sanity/desk-tool/structure-builder";
 import { ImCog, ImHome, ImQuestion } from "react-icons/im";
-import { BsBoxSeam, BsBookHalf } from 'react-icons/bs'
+import { BsBoxSeam, BsBookHalf } from "react-icons/bs";
+
+const DOCUMENT_TYPES_IN_STRUCTURE = [
+  "siteSettings",
+  "homepage",
+  "about",
+  "help",
+  "wholesale",
+  "tryTor",
+  "media.tag",
+];
+
+import { settings } from "./desk/settings";
+import { home } from "./desk/home";
+import { about } from "./desk/about";
+import { help } from "./desk/help";
+import { tryTor } from "./desk/tryTor";
+import { wholesale } from './desk/wholesale'
 
 export default () =>
   S.list()
-    .title("Menu")
+    .title("Content")
     .items([
-      S.listItem()
-        .title("Site Settings")
-        .icon(ImCog)
-        .child(
-          S.editor()
-            .id("siteSettings")
-            .schemaType("siteSettings")
-            .documentId("siteSettings")
-            .title("Site Settings")
-        ),
-      S.listItem()
-        .title("Home")
-        .icon(ImHome)
-        .child(
-          S.editor()
-            .id("homepage")
-            .schemaType("homepage")
-            .documentId("homepage")
-            .title("Home Page")
-        ),
-      S.listItem()
-        .title("About")
-        .icon(BsBookHalf)
-        .child(
-          S.editor()
-            .id("about")
-            .schemaType("about")
-            .documentId("about")
-            .title("About Us")
-        ),
-      S.listItem()
-        .title("Help")
-        .icon(ImQuestion)
-        .child(
-          S.editor()
-            .id("help")
-            .schemaType("help")
-            .documentId("help")
-            .title("Help")
-        ),
-        S.listItem()
-        .title("Wholesale")
-        .icon(BsBoxSeam)
-        .child(
-          S.editor()
-            .id("wholesale")
-            .schemaType("wholesale")
-            .documentId("wholesale")
-            .title("Wholesale")
-        ),
-        S.listItem()
-        .title("Try TOR")
-        .icon(BsBookHalf)
-        .child(
-          S.editor()
-            .id("tryTor")
-            .schemaType("tryTor")
-            .documentId("tryTor")
-            .title("Try TOR")
-        ),
+      settings,
       S.divider(),
-      ...S.documentTypeListItems().filter(
-        (listItem) => !["homepage", "about", "help", "siteSettings", "wholesale", "tryTor"].includes(listItem.getId())
-      ),
+      home,
+      about,
+      help,
+      wholesale,
+      tryTor,
+      S.divider(),
+      // Automatically add new document types to the root pane
+      //prettier-ignore
+      ...S.documentTypeListItems().filter(listItem => !DOCUMENT_TYPES_IN_STRUCTURE.includes(listItem.getId())),
     ]);
