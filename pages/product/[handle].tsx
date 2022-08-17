@@ -24,7 +24,13 @@ import {
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
-import React, { useState, useContext, useRef, useEffect, Suspense } from "react";
+import React, {
+  useState,
+  useContext,
+  useRef,
+  useEffect,
+  Suspense,
+} from "react";
 import CartContext from "../../lib/CartContext";
 import formatter from "../../lib/formatter";
 import { GetStaticProps } from "next";
@@ -36,6 +42,7 @@ import { RatingStar } from "rating-star";
 import ReviewSubmit from "../../components/Product/ReviewSubmit";
 import Loader from "../../components/Loader";
 import addToCart from "../../lib/Cart/addToCart";
+import SubscriptionPlan from "../../components/SubscriptionPlan";
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -82,8 +89,13 @@ const ProductPage = ({
     ).node;
   });
 
+  //subscription plans
+  const [subscriptionPlan, setSubscriptionPlan] = useState('none');
+
+  //refs
   const reviewsSection = useRef<HTMLDivElement | null>(null);
 
+  //quantity handling
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
     useNumberInput({
       step: 1,
@@ -97,11 +109,12 @@ const ProductPage = ({
   const inc = getIncrementButtonProps();
   const dec = getDecrementButtonProps();
   const input = getInputProps();
+  //end quantity handling
 
   const variants = product?.variants.edges;
 
   async function handleAddToCart() {
-    const response = await addToCart(cart.id, activeVariant.id, itemQty)
+    const response = await addToCart(cart.id, activeVariant.id, itemQty, subscriptionPlan);
 
     setCart({
       ...cart,
@@ -217,12 +230,6 @@ const ProductPage = ({
               </Box>
             </HStack>
             <Divider />
-            <Box
-              className="product_description_html_outer_container"
-              dangerouslySetInnerHTML={{
-                __html: product.descriptionHtml,
-              }}
-            />
             {variants.length > 1 && (
               <Select
                 minW={"200px"}
@@ -251,6 +258,17 @@ const ProductPage = ({
                 +
               </Button>
             </HStack>
+            {/* subscriptions */}
+            {product.sellingPlanGroups.edges.length > 0 && (
+              <SubscriptionPlan
+              subscriptionPlan={subscriptionPlan}
+              setSubscriptionPlan={setSubscriptionPlan}
+                sellingPlan={
+                  product.sellingPlanGroups.edges[0].node.sellingPlans
+                }
+              />
+            )}
+            {/* end subscriptions */}
             <Button
               position={["fixed", "static"]}
               bottom={[7, 0]}
@@ -263,6 +281,12 @@ const ProductPage = ({
             >
               {activeVariant?.availableForSale ? "Add To Cart" : "Sold Out!"}
             </Button>
+            <Box
+              className="product_description_html_outer_container"
+              dangerouslySetInnerHTML={{
+                __html: product.descriptionHtml,
+              }}
+            />
             <Accordion w="full" allowToggle>
               {product.instructions && (
                 <AccordionItem>
@@ -351,89 +375,89 @@ const ProductPage = ({
           </Stack>
         </GridItem>
       </SimpleGrid>
-        {collection && (
-          <Box bg={collection.color?.value ? collection.color.value : "white"}>
-            <Flex flexDir={["column-reverse", "row"]}>
-              <Box
-                w={["full", "50%"]}
-                pl={[8, 20]}
-                pr={[8, 40]}
-                py={[20, 40]}
+      {collection && (
+        <Box bg={collection.color?.value ? collection.color.value : "white"}>
+          <Flex flexDir={["column-reverse", "row"]}>
+            <Box
+              w={["full", "50%"]}
+              pl={[8, 20]}
+              pr={[8, 40]}
+              py={[20, 40]}
+              pos="relative"
+            >
+              <Image
+                src={collection.typeImage?.reference.image.url}
+                alt=""
+                pos="absolute"
+                top={[0, 10]}
+                opacity={0.1}
+                w="70%"
+                left={[0, 20]}
+                zIndex={0}
+              />
+              <Stack
+                direction={["column"]}
+                spacing={6}
                 pos="relative"
+                zIndex={1}
               >
-                <Image
-                  src={collection.typeImage?.reference.image.url}
-                  alt=""
-                  pos="absolute"
-                  top={[0, 10]}
-                  opacity={0.1}
-                  w="70%"
-                  left={[0, 20]}
-                  zIndex={0}
-                />
+                <Heading>{collection.title}</Heading>
+                <Text>{collection.description}</Text>
                 <Stack
-                  direction={["column"]}
+                  direction={"row"}
+                  textAlign="left"
+                  justify="flex-start"
                   spacing={6}
-                  pos="relative"
-                  zIndex={1}
                 >
-                  <Heading>{collection.title}</Heading>
-                  <Text>{collection.description}</Text>
-                  <Stack
-                    direction={"row"}
-                    textAlign="left"
-                    justify="flex-start"
-                    spacing={6}
-                  >
-                    <Box w="120px">
-                      <Image
-                        mb={2}
-                        boxSize={6}
-                        src={collection?.benefitOneIcon?.reference.image?.url}
-                        alt={collection?.benefitOneText?.value}
-                      />
-                      <Text>{collection?.benefitOneText?.value}</Text>
-                    </Box>
-                    <Box w="120px">
-                      <Image
-                        mb={2}
-                        boxSize={6}
-                        src={collection?.benefitTwoIcon?.reference.image.url}
-                        alt={collection?.benefitTwoText?.value}
-                      />
-                      <Text>{collection?.benefitTwoText?.value}</Text>
-                    </Box>
-                    <Box w="120px">
-                      <Image
-                        mb={2}
-                        boxSize={6}
-                        src={collection?.benefitThreeIcon?.reference.image.url}
-                        alt={collection?.benefitThreeText?.value}
-                      />
-                      <Text>{collection?.benefitThreeText?.value}</Text>
-                    </Box>
-                  </Stack>
+                  <Box w="120px">
+                    <Image
+                      mb={2}
+                      boxSize={6}
+                      src={collection?.benefitOneIcon?.reference.image?.url}
+                      alt={collection?.benefitOneText?.value}
+                    />
+                    <Text>{collection?.benefitOneText?.value}</Text>
+                  </Box>
+                  <Box w="120px">
+                    <Image
+                      mb={2}
+                      boxSize={6}
+                      src={collection?.benefitTwoIcon?.reference.image.url}
+                      alt={collection?.benefitTwoText?.value}
+                    />
+                    <Text>{collection?.benefitTwoText?.value}</Text>
+                  </Box>
+                  <Box w="120px">
+                    <Image
+                      mb={2}
+                      boxSize={6}
+                      src={collection?.benefitThreeIcon?.reference.image.url}
+                      alt={collection?.benefitThreeText?.value}
+                    />
+                    <Text>{collection?.benefitThreeText?.value}</Text>
+                  </Box>
                 </Stack>
-              </Box>
-              <AspectRatio ratio={1 / 1} w={["full", "50%"]}>
-                <Image src={collection?.image?.url} alt="" />
-              </AspectRatio>
-            </Flex>
-            <Container maxW="container.xl" centerContent py={20}>
-              <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
-                {collection.products.edges.map((p: any, i: number) => (
-                  <Product product={p} fontSize={24} key={i} />
-                ))}
-              </SimpleGrid>
-              <NextLink
-                href={returnCollection(collection.handle) as string}
-                passHref
-              >
-                <Button mt={[8]}>See Collection</Button>
-              </NextLink>
-            </Container>
-          </Box>
-        )}
+              </Stack>
+            </Box>
+            <AspectRatio ratio={1 / 1} w={["full", "50%"]}>
+              <Image src={collection?.image?.url} alt="" />
+            </AspectRatio>
+          </Flex>
+          <Container maxW="container.xl" centerContent py={20}>
+            <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
+              {collection.products.edges.map((p: any, i: number) => (
+                <Product product={p} fontSize={24} key={i} />
+              ))}
+            </SimpleGrid>
+            <NextLink
+              href={returnCollection(collection.handle) as string}
+              passHref
+            >
+              <Button mt={[8]}>See Collection</Button>
+            </NextLink>
+          </Container>
+        </Box>
+      )}
       {reviews && reviews.reviews.length > 0 && (
         <Container
           ref={reviewsSection}
@@ -632,6 +656,26 @@ export const getStaticProps: GetStaticProps = async (context) => {
       description
       tags
       productType
+      sellingPlanGroups(first: 100) {
+        edges {
+          node {
+              sellingPlans(first: 10) {
+                  edges {
+                      node {
+                          id
+                          name
+                          options {
+                              name
+                              value
+                          }
+                      }
+                  }
+              }
+            appName
+            name
+          }
+        }
+      }
       collectionToPull: metafield(namespace: "product", key:"featured_collection"){
         value
       }

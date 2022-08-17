@@ -1,13 +1,15 @@
 import { gql } from "graphql-request";
 import graphClient from "../graph-client";
 
-export default async function addToCart(cartId:string, variantId:string, qty?:number){
+export default async function addToCart(cartId:string, variantId:string, qty?:number, sellingPlanId?: string){
+
+  console.log(sellingPlanId)
 
     const query = gql`
-      mutation AddToCart($cartId: ID!, $variantId: ID! ) {
+      mutation AddToCart($cartId: ID!, $variantId: ID!, $sellingPlanId: ID!) {
         cartLinesAdd(
           cartId: $cartId
-          lines: [{ quantity: ${qty ? qty : 1}, merchandiseId: $variantId }]
+          lines: [{ quantity: ${qty ? qty : 1}, merchandiseId: $variantId, sellingPlanId: $sellingPlanId }]
         ) {
           cart {
             discountCodes {
@@ -35,7 +37,9 @@ export default async function addToCart(cartId:string, variantId:string, qty?:nu
       }
     `;
   
-    const response = await graphClient.request(query, { cartId, variantId });
+    const variables = sellingPlanId ? { cartId, variantId, sellingPlanId } : { cartId, variantId }
+
+    const response = await graphClient.request(query, variables)
 
     return response;
 }

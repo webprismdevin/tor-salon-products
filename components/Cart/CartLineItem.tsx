@@ -38,6 +38,7 @@ export function CartLineItem({
             <Text fontSize={[16, 18]} fontWeight="bold">
               {product.node.merchandise.product.title}
             </Text>
+            {product.node.sellingPlanAllocation && <Text>{product.node.sellingPlanAllocation.sellingPlan.name}</Text>}
             {product.node.merchandise.title !== "Default Title" && (
               <Text mt={1} fontSize={[14, 16]}>
                 {product.node.merchandise.title}

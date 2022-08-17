@@ -22,6 +22,11 @@ export default async function loadCart(cartId: string) {
                 node {
                 id
                 quantity
+                sellingPlanAllocation {
+                    sellingPlan {
+                        name
+                    }
+                }
                 estimatedCost {
                     subtotalAmount {
                     amount
