@@ -23,6 +23,7 @@ import AuthContext from "../../lib/auth-context";
 
 const NavBar = () => {
   const router = useRouter();
+  const { user } = useContext(AuthContext);
 
   return (
     <Box
@@ -42,11 +43,16 @@ const NavBar = () => {
           align={["center"]}
           justify={"flex-start"}
         >
-          {!router.asPath.includes("/offer") &&<MobileMenu />}
+          {!router.asPath.includes("/offer") && <MobileMenu />}
           <StoreName />
-          {!router.asPath.includes("/offer") &&<DesktopMenu />}
+          {!router.asPath.includes("/offer") && <DesktopMenu />}
         </Stack>
         <Stack direction="row" spacing={4}>
+          {user && user.isPro && (
+            <NextLink href="wholesale">
+              <Link>Wholesale</Link>
+            </NextLink>
+          )}
           {!router.asPath.includes("/offer") && (
             <Box display={["none", "inherit"]}>
               <Menu>

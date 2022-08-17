@@ -20,17 +20,16 @@ import {
 import { useRouter } from "next/router";
 import React, { useEffect, useContext, useState } from "react";
 import { AiOutlineShopping, AiOutlineShoppingCart } from "react-icons/ai";
-import CartContext from "../lib/CartContext";
-import formatter from "../lib/formatter";
-import FreeShippingProgress from "./Cart/FreeShipping";
-import { CartLineItem } from "./Cart/CartLineItem";
-import loadCart from "../lib/Cart/loadCart";
-import createCart from "../lib/Cart/createCart";
-import removeCartItem from "../lib/Cart/removeCartItem";
-import CartRecommendations from "./Cart/CartRecommendations";
-import ShopPayInstallments from "./Cart/ShopPayInstallments";
-import DiscountCodeInput from "./Cart/DiscountCodeInput";
-import applyDiscountToCart from "../lib/Cart/applyDiscountToCart";
+import CartContext from "../../lib/CartContext";
+import formatter from "../../lib/formatter";
+import FreeShippingProgress from "./FreeShipping";
+import { CartLineItem } from "../Cart/CartLineItem";
+import loadCart from "../../lib/Cart/loadCart";
+import createCart from "../../lib/Cart/createCart";
+import removeCartItem from "../../lib/Cart/removeCartItem";
+import CartRecommendations from "./CartRecommendations";
+import ShopPayInstallments from "./ShopPayInstallments";
+import DiscountCodeInput from "./DiscountCodeInput";
 
 const Cart = ({ color }: { color?: string }) => {
   const { cart, setCart } = useContext(CartContext);

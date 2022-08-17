@@ -172,9 +172,9 @@ export default function Wholesale({ products, page }: any) {
             Download: Wholesale Pricing Guide
           </Link>
         </Stack>
-        <Stack direction={["column", "row"]} align="flex-start">
-          {cart && <WholesaleCart cart={cart} handleSubmit={handleSubmit} />}
+        <Stack direction={["column", "row"]} align="flex-start" gap={8}>
           <Products products={products} handleAddToCart={handleAddToCart} />
+          {cart && <WholesaleCart cart={cart} handleSubmit={handleSubmit} />}
         </Stack>
       </WholesaleCartContext.Provider>
     </Stack>
@@ -235,7 +235,7 @@ function WholesaleCart({ cart, handleSubmit }: any) {
       spacing={4}
       flexGrow={1}
       p={8}
-      mr={16}
+      ml={16}
       bgColor="white"
       borderRadius={5}
     >
