@@ -88,7 +88,6 @@ const NavBar = () => {
 const Auth = () => {
   const { user } = useContext(AuthContext);
   const router = useRouter();
-  // const [user, setUser, token] = useUser();
 
   function handleLoginOrAccount() {
     if (user && user.id) router.push("/account");

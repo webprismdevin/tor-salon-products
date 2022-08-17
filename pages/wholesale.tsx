@@ -25,6 +25,7 @@ import {
   Checkbox,
   Icon,
   Tag,
+  Textarea,
 } from "@chakra-ui/react";
 import { useContext, useEffect, useState, createContext } from "react";
 import AuthContext from "../lib/auth-context";
@@ -40,6 +41,7 @@ import addToCart from "../lib/Cart/addToCart";
 import applyDiscountToCart from "../lib/Cart/applyDiscountToCart";
 import updateCartItemQty from "../lib/Cart/updateCartItemQty";
 import { FaInfoCircle, FaShippingFast } from "react-icons/fa";
+import Head from "next/head";
 
 const WholesaleCartContext = createContext<any>({
   cart: [],
@@ -101,32 +103,38 @@ export default function Wholesale({ products, page }: any) {
     });
   }
 
-  async function handleSubmit() {
+  async function handleSubmit(
+    shipping: any,
+    billing: any,
+    same: boolean,
+    note: string
+  ) {
     const response = await fetch("/api/create-wholesale-order", {
       method: "POST",
       body: JSON.stringify({
         lineItems: cart.lines,
         customerId: user.id,
         email: user.email,
+        billingAddress: billing,
+        shippingAddress: same ? billing : shipping,
+        note,
       }),
     }).then((res) => res.json());
-
-    console.log(response);
   }
 
   useEffect(() => {
-    if (user) console.log(user);
+    // if (user) console.log(user);
     getCart();
 
-    if (cart && cart.id) {
-      applyDiscountToCart(cart.id, "WHOLESALE50").then((res) =>
-        setCart({
-          ...cart,
-          status: "dirty",
-          discount: res.cartDiscountCodesUpdate.cart.discountCodes,
-        })
-      );
-    }
+    // if (cart && cart.id) {
+    //   applyDiscountToCart(cart.id, "WHOLESALE50").then((res) =>
+    //     setCart({
+    //       ...cart,
+    //       status: "dirty",
+    //       discount: res.cartDiscountCodesUpdate.cart.discountCodes,
+    //     })
+    //   );
+    // }
   }, []);
 
   useEffect(() => {
@@ -152,42 +160,66 @@ export default function Wholesale({ products, page }: any) {
     );
 
   return (
-    <Box bgColor={"gray.200"}>
+    <Stack py={20} px={8} bgColor={"gray.200"}>
+      <Head>
+        <title>Order Wholesale</title>
+      </Head>
       <WholesaleCartContext.Provider value={{ cart, setCart }}>
-        <Stack py={20} direction={["column", "row"]} px={8} align="flex-start">
+        <Heading size={"2xl"} px={2} as="h1">
+          Wholesale
+        </Heading>
+        <Stack py={6} px={2}>
+          <Heading>Pricing Guides</Heading>
+          <Link
+            target="_blank"
+            href={`${page.retailGuideUrl}?dl=tor-msrp-retail-pricing-guide.pdf`}
+          >
+            Download: Retail Pricing Guide
+          </Link>
+          <Link
+            target="_blank"
+            href={`${page.wholesaleGuideUrl}?dl=tor-wholesale-pricing-guide.pdf`}
+          >
+            Download: Wholesale Pricing Guide
+          </Link>
+        </Stack>
+        <Stack direction={["column", "row"]} align="flex-start">
           {cart && <WholesaleCart cart={cart} handleSubmit={handleSubmit} />}
           <Products products={products} handleAddToCart={handleAddToCart} />
         </Stack>
       </WholesaleCartContext.Provider>
-    </Box>
+    </Stack>
   );
 }
 
 function WholesaleCart({ cart, handleSubmit }: any) {
   const [billingInfo, updateBilling] = useState({
-    street1: "",
-    street2: "",
+    company: "",
+    address1: "",
+    address2: "",
     city: "",
-    state: "",
+    province: "",
     zip: "",
     country: "United States",
   });
   const [shippingInfo, updateShipping] = useState({
-    street1: "",
-    street2: "",
+    company: "",
+    address1: "",
+    address2: "",
     city: "",
-    state: "",
+    province: "",
     zip: "",
     country: "United States",
   });
   const [sameAsBilling, setSame] = useState(false);
+  const [note, setNote] = useState("");
 
   function validateOrder() {
     if (sameAsBilling) {
       if (
-        billingInfo.street1 &&
+        billingInfo.address1 &&
         billingInfo.city &&
-        billingInfo.state &&
+        billingInfo.province &&
         billingInfo.zip
       )
         return true;
@@ -195,12 +227,13 @@ function WholesaleCart({ cart, handleSubmit }: any) {
     }
     if (!sameAsBilling) {
       if (
-        billingInfo.street1 &&
+        billingInfo.address1 &&
         billingInfo.city &&
-        billingInfo.state &&
+        billingInfo.province &&
         billingInfo.zip &&
-        shippingInfo.street1 &&
+        shippingInfo.address1 &&
         shippingInfo.city &&
+        shippingInfo.province &&
         shippingInfo.zip
       )
         return true;
@@ -226,7 +259,7 @@ function WholesaleCart({ cart, handleSubmit }: any) {
             <CartLineItem key={line.node.id} product={line} />
           ))}
       </Stack>
-      <Divider />
+      {cart.lines && cart.lines.length > 0 && <Divider />}
       <Stack>
         <Stack direction="row" align={"center"}>
           <Icon as={FaInfoCircle} />
@@ -243,7 +276,7 @@ function WholesaleCart({ cart, handleSubmit }: any) {
             Total:
           </Text>
           <Text fontSize="4xl" fontWeight={600}>
-            {formatter.format(cart.estimatedCost.totalAmount.amount)}
+            {formatter.format(cart.estimatedCost.totalAmount.amount / 2)}
           </Text>
         </Stack>
       </Stack>
@@ -256,7 +289,18 @@ function WholesaleCart({ cart, handleSubmit }: any) {
         setSame={setSame}
         validation={validateOrder()}
       />
-      <Button onClick={handleSubmit} disabled={!validateOrder()}>
+      <Textarea
+        placeholder="Add an additional note?"
+        value={note}
+        onChange={(e) => setNote(e.target.value)}
+        rows={2}
+      />
+      <Button
+        onClick={() =>
+          handleSubmit(shippingInfo, billingInfo, sameAsBilling, note)
+        }
+        disabled={!validateOrder()}
+      >
         Submit Order
       </Button>
     </Stack>
@@ -273,7 +317,7 @@ function CustomerDetails({
   validation,
 }: any) {
   return (
-    <Accordion allowToggle>
+    <Accordion allowToggle defaultIndex={[0]}>
       <AccordionItem>
         <h2>
           <AccordionButton px={2}>
@@ -290,23 +334,29 @@ function CustomerDetails({
         </h2>
         <AccordionPanel pb={4} px={2}>
           <Text mb={4} fontSize="sm">
-            Enter your customer details. Some fields have been prefilled for
-            you.
+            Please complete your order details.
           </Text>
           <Stack w="full">
             <Text>Billing Address</Text>
             <Input
-              placeholder="Street"
-              value={billingInfo.street1}
+              placeholder="Company"
+              value={billingInfo.company}
               onChange={(e) =>
-                updateBilling({ ...billingInfo, street1: e.target.value })
+                updateBilling({ ...billingInfo, company: e.target.value })
+              }
+            />
+            <Input
+              placeholder="Street"
+              value={billingInfo.address1}
+              onChange={(e) =>
+                updateBilling({ ...billingInfo, address1: e.target.value })
               }
             />
             <Input
               placeholder="Street line 2"
-              value={billingInfo.street2}
+              value={billingInfo.address2}
               onChange={(e) =>
-                updateBilling({ ...billingInfo, street2: e.target.value })
+                updateBilling({ ...billingInfo, address2: e.target.value })
               }
             />
             <SimpleGrid gap={2} templateColumns={"repeat(2, 1fr)"}>
@@ -322,9 +372,9 @@ function CustomerDetails({
               <GridItem colSpan={[2, 1]}>
                 <Input
                   placeholder="State"
-                  value={billingInfo.state}
+                  value={billingInfo.province}
                   onChange={(e) =>
-                    updateBilling({ ...billingInfo, state: e.target.value })
+                    updateBilling({ ...billingInfo, province: e.target.value })
                   }
                 />
               </GridItem>
@@ -356,6 +406,13 @@ function CustomerDetails({
             {!sameAsBilling && (
               <>
                 <Input
+                  placeholder="Company"
+                  value={shippingInfo.company}
+                  onChange={(e) =>
+                    updateBilling({ ...shippingInfo, company: e.target.value })
+                  }
+                />
+                <Input
                   placeholder="Street"
                   value={shippingInfo.street1}
                   onChange={(e) =>
@@ -364,9 +421,12 @@ function CustomerDetails({
                 />
                 <Input
                   placeholder="Street line 2"
-                  value={shippingInfo.street2}
+                  value={shippingInfo.address2}
                   onChange={(e) =>
-                    updateShipping({ ...shippingInfo, street2: e.target.value })
+                    updateShipping({
+                      ...shippingInfo,
+                      address2: e.target.value,
+                    })
                   }
                 />
                 <SimpleGrid gap={2} templateColumns={"repeat(2, 1fr)"}>
@@ -427,11 +487,7 @@ function CustomerDetails({
 
 function Products({ products, handleAddToCart }: any) {
   return (
-    <Stack
-      spacing={4}
-      minW="50%"
-      flexShrink={0}
-    >
+    <Stack spacing={4} minW="50%" flexShrink={0}>
       {products?.map((product: any) => (
         <Product
           product={product}
@@ -455,8 +511,7 @@ function Product({ product, handleAddToCart }: any) {
   }
 
   return (
-    <Stack direction="row" shadow="md" p={8} w="full"       bgColor={"white"}
-    >
+    <Stack direction="row" shadow="md" p={8} w="full" bgColor={"white"}>
       <AspectRatio ratio={1 / 1} boxSize={120} flexShrink={0}>
         <Image
           src={product.node.images.edges[0].node.url}
@@ -571,7 +626,9 @@ function CartLineItem({ product }: { product: any }) {
         <Stack direction="row" justify={"space-between"}>
           <ItemQty product={product} />
           <Text fontSize={[16, 18]}>
-            {formatter.format(product.node.estimatedCost.totalAmount.amount)}
+            {formatter.format(
+              product.node.estimatedCost.totalAmount.amount / 2
+            )}
           </Text>
         </Stack>
       </Stack>

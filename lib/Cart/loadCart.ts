@@ -35,6 +35,7 @@ export default async function loadCart(cartId: string) {
                 merchandise {
                     ... on ProductVariant {
                     title
+                    id
                     image {
                         url
                     }
