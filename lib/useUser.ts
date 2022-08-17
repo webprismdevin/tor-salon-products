@@ -32,6 +32,14 @@ function useUser() {
         lastName
         email
         tags
+        defaultAddress {
+          company
+          address1
+          address2
+          city
+          province
+          zip
+        }
       }
     }
   `;

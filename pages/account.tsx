@@ -11,7 +11,6 @@ import {
   Flex,
   Button,
   Link,
-  HStack,
   SimpleGrid,
   GridItem,
   Tag,
@@ -21,7 +20,7 @@ import { useContext, useEffect, useState } from "react";
 import NextLink from "next/link";
 import Head from "next/head";
 import Loader from "../components/Loader";
-import useUser from "../lib/useUser";
+// import useUser from "../lib/useUser";
 import AuthContext from "../lib/auth-context";
 
 declare interface CustData {
@@ -33,7 +32,6 @@ declare interface CustData {
 }
 
 export default function Account() {
-  const [authenticated, setAuth] = useState(false);
   const router = useRouter();
   const [userData, setUserData] = useState<CustData | null>(null);
   const { user, setUser, token } = useContext(AuthContext);

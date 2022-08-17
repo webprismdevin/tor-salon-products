@@ -15,30 +15,33 @@ import {
   DrawerContent,
   DrawerCloseButton,
   Stack,
+  useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useContext, useState } from "react";
 import { AiOutlineShopping, AiOutlineShoppingCart } from "react-icons/ai";
-import CartContext from "../../lib/CartContext";
-import formatter from "../../lib/formatter";
-import FreeShippingProgress from "./FreeShipping";
-import { CartLineItem } from "./CartLineItem";
-import loadCart from "../../lib/Cart/loadCart";
-import createCart from "../../lib/Cart/createCart";
-import removeCartItem from "../../lib/Cart/removeCartItem";
-import CartRecommendations from "./CartRecommendations";
-import ShopPayInstallments from "./ShopPayInstallments";
-import DiscountCodeInput from "./DiscountCodeInput";
+import CartContext from "../lib/CartContext";
+import formatter from "../lib/formatter";
+import FreeShippingProgress from "./Cart/FreeShipping";
+import { CartLineItem } from "./Cart/CartLineItem";
+import loadCart from "../lib/Cart/loadCart";
+import createCart from "../lib/Cart/createCart";
+import removeCartItem from "../lib/Cart/removeCartItem";
+import CartRecommendations from "./Cart/CartRecommendations";
+import ShopPayInstallments from "./Cart/ShopPayInstallments";
+import DiscountCodeInput from "./Cart/DiscountCodeInput";
+import applyDiscountToCart from "../lib/Cart/applyDiscountToCart";
 
 const Cart = ({ color }: { color?: string }) => {
   const { cart, setCart } = useContext(CartContext);
   const [cartQty, setCartQty] = useState<number | null>(null);
   const router = useRouter();
+  const toast = useToast();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
-    if (cart.lines && cart.lines.length > 1) {
+    if (cart.lines.length > 1) {
       const cartQtyCalc = cart.lines.reduce(
         (partialSum: any, current: any) => partialSum + current.node?.quantity,
         0
@@ -46,7 +49,7 @@ const Cart = ({ color }: { color?: string }) => {
       setCartQty(cartQtyCalc);
     }
 
-    if (cart.lines && cart.lines.length === 1) {
+    if (cart.lines.length === 1) {
       setCartQty(cart.lines[0].node.quantity);
     }
   }, [cart]);
@@ -163,7 +166,7 @@ const Cart = ({ color }: { color?: string }) => {
             display: "inline",
           }}
         >
-          {cart.lines?.length > 0 && cartQty}
+          {cart.lines.length > 0 && cartQty}
         </Text>
       </Box>
       <Drawer isOpen={isOpen} placement="right" onClose={onClose} size={"md"}>
@@ -193,13 +196,13 @@ const Cart = ({ color }: { color?: string }) => {
           </DrawerHeader>
           <DrawerBody pl={[4]} pr={[4, 6]}>
             <VStack
-              justifyContent={cart.lines?.length === 0 ? "center" : "flex-start"}
-              alignItems={cart.lines?.length === 0 ? "center" : "flex-start"}
+              justifyContent={cart.lines.length === 0 ? "center" : "flex-start"}
+              alignItems={cart.lines.length === 0 ? "center" : "flex-start"}
               h="full"
               w="full"
             >
-              {cart.lines?.length === 0 && <EmptyCart />}
-              {cart.lines?.length > 0 && (
+              {cart.lines.length === 0 && <EmptyCart />}
+              {cart.lines.length > 0 && (
                 <>
                   {cart.lines.map((l: any) => (
                     <React.Fragment key={l.node.id}>

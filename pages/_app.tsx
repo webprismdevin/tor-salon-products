@@ -74,7 +74,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               <NavBar />
               <Component key={router.asPath} {...pageProps} />
             </CartContext.Provider>
-            {!router.asPath.includes("/offer") && <Follow />}
+            <Follow />
             <Suspense fallback={<Loader />}>
               {!router.asPath.includes("/offer") && <Footer />}
             </Suspense>

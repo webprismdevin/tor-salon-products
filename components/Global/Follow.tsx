@@ -1,19 +1,12 @@
-import { Container, Heading, Button, Link, Box } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import Script from "next/script";
 
 export default function Follow() {
+  const router = useRouter()
+
   return (
-    // <Container maxW="container.xl" pb={40} mt={20}>
-      <Box w="full" pt={40}>
-        {/* <Heading textAlign={"center"}>Follow us on Instagram!</Heading>
-        <Box textAlign={"center"} my={6}>
-          <Link
-            href="https://www.instagram.com/tor_salonproducts/"
-            target="_blank"
-          >
-            <Button>Follow</Button>
-          </Link>
-        </Box> */}
+      <Box w="full" pt={40} display={router.asPath.includes("/offer") ? "none" : "inherit"}>
         <Script
           strategy="afterInteractive"
           id="EmbedSocialHashtagScript"
@@ -24,6 +17,5 @@ export default function Follow() {
           data-ref="e809ba879b57c02fc17f2171500c0a089e3ea49f"
         ></div>
       </Box>
-    // </Container>
   );
 }

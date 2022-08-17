@@ -13,13 +13,13 @@ import {
   InputRightElement,
   Stack
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import AuthContext from "../lib/auth-context";
 
 export default function Login() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [show, toggle] = useState(false);
   const [loginFailed, setFailed] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [email, handleEmail] = useState("");
   const [password, handlePassword] = useState("");
 
