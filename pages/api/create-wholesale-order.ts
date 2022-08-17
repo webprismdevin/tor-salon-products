@@ -72,8 +72,8 @@ export default async function handler(
   if (response) {
     const recipients = [
       new Recipient("devin@webprism.co", "Devin Santamaria"),
-      // new Recipient("ttor@torsalonproducts.com", "Tina Tor"),
-      // new Recipient("stor@torsalonproducts.com", "Shannon Tor"),
+      new Recipient("ttor@torsalonproducts.com", "Tina Tor"),
+      new Recipient("stor@torsalonproducts.com", "Shannon Tor"),
     ];
 
     const emailParams = new EmailParams()

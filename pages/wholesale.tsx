@@ -123,18 +123,7 @@ export default function Wholesale({ products, page }: any) {
   }
 
   useEffect(() => {
-    // if (user) console.log(user);
     getCart();
-
-    // if (cart && cart.id) {
-    //   applyDiscountToCart(cart.id, "WHOLESALE50").then((res) =>
-    //     setCart({
-    //       ...cart,
-    //       status: "dirty",
-    //       discount: res.cartDiscountCodesUpdate.cart.discountCodes,
-    //     })
-    //   );
-    // }
   }, []);
 
   useEffect(() => {
