@@ -47,7 +47,7 @@ const MobileMenu = () => {
     <>
       <Icon
         order={[1, 4]}
-        display={['inherit', 'none']}
+        display={["inherit", "none"]}
         as={AiOutlineMenu}
         onClick={menuOnOpen}
         style={{
@@ -126,6 +126,7 @@ const MobileMenu = () => {
                   </AccordionItem>
                 </Accordion>
               </Box>
+              <MenuLink href="/wholesale" text="Wholesale" />
               <MenuLink href={"/salon-finder"} text="Salon Finder" />
               <MenuLink href={"/professionals"} text="Professionals" />
               <MenuLink href={"/blog"} text="Blog" />

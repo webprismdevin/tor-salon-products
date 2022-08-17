@@ -28,7 +28,7 @@ import {
   Textarea,
   useToast,
 } from "@chakra-ui/react";
-import { useContext, useEffect, useState, createContext } from "react";
+import { useContext, useEffect, useState, createContext, useRef } from "react";
 import AuthContext from "../lib/auth-context";
 import Loader from "../components/Loader";
 import { gql, GraphQLClient } from "graphql-request";
@@ -126,7 +126,7 @@ export default function Wholesale({ products, page }: any) {
       }),
     }).then((res) => res.json());
 
-    console.log(response.response)
+    console.log(response.response);
 
     if (response) {
       setSubmitting(false);
@@ -226,6 +226,8 @@ export default function Wholesale({ products, page }: any) {
 }
 
 function WholesaleCart({ cart, handleSubmit, submitting }: any) {
+  const cartRef = useRef<HTMLDivElement | null>(null);
+
   const [billingInfo, updateBilling] = useState({
     company: "",
     address1: "",
@@ -278,11 +280,28 @@ function WholesaleCart({ cart, handleSubmit, submitting }: any) {
     <Stack
       spacing={4}
       flexGrow={1}
-      p={8}
+      p={[6, 8]}
       ml={16}
       bgColor="white"
       borderRadius={5}
+      ref={cartRef}
     >
+      {cart && cart.lines && cart.lines.length > 0 && (
+        <Button
+          display={["block", "none"]}
+          position="fixed"
+          bottom={7}
+          left={2}
+          zIndex={2}
+          onClick={() =>
+            cartRef &&
+            cartRef.current &&
+            cartRef.current.scrollIntoView({ behavior: "smooth" })
+          }
+        >
+          View Cart
+        </Button>
+      )}
       <Heading>Your Order</Heading>
       <Divider />
       <Stack spacing={2}>
@@ -310,7 +329,9 @@ function WholesaleCart({ cart, handleSubmit, submitting }: any) {
             Total:
           </Text>
           <Text fontSize="4xl" fontWeight={600}>
-            {cart.estimatedCost ? formatter.format(cart.estimatedCost.totalAmount.amount / 2) : "$0.00"}
+            {cart.estimatedCost
+              ? formatter.format(cart.estimatedCost.totalAmount.amount / 2)
+              : "$0.00"}
           </Text>
         </Stack>
       </Stack>
@@ -546,15 +567,26 @@ function Product({ product, handleAddToCart }: any) {
   }
 
   return (
-    <Stack direction="row" shadow="md" p={8} w="full" bgColor={"white"}>
-      <AspectRatio ratio={1 / 1} boxSize={120} flexShrink={0}>
+    <Stack
+      direction={["column", "row"]}
+      shadow="md"
+      p={8}
+      w="full"
+      bgColor={"white"}
+    >
+      <AspectRatio
+        ratio={1 / 1}
+        boxSize={120}
+        flexShrink={0}
+        alignSelf={"center"}
+      >
         <Image
           src={product.node.images.edges[0].node.url}
           alt={product.node.title}
         />
       </AspectRatio>
-      <Stack spacing={4} w="full">
-        <Stack direction="row" justify={"space-between"}>
+      <Stack spacing={4} w="full" direction={["column", "row"]}>
+        <Stack justify={"space-between"} direction={["column", "row"]}>
           <Text fontSize="2xl">{product.node.title}</Text>
           <WholesalePrice price={findPrice()} />
         </Stack>
@@ -571,7 +603,7 @@ function Product({ product, handleAddToCart }: any) {
 function WholesalePrice({ price }: any) {
   return (
     <>
-      <Stack direction="row">
+      <Stack direction="row" alignSelf={["flex-end", "center"]}>
         <chakra.span
           fontSize="2xl"
           fontWeight={600}
@@ -592,13 +624,16 @@ function Variants({ variants, handleAddToCart, setVariant }: any) {
   return (
     <Stack w="full">
       {variants.length === 1 && (
-        <Button alignSelf="flex-end" onClick={handleAddToCart}>
+        <Button alignSelf={["flex-end"]} onClick={handleAddToCart}>
           Add To Cart
         </Button>
       )}
       {variants.length > 1 && (
         <Stack direction="row" justify="space-between">
-          <Select maxW={240} onChange={(e) => setVariant(e.target.value)}>
+          <Select
+            maxW={[120, 240]}
+            onChange={(e) => setVariant(e.target.value)}
+          >
             {variants.map((v: any) => (
               <option key={v.node.id} value={v.node.id}>
                 {v.node.title}

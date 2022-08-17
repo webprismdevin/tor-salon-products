@@ -49,9 +49,11 @@ const NavBar = () => {
         </Stack>
         <Stack direction="row" spacing={4}>
           {user && user.isPro && (
-            <NextLink href="wholesale">
-              <Link>Wholesale</Link>
-            </NextLink>
+            <Box display={["none", "inherit"]}>
+              <NextLink href="wholesale">
+                <Link>Wholesale</Link>
+              </NextLink>
+            </Box>
           )}
           {!router.asPath.includes("/offer") && (
             <Box display={["none", "inherit"]}>
@@ -84,7 +86,7 @@ const NavBar = () => {
           )}
           {!router.asPath.includes("/offer") && <Auth />}
           {!router.asPath.includes("/offer") && <Search router={router} />}
-          <Cart />
+          {!router.asPath.includes("/wholesale") && <Cart />}
         </Stack>
       </Flex>
     </Box>
