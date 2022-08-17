@@ -291,7 +291,7 @@ function WholesaleCart({ cart, handleSubmit, submitting }: any) {
           display={["block", "none"]}
           position="fixed"
           bottom={7}
-          left={2}
+          right={2}
           zIndex={2}
           onClick={() =>
             cartRef &&
