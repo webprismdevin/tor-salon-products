@@ -11,7 +11,7 @@ import {
   InputRightElement,
   Link,
   useToast,
-  ToastMessage,
+  Toast,
 } from "@chakra-ui/react";
 import { NextRouter, useRouter } from "next/router";
 import NextLink from "next/link";
@@ -62,14 +62,13 @@ export default function Login() {
     <Box pt={40} pb={20}>
       <Head>
         <title>Login | TOR Salon Products</title>
-        <meta name="description" content="Sign in to view past order information." />
+        <meta
+          name="description"
+          content="Sign in to view past order information."
+        />
       </Head>
       <Container maxW="container.lg">
-        {signIn ? (
-          <SignIn shop={shop} router={router} toast={toast} />
-        ) : (
-          <SignUp shop={shop} router={router} toast={toast} />
-        )}
+        {signIn ? <SignIn router={router} /> : <SignUp />}
         <Stack direction={["column-reverse", "row"]} mt={4}>
           <Box minW={[0, "45%"]}></Box>
           <Link onClick={() => toggleSignIn(!signIn)}>
@@ -81,21 +80,20 @@ export default function Login() {
   );
 }
 
-function SignIn({
-  shop,
-  router,
-  toast,
-}: {
-  shop: { name: string };
-  router: NextRouter;
-  toast: ToastMessage;
-}) {
+function SignIn({ router }: { router: NextRouter }) {
   const [show, toggle] = useState(false);
   const [loginFailed, setFailed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [email, handleEmail] = useState("");
   const [password, handlePassword] = useState("");
-  const { user, setUser, setToken } = useContext(AuthContext)
+  const { user, setUser, setToken } = useContext(AuthContext);
+  const toast = useToast();
+
+  const handleKeyDown = (event: any) => {
+    if (event.key === "Enter") {
+      handleAuth();
+    }
+  };
 
   async function handleAuth() {
     setFailed(false);
@@ -109,25 +107,30 @@ function SignIn({
     }).then((res) => res.json());
 
     if (response.customerAccessToken) {
-
       setToken({
-        ...response
-      })
+        ...response,
+      });
 
       window.localStorage.setItem(
         `${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:accessToken`,
         JSON.stringify({ ...response })
       );
 
-      router.push("/account")
+      router.push("/account");
 
       return;
     }
 
     if (response.customerUserErrors) {
+      console.log(response);
 
       setFailed(true);
-      //add toast
+      toast({
+        title: "Login failed",
+        description: response.customerUserErrors[0].message,
+        isClosable: true,
+        status: "error",
+      });
 
       return;
     }
@@ -155,6 +158,7 @@ function SignIn({
             placeholder={"Enter your password"}
             value={password}
             onChange={(e) => handlePassword(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
           <InputRightElement width="4.5rem">
             <Button h="1.75rem" size="sm" onClick={() => toggle(!show)}>
@@ -175,22 +179,21 @@ function SignIn({
   );
 }
 
-function SignUp({
-  shop,
-  router,
-  toast,
-}: {
-  shop: { name: string };
-  router: NextRouter;
-  toast: ToastMessage;
-}) {
+function SignUp() {
   const [show, toggle] = useState(false);
   const [loading, setLoading] = useState(false);
   const [email, handleEmail] = useState("");
-  const [ name, handleName ] = useState("");
-  const [surname, handleSurname ] = useState("");
+  const [name, handleName] = useState("");
+  const [surname, handleSurname] = useState("");
   const [password, handlePassword] = useState("");
   const [ReEnterPassword, handleReEnterPassword] = useState("");
+  const toast = useToast();
+
+  const handleKeyDown = (event: any) => {
+    if (event.key === "Enter") {
+      handleAuth();
+    }
+  };
 
   async function handleAuth() {
     const response = await fetch("/api/create-account", {
@@ -223,7 +226,9 @@ function SignUp({
     <Stack direction={["column", "row"]}>
       <Box minW="45%">
         <Heading>Create your TOR account</Heading>
-        <Text>View past orders, and receive an exclusive offer for signing up!</Text>
+        <Text>
+          View past orders, and receive an exclusive offer for signing up!
+        </Text>
       </Box>
       <Stack spacing={4} w="full">
         <Stack direction="row">
@@ -254,6 +259,7 @@ function SignUp({
             placeholder={"Enter your password"}
             value={password}
             onChange={(e) => handlePassword(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
           <InputRightElement width="4.5rem">
             <Button h="1.75rem" size="sm" onClick={() => toggle(!show)}>
@@ -269,6 +275,7 @@ function SignUp({
             placeholder={"Re-enter your password"}
             value={ReEnterPassword}
             onChange={(e) => handleReEnterPassword(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
           <InputRightElement width="4.5rem">
             <Button h="1.75rem" size="sm" onClick={() => toggle(!show)}>

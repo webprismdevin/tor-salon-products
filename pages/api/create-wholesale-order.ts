@@ -52,7 +52,7 @@ export default async function handler(
     email: data.email,
     shippingAddress: data.shippingAddress,
     billingAddress: data.billingAddress,
-    note: data.note
+    note: data.note,
   };
 
   const response = await adminGraphClient.request(query, {
@@ -84,17 +84,17 @@ export default async function handler(
       .setReplyToName("[No Reply] WEBPRISM")
       .setSubject(`New wholesale order from ${data.email}`)
       .setHtml(
-        `View the new order at https://tor-salon-products.myshopify.com/admin/draft_orders/${draftOrderId}`
+        `New order from ${data.email}. View the new order at https://tor-salon-products.myshopify.com/admin/draft_orders/${draftOrderId}`
       )
       .setText(
-        `View the new order at https://tor-salon-products.myshopify.com/admin/draft_orders/${draftOrderId}`
+        `<div><p>New order from ${data.email}.</p><p>View the new order at https://tor-salon-products.myshopify.com/admin/draft_orders/${draftOrderId}</p></div>`
       );
 
     mailersend
       .send(emailParams)
       .then((response: any) => response.json())
       .then((res: any) => console.log(res))
-      .catch((err:any) => console.log(err))
+      .catch((err: any) => console.log(err));
   }
 
   res.send({

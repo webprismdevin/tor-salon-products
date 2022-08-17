@@ -26,6 +26,7 @@ import {
   Icon,
   Tag,
   Textarea,
+  useToast,
 } from "@chakra-ui/react";
 import { useContext, useEffect, useState, createContext } from "react";
 import AuthContext from "../lib/auth-context";
@@ -51,6 +52,8 @@ const WholesaleCartContext = createContext<any>({
 export default function Wholesale({ products, page }: any) {
   const { user, token } = useContext(AuthContext);
   const [cart, setCart] = useState<any>();
+  const [submitting, setSubmitting] = useState(false);
+  const toast = useToast();
 
   async function getCart() {
     let localCartData = await JSON.parse(
@@ -109,6 +112,8 @@ export default function Wholesale({ products, page }: any) {
     same: boolean,
     note: string
   ) {
+    setSubmitting(true);
+
     const response = await fetch("/api/create-wholesale-order", {
       method: "POST",
       body: JSON.stringify({
@@ -120,6 +125,39 @@ export default function Wholesale({ products, page }: any) {
         note,
       }),
     }).then((res) => res.json());
+
+    console.log(response.response)
+
+    if (response) {
+      setSubmitting(false);
+      if (response.response.draftOrderCreate.userErrors.length === 0) {
+        //clean up cart
+        window.localStorage.removeItem(
+          `${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:cart:wholesale`
+        );
+        setCart({
+          status: "dirty",
+        });
+        toast({
+          title: "Order submitted successfully!",
+          description:
+            "You will recieve a confirmation and invoice once the order has been reviewed.",
+          duration: null,
+          isClosable: true,
+          status: "success",
+        });
+      }
+      if (response.response.draftOrderCreate.userErrors.length > 0) {
+        toast({
+          title: "Order submission failed",
+          description:
+            "Something went wrong when submitting your order. Send us a message via the chat in the bottom right corner for assistance.",
+          duration: null,
+          isClosable: true,
+          status: "error",
+        });
+      }
+    }
   }
 
   useEffect(() => {
@@ -174,14 +212,20 @@ export default function Wholesale({ products, page }: any) {
         </Stack>
         <Stack direction={["column", "row"]} align="flex-start" gap={8}>
           <Products products={products} handleAddToCart={handleAddToCart} />
-          {cart && <WholesaleCart cart={cart} handleSubmit={handleSubmit} />}
+          {cart && (
+            <WholesaleCart
+              cart={cart}
+              handleSubmit={handleSubmit}
+              submitting={submitting}
+            />
+          )}
         </Stack>
       </WholesaleCartContext.Provider>
     </Stack>
   );
 }
 
-function WholesaleCart({ cart, handleSubmit }: any) {
+function WholesaleCart({ cart, handleSubmit, submitting }: any) {
   const [billingInfo, updateBilling] = useState({
     company: "",
     address1: "",
@@ -243,6 +287,7 @@ function WholesaleCart({ cart, handleSubmit }: any) {
       <Divider />
       <Stack spacing={2}>
         {cart &&
+          cart.lines &&
           cart.lines.length > 0 &&
           cart.lines.map((line: any) => (
             <CartLineItem key={line.node.id} product={line} />
@@ -265,7 +310,7 @@ function WholesaleCart({ cart, handleSubmit }: any) {
             Total:
           </Text>
           <Text fontSize="4xl" fontWeight={600}>
-            {formatter.format(cart.estimatedCost.totalAmount.amount / 2)}
+            {cart.estimatedCost ? formatter.format(cart.estimatedCost.totalAmount.amount / 2) : "$0.00"}
           </Text>
         </Stack>
       </Stack>
@@ -289,6 +334,7 @@ function WholesaleCart({ cart, handleSubmit }: any) {
           handleSubmit(shippingInfo, billingInfo, sameAsBilling, note)
         }
         disabled={!validateOrder()}
+        isLoading={submitting}
       >
         Submit Order
       </Button>
