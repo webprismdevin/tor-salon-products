@@ -40,7 +40,6 @@ import { wrap } from "@popmotion/popcorn";
 import NextLink from "next/link";
 import { RatingStar } from "rating-star";
 import ReviewSubmit from "../../components/Product/ReviewSubmit";
-import Loader from "../../components/Loader";
 import addToCart from "../../lib/Cart/addToCart";
 import SubscriptionPlan from "../../components/Product/SubscriptionPlan";
 
@@ -90,7 +89,7 @@ const ProductPage = ({
   });
 
   //subscription plans
-  const [subscriptionPlan, setSubscriptionPlan] = useState('none');
+  const [subscriptionPlan, setSubscriptionPlan] = useState("");
 
   //refs
   const reviewsSection = useRef<HTMLDivElement | null>(null);
@@ -196,9 +195,14 @@ const ProductPage = ({
           >
             <Stack direction={"row"} justify={"space-between"}>
               <Heading maxW={[480]}>{product.title}</Heading>
-              <Heading fontWeight={600}>
-                {formatter.format(parseInt(activeVariant.priceV2.amount))}
-              </Heading>
+            <Stack>
+              {subscriptionPlan === "" ? <Heading fontWeight={600}>
+                  {formatter.format(parseInt(activeVariant.priceV2.amount))}
+                </Heading> : <Heading fontWeight={600}>
+                  <span style={{textDecoration: 'line-through', opacity: 0.6}}>{formatter.format(parseInt(activeVariant.priceV2.amount))}</span> <span style={{fontWeight: 400}}>{formatter.format(parseInt(activeVariant.priceV2.amount)*.95)}</span>
+                </Heading>}
+                {subscriptionPlan !== "" && <Text textAlign={"right"} color="red">Save 5% on every order!</Text>}
+            </Stack>
             </Stack>
             <Divider />
             <HStack justify={"space-around"}>

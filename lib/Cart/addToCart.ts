@@ -3,7 +3,7 @@ import graphClient from "../graph-client";
 
 export default async function addToCart(cartId:string, variantId:string, qty?:number, sellingPlanId?: string){
 
-    const query = sellingPlanId !== "none" ? gql`
+    const query = sellingPlanId !== "" ? gql`
       mutation AddToCart($cartId: ID!, $variantId: ID!, $sellingPlanId: ID!) {
         cartLinesAdd(
           cartId: $cartId
@@ -66,7 +66,7 @@ export default async function addToCart(cartId:string, variantId:string, qty?:nu
       }
     `;
   
-    const variables = sellingPlanId !== "none" ? { cartId, variantId, sellingPlanId } : { cartId, variantId }
+    const variables = sellingPlanId !== "" ? { cartId, variantId, sellingPlanId } : { cartId, variantId }
 
     const response = await graphClient.request(query, variables)
 
