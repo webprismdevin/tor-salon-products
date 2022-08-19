@@ -276,6 +276,7 @@ function LineItem({ product }: any) {
       />
       <Box>
         <Text fontWeight={600}>{product.node.name}</Text>
+        {product.node.sellingPlanAllocation && <Text>{product.node.sellingPlanAllocation.sellingPlan.name}</Text>}
         <Text>Qty: {product.node.currentQuantity}</Text>
       </Box>
     </Stack>

@@ -20,7 +20,6 @@ import { useContext, useEffect, useState } from "react";
 import NextLink from "next/link";
 import Head from "next/head";
 import Loader from "../components/Loader";
-// import useUser from "../lib/useUser";
 import AuthContext from "../lib/auth-context";
 
 declare interface CustData {

@@ -11,7 +11,7 @@ import {
   AccordionIcon,
   Link,
 } from "@chakra-ui/react";
-import { groq } from "next-sanity";
+import groq from "@sanity/client";
 import { sanity } from "../lib/sanity";
 import Head from "next/head";
 
@@ -64,7 +64,7 @@ function FaqAccordion({ faqs }: any) {
 }
 
 export async function getStaticProps() {
-  const helpPageQuery = groq`*[_type == "help"]
+  const helpPageQuery = `*[_type == "help"]
   {...,
     faqs[]->
   }[0]`;

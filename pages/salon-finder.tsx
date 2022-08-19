@@ -13,7 +13,7 @@ import {
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
-import { groq } from "next-sanity";
+import groq from "@sanity/client";
 import { useState } from "react";
 import { sanity } from "../lib/sanity";
 import Search from "@smakss/search";
@@ -104,7 +104,7 @@ export default function SalonFinder({ salons }: SalonPageData) {
 }
 
 export const getStaticProps = async () => {
-  const salonQuery = groq`*[_type == "salon"]`;
+  const salonQuery = `*[_type == "salon"]`;
 
   const salons = await sanity.fetch(salonQuery, {});
 

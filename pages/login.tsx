@@ -11,7 +11,6 @@ import {
   InputRightElement,
   Link,
   useToast,
-  Toast,
 } from "@chakra-ui/react";
 import { NextRouter, useRouter } from "next/router";
 import NextLink from "next/link";

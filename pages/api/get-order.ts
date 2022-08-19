@@ -1,11 +1,10 @@
-import { gql, GraphQLClient } from 'graphql-request';
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { gql, GraphQLClient } from "graphql-request";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
-
   const query = gql`
     {
         order(id: "${req.query.orderId}") {
@@ -112,10 +111,10 @@ export default async function handler(
     `;
 
   const adminGraphClient = new GraphQLClient(
-    'https://tor-salon-products.myshopify.com/admin/api/2022-07/graphql.json' as string,
+    "https://tor-salon-products.myshopify.com/admin/api/2022-07/graphql.json" as string,
     {
       headers: {
-        'X-Shopify-Access-Token': process.env.SHOPIFY_API_PASSWORD as string,
+        "X-Shopify-Access-Token": process.env.SHOPIFY_API_PASSWORD as string,
       },
     }
   );
@@ -127,7 +126,7 @@ export default async function handler(
     res.send({
       error: response.errors,
     });
-    throw Error('There was a problem creating the cart. Please check logs');
+    throw Error("There was a problem creating the cart. Please check logs");
   }
   res.send({
     response: response,

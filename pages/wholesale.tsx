@@ -32,7 +32,7 @@ import { useContext, useEffect, useState, createContext, useRef } from "react";
 import AuthContext from "../lib/auth-context";
 import Loader from "../components/Loader";
 import { gql, GraphQLClient } from "graphql-request";
-import { groq } from "next-sanity";
+import groq from "@sanity/client";
 import formatter from "../lib/formatter";
 import { sanity } from "../lib/sanity";
 import loadCart from "../lib/Cart/loadCart";
@@ -824,7 +824,7 @@ export async function getStaticProps() {
     throw Error("Unable to retrieve Shopify Products. Please check logs");
   }
 
-  const wholesaleQuery = groq`*[_type == "wholesale"]
+  const wholesaleQuery = `*[_type == "wholesale"]
     {...,
       "retailGuideUrl": retailGuide.asset->url,
       "wholesaleGuideUrl": wholesaleGuide.asset->url,

@@ -42,7 +42,7 @@ import { RatingStar } from "rating-star";
 import ReviewSubmit from "../../components/Product/ReviewSubmit";
 import Loader from "../../components/Loader";
 import addToCart from "../../lib/Cart/addToCart";
-import SubscriptionPlan from "../../components/SubscriptionPlan";
+import SubscriptionPlan from "../../components/Product/SubscriptionPlan";
 
 const MotionImage = motion<ImageProps>(Image);
 

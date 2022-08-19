@@ -22,7 +22,7 @@ import { motion } from "framer-motion";
 import { FiArrowRight, FiBookOpen, FiCreditCard, FiGift } from "react-icons/fi";
 import dynamic from "next/dynamic";
 import { sanity } from "../lib/sanity";
-import { groq } from "next-sanity";
+import groq from "@sanity/client";
 import curlyHairGirl from "../public/images/home/img1.png";
 
 const Testimonials = dynamic(() => import("../components/Home/Testimonials"));
@@ -38,7 +38,7 @@ function HomePage({ products, styling, body, homepageData }: any) {
   return (
     <>
       <Head>
-        <title>{homepageData.seo_title} | TOR Salon Products</title>
+        <title>{homepageData.seo_title}</title>
         <meta name="description" content={homepageData.seo_description} />
       </Head>
       <Container py={20} centerContent pos="relative" maxW="container.xl">
@@ -648,7 +648,7 @@ export async function getStaticProps() {
     throw Error("Unable to retrieve Shopify Products. Please check logs");
   }
 
-  const homepageQuery = groq`*[_type == "homepage"][0]`;
+  const homepageQuery = `*[_type == "homepage"][0]`;
 
   const homepageData = await sanity.fetch(homepageQuery, {});
 

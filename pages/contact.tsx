@@ -9,7 +9,6 @@ import {
   Grid,
   Button,
 } from "@chakra-ui/react";
-import Image from "next/image";
 
 const Contact = () => {
   return (
