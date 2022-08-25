@@ -1,3 +1,4 @@
+import { VariantSelect } from './../../components/Product/VariantSelect';
 import {
   Heading,
   Box,
