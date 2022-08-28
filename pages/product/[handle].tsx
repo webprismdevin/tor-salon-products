@@ -1,4 +1,3 @@
-import { VariantSelect } from './../../components/Product/VariantSelect';
 import {
   Heading,
   Box,
@@ -43,6 +42,7 @@ import { RatingStar } from "rating-star";
 import ReviewSubmit from "../../components/Product/ReviewSubmit";
 import addToCart from "../../lib/Cart/addToCart";
 import SubscriptionPlan from "../../components/Product/SubscriptionPlan";
+// import Swatches from '../../components/Product/Swatches';
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -121,27 +121,6 @@ const ProductPage = ({
       status: "dirty",
       lines: response.cartLinesAdd.cart.lines,
     });
-
-    if (window.dataLayer) {
-      window.dataLayer.push({ ecommerce: null }); // Clear the previous ecommerce object.
-      window.dataLayer.push({
-        event: "add_to_cart",
-        ecommerce: {
-          items: [
-            {
-              item_id: product.id,
-              item_name: product.title,
-              affiliation: "Storefront",
-              item_brand: "TOR",
-              value: activeVariant.priceV2.amount,
-              item_variant: activeVariant.title,
-              currency: "USD",
-              item_category: product.productType,
-            },
-          ],
-        },
-      });
-    }
   }
 
   function handleActiveVariantChange(id: string) {
@@ -250,6 +229,9 @@ const ProductPage = ({
                 ))}
               </Select>
             )}
+            {/* {variants.length > 1 && (
+              <Swatches variants={variants} />
+            )} */}
             <HStack
               border={"1px solid black"}
               alignSelf={["flex-end", "flex-start"]}

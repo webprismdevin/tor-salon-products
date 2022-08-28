@@ -4,6 +4,11 @@ import Head from "next/head";
 import { createContext, useState } from "react";
 import { HeroWithProduct } from "../../components/Page/Hero";
 import PortableText from "../../components/PortableText/PortableText";
+import {
+  productFragment,
+  productImageFragment,
+} from "../../lib/fragments/productImageFragment";
+import graphClient from "../../lib/graph-client";
 import { sanity } from "../../lib/sanity";
 
 export const VariantContext = createContext<any>({
@@ -11,8 +16,23 @@ export const VariantContext = createContext<any>({
   updateVariant: () => null,
 });
 
-export default function Page({ page }: any) {
-  const [variant, updateVariant] = useState<string>("");
+export const ImageContext = createContext<any>({
+  image: {},
+  setImage: () => null,
+});
+
+export default function Page({ page, productImages }: any) {
+  const [variant, updateVariant] = useState<string>(() => {
+    if (page.showHero && page.hero.content[0].product) {
+      return page.hero.content[0].product.store.variants[0].store.gid;
+    }
+  });
+
+  const [image, setImage] = useState<string>(() => {
+    if (page.showHero && productImages) {
+      return productImages.product.featuredImage;
+    }
+  });
 
   return (
     <div>
@@ -20,12 +40,16 @@ export default function Page({ page }: any) {
         <title>{page.seo ? page.seo.title : page.title}</title>
       </Head>
       <VariantContext.Provider value={{ variant, updateVariant }}>
-        <Container maxW="container.xl">
-          {page.showHero && <HeroWithProduct hero={page.hero} />}
-        </Container>
-        <Container maxW="container.lg">
+        <ImageContext.Provider value={{ image, setImage }}>
+          <Container maxW="container.xl">
+            {page.showHero && (
+              <HeroWithProduct hero={page.hero} productImages={productImages} body={page.body} />
+            )}
+          </Container>
+        </ImageContext.Provider>
+        {!page.showHero && <Container maxW="container.lg">
           <PortableText blocks={page.body} />
-        </Container>
+        </Container>}
       </VariantContext.Provider>
     </div>
   );
@@ -52,6 +76,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         ...,
         hero {
             ...,
+            topHeroReview {
+              ...,
+              colorTheme ->
+            },   
             content[] {
                 ...,
                 product-> {
@@ -61,15 +89,25 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                         variants[]->
                     }
                 }
-            }
+            }, 
         }
     }`;
 
   const page = await sanity.fetch(query);
 
+  const productImages = await graphClient.request(productImageFragment, {
+    id: page.hero?.content[0].product?.store.gid,
+  });
+
+  const product = await graphClient.request(productFragment, {
+    id: page.hero?.content[0].product?.store.gid,
+  });
+
   return {
     props: {
       page,
+      productImages,
+      product
     },
     revalidate: 10,
   };
