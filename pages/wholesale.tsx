@@ -210,7 +210,7 @@ export default function Wholesale({ products, page }: any) {
             Download: Wholesale Pricing Guide
           </Link>
         </Stack>
-        <Stack direction={["column", "row"]} align="flex-start" gap={8}>
+        <Stack direction={["column", "row"]} align="flex-start" gap={[4, 8]}>
           <Products products={products} handleAddToCart={handleAddToCart} />
           {cart && (
             <WholesaleCart
@@ -279,9 +279,9 @@ function WholesaleCart({ cart, handleSubmit, submitting }: any) {
   return (
     <Stack
       spacing={4}
-      flexGrow={1}
+      flexGrow={[0, 0, 1]}
       p={[6, 8]}
-      ml={16}
+      ml={[0, 8, 16]}
       bgColor="white"
       borderRadius={5}
       ref={cartRef}
@@ -543,7 +543,7 @@ function CustomerDetails({
 
 function Products({ products, handleAddToCart }: any) {
   return (
-    <Stack spacing={4} minW="50%" flexShrink={0}>
+    <Stack spacing={4} minW={["50%"]} maxW={["100%", null, "60%", "60%", "50%"]} flexShrink={[1, 1, 0]}>
       {products?.map((product: any) => (
         <Product
           product={product}
@@ -585,7 +585,7 @@ function Product({ product, handleAddToCart }: any) {
           alt={product.node.title}
         />
       </AspectRatio>
-      <Stack spacing={4} w="full" direction={["column", "row"]}>
+      <Stack spacing={4} w="full" direction={["column", null, null, null, "row"]}>
         <Stack justify={"space-between"} direction={["column", "row"]}>
           <Text fontSize="2xl">{product.node.title}</Text>
           <WholesalePrice price={findPrice()} />
