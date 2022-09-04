@@ -11,8 +11,10 @@ import {
   Text,
   SimpleGrid,
   GridItem,
+  Container
 } from "@chakra-ui/react";
 import Image from "next/image";
+import { RatingStar } from "rating-star";
 import React, { useContext, useEffect, useState } from "react";
 import addToCart from "../../lib/Cart/addToCart";
 import CartContext from "../../lib/CartContext";
@@ -21,10 +23,14 @@ import { ImageContext, VariantContext } from "../../pages/pages/[slug]";
 import { SanityColorTheme, SanityImageReference } from "../../types/sanity";
 import PortableText from "../PortableText/PortableText";
 
-export function HeroWithProduct({ hero, productImages, body }: any) {
+export function HeroWithProduct({ hero, productImages, body, reviews }: any) {
   const product = hero.content[0].product.store;
   const { variant } = useContext(VariantContext);
   const { setImage } = useContext(ImageContext);
+
+  const scoreAverage =
+    reviews.reduce((acc: number, obj: any) => acc + obj.score, 0) /
+    reviews.length;
 
   useEffect(() => {
     const selectedVariant = product.variants.filter(
@@ -34,37 +40,57 @@ export function HeroWithProduct({ hero, productImages, body }: any) {
     setImage({ url: selectedVariant?.previewImageUrl });
   }, [variant]);
 
+  function handleReviewScroll() {
+    let element = document.getElementById("page_all_reviews");
+    let headerOffset = 80;
+    let elementPosition = element?.getBoundingClientRect().top;
+    let offsetPosition = elementPosition! + window.pageYOffset - headerOffset;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: "smooth",
+    });
+  }
+
   return (
     <div>
-      <Box p={20}>
-        <Stack direction={["column", "row"]} spacing={16} align="flex-start">
-          <Box w="full">
-            <MainImage />
-            <ImageList images={productImages.product.images.edges} />
-          </Box>
-          <Stack spacing={4} w="full">
-            {hero.topHeroReview && <HeroReview review={hero.topHeroReview} />}
-            <Heading size="xl">{hero.title}</Heading>
-            <Pricebox variants={product.variants} />
-            <Box
-              dangerouslySetInnerHTML={{
-                __html: product.descriptionHtml,
-              }}
-            />
-            {product.variants.length > 1 && (
-              <VariantSelect variants={product.variants} />
-            )}
-            <AddToCart />
-            <Modules modules={hero.modules} />
-            <PortableText blocks={body} />
+      <Box py={[4, 10]}>
+        <Container maxW="container.xl">
+          <Stack direction={["column", "row"]} spacing={16} align="flex-start">
+            <Box w="full" pos={["static", null, null, "sticky"]} top={24}>
+              <MainImage />
+              <ImageList images={productImages.product.images.edges} />
+            </Box>
+            <Stack spacing={4} w="full">
+              {hero.topHeroReview && <HeroReview review={hero.topHeroReview} />}
+              <Box>
+                {reviews && <Stack onClick={handleReviewScroll} direction="row" align="center" mb={1}>
+                  <RatingStar id={"hero_rating_star"} rating={scoreAverage} size={20} />
+                  <Text>{reviews.length} Reviews</Text>
+                </Stack>}
+                <Heading size="xl">{hero.title}</Heading>
+              </Box>
+              <Pricebox variants={product.variants} />
+              <Box
+                dangerouslySetInnerHTML={{
+                  __html: product.descriptionHtml,
+                }}
+              />
+              {product.variants.length > 1 && (
+                <VariantSelect variants={product.variants} />
+              )}
+              <AddToCart />
+              {hero.modules && <Modules modules={hero.modules} />}
+              <PortableText blocks={body} />
+            </Stack>
           </Stack>
-        </Stack>
+        </Container>
       </Box>
     </div>
   );
 }
 
-function Pricebox({ variants }: any) {
+export function Pricebox({ variants }: any) {
   const { variant } = useContext(VariantContext);
 
   const selectedVariant = variants.filter(
@@ -103,6 +129,7 @@ function MainImage() {
         alt={image.altText}
         objectFit="cover"
         layout="fill"
+        priority
       />
     </AspectRatio>
   );
@@ -122,7 +149,7 @@ function ImageList({ images }: any) {
 
   return (
     <SimpleGrid templateColumns={"repeat(4, 1fr)"} gap={6} mt={8}>
-      {images.map((image: ImageProps) => (
+      {images.map((image: ImageProps, index: number) => (
         <GridItem
           key={image.node.url}
           colSpan={1}
@@ -137,6 +164,7 @@ function ImageList({ images }: any) {
               alt=""
               objectFit="cover"
               layout="fill"
+              priority={index < 4 ? true : false}
             />
           </AspectRatio>
         </GridItem>
@@ -158,12 +186,13 @@ export function VariantSelect({ variants }: any) {
 }
 
 function VariantSwatches({ variants }: { variants: [any] }) {
-  const { updateVariant } = useContext(VariantContext);
+  const { variant, updateVariant } = useContext(VariantContext);
 
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: "variant",
     defaultValue: variants[0].store.gid,
-    onChange: (value) => updateVariant(value),
+    value: variant,
+    onChange: (value) => updateVariant(value)
   });
 
   const group = getRootProps();
@@ -361,13 +390,12 @@ function CalloutReview({ review, colorTheme }: any) {
   return (
     <Box
       w="full"
-      textAlign={"center"}
       p={8}
       bg={colorTheme.background.hex}
       color={colorTheme.text.hex}
     >
-      <Text fontSize="2xl">{review.content}</Text>
-      <Text fontSize="md">{review.name}</Text>
+      <Text fontSize="xl" textAlign={"justify"}>&quot;{review.content}&quot;</Text>
+      <Text fontSize="md" textAlign={"center"} mt={2} fontStyle={"italic"} color={"blackAlpha.700"}>{review.name}</Text>
     </Box>
   );
 }

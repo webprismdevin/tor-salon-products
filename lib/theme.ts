@@ -9,7 +9,10 @@ const themeConfig = {
       white: "#FFFFFF",
       rose: "#E4D5D4",
       alabaster: "#E4E2DB",
-      platinum: "#D7E1DC"
+      platinum: "#D7E1DC",
+      curly: "#E4D5D4",
+      fineThin: "#E4E2DB",
+      mediumThick: "#D7E1DC"
 
     },
   },
