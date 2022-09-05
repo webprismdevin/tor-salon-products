@@ -22,7 +22,12 @@ import { AiFillEdit } from "react-icons/ai";
 import { RatingStar } from "rating-star";
 import { useState } from "react";
 
-export default function ReviewSubmit({ product }: any) {
+declare interface ReviewSubmitProps {
+  handle: string //shopify product handle
+  gid: string // shopify product gid
+}
+
+export default function ReviewSubmit({ handle, gid }: ReviewSubmitProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [rating, setRating] = useState(5);
   const [name, setName] = useState("");
@@ -35,18 +40,6 @@ export default function ReviewSubmit({ product }: any) {
   function onSubmit() {
     if (name && email && review && title) {
       setSubmitting(true);
-      console.log({
-        appkey: "bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l",
-        domain: "tor-salon-products.myshopify.com",
-        sku: product.id.split("/")[4],
-        product_title: product.title,
-        display_name: name,
-        email: email,
-        is_incentivized: false,
-        review_content: review,
-        review_title: title,
-        review_score: rating,
-      })
       fetch("https://api.yotpo.com/v1/widget/reviews", {
         method: "POST",
         headers: {
@@ -56,8 +49,8 @@ export default function ReviewSubmit({ product }: any) {
         body: JSON.stringify({
           appkey: "bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l",
           domain: "tor-salon-products.myshopify.com",
-          sku: product.id.split("/")[4],
-          product_title: product.title,
+          sku: gid,
+          product_title: handle,
           display_name: name,
           email: email,
           is_incentivized: false,
@@ -68,7 +61,6 @@ export default function ReviewSubmit({ product }: any) {
       })
         .then((res) => res.json())
         .then((response) => {
-          console.log(response);
           setSubmitting(false);
           if (response.code === 200) {
             toast({

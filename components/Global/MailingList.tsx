@@ -74,8 +74,6 @@ export default function MailingList() {
       }),
     }).then((res) => res.json());
 
-    console.log(response);
-
     if (!response) {
       setStatus("failure");
       if (process.env.NODE_ENV === "production") {

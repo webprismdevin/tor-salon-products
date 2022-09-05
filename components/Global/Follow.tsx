@@ -6,7 +6,7 @@ export default function Follow() {
   const router = useRouter()
 
   return (
-      <Box w="full" pt={40} display={router.asPath.includes("/offer") ? "none" : "inherit"}>
+      <Box w="full" pt={0} display={router.asPath.includes("/offer") ? "none" : "inherit"}>
         <Script
           strategy="afterInteractive"
           id="EmbedSocialHashtagScript"

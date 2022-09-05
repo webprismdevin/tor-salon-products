@@ -25,6 +25,7 @@
     "@sanity/block-content-to-react": "^3.0.0",
     "@sanity/client": "^3.3.2",
     "@sanity/image-url": "^1.0.1",
+    "@sanity/types": "^2.31.0",
     "@smakss/search": "^1.2.2",
     "formik": "^2.2.9",
     "framer": "^2.1.3",

@@ -53,8 +53,14 @@ export default async function addToCart(cartId:string, variantId:string, qty?:nu
                   merchandise {
                     ... on ProductVariant {
                       id
+                      priceV2 {
+                        amount
+                      }
+                      title
                       product {
                         title
+                        id
+                        productType
                       }
                     }
                   }
@@ -70,7 +76,30 @@ export default async function addToCart(cartId:string, variantId:string, qty?:nu
 
     const response = await graphClient.request(query, variables)
 
-    console.log(response, variables, query)
+    console.log(response, variables, query);
+
+    if (window.dataLayer) {
+      const merchandise = response.cartLinesAdd.cart.lines.edges[0].node.merchandise
+
+      window.dataLayer.push({ ecommerce: null }); // Clear the previous ecommerce object.
+      window.dataLayer.push({
+        event: "add_to_cart",
+        ecommerce: {
+          items: [
+            {
+              item_id: merchandise.id,
+              item_name: merchandise.product.title,
+              affiliation: "Storefront",
+              item_brand: "TOR",
+              value: merchandise.priceV2.amount,
+              item_variant: merchandise.title,
+              currency: "USD",
+              item_category: merchandise.productType,
+            },
+          ],
+        },
+      });
+    }
 
     return response;
 }
