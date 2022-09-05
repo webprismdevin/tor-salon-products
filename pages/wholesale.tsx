@@ -97,7 +97,7 @@ export default function Wholesale({ products, page }: any) {
   }
 
   async function handleAddToCart(variantId: string) {
-    const response = await addToCart(cart.id, variantId, 1);
+    const response = await addToCart(cart.id, variantId, 1, "");
 
     setCart({
       ...cart,
@@ -543,7 +543,7 @@ function CustomerDetails({
 
 function Products({ products, handleAddToCart }: any) {
   return (
-    <Stack spacing={4} minW={["50%"]} maxW={["100%", null, "60%", "60%", "50%"]} flexShrink={[1, 1, 0]}>
+    <Stack spacing={4} minW={["50%"]} maxW={["100%", null, "60%"]} flexShrink={[1, 1, 0]}>
       {products?.map((product: any) => (
         <Product
           product={product}
@@ -586,7 +586,7 @@ function Product({ product, handleAddToCart }: any) {
         />
       </AspectRatio>
       <Stack spacing={4} w="full" direction={["column", null, null, null, "row"]}>
-        <Stack justify={"space-between"} direction={["column", "row"]}>
+        <Stack justify={["space-between"]} align="flex-start" direction={["column"]}>
           <Text fontSize="2xl">{product.node.title}</Text>
           <WholesalePrice price={findPrice()} />
         </Stack>
@@ -603,7 +603,7 @@ function Product({ product, handleAddToCart }: any) {
 function WholesalePrice({ price }: any) {
   return (
     <>
-      <Stack direction="row" alignSelf={["flex-end", "center"]}>
+      <Stack direction="row" alignSelf={["flex-end", "flex-start"]}>
         <chakra.span
           fontSize="2xl"
           fontWeight={600}

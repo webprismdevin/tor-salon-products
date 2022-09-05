@@ -53,13 +53,13 @@ export default function MailingList() {
 
   const animationVariants = {
     initial: {
-      x: 0
+      y: 0
     },
     animate: {
-      x: 1008
+      y: -608
     },
     close: {
-      x: 0
+      y: 0
     },
   };
 
@@ -106,15 +106,15 @@ export default function MailingList() {
   return (
     <MotionBox
       pos="fixed"
-      bottom={2}
-      left={-1000}
+      bottom={-600}
+      left={2}
       p={10}
       zIndex={200}
       bgColor="black"
       color="white"
       animate={controls}
       variants={animationVariants}
-      maxW={["370px", "580px"]}
+      maxW={["320px", "580px"]}
     >
       <MotionBox
         whileHover={{
@@ -123,7 +123,7 @@ export default function MailingList() {
         onClick={() => controls.start("close")}
         pos={"absolute"}
         right={4}
-        top={-2}
+        top={0}
         fontSize={36}
         cursor="pointer"
       >

@@ -21,7 +21,7 @@ export default function ProductFeature({ reference }: any) {
   const { cart, setCart } = useContext(CartContext);
 
   async function handleAddToCart() {
-    const response = await addToCart(cart.id, reference.variants.edges[0].node.id, 1)
+    const response = await addToCart(cart.id, reference.variants.edges[0].node.id, 1, "")
 
     setCart({
       ...cart,

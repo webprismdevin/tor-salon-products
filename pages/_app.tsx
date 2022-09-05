@@ -91,7 +91,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               }}
             />
           )}
-        {process.env.NODE_ENV === "production" &&
+        {process.env.NODE_ENV === "development" &&
           !router.asPath.includes("/offer") && (
             <Suspense fallback={`...`}>
               <MailingList />

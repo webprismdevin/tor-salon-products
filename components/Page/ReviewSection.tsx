@@ -14,19 +14,15 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Link,
   Button,
   Input,
   Textarea,
   Stack,
-  Select,
-  Toast,
   useToast,
 } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import { RatingStar } from "rating-star";
 import { useState } from "react";
-import ReviewSubmit from "../Product/ReviewSubmit";
 
 export default function ReviewSection({ reviews, handle, gid }: any) {
   const scoreAverage =
