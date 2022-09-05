@@ -1,33 +1,30 @@
 import {
-  Box,
   Container,
   Heading,
   List,
   ListItem,
-  Stack,
   Text,
 } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 import Head from "next/head";
 import React, { createContext, useEffect, useState } from "react";
 import {
-  AddToCart,
   HeroWithProduct,
-  Pricebox,
-  VariantSwatches,
 } from "../../components/Page/Hero";
-import BigTextBlock from "../../components/Page/BigTextBlock";
-import FeaturedInformation from "../../components/Page/FeaturedInformation";
 import PortableText from "../../components/PortableText/PortableText";
-import ReviewSlider from "../../components/ReviewSlider";
 import {
-  productFragment,
   productImageFragment,
 } from "../../lib/fragments/productImageFragment";
 import graphClient from "../../lib/graph-client";
 import { imageBuilder, sanity } from "../../lib/sanity";
-import ReviewSection from "../../components/Page/ReviewSection";
 import { useRouter } from "next/router";
+import { Modules } from "../../components/Page/Modules";
+
+import dynamic from "next/dynamic";
+
+const ReviewSection = dynamic(() => import("../../components/Page/ReviewSection"))
+const HairTypes = dynamic(() => import("../../components/Page/HairTypes"))
+const SecondBuyButton = dynamic(() => import("../../components/Page/SecondBuyButton"))
 
 export const VariantContext = createContext<any>({
   variant: "",
@@ -85,7 +82,7 @@ export default function Page({ page, productImages, reviews }: any) {
             <PortableText blocks={page?.body} />
           </Container>
         )}
-        <PageHairTypes />
+        <HairTypes />
         {page?.modules && <Modules modules={page.modules} />}
         {page?.additionalBuyButton && (
           <SecondBuyButton
@@ -95,92 +92,6 @@ export default function Page({ page, productImages, reviews }: any) {
         {page?.showAllReviews && <ReviewSection reviews={reviews} />}
       </VariantContext.Provider>
     </div>
-  );
-}
-
-export function SecondBuyButton({ product }: any) {
-  return (
-    <Box>
-      <Container centerContent py={20}>
-        <Stack spacing={3} align="center">
-          <Pricebox variants={product.variants} />
-          <VariantSwatches variants={product.variants} />
-          <AddToCart />
-        </Stack>
-      </Container>
-    </Box>
-  );
-}
-
-export function Modules({ modules }: any) {
-  return (
-    <React.Fragment>
-      {modules.map((module: any) => {
-        switch (module._type) {
-          case "featuredInformation":
-            return <FeaturedInformation key={module._key} module={module} />;
-          case "bigTextBlock":
-            return <BigTextBlock key={module._key} module={module} />;
-          case "module.reviewSlider":
-            return <ReviewSlider key={module._key} reviews={module.reviews} />
-          default:
-            return null;
-        }
-      })}
-    </React.Fragment>
-  );
-}
-
-export function PageHairTypes() {
-  return (
-    <Box px={[2, 8]}>
-      <Heading as="h2" fontFamily={"Futura"} mb={6} textAlign={"center"}>
-        Designed By Hair Type. Formulated For Results.
-      </Heading>
-      <Stack
-        spacing={[2, 8]}
-        direction={["column", null, "row"]}
-        w="full"
-        justify="center"
-      >
-        <Stack align="center" py={[8, 16]} flexGrow={1} bg="brand.curly">
-          <Text fontSize={24} mb={3}>
-            Curly
-          </Text>
-          <List>
-            <ListItem>Balanced curls</ListItem>
-            <ListItem>Increased definition</ListItem>
-            <ListItem>Add bounce and shine</ListItem>
-            <ListItem>Real moisture</ListItem>
-            <ListItem>Breakage &amp; frizz protection</ListItem>
-          </List>
-        </Stack>
-        <Stack align="center" py={[8, 16]} flexGrow={1} bg="brand.fineThin">
-          <Text fontSize={24} mb={3}>
-            Fine/Thin
-          </Text>
-          <List>
-            <ListItem>Voluptous volume</ListItem>
-            <ListItem>Soft touch</ListItem>
-            <ListItem>Naturally detangling</ListItem>
-            <ListItem>Add shine</ListItem>
-            <ListItem>Fuller styling</ListItem>
-          </List>
-        </Stack>
-        <Stack align="center" py={[8, 16]} flexGrow={1} bg="brand.mediumThick">
-          <Text fontSize={24} mb={3}>
-            Medium/Thick
-          </Text>
-          <List>
-            <ListItem>Add shine</ListItem>
-            <ListItem>Easily managed thick hair</ListItem>
-            <ListItem>Real moisture</ListItem>
-            <ListItem>No added weight</ListItem>
-            <ListItem>Sexier second day hair</ListItem>
-          </List>
-        </Stack>
-      </Stack>
-    </Box>
   );
 }
 
@@ -228,15 +139,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const page = await sanity.fetch(query);
 
-  console.log(page.title)
-
   const productImages = await graphClient.request(productImageFragment, {
     id: page.hero?.content[0].product?.store.gid,
   });
 
-  const product = await graphClient.request(productFragment, {
-    id: page.hero?.content[0].product?.store.gid,
-  });
 
   const utoken = "kZl7BZ4R7OWf9Rq2hpXpFThQ2OGuS1xzzkjV89vJ";
 
@@ -248,7 +154,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     props: {
       page,
       productImages,
-      product,
       reviews: reviewResponse.reviews,
     },
     revalidate: 10,
