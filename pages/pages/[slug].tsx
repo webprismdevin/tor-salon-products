@@ -133,7 +133,7 @@ export function PageHairTypes() {
         w="full"
         justify="center"
       >
-        <Stack align="center" py={16} flexGrow={1} bg="brand.curly">
+        <Stack align="center" py={[10, 16]} flexGrow={1} bg="brand.curly">
           <Text fontSize={24} mb={3}>
             Curly
           </Text>
@@ -145,7 +145,7 @@ export function PageHairTypes() {
             <ListItem>Breakage &amp; frizz protection</ListItem>
           </List>
         </Stack>
-        <Stack align="center" py={16} flexGrow={1} bg="brand.fineThin">
+        <Stack align="center" py={[10, 16]} flexGrow={1} bg="brand.fineThin">
           <Text fontSize={24} mb={3}>
             Fine/Thin
           </Text>
@@ -157,7 +157,7 @@ export function PageHairTypes() {
             <ListItem>Fuller styling</ListItem>
           </List>
         </Stack>
-        <Stack align="center" py={16} flexGrow={1} bg="brand.mediumThick">
+        <Stack align="center" py={[10, 16]} flexGrow={1} bg="brand.mediumThick">
           <Text fontSize={24} mb={3}>
             Medium/Thick
           </Text>

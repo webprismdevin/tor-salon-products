@@ -11,11 +11,21 @@ import {
   Text,
   SimpleGrid,
   GridItem,
-  Container
+  Container,
+  Icon,
+  IconButton,
 } from "@chakra-ui/react";
+import { wrap } from "@popmotion/popcorn";
+import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { RatingStar } from "rating-star";
 import React, { useContext, useEffect, useState } from "react";
+import {
+  AiOutlineArrowLeft,
+  AiOutlineArrowRight,
+  AiOutlineDoubleLeft,
+  AiOutlineDoubleRight,
+} from "react-icons/ai";
 import addToCart from "../../lib/Cart/addToCart";
 import CartContext from "../../lib/CartContext";
 import { imageBuilder } from "../../lib/sanity";
@@ -56,30 +66,80 @@ export function HeroWithProduct({ hero, productImages, body, reviews }: any) {
     <div>
       <Box py={[4, 10]}>
         <Container maxW="container.xl">
-          <Stack direction={["column", "row"]} spacing={16} align="flex-start">
-            <Box w="full" pos={["static", null, null, "sticky"]} top={24}>
-              <MainImage />
+          <Stack
+            direction={["column", "row"]}
+            spacing={[4, 16]}
+            align={["center", "flex-start"]}
+          >
+            <Box display={["initial", null, null, "none"]} w="full">
+              {reviews && (
+                <Stack
+                  onClick={handleReviewScroll}
+                  direction="row"
+                  align="flex-start"
+                  mb={1}
+                >
+                  <RatingStar
+                    id={"hero_rating_star"}
+                    rating={scoreAverage}
+                    size={20}
+                  />
+                  <Text>{reviews.length} Reviews</Text>
+                </Stack>
+              )}
+              <Heading size="xl">{hero.title}</Heading>
+            </Box>
+            <Box
+              w={[320, "full"]}
+              pos={["static", null, null, "sticky"]}
+              top={24}
+            >
+              <MainImage images={productImages.product.images.edges} />
               <ImageList images={productImages.product.images.edges} />
             </Box>
-            <Stack spacing={4} w="full">
-              {hero.topHeroReview && <HeroReview review={hero.topHeroReview} />}
-              <Box>
-                {reviews && <Stack onClick={handleReviewScroll} direction="row" align="center" mb={1}>
-                  <RatingStar id={"hero_rating_star"} rating={scoreAverage} size={20} />
-                  <Text>{reviews.length} Reviews</Text>
-                </Stack>}
-                <Heading size="xl">{hero.title}</Heading>
-              </Box>
+            <Stack
+              spacing={4}
+              display={["initial", null, null, "none"]}
+              w="full"
+            >
               <Pricebox variants={product.variants} />
-              <Box
-                dangerouslySetInnerHTML={{
-                  __html: product.descriptionHtml,
-                }}
-              />
               {product.variants.length > 1 && (
                 <VariantSelect variants={product.variants} />
               )}
               <AddToCart />
+            </Stack>
+            <Stack spacing={4} w="full">
+              {hero.topHeroReview && <HeroReview review={hero.topHeroReview} />}
+              <Box display={["none", null, null, "initial"]}>
+                {reviews && (
+                  <Stack
+                    onClick={handleReviewScroll}
+                    direction="row"
+                    align="center"
+                    mb={1}
+                  >
+                    <RatingStar
+                      id={"hero_rating_star"}
+                      rating={scoreAverage}
+                      size={20}
+                    />
+                    <Text>{reviews.length} Reviews</Text>
+                  </Stack>
+                )}
+                <Heading size="xl">{hero.title}</Heading>
+              </Box>
+              <Stack spacing={4} display={["none", null, null, "initial"]}>
+                <Pricebox variants={product.variants} />
+                <Box
+                  dangerouslySetInnerHTML={{
+                    __html: product.descriptionHtml,
+                  }}
+                />
+                {product.variants.length > 1 && (
+                  <VariantSelect variants={product.variants} />
+                )}
+                <AddToCart />
+              </Stack>
               {hero.modules && <Modules modules={hero.modules} />}
               <PortableText blocks={body} />
             </Stack>
@@ -114,24 +174,77 @@ export function Pricebox({ variants }: any) {
   );
 }
 
-function MainImage() {
-  const { image } = useContext(ImageContext);
+const MotionAspect = motion(AspectRatio);
+
+function MainImage({ images }: { images: [any] }) {
+  const { image, setImage } = useContext(ImageContext);
+
+  const [[page, direction], setPage] = useState([0, 0]);
+  const index = wrap(0, images.length, page);
+
+  const paginate = (newDirection: number) => {
+    setPage([page + newDirection, newDirection]);
+  };
+
+  useEffect(() => {
+    setImage(images[index].node)
+  }, [page])
 
   return (
-    <AspectRatio
-      flexShrink={0}
-      ratio={1 / 1}
-      borderRadius={10}
-      overflow={"hidden"}
-    >
-      <Image
-        src={image.url}
-        alt={image.altText}
-        objectFit="cover"
-        layout="fill"
-        priority
+    <Box pos="relative">
+      <IconButton
+        aria-label="Previous photo"
+        variant={"ghost"}
+        onClick={() => paginate(-1)}
+        as={AiOutlineDoubleLeft}
+        boxSize={8}
+        pos="absolute"
+        zIndex={2}
+        top={150}
+        left={2}
+        opacity={0.6}
       />
-    </AspectRatio>
+      <AnimatePresence initial={true} custom={direction} exitBeforeEnter={true}>
+        <MotionAspect
+          flexShrink={0}
+          ratio={1 / 1}
+          borderRadius={10}
+          overflow={"hidden"}
+          custom={direction}
+          initial={{
+            opacity: 0,
+          }}
+          animate={{
+            opacity: 1,
+            transition: { duration: 0.2 },
+          }}
+          exit={{
+            opacity: 0,
+          }}
+          key={page}
+        >
+          <Image
+            src={image.url}
+            alt={image.altText}
+            objectFit="cover"
+            layout="fill"
+            priority
+          />
+        </MotionAspect>
+      </AnimatePresence>
+      <IconButton
+        aria-label="Next photo"
+        variant={"ghost"}
+        onClick={() => paginate(1)}
+        as={AiOutlineDoubleRight}
+        boxSize={8}
+        pos="absolute"
+        zIndex={2}
+        top={150}
+        right={2}
+        opacity={0.6}
+      />
+    </Box>
   );
 }
 
@@ -148,7 +261,12 @@ function ImageList({ images }: any) {
   const { setImage } = useContext(ImageContext);
 
   return (
-    <SimpleGrid templateColumns={"repeat(4, 1fr)"} gap={6} mt={8}>
+    <SimpleGrid
+      templateColumns={"repeat(4, 1fr)"}
+      gap={6}
+      mt={8}
+      display={["none", "grid"]}
+    >
       {images.map((image: ImageProps, index: number) => (
         <GridItem
           key={image.node.url}
@@ -192,7 +310,7 @@ function VariantSwatches({ variants }: { variants: [any] }) {
     name: "variant",
     defaultValue: variants[0].store.gid,
     value: variant,
-    onChange: (value) => updateVariant(value)
+    onChange: (value) => updateVariant(value),
   });
 
   const group = getRootProps();
@@ -253,8 +371,8 @@ function Swatch(props: any) {
         _focus={{
           boxShadow: "outline",
         }}
-        px={5}
-        py={3}
+        px={[3, 5]}
+        py={[2, 3]}
       >
         {props.children}
       </Box>
@@ -394,8 +512,18 @@ function CalloutReview({ review, colorTheme }: any) {
       bg={colorTheme.background.hex}
       color={colorTheme.text.hex}
     >
-      <Text fontSize="xl" textAlign={"justify"}>&quot;{review.content}&quot;</Text>
-      <Text fontSize="md" textAlign={"center"} mt={2} fontStyle={"italic"} color={"blackAlpha.700"}>{review.name}</Text>
+      <Text fontSize={["lg", "xl"]} textAlign={"justify"}>
+        &quot;{review.content}&quot;
+      </Text>
+      <Text
+        fontSize="md"
+        textAlign={"center"}
+        mt={2}
+        fontStyle={"italic"}
+        color={"blackAlpha.700"}
+      >
+        {review.name}
+      </Text>
     </Box>
   );
 }
