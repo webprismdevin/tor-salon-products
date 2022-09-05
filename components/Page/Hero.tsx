@@ -12,7 +12,6 @@ import {
   SimpleGrid,
   GridItem,
   Container,
-  Icon,
   IconButton,
 } from "@chakra-ui/react";
 import { wrap } from "@popmotion/popcorn";
@@ -21,8 +20,6 @@ import Image from "next/image";
 import { RatingStar } from "rating-star";
 import React, { useContext, useEffect, useState } from "react";
 import {
-  AiOutlineArrowLeft,
-  AiOutlineArrowRight,
   AiOutlineDoubleLeft,
   AiOutlineDoubleRight,
 } from "react-icons/ai";
@@ -80,7 +77,7 @@ export function HeroWithProduct({ hero, productImages, body, reviews }: any) {
                   mb={1}
                 >
                   <RatingStar
-                    id={"hero_rating_star"}
+                    id={"hero_rating_star_mobile"}
                     rating={scoreAverage}
                     size={20}
                   />
@@ -104,7 +101,7 @@ export function HeroWithProduct({ hero, productImages, body, reviews }: any) {
             >
               <Pricebox variants={product.variants} />
               {product.variants.length > 1 && (
-                <VariantSelect variants={product.variants} />
+                <VariantSwatches variants={product.variants} />
               )}
               <AddToCart />
             </Stack>
@@ -136,7 +133,7 @@ export function HeroWithProduct({ hero, productImages, body, reviews }: any) {
                   }}
                 />
                 {product.variants.length > 1 && (
-                  <VariantSelect variants={product.variants} />
+                  <VariantSwatches variants={product.variants} />
                 )}
                 <AddToCart />
               </Stack>
@@ -200,7 +197,7 @@ function MainImage({ images }: { images: [any] }) {
         boxSize={8}
         pos="absolute"
         zIndex={2}
-        top={150}
+        top={[150, 250]}
         left={2}
         opacity={0.6}
       />
@@ -224,8 +221,8 @@ function MainImage({ images }: { images: [any] }) {
           key={page}
         >
           <Image
-            src={image.url}
-            alt={image.altText}
+            src={image?.url}
+            alt={image?.altText}
             objectFit="cover"
             layout="fill"
             priority
@@ -240,7 +237,7 @@ function MainImage({ images }: { images: [any] }) {
         boxSize={8}
         pos="absolute"
         zIndex={2}
-        top={150}
+        top={[150, 250]}
         right={2}
         opacity={0.6}
       />
@@ -291,24 +288,12 @@ function ImageList({ images }: any) {
   );
 }
 
-export function VariantSelect({ variants }: any) {
-  const { variant, updateVariant } = useContext(VariantContext);
-
-  useEffect(() => {
-    if (variant === "") {
-      updateVariant(variants[0].store.gid);
-    }
-  }, []);
-
-  return <VariantSwatches variants={variants} />;
-}
-
-function VariantSwatches({ variants }: { variants: [any] }) {
+export function VariantSwatches({ variants }: { variants: [any] }) {
   const { variant, updateVariant } = useContext(VariantContext);
 
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: "variant",
-    defaultValue: variants[0].store.gid,
+    defaultValue: "",
     value: variant,
     onChange: (value) => updateVariant(value),
   });
@@ -398,29 +383,32 @@ export function AddToCart() {
   }
 
   return (
-    <HStack spacing={0} w="full">
-      <Select
-        maxW={20}
-        borderTopRightRadius={0}
-        borderBottomRightRadius={0}
-        onChange={(event) => setQty(parseInt(event.target.value))}
-        size="lg"
-        textAlign={"center"}
-      >
-        {selectQty.map((num: number) => (
-          <option key={num}>{num}</option>
-        ))}
-      </Select>
-      <Button
-        borderBottomLeftRadius={0}
-        borderTopLeftRadius={0}
-        size="lg"
-        onClick={handleAddToCart}
-        flexGrow={1}
-      >
-        Add To Cart
-      </Button>
-    </HStack>
+    <Stack w="full">
+      <HStack spacing={0} w="full">
+        <Select
+          maxW={20}
+          borderTopRightRadius={0}
+          borderBottomRightRadius={0}
+          onChange={(event) => setQty(parseInt(event.target.value))}
+          size="lg"
+          textAlign={"center"}
+        >
+          {selectQty.map((num: number) => (
+            <option key={num}>{num}</option>
+          ))}
+        </Select>
+        <Button
+          borderBottomLeftRadius={0}
+          borderTopLeftRadius={0}
+          size="lg"
+          onClick={handleAddToCart}
+          flexGrow={1}
+        >
+          Add To Cart
+        </Button>
+      </HStack>
+      <Text textTransform="uppercase" fontWeight={500} width="full" textAlign={"center"}>100% Money-back Guarantee</Text>
+    </Stack>
   );
 }
 
@@ -438,17 +426,6 @@ function Modules({ modules }: { modules: [ModuleProps] }) {
         switch (module._type) {
           case "trustIcons":
             return <TrustIcons key={module._key} groups={module.iconGroups} />;
-          case "guaranteeText":
-            return (
-              <Text
-                textTransform="uppercase"
-                fontWeight={500}
-                key={module._key}
-                width="full"
-              >
-                {module.text}
-              </Text>
-            );
           default:
             return;
         }

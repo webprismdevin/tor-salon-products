@@ -50,7 +50,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   // Shopify Request
   const query = gql`{
-        products(query: "${searchQuery}", first: 100) {
+        products(query: "${searchQuery} NOT product_type:Promo", first: 100) {
           edges {
             node {
               id

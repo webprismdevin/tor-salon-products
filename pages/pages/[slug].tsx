@@ -9,12 +9,12 @@ import {
 } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 import Head from "next/head";
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import {
   AddToCart,
   HeroWithProduct,
   Pricebox,
-  VariantSelect,
+  VariantSwatches,
 } from "../../components/Page/Hero";
 import BigTextBlock from "../../components/Page/BigTextBlock";
 import FeaturedInformation from "../../components/Page/FeaturedInformation";
@@ -25,8 +25,9 @@ import {
   productImageFragment,
 } from "../../lib/fragments/productImageFragment";
 import graphClient from "../../lib/graph-client";
-import { sanity } from "../../lib/sanity";
+import { imageBuilder, sanity } from "../../lib/sanity";
 import ReviewSection from "../../components/Page/ReviewSection";
+import { useRouter } from "next/router";
 
 export const VariantContext = createContext<any>({
   variant: "",
@@ -39,23 +40,33 @@ export const ImageContext = createContext<any>({
 });
 
 export default function Page({ page, productImages, reviews }: any) {
+  const router = useRouter()
   const [variant, updateVariant] = useState<string>(() => {
     if (page?.showHero && page?.hero.content[0].product) {
       return page.hero.content[0].product.store.variants[0].store.gid;
     }
   });
 
-  const [image, setImage] = useState<string>(() => {
-    if (page?.showHero && productImages) {
-      return productImages.product.featuredImage;
+  const [image, setImage] = useState<any>(() => {
+    if (page?.showHero) {
+      return  { url: page.hero.content[0].product.store.variants[0].store.previewImageUrl } 
     }
   });
 
+  useEffect(() => {
+    console.log(page.seo)
+  }, [])
+
   return (
     <div>
-      {/* <Head>
-        <title>{page.title}</title>
-      </Head> */}
+      <Head>
+        <title>{page.seo?.title ? page.seo?.title : page.title}</title>
+        <meta name="description" content={page.seo?.description} />
+        <meta property="og:title" content={page.seo?.title ? page.seo?.title : page.title} />
+        <meta property="og:type" content="website" />
+        {page.seo?.image && <meta property="og:image" content={imageBuilder(page.seo?.image).height(630).width(1200).url()} />}
+        <meta property="og:url" content={router.pathname} />
+      </Head>
       <VariantContext.Provider value={{ variant, updateVariant }}>
         <ImageContext.Provider value={{ image, setImage }}>
           <Container maxW="container.xl">
@@ -93,9 +104,8 @@ export function SecondBuyButton({ product }: any) {
       <Container centerContent py={20}>
         <Stack spacing={3} align="center">
           <Pricebox variants={product.variants} />
-          <VariantSelect variants={product.variants} />
+          <VariantSwatches variants={product.variants} />
           <AddToCart />
-          <Text textTransform="uppercase" fontWeight={500} width="full" textAlign={"center"}>100% Money-back Guarantee</Text>
         </Stack>
       </Container>
     </Box>
@@ -112,7 +122,7 @@ export function Modules({ modules }: any) {
           case "bigTextBlock":
             return <BigTextBlock key={module._key} module={module} />;
           case "module.reviewSlider":
-            return <ReviewSlider reviews={module.reviews} />
+            return <ReviewSlider key={module._key} reviews={module.reviews} />
           default:
             return null;
         }
@@ -123,17 +133,17 @@ export function Modules({ modules }: any) {
 
 export function PageHairTypes() {
   return (
-    <Box px={8}>
+    <Box px={[2, 8]}>
       <Heading as="h2" fontFamily={"Futura"} mb={6} textAlign={"center"}>
         Designed By Hair Type. Formulated For Results.
       </Heading>
       <Stack
-        spacing={8}
+        spacing={[2, 8]}
         direction={["column", null, "row"]}
         w="full"
         justify="center"
       >
-        <Stack align="center" py={[10, 16]} flexGrow={1} bg="brand.curly">
+        <Stack align="center" py={[8, 16]} flexGrow={1} bg="brand.curly">
           <Text fontSize={24} mb={3}>
             Curly
           </Text>
@@ -145,7 +155,7 @@ export function PageHairTypes() {
             <ListItem>Breakage &amp; frizz protection</ListItem>
           </List>
         </Stack>
-        <Stack align="center" py={[10, 16]} flexGrow={1} bg="brand.fineThin">
+        <Stack align="center" py={[8, 16]} flexGrow={1} bg="brand.fineThin">
           <Text fontSize={24} mb={3}>
             Fine/Thin
           </Text>
@@ -157,7 +167,7 @@ export function PageHairTypes() {
             <ListItem>Fuller styling</ListItem>
           </List>
         </Stack>
-        <Stack align="center" py={[10, 16]} flexGrow={1} bg="brand.mediumThick">
+        <Stack align="center" py={[8, 16]} flexGrow={1} bg="brand.mediumThick">
           <Text fontSize={24} mb={3}>
             Medium/Thick
           </Text>
@@ -185,7 +195,7 @@ export const getStaticPaths = async () => {
         slug: page.slug.current,
       },
     })),
-    fallback: true,
+    fallback: false,
   };
 };
 
@@ -217,6 +227,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }`;
 
   const page = await sanity.fetch(query);
+
+  console.log(page.title)
 
   const productImages = await graphClient.request(productImageFragment, {
     id: page.hero?.content[0].product?.store.gid,
