@@ -46,20 +46,20 @@ export default function MailingList() {
         controls.start("animate");
         setShown(true);
       }
-    }, 6000);
+    }, 6500);
 
     return () => clearInterval(interval);
   }, [popupShown]);
 
   const animationVariants = {
     initial: {
-      x: 0,
+      x: 0
     },
     animate: {
-      x: 1008,
+      x: 1008
     },
     close: {
-      x: 0,
+      x: 0
     },
   };
 

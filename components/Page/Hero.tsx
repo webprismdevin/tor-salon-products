@@ -163,10 +163,10 @@ export function Pricebox({ variants }: any) {
       <Text fontSize="3xl" fontWeight={400}>
         ${selectedVariant?.price}
       </Text>
-      <Text fontSize="3xl" fontWeight={400} textDecor={"line-through"}>
+      <Text fontSize="2xl" fontWeight={400} color={"blackAlpha.600"} textDecor={"line-through"}>
         ${selectedVariant?.compareAtPrice}
       </Text>
-      <Text textTransform={"uppercase"}>A {savings}% savings!</Text>
+      <Text color={"red.700"} textTransform={"uppercase"}>A {savings}% savings!</Text>
     </HStack>
   );
 }
