@@ -221,7 +221,7 @@ function MainImage({ images }: { images: [any] }) {
           key={page}
         >
           <Image
-            src={image?.url}
+            src={image.url}
             alt={image?.altText}
             objectFit="cover"
             layout="fill"

@@ -36,6 +36,10 @@ const nextConfig = {
       source: '/product/gift-cards',
       destination: '/gift-card',
       permanent: true
+    }, {
+      source: '/offer/try-tor',
+      destination: '/pages/try-tor',
+      permanent: true
     }]
   }
 }

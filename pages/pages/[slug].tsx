@@ -1,9 +1,5 @@
 import {
-  Container,
-  Heading,
-  List,
-  ListItem,
-  Text,
+  Container
 } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 import Head from "next/head";

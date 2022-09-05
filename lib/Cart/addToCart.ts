@@ -76,10 +76,14 @@ export default async function addToCart(cartId:string, variantId:string, qty?:nu
 
     const response = await graphClient.request(query, variables)
 
-    console.log(response, variables, query);
+    // console.log(response, variables, query);
+
+    const merchandise = response.cartLinesAdd.cart.lines.edges[0].node.merchandise
+
+    // console.log(merchandise, "atc fired")
 
     if (window.dataLayer) {
-      const merchandise = response.cartLinesAdd.cart.lines.edges[0].node.merchandise
+      // const merchandise = response.cartLinesAdd.cart.lines.edges[0].node.merchandise
 
       window.dataLayer.push({ ecommerce: null }); // Clear the previous ecommerce object.
       window.dataLayer.push({
