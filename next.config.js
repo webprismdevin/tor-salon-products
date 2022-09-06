@@ -38,7 +38,7 @@ const nextConfig = {
       permanent: true
     }, {
       source: '/offer/try-tor',
-      destination: '/pages/try-tor',
+      destination: '/pages/wash-style-bundle',
       permanent: true
     }]
   }
