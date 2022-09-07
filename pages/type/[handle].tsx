@@ -10,7 +10,6 @@ import {
   AspectRatio,
   Image,
   Flex,
-  Icon,
 } from "@chakra-ui/react";
 import ProductFeature from "../../components/ProductFeature";
 import Product from "../../components/Product/Product";

@@ -102,6 +102,10 @@ export default async function addToCart(cartId:string, variantId:string, qty?:nu
             },
           ],
         },
+        eventModel: {
+          value: merchandise.priceV2.amount,
+          currency: "USD",
+        },
       });
     }
 
