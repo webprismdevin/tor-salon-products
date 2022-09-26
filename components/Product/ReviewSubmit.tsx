@@ -23,7 +23,7 @@ import { RatingStar } from "rating-star";
 import { useState } from "react";
 
 declare interface ReviewSubmitProps {
-  handle: string //shopify product handle
+  handle: string //shopify product title
   gid: string // shopify product gid
 }
 
@@ -73,6 +73,12 @@ export default function ReviewSubmit({ handle, gid }: ReviewSubmitProps) {
             setTitle("")
             setEmail("")
             setName("")
+          }
+          else {
+            toast({
+              title: "Something didn't go right",
+              description: "If you can, send us a chat message and let us know you got this message!"
+            })
           }
         });
     }

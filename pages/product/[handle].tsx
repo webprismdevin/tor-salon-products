@@ -210,7 +210,7 @@ const ProductPage = ({
               </Stack>
               <Divider orientation="vertical" height={"60px"} px={[2, 0]} />
               <Box w={["100%", "50%"]}>
-                <ReviewSubmit handle={product.handle} gid={product.id}  />
+                <ReviewSubmit handle={product.title} gid={product.id}  />
               </Box>
             </HStack>
             <Divider />
