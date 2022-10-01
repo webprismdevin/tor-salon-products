@@ -32,7 +32,7 @@ export default function ReviewSlider({ reviews }: ReviewSliderProps) {
   }, [page]);
 
   return (
-    <AnimatePresence initial={true} custom={direction} exitBeforeEnter={true}>
+    <AnimatePresence initial={true} custom={direction} mode='wait'>
       <MotionBox
         custom={direction}
         initial={{

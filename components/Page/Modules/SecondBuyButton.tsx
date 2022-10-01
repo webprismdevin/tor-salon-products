@@ -6,7 +6,7 @@ import React from "react";
 import {
   AddToCart, Pricebox,
   VariantSwatches
-} from "./Hero";
+} from "../HeroWithProduct";
 
 
 export default function SecondBuyButton({ product }: any) {

@@ -1,7 +1,7 @@
 import { Stack, Text, AspectRatio } from "@chakra-ui/react"
 import NextImage from 'next/image'
-import { imageBuilder } from "../../lib/sanity"
-import { SanityImageReference } from "../../types/sanity"
+import { imageBuilder } from "../../../lib/sanity"
+import { SanityImageReference } from "../../../types/sanity"
 
 export interface BigTextBlockProps {
     image: SanityImageReference

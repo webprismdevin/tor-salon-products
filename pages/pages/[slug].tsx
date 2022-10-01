@@ -1,106 +1,104 @@
-import {
-  Container
-} from "@chakra-ui/react";
+import { Container, Heading } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 import Head from "next/head";
-import React, { createContext, useEffect, useState } from "react";
-import {
-  HeroWithProduct,
-} from "../../components/Page/Hero";
+import React, { Suspense, useState } from "react";
+import HeroWithProduct from "../../components/Page/HeroWithProduct";
+import HeroImage from "../../components/Page/HeroImage";
 import PortableText from "../../components/PortableText/PortableText";
-import {
-  productImageFragment,
-} from "../../lib/fragments/productImageFragment";
 import graphClient from "../../lib/graph-client";
+import { productImageFragment } from "../../lib/fragments/productImageFragment";
 import { imageBuilder, sanity } from "../../lib/sanity";
 import { useRouter } from "next/router";
-import { Modules } from "../../components/Page/Modules";
-
+import { VariantContext } from "../../lib/pages/variant-context";
+import { ImageContext } from "../../lib/pages/image-context";
 import dynamic from "next/dynamic";
 
-const ReviewSection = dynamic(() => import("../../components/Page/ReviewSection"))
-const HairTypes = dynamic(() => import("../../components/Page/HairTypes"))
-const SecondBuyButton = dynamic(() => import("../../components/Page/SecondBuyButton"))
-
-export const VariantContext = createContext<any>({
-  variant: "",
-  updateVariant: () => null,
+const Modules = dynamic(() => import("../../components/Page/Modules"), {
+  suspense: true,
 });
 
-export const ImageContext = createContext<any>({
-  image: {},
-  setImage: () => null,
-});
-
-export default function Page({ page, productImages, reviews }: any) {
-  const router = useRouter()
+export default function Page({ page, productImages, bottomline }: any) {
+  const router = useRouter();
   const [variant, updateVariant] = useState<string>(() => {
-    if (page?.showHero && page?.hero.content[0].product) {
+    if (page?.showHero && page.hero.content[0]._type === "productWithVariant") {
       return page.hero.content[0].product.store.variants[0].store.gid;
     }
   });
 
   const [image, setImage] = useState<any>(() => {
-    if (page?.showHero) {
-      return  { url: page.hero.content[0].product.store.variants[0].store.previewImageUrl } 
+    if (page?.showHero && page.hero.content[0]._type === "productWithVariant") {
+      return {
+        url: page.hero.content[0].product.store.variants[0].store
+          .previewImageUrl,
+      };
     }
   });
 
-  useEffect(() => {
-    console.log(page.seo)
-  }, [])
+  const heroTypeIsProduct = page.hero.content[0]._type === "productWithVariant";
 
   return (
     <div>
       <Head>
         <title>{page.seo?.title ? page.seo?.title : page.title}</title>
         <meta name="description" content={page.seo?.description} />
-        <meta property="og:title" content={page.seo?.title ? page.seo?.title : page.title} />
+        <meta
+          property="og:title"
+          content={page.seo?.title ? page.seo?.title : page.title}
+        />
         <meta property="og:type" content="website" />
-        {page.seo?.image && <meta property="og:image" content={imageBuilder(page.seo?.image).height(630).width(1200).url()} />}
+        {page.seo?.image && (
+          <meta
+            property="og:image"
+            content={imageBuilder(page.seo?.image)
+              .height(630)
+              .width(1200)
+              .url()}
+          />
+        )}
         <meta property="og:url" content={router.pathname} />
       </Head>
       <VariantContext.Provider value={{ variant, updateVariant }}>
         <ImageContext.Provider value={{ image, setImage }}>
-          <Container maxW="container.xl">
-            {page?.showHero && (
-              <HeroWithProduct
-                hero={page.hero}
-                productImages={productImages}
-                body={page?.body}
-                reviews={reviews}
-              />
+          {page?.showHero && heroTypeIsProduct && (
+            <HeroWithProduct
+              hero={page.hero}
+              productImages={productImages}
+              body={page?.body}
+              bottomline={bottomline}
+            />
+          )}
+          {page?.showHero &&
+            page?.hero.content[0]._type === "imageWithProductHotspots" && (
+              <HeroImage content={page.hero.content[0]} />
             )}
-          </Container>
         </ImageContext.Provider>
-        {!page?.showHero && page?.body && (
-          <Container maxW="container.lg">
-            <PortableText blocks={page?.body} />
+        {page?.hero.content[0]._type === "imageWithProductHotspots" && (
+          <Container maxW="container.lg" py={16}>
+            <Heading as="h1">{page.title}</Heading>
+            <PortableText blocks={page.body} />
           </Container>
         )}
-        <HairTypes />
-        {page?.modules && <Modules modules={page.modules} />}
-        {page?.additionalBuyButton && (
-          <SecondBuyButton
-            product={page?.showHero && page.hero.content[0].product.store}
-          />
-        )}
-        {page?.showAllReviews && <ReviewSection reviews={reviews} />}
+        <Suspense fallback={`Loading...`}>
+          {page?.modules && (
+            <Modules
+              modules={page.modules}
+              product={page?.showHero && page.hero.content[0]?.product.store}
+            />
+          )}
+        </Suspense>
       </VariantContext.Provider>
     </div>
   );
 }
 
 export const getStaticPaths = async () => {
-  const query = `*[ _type == "page"]`;
+  const query = `*[ _type == "page"]{ title, slug }`;
 
   const pages = await sanity.fetch(query);
 
   return {
-    paths: pages.map((page: any) => ({
-      params: {
-        slug: page.slug.current,
-      },
+    paths: pages.map((doc: any) => ({
+      params: { slug: doc.slug.current },
     })),
     fallback: false,
   };
@@ -112,10 +110,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         ...,
         hero {
             ...,
-            topHeroReview {
+            modules[] {
               ...,
-              colorTheme ->
-            },   
+              colorTheme->
+            },
             content[] {
                 ...,
                 product-> {
@@ -135,22 +133,37 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const page = await sanity.fetch(query);
 
-  const productImages = await graphClient.request(productImageFragment, {
-    id: page.hero?.content[0].product?.store.gid,
-  });
+  const heroTypeIsProduct = page.hero.content[0]._type === "productWithVariant";
 
-
-  const utoken = "kZl7BZ4R7OWf9Rq2hpXpFThQ2OGuS1xzzkjV89vJ";
-
+  let productImages;
+  if (heroTypeIsProduct) {
+    productImages = await graphClient.request(productImageFragment, {
+      id: page.hero?.content[0].product?.store.gid,
+    });
+  } else {
+    productImages = null;
+  }
   const reviewResponse = await fetch(
-    `https://api.yotpo.com/v1/apps/${process.env.YOTPO_APP_KEY}/reviews?deleted=false&utoken=${utoken}&count=100`
+    `https://api.yotpo.com/v1/apps/${process.env.YOTPO_APP_KEY}/reviews?deleted=false&utoken=${process.env.YOTPO_UTOKEN}&count=100`
   ).then((Response) => Response.json());
+
+  const scoreAverage =
+    reviewResponse.reviews.reduce(
+      (acc: number, obj: any) => acc + obj.score,
+      0
+    ) / reviewResponse.reviews.length;
+
+  const reviewCount = reviewResponse.reviews.length;
 
   return {
     props: {
       page,
       productImages,
       reviews: reviewResponse.reviews,
+      bottomline: {
+        scoreAverage,
+        reviewCount,
+      },
     },
     revalidate: 10,
   };

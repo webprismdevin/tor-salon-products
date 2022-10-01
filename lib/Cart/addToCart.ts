@@ -72,7 +72,7 @@ export default async function addToCart(cartId:string, variantId:string, qty?:nu
       }
     `;
   
-    const variables = sellingPlanId !== "" ? { cartId, variantId, sellingPlanId } : { cartId, variantId }
+    const variables:any = sellingPlanId !== "" ? { cartId, variantId, sellingPlanId } : { cartId, variantId }
 
     const response = await graphClient.request(query, variables)
 

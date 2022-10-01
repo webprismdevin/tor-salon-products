@@ -16,6 +16,7 @@ import {
   DrawerCloseButton,
   Stack,
   useToast,
+  HStack,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useContext, useState } from "react";
@@ -30,6 +31,7 @@ import removeCartItem from "../../lib/Cart/removeCartItem";
 import CartRecommendations from "./CartRecommendations";
 import ShopPayInstallments from "./ShopPayInstallments";
 import DiscountCodeInput from "./DiscountCodeInput";
+import { SiApplepay, SiGooglepay, SiMastercard, SiPaypal, SiVisa } from "react-icons/si";
 
 const Cart = ({ color }: { color?: string }) => {
   const { cart, setCart } = useContext(CartContext);
@@ -94,7 +96,7 @@ const Cart = ({ color }: { color?: string }) => {
 
     localCartData = await createCart();
 
-    console.log(localCartData)
+    console.log(localCartData);
 
     setCart({
       id: localCartData.cartCreate.cart.id,
@@ -214,21 +216,23 @@ const Cart = ({ color }: { color?: string }) => {
               )}
             </VStack>
           </DrawerBody>
-          
+
           <DrawerFooter>
             <VStack w="full" spacing={2}>
               <DiscountCodeInput />
               <Divider />
               <ShopPayInstallments />
-              {cart && cart.lines && cart.lines.length > 0 && <Flex
-                w="100%"
-                justifyContent={"space-between"}
-                fontSize="md"
-                fontWeight={400}
-              >
-                <Text>Taxes &amp; Shipping:</Text>
-                <Text>Calculated at checkout</Text>
-              </Flex>}
+              {cart && cart.lines && cart.lines.length > 0 && (
+                <Flex
+                  w="100%"
+                  justifyContent={"space-between"}
+                  fontSize="md"
+                  fontWeight={400}
+                >
+                  <Text>Taxes &amp; Shipping:</Text>
+                  <Text>Calculated at checkout</Text>
+                </Flex>
+              )}
               <TotalCost cart={cart} />
               <Button
                 fontSize={"2xl"}
@@ -238,6 +242,13 @@ const Cart = ({ color }: { color?: string }) => {
               >
                 Checkout
               </Button>
+              <HStack w="full" justify={"space-around"}>
+                <Icon as={SiApplepay} boxSize={8} />
+                <Icon as={SiGooglepay} boxSize={10} />
+                <Icon as={SiMastercard} boxSize={8} />
+                <Icon as={SiVisa} boxSize={10} />
+                <Icon as={SiPaypal} boxSize={5} />
+              </HStack>
             </VStack>
           </DrawerFooter>
         </DrawerContent>

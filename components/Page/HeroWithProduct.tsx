@@ -13,31 +13,34 @@ import {
   GridItem,
   Container,
   IconButton,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
 } from "@chakra-ui/react";
 import { wrap } from "@popmotion/popcorn";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { RatingStar } from "rating-star";
 import React, { useContext, useEffect, useState } from "react";
-import {
-  AiOutlineDoubleLeft,
-  AiOutlineDoubleRight,
-} from "react-icons/ai";
+import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from "react-icons/ai";
 import addToCart from "../../lib/Cart/addToCart";
 import CartContext from "../../lib/CartContext";
 import { imageBuilder } from "../../lib/sanity";
-import { ImageContext, VariantContext } from "../../pages/pages/[slug]";
+import { VariantContext } from "../../lib/pages/variant-context";
+import { ImageContext } from "../../lib/pages/image-context";
 import { SanityColorTheme, SanityImageReference } from "../../types/sanity";
 import PortableText from "../PortableText/PortableText";
 
-export function HeroWithProduct({ hero, productImages, body, reviews }: any) {
+export default function HeroWithProduct({
+  hero,
+  productImages,
+  bottomline,
+}: any) {
   const product = hero.content[0].product.store;
   const { variant } = useContext(VariantContext);
   const { setImage } = useContext(ImageContext);
-
-  const scoreAverage =
-    reviews.reduce((acc: number, obj: any) => acc + obj.score, 0) /
-    reviews.length;
 
   useEffect(() => {
     const selectedVariant = product.variants.filter(
@@ -59,8 +62,16 @@ export function HeroWithProduct({ hero, productImages, body, reviews }: any) {
     });
   }
 
+  const heroReview = hero.modules.find(
+    (module: any) => module._type === "topHeroReview"
+  );
+
+  const guaranteeText = hero.modules.find(
+    (module: any) => module._type === "guaranteeText"
+  );
+
   return (
-    <div>
+    <Container maxW="container.xl">
       <Box py={[4, 10]}>
         <Container maxW="container.xl">
           <Stack
@@ -68,24 +79,22 @@ export function HeroWithProduct({ hero, productImages, body, reviews }: any) {
             spacing={[4, 16]}
             align={["center", "flex-start"]}
           >
-            <Box display={["initial", null, null, "none"]} w="full">
-              {reviews && (
-                <Stack
-                  onClick={handleReviewScroll}
-                  direction="row"
-                  align="flex-start"
-                  mb={1}
-                >
-                  <RatingStar
-                    id={"hero_rating_star_mobile"}
-                    rating={scoreAverage}
-                    size={20}
-                  />
-                  <Text>{reviews.length} Reviews</Text>
-                </Stack>
-              )}
-              <Heading size="xl">{hero.title}</Heading>
-            </Box>
+            {bottomline && (
+              <Box
+                maxH={20}
+                overflow="hidden"
+                display={["initial", null, null, "none"]}
+                w="full"
+              >
+                <RatingStar
+                  id={"hero_rating_star_mobile"}
+                  rating={bottomline.scoreAverage}
+                  size={20}
+                />
+                <Text display="inline">({bottomline.reviewCount}) Reviews</Text>
+                <Heading size="xl">{hero.title}</Heading>
+              </Box>
+            )}
             <Box
               w={[320, "full"]}
               pos={["static", null, null, "sticky"]}
@@ -104,11 +113,12 @@ export function HeroWithProduct({ hero, productImages, body, reviews }: any) {
                 <VariantSwatches variants={product.variants} />
               )}
               <AddToCart />
+              {guaranteeText && <Text>{guaranteeText.text}</Text>}
             </Stack>
             <Stack spacing={4} w="full">
-              {hero.topHeroReview && <HeroReview review={hero.topHeroReview} />}
+              {heroReview !== undefined && <HeroReview review={heroReview} />}
               <Box display={["none", null, null, "initial"]}>
-                {reviews && (
+                {bottomline && (
                   <Stack
                     onClick={handleReviewScroll}
                     direction="row"
@@ -117,10 +127,10 @@ export function HeroWithProduct({ hero, productImages, body, reviews }: any) {
                   >
                     <RatingStar
                       id={"hero_rating_star"}
-                      rating={scoreAverage}
+                      rating={bottomline.scoreAverage}
                       size={20}
                     />
-                    <Text>{reviews.length} Reviews</Text>
+                    <Text>{bottomline.reviewCount} Reviews</Text>
                   </Stack>
                 )}
                 <Heading size="xl">{hero.title}</Heading>
@@ -136,14 +146,18 @@ export function HeroWithProduct({ hero, productImages, body, reviews }: any) {
                   <VariantSwatches variants={product.variants} />
                 )}
                 <AddToCart />
+                {guaranteeText && (
+                  <Text textAlign={"center"} fontWeight={600} marginBottom={4}>
+                    {guaranteeText.text}
+                  </Text>
+                )}
+                {hero.modules && <Modules modules={hero.modules} />}
               </Stack>
-              {hero.modules && <Modules modules={hero.modules} />}
-              <PortableText blocks={body} />
             </Stack>
           </Stack>
         </Container>
       </Box>
-    </div>
+    </Container>
   );
 }
 
@@ -163,10 +177,17 @@ export function Pricebox({ variants }: any) {
       <Text fontSize="3xl" fontWeight={400}>
         ${selectedVariant?.price}
       </Text>
-      <Text fontSize="2xl" fontWeight={400} color={"blackAlpha.600"} textDecor={"line-through"}>
+      <Text
+        fontSize="2xl"
+        fontWeight={400}
+        color={"blackAlpha.600"}
+        textDecor={"line-through"}
+      >
         ${selectedVariant?.compareAtPrice}
       </Text>
-      <Text color={"red.700"} textTransform={"uppercase"}>A {savings}% savings!</Text>
+      <Text color={"red.700"} textTransform={"uppercase"}>
+        A {savings}% savings!
+      </Text>
     </HStack>
   );
 }
@@ -184,8 +205,8 @@ function MainImage({ images }: { images: [any] }) {
   };
 
   useEffect(() => {
-    setImage(images[index].node)
-  }, [page])
+    setImage(images[index].node);
+  }, [page]);
 
   return (
     <Box pos="relative">
@@ -201,7 +222,7 @@ function MainImage({ images }: { images: [any] }) {
         left={2}
         opacity={0.6}
       />
-      <AnimatePresence initial={true} custom={direction} exitBeforeEnter={true}>
+      <AnimatePresence initial={true} custom={direction} mode='wait'>
         <MotionAspect
           flexShrink={0}
           ratio={1 / 1}
@@ -407,7 +428,6 @@ export function AddToCart() {
           Add To Cart
         </Button>
       </HStack>
-      <Text textTransform="uppercase" fontWeight={500} width="full" textAlign={"center"}>100% Money-back Guarantee</Text>
     </Stack>
   );
 }
@@ -415,8 +435,17 @@ export function AddToCart() {
 declare interface ModuleProps {
   _type: string;
   _key: string;
-  text: string;
+  text?: string;
   iconGroups?: [any];
+  body?: [any];
+  groups?: [
+    {
+      _key: string;
+      _type: "group";
+      body: [any];
+      title: string;
+    }
+  ];
 }
 
 function Modules({ modules }: { modules: [ModuleProps] }) {
@@ -426,6 +455,10 @@ function Modules({ modules }: { modules: [ModuleProps] }) {
         switch (module._type) {
           case "trustIcons":
             return <TrustIcons key={module._key} groups={module.iconGroups} />;
+          case "productDetails":
+            return <PortableText blocks={module.body!} key={module._key}  />;
+          case "module.accordion":
+            return <HeroAccordion groups={module.groups} key={module._key}  />;
           default:
             return;
         }
@@ -468,6 +501,7 @@ export interface SanityReview {
     name: string;
   };
   colorTheme: SanityColorTheme;
+  _type: "topHeroReview";
 }
 
 function HeroReview({ review }: { review: SanityReview }) {
@@ -497,10 +531,33 @@ function CalloutReview({ review, colorTheme }: any) {
         textAlign={"center"}
         mt={2}
         fontStyle={"italic"}
-        color={"blackAlpha.700"}
+        color={colorTheme.text.hex}
+        opacity={0.8}
       >
         {review.name}
       </Text>
     </Box>
+  );
+}
+
+function HeroAccordion({ groups }: any) {
+  return (
+    <Accordion allowToggle>
+      {groups.map((group: { _key: string; title: string; body: any }) => (
+        <AccordionItem key={group._key}>
+          <h2>
+            <AccordionButton>
+              <Box flex="1" textAlign="left">
+                {group.title}
+              </Box>
+              <AccordionIcon />
+            </AccordionButton>
+          </h2>
+          <AccordionPanel pb={4}>
+            <PortableText blocks={group.body} />
+          </AccordionPanel>
+        </AccordionItem>
+      ))}
+    </Accordion>
   );
 }

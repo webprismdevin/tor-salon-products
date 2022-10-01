@@ -32,7 +32,7 @@ export default function Banner() {
 
   return (
     <MotionBox py={2} bg="black" color="white">
-      <AnimatePresence initial={true} custom={direction} exitBeforeEnter={true}>
+      <AnimatePresence initial={true} custom={direction} mode='wait'>
         <MotionBox
           custom={direction}
           initial={{

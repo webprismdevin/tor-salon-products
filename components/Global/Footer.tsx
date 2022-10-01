@@ -27,6 +27,7 @@ import {
   SiAmericanexpress,
   SiApplepay,
   SiGooglepay,
+  SiPaypal,
 } from "react-icons/si";
 import ShopContext from "../../lib/shop-context";
 import {
@@ -198,13 +199,12 @@ const Footer = () => {
             </Text>
           </Stack>
         </Stack>
-        <Stack alignSelf={"flex-end"} direction="row" spacing={4}>
-          <Icon as={SiAmericanexpress} boxSize={8} />
+        <Stack alignSelf={"flex-end"} align="center" direction="row" spacing={4}>
           <Icon as={SiApplepay} boxSize={8} />
-          <Icon as={SiDiscover} boxSize={8} />
-          <Icon as={SiGooglepay} boxSize={8} />
+          <Icon as={SiGooglepay} boxSize={10} />
           <Icon as={SiMastercard} boxSize={8} />
-          <Icon as={SiVisa} boxSize={8} />
+          <Icon as={SiVisa} boxSize={10} />
+          <Icon as={SiPaypal} boxSize={5} />
         </Stack>
         <Text w="full" textAlign={"center"} fontSize="xs">
           © {shop.name}. 2022. Crafted by{" "}

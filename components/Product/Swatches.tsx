@@ -1,6 +1,6 @@
 import { Box, HStack, useRadio, useRadioGroup } from "@chakra-ui/react";
 import { useContext, useEffect } from "react";
-import { VariantContext } from "../../pages/pages/[slug]";
+import { VariantContext } from "../../lib/pages/variant-context";
 
 export function Swatches({ variants }: any) {
   const { variant, updateVariant } = useContext(VariantContext);
