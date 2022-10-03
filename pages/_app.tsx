@@ -1,9 +1,5 @@
 import type { AppProps } from "next/app";
-import {
-  extendTheme,
-  ChakraProvider,
-  ColorModeScript,
-} from "@chakra-ui/react";
+import { extendTheme, ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import CartContext from "../lib/CartContext";
 import ShopContext from "../lib/shop-context";
 import Head from "next/head";
@@ -18,6 +14,8 @@ import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import "@fontsource/raleway/400.css";
 import "../styles/globals.css";
+import { sanity } from "../lib/sanity";
+import useSWR from "swr";
 
 const Banner = dynamic(() => import("../components/Global/Banner"));
 const NavBar = dynamic(() => import("../components/Global/NavBar"));
@@ -40,11 +38,16 @@ declare global {
 
 const customTheme: ThemeConfig = extendTheme(defaultTheme, themeConfig);
 
+const fetcher = (query:string) => sanity.fetch(query)
+
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [cart, setCart] = useState<any>({ id: null, lines: [] });
-  const shop = { name: "TOR Salon Products" };
   const [user, setUser, token, setToken] = useUser();
+  const { data, error } = useSWR('*[ _type == "settings" ][0]', fetcher)
+  const shop = { name: "TOR Salon Products" };
+
+
 
   useEffect(() => {
     if (typeof window) {
@@ -69,34 +72,31 @@ function MyApp({ Component, pageProps }: AppProps) {
               />
             </Head>
             <CartContext.Provider value={{ cart, setCart }}>
-              {router.pathname !== "/wholesale" &&
-                !router.asPath.includes("/offer") && <Banner />}
+              {router.pathname !== "/wholesale" && data && <Banner data={data.banner} />}
               <NavBar />
               <Component key={router.asPath} {...pageProps} />
             </CartContext.Provider>
             <Follow />
-            <Suspense fallback={<Loader />}>
-              {!router.asPath.includes("/offer") && <Footer />}
+            <Suspense fallback={'...'}>
+              <Footer />
             </Suspense>
           </ShopContext.Provider>
         </AuthContext.Provider>
         <ColorModeScript initialColorMode={customTheme.initialColorMode} />
-        {process.env.NODE_ENV === "production" &&
-          !router.asPath.includes("/offer") && (
-            <Script
-              id="tawk_tag"
-              strategy="lazyOnload"
-              dangerouslySetInnerHTML={{
-                __html: `var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();`,
-              }}
-            />
-          )}
-        {process.env.NODE_ENV === "development" &&
-          !router.asPath.includes("/offer") && (
-            <Suspense fallback={`...`}>
-              <MailingList />
-            </Suspense>
-          )}
+        {process.env.NODE_ENV === "production" && (
+          <Script
+            id="tawk_tag"
+            strategy="lazyOnload"
+            dangerouslySetInnerHTML={{
+              __html: `var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();`,
+            }}
+          />
+        )}
+        {process.env.NODE_ENV === "production" && data && (
+          <Suspense fallback={`...`}>
+            <MailingList settings={data.emailPopup} />
+          </Suspense>
+        )}
       </ChakraProvider>
       {process.env.NODE_ENV === "production" && (
         <Script

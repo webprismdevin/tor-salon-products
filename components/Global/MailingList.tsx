@@ -14,10 +14,20 @@ import {
 import { motion, useAnimation } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FiArrowRight } from "react-icons/fi";
+import useSWR from "swr";
+import { sanity } from "../../lib/sanity";
 
 const MotionBox = motion<BoxProps>(Box);
 
-export default function MailingList() {
+declare interface MailingListSettings {
+  settings: {
+    title: string
+    description: string
+    delay: number
+  }
+}
+
+export default function MailingList({ settings }: MailingListSettings) {
   const [popupShown, setShown] = useState(false);
   const controls = useAnimation();
   const [email, setEmail] = useState("");
@@ -46,7 +56,7 @@ export default function MailingList() {
         controls.start("animate");
         setShown(true);
       }
-    }, 6500);
+    }, settings.delay);
 
     return () => clearInterval(interval);
   }, [popupShown]);
@@ -114,7 +124,7 @@ export default function MailingList() {
       color="white"
       animate={controls}
       variants={animationVariants}
-      maxW={["320px", "580px"]}
+      maxW={["320px", "640px"]}
     >
       <MotionBox
         whileHover={{
@@ -133,7 +143,7 @@ export default function MailingList() {
         <Heading>
           {formStatus === "success"
             ? "Check your inbox!"
-            : "Get 15% off your first order!"}
+            : settings.title }
         </Heading>
         <InputGroup display={formStatus === "success" ? "none" : "inherit"}>
           <Input
@@ -171,7 +181,7 @@ export default function MailingList() {
         <Text>
           {formStatus === "success"
             ? "We're grateful to have you join! Check your inbox for your special discount."
-            : "Special discount when you join! Get access to exclusive discounts, new product updates and more amazing content!"}
+            : settings.description}
         </Text>
       </Stack>
     </MotionBox>
