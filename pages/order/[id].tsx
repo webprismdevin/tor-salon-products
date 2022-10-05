@@ -87,6 +87,7 @@ export default function ThankYou() {
             items: itemsArray,
           },
           eventModel: {
+            user_data,
             value: orderValue,
             currency: data.currencyCode,
             transaction_id: orderId,
@@ -114,8 +115,8 @@ export default function ThankYou() {
         />
       </Head>
       <Container py={20} maxW="container.xl">
-        <SimpleGrid templateColumns={"repeat(3, 1fr)"}>
-          <GridItem colSpan={2}>
+        <SimpleGrid templateColumns={"repeat(3, 1fr)"} gap={[8]}>
+          <GridItem colSpan={[3, 2]}>
             <Stack spacing={8} align="flex-start">
               <Box>
                 <Text fontSize="2xl" fontWeight={600}>
@@ -133,20 +134,21 @@ export default function ThankYou() {
                 </Text>
               </Box>
               <Stack
+                display={["none", "inherit"]}
                 spacing={16}
                 justify="flex-start"
                 direction={["column", "row"]}
               >
                 <ShippingDetails displayAddress={data.displayAddress} />
                 <BillingDetails billingAddress={data.billingAddress} />
+                <NextLink href="/" passHref>
+                  <Button>Continue Shopping</Button>
+                </NextLink>
               </Stack>
-              <NextLink href="/" passHref>
-                <Button>Continue Shopping</Button>
-              </NextLink>
             </Stack>
           </GridItem>
           <GridItem
-            colSpan={1}
+            colSpan={[3, 1]}
             bg={"gray.200"}
             p={6}
             borderRadius={6}
@@ -162,6 +164,19 @@ export default function ThankYou() {
               ))}
               <Divider borderColor={"black"} />
               <PurchaseDetails data={data} />
+            </Stack>
+          </GridItem>
+          <GridItem colSpan={[3, 1]} display={["inherit", "none"]}>
+            <Stack
+              spacing={16}
+              justify="flex-start"
+              direction={["column", "row"]}
+            >
+              <ShippingDetails displayAddress={data.displayAddress} />
+              <BillingDetails billingAddress={data.billingAddress} />
+              <NextLink href="/" passHref>
+                <Button>Continue Shopping</Button>
+              </NextLink>
             </Stack>
           </GridItem>
         </SimpleGrid>
@@ -276,7 +291,9 @@ function LineItem({ product }: any) {
       />
       <Box>
         <Text fontWeight={600}>{product.node.name}</Text>
-        {product.node.sellingPlanAllocation && <Text>{product.node.sellingPlanAllocation.sellingPlan.name}</Text>}
+        {product.node.sellingPlanAllocation && (
+          <Text>{product.node.sellingPlanAllocation.sellingPlan.name}</Text>
+        )}
         <Text>Qty: {product.node.currentQuantity}</Text>
       </Box>
     </Stack>

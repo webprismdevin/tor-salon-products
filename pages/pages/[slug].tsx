@@ -1,7 +1,7 @@
 import { Container, Heading } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 import Head from "next/head";
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import HeroWithProduct from "../../components/Page/HeroWithProduct";
 import HeroImage from "../../components/Page/HeroImage";
 import PortableText from "../../components/PortableText/PortableText";
@@ -33,6 +33,24 @@ export default function Page({ page, productImages, bottomline }: any) {
       };
     }
   });
+
+  useEffect(() => {
+    const content_type = page?.showHero && page.hero.content[0]._type === "productWithVariant" ? "product" : "product_group";
+
+    if (window.dataLayer) {
+      window.dataLayer.push({ ecommerce: null });
+      window.dataLayer.push({
+        event: "view-item",
+        eventModel: {
+          content_type,
+          content_ids: [page.slug.current],
+          content_name: page.title,
+          currency: "USD",
+        },
+        eventCallback: () => console.log("event fired")
+      });
+    }
+  }, []);
 
   const heroTypeIsProduct = page.hero.content[0]._type === "productWithVariant";
 
