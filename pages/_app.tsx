@@ -18,7 +18,7 @@ import { sanity } from "../lib/sanity";
 import useSWR from "swr";
 
 const Banner = dynamic(() => import("../components/Global/Banner"));
-const NavBar = dynamic(() => import("../components/Global/NavBar"));
+const Navigation = dynamic(() => import("../components/Global/Navigation"))
 const Follow = dynamic(() => import("../components/Global/Follow"), {
   ssr: false,
 });
@@ -38,16 +38,32 @@ declare global {
 
 const customTheme: ThemeConfig = extendTheme(defaultTheme, themeConfig);
 
-const fetcher = (query:string) => sanity.fetch(query)
+export const sanityFetcher = (query: string) => sanity.fetch(query);
+
+const settingsQuery = `*[ _type == "settings" ][0]
+{ 
+  ...,
+  menu { 
+    mega_menu[]{
+      ...,
+      _type == 'collectionGroup' => @{ 
+        collectionLinks[]-> 
+      },
+      _type != 'collectionGroup' => @
+    },
+    links[]{
+      _type == 'reference' => @->,
+      _type != 'reference' => @,
+    }
+  } 
+}`;
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [cart, setCart] = useState<any>({ id: null, lines: [] });
   const [user, setUser, token, setToken] = useUser();
-  const { data, error } = useSWR('*[ _type == "settings" ][0]', fetcher)
+  const { data: settings, error } = useSWR(settingsQuery, sanityFetcher);
   const shop = { name: "TOR Salon Products" };
-
-
 
   useEffect(() => {
     if (typeof window) {
@@ -72,12 +88,15 @@ function MyApp({ Component, pageProps }: AppProps) {
               />
             </Head>
             <CartContext.Provider value={{ cart, setCart }}>
-              {router.pathname !== "/wholesale" && data && <Banner data={data.banner} />}
-              <NavBar />
+              {router.pathname !== "/wholesale" && settings && (
+                <Banner data={settings.banner} />
+              )}
+              {/* <NavBar /> */}
+              {settings && <Navigation menu={settings.menu} />}
               <Component key={router.asPath} {...pageProps} />
             </CartContext.Provider>
             <Follow />
-            <Suspense fallback={'...'}>
+            <Suspense fallback={"..."}>
               <Footer />
             </Suspense>
           </ShopContext.Provider>
@@ -92,9 +111,9 @@ function MyApp({ Component, pageProps }: AppProps) {
             }}
           />
         )}
-        {process.env.NODE_ENV === "production" && data && (
+        {process.env.NODE_ENV === "production" && settings && (
           <Suspense fallback={`...`}>
-            <MailingList settings={data.emailPopup} />
+            <MailingList settings={settings.emailPopup} />
           </Suspense>
         )}
       </ChakraProvider>

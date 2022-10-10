@@ -17,23 +17,25 @@ import {
   AccordionIcon,
   Box,
   Icon,
-  chakra,
+  Link
 } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import { AiOutlineMenu } from "react-icons/ai";
+import NextLink from "next/link";
 import MenuLink from "./MenuLink";
-import { ByHairType, ByProductTypes, MoreLinks } from "./MenuSections";
+import AuthContext from "../../lib/auth-context";
+import { MenuProps } from "../../types/app_types";
+import { CollectionLink } from "../../types/sanity";
 
-const MenuIcon = chakra(AiOutlineMenu);
-
-const MobileMenu = () => {
+const MobileMenu = ({ menu }: MenuProps) => {
   const {
     isOpen: menuIsOpen,
     onOpen: menuOnOpen,
     onClose: menuOnClose,
   } = useDisclosure();
   const router = useRouter();
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     router.events.on("routeChangeStart", menuOnClose);
@@ -46,7 +48,6 @@ const MobileMenu = () => {
   return (
     <>
       <Icon
-        order={[1, 4]}
         display={["inherit", "none"]}
         as={AiOutlineMenu}
         onClick={menuOnOpen}
@@ -73,42 +74,39 @@ const MobileMenu = () => {
           </DrawerHeader>
           <DrawerBody p={8}>
             <VStack spacing={4} alignItems={"flex-start"} w="full">
-              <MenuLink href={"/"} text="Home" />
-              <Box w="full">
+              <MenuLink href="/" text="Home" />
+              <Box w="full" mb={6}>
                 <Text fontWeight={600} mb={2}>
                   Shop
                 </Text>
                 <Accordion w="full" allowToggle>
-                  <AccordionItem>
-                    <h2>
-                      <AccordionButton px={0}>
-                        <Box flex="1" textAlign="left">
-                          By Product Type
-                        </Box>
-                        <AccordionIcon />
-                      </AccordionButton>
-                    </h2>
-                    <AccordionPanel>
-                      <Stack>
-                        <ByProductTypes />
-                      </Stack>
-                    </AccordionPanel>
-                  </AccordionItem>
-                  <AccordionItem>
-                    <h2>
-                      <AccordionButton px={0}>
-                        <Box flex="1" textAlign="left">
-                          By Hair Type
-                        </Box>
-                        <AccordionIcon />
-                      </AccordionButton>
-                    </h2>
-                    <AccordionPanel>
-                      <Stack>
-                        <ByHairType />
-                      </Stack>
-                    </AccordionPanel>
-                  </AccordionItem>
+                  {menu.mega_menu
+                    .filter((item) => item._type === "collectionGroup")
+                    .map((item) => (
+                      <AccordionItem key={item._key}>
+                        <h2>
+                          <AccordionButton px={0}>
+                            <Box flex="1" textAlign="left">
+                              {item.title}
+                            </Box>
+                            <AccordionIcon />
+                          </AccordionButton>
+                        </h2>
+                        <AccordionPanel>
+                          <Stack>
+                            {item.collectionLinks!.map((link: CollectionLink) => (
+                              <NextLink
+                                key={link._id}
+                                href={`/${link._type}/${link.store.slug.current}`}
+                                passHref
+                              >
+                                <Link>{link.store.title}</Link>
+                              </NextLink>
+                            ))}
+                          </Stack>
+                        </AccordionPanel>
+                      </AccordionItem>
+                    ))}
                   <AccordionItem>
                     <h2>
                       <AccordionButton px={0}>
@@ -120,18 +118,41 @@ const MobileMenu = () => {
                     </h2>
                     <AccordionPanel>
                       <Stack>
-                        <MoreLinks />
+                        {menu.mega_menu
+                          .filter(
+                            (item) =>
+                              item._type === "linkExternal" ||
+                              item._type === "linkInternal"
+                          )
+                          .map((item) => (
+                            <NextLink
+                              href={item.url}
+                              key={item._key}
+                              target={item.newWindow ? "_blank" : "_self"}
+                            >
+                              <Link>{item.title}</Link>
+                            </NextLink>
+                          ))}
                       </Stack>
                     </AccordionPanel>
                   </AccordionItem>
                 </Accordion>
               </Box>
-              <MenuLink href="/wholesale" text="Wholesale" />
-              <MenuLink href={"/salon-finder"} text="Salon Finder" />
-              <MenuLink href={"/professionals"} text="Professionals" />
-              <MenuLink href={"/blog"} text="Blog" />
-              <MenuLink href={"/about"} text="About" />
+              {menu.links.map((link) => (
+                <NextLink
+                  href={link.url}
+                  key={link._key}
+                  passHref
+                  target={link.newWindow ? "_blank" : "_self"}
+                >
+                  <Link>{link.title}</Link>
+                </NextLink>
+              ))}
+              <MenuLink href="/account" text="Account" />
               <MenuLink href={"/help"} text="Help &amp; FAQ" />
+              {user && user.isPro && (
+                <MenuLink href="/wholesale" text="Wholesale" />
+              )}
             </VStack>
           </DrawerBody>
           <DrawerFooter></DrawerFooter>

@@ -60,7 +60,6 @@ function useUser() {
   useEffect(() => {
     if (token) {
       getUser(token.customerAccessToken.accessToken);
-      console.log("firing");
     }
   }, [token]);
 

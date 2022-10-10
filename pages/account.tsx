@@ -79,7 +79,7 @@ export default function Account() {
           <Stack spacing={10} w="full">
             <Flex justify={"space-between"}>
               <Heading>Account</Heading>
-              <Stack direction="row" spacing={6}>
+              <Stack direction={["column", null, null, "row"]} spacing={6}>
                 {user.isPro && (
                   <Button onClick={() => router.push("/wholesale")}>
                     Shop Wholesale

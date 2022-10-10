@@ -35,7 +35,10 @@ export default function Page({ page, productImages, bottomline }: any) {
   });
 
   useEffect(() => {
-    const content_type = page?.showHero && page.hero.content[0]._type === "productWithVariant" ? "product" : "product_group";
+    const content_type =
+      page?.showHero && page.hero.content[0]._type === "productWithVariant"
+        ? "product"
+        : "product_group";
 
     if (window.dataLayer) {
       window.dataLayer.push({ ecommerce: null });
@@ -47,7 +50,7 @@ export default function Page({ page, productImages, bottomline }: any) {
           content_name: page.title,
           currency: "USD",
         },
-        eventCallback: () => console.log("event fired")
+        eventCallback: () => console.log("event fired"),
       });
     }
   }, []);
@@ -93,7 +96,7 @@ export default function Page({ page, productImages, bottomline }: any) {
         {page?.hero.content[0]._type === "imageWithProductHotspots" && (
           <Container maxW="container.lg" py={16}>
             <Heading as="h1">{page.title}</Heading>
-            <PortableText blocks={page.body} />
+            <PortableText colorTheme={page.colorTheme} blocks={page.body} />
           </Container>
         )}
         <Suspense fallback={`Loading...`}>
@@ -126,6 +129,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const query = `*[ _type == "page" && slug.current == "${params?.slug}"][0]
     {
         ...,
+        colorTheme->,
         hero {
             ...,
             modules[] {
@@ -142,6 +146,23 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                     }
                 }
             }, 
+        },
+        body[] {
+          ...,
+          markDefs[] {
+            ...,
+            productWithVariant {
+              ...,
+              product-> {
+                ...,
+                store {
+                  ...,
+                  variants[]->
+                }
+              },
+              variant->
+            }
+          },
         },
         modules[] {
           ...,
@@ -161,23 +182,30 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   } else {
     productImages = null;
   }
-  const reviewResponse = await fetch(
-    `https://api.yotpo.com/v1/apps/${process.env.YOTPO_APP_KEY}/reviews?deleted=false&utoken=${process.env.YOTPO_UTOKEN}&count=100`
-  ).then((Response) => Response.json());
 
-  const scoreAverage =
-    reviewResponse.reviews.reduce(
-      (acc: number, obj: any) => acc + obj.score,
-      0
-    ) / reviewResponse.reviews.length;
+  let reviewResponse, scoreAverage, reviewCount;
 
-  const reviewCount = reviewResponse.reviews.length;
+  if (heroTypeIsProduct) {
+    reviewResponse = await fetch(
+      `https://api.yotpo.com/v1/apps/${process.env.YOTPO_APP_KEY}/reviews?deleted=false&utoken=${process.env.YOTPO_UTOKEN}&count=100`
+    ).then((Response) => Response.json());
+
+    scoreAverage =
+      reviewResponse.reviews.reduce(
+        (acc: number, obj: any) => acc + obj.score,
+        0
+      ) / reviewResponse.reviews.length;
+
+    reviewCount = reviewResponse.reviews.length;
+  } else {
+    reviewResponse = null, scoreAverage = null, reviewCount = null
+  }
 
   return {
     props: {
       page,
       productImages,
-      reviews: reviewResponse.reviews,
+      reviews: reviewResponse ? reviewResponse.reviews : null,
       bottomline: {
         scoreAverage,
         reviewCount,

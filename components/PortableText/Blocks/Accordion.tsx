@@ -7,7 +7,6 @@ import {
   Box,
 } from "@chakra-ui/react";
 import type { PortableTextBlock } from "@portabletext/types";
-// import type { SanityModuleAccordion } from "../../../types";
 import PortableText from "../PortableText";
 
 type Props = {
@@ -16,7 +15,7 @@ type Props = {
 
 export default function AccordionBlock({ node }: Props) {
   return (
-    <Accordion allowMultiple allowToggle my={8}>
+    <Accordion allowToggle my={8}>
       {node?.groups?.map((group:any) => (
         <AccordionItem key={group._key}>
           <h2>

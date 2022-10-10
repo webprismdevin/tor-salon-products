@@ -129,7 +129,7 @@ const Cart = ({ color }: { color?: string }) => {
       window.dataLayer.push({
         event: "begin_checkout",
         eventCallback: () => (window.location.href = cart.checkoutUrl),
-        eventTimeout: 1200,
+        eventTimeout: 2400,
       });
     }
     if (process.env.NODE_ENV === "development") {
