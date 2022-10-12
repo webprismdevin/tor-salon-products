@@ -44,6 +44,8 @@ export default function PortableText({
       blocks={blocks}
       // className={clsx('portableText', className)}
       renderContainerOnSingleChild
+      projectId="c53k64ci"
+      dataset="production"
       serializers={{
         // Lists
         // list: ListBlock,
@@ -61,7 +63,7 @@ export default function PortableText({
           block: Block,
           blockAccordion: AccordionBlock,
           blockImages: (props: any) => (
-            <ImagesBlock centered={centered} {...props} />
+            <ImagesBlock centered={true} {...props} />
           ),
         },
       }}
@@ -91,15 +93,15 @@ export const ProductAnnotation = ({
   const [singleAddToCart, instantCheckout] = useAddToCart();
 
   const product = productWithVariant.product.store;
-  const hasVariant = productWithVariant.variant !== null;
+  const hasVariant = productWithVariant.variant;
   
   const variant = hasVariant
       ? productWithVariant.variant.store
       : productWithVariant.product.store;
 
-  const variantId = !hasVariant
-      ? productWithVariant.product.store.variants[0].store.gid
-      : productWithVariant.variant.store.gid
+  const variantId = hasVariant
+      ? productWithVariant.variant?.store?.gid
+      : productWithVariant.product.store.variants[0].store.gid
 
   return (
     <Box
@@ -109,7 +111,7 @@ export const ProductAnnotation = ({
       onMouseEnter={() => cycleOpen()}
       onMouseLeave={() => cycleOpen()}
     >
-      <chakra.span bg={colorTheme?.background.hex} px={colorTheme ? 1 : 0}>
+      <chakra.span bg={colorTheme?.background.hex} px={colorTheme ? 1 : 0}  textDecor={colorTheme ? "none" : "underline"} textDecorationStyle={"dashed"}>
         {children[0]}
       </chakra.span>
       <AnimatePresence>
@@ -129,7 +131,7 @@ export const ProductAnnotation = ({
           >
             <Stack spacing={6}>
               <AspectRatio ratio={1 / 1} w={198}>
-                <NextImage src={variant.previewImageUrl} layout="fill" />
+                <NextImage src={variant.previewImageUrl ? variant.previewImageUrl : product.previewImageUrl} layout="fill" loading="eager" />
               </AspectRatio>
               <Box>
                 <NextLink href={`/product/${product.slug.current}`}>

@@ -38,7 +38,26 @@ const BlogPost = ({ post }: any) => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const pageSlug = params?.slug;
   const query = encodeURIComponent(
-    `*[ _type == "post" && slug.current == "${pageSlug}"]`
+    `*[ _type == "post" && slug.current == "${pageSlug}"]{
+      ...,
+      body[] {
+        ...,
+        markDefs[] {
+          ...,
+          productWithVariant {
+            ...,
+            product-> {
+              ...,
+              store {
+                ...,
+                variants[]->
+              }
+            },
+            variant->
+          }
+        },
+      },
+    }`
   );
 
   const url = `https://${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}.api.sanity.io/v1/data/query/production?query=${query}`;
