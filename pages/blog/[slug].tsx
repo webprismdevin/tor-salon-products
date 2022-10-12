@@ -14,16 +14,21 @@ const BlogPost = ({ post }: any) => {
       </Head>
       <Box py={20}>
         <Container>
-          <AspectRatio ratio={3 / 2} mb={6}>
-            <Image src={imageBuilder(post.mainImage).url()!} alt={post.title} />
-          </AspectRatio>
+          {post.mainImage && (
+            <AspectRatio ratio={3 / 2} mb={6}>
+              <Image
+                src={imageBuilder(post.mainImage).url()}
+                alt={post.title}
+              />
+            </AspectRatio>
+          )}
           <Heading as="h1" size="2xl">
             {post.title}
           </Heading>
-          <PortableText 
-            // colorTheme={post.colorTheme} 
+          <PortableText
+            // colorTheme={post.colorTheme}
             blocks={post.body}
-           />
+          />
         </Container>
       </Box>
     </article>

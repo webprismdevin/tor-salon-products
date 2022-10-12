@@ -85,7 +85,7 @@ div[data-framer-component-type='Text'] span {
   margin: 4px 0px;
 }
 
-.blog_article:first-child, .blog_article:nth-child(3) {
+/* .blog_article:first-child, .blog_article:nth-child(3n + 4), .blog_article:nth-child(3) {
   border: 2px solid black
 }
 .blog_article:nth-child(2){
@@ -100,4 +100,4 @@ div[data-framer-component-type='Text'] span {
     border-top: none;
     border-bottom: none;
   }
-}
+} */
