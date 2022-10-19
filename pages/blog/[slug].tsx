@@ -68,7 +68,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     props: {
       post: returnedPost,
     },
-    revalidate: 60,
+    revalidate: 10,
   };
 };
 
@@ -88,7 +88,7 @@ export async function getStaticPaths() {
           slug: post.slug.current,
         },
       })) || [],
-    fallback: false,
+    fallback: 'blocking',
   };
 }
 

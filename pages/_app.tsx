@@ -1,5 +1,5 @@
 import type { AppProps } from "next/app";
-import { extendTheme, ChakraProvider, ColorModeScript } from "@chakra-ui/react";
+import { extendTheme, ChakraProvider, ColorModeScript, useToast } from "@chakra-ui/react";
 import CartContext from "../lib/CartContext";
 import ShopContext from "../lib/shop-context";
 import Head from "next/head";
@@ -7,7 +7,6 @@ import dynamic from "next/dynamic";
 import themeConfig from "../lib/theme";
 import AuthContext from "../lib/auth-context";
 import useUser from "../lib/useUser";
-import Loader from "../components/Loader";
 import Script from "next/script";
 import { theme as defaultTheme, ThemeConfig } from "@chakra-ui/theme";
 import { Suspense, useEffect, useState } from "react";
@@ -16,9 +15,10 @@ import "@fontsource/raleway/400.css";
 import "../styles/globals.css";
 import { sanity } from "../lib/sanity";
 import useSWR from "swr";
+import applyDiscountToCart from "../lib/Cart/applyDiscountToCart";
 
 const Banner = dynamic(() => import("../components/Global/Banner"));
-const Navigation = dynamic(() => import("../components/Global/Navigation"))
+const Navigation = dynamic(() => import("../components/Global/Navigation"), { ssr: false });
 const Follow = dynamic(() => import("../components/Global/Follow"), {
   ssr: false,
 });
@@ -64,6 +64,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [user, setUser, token, setToken] = useUser();
   const { data: settings, error } = useSWR(settingsQuery, sanityFetcher);
   const shop = { name: "TOR Salon Products" };
+  const toast = useToast()
 
   useEffect(() => {
     if (typeof window) {
@@ -73,6 +74,26 @@ function MyApp({ Component, pageProps }: AppProps) {
       };
     }
   }, []);
+
+  useEffect(() => {
+    const queryString = router.asPath.split("?")[1];
+    const queryObj = new URLSearchParams(queryString);
+
+    if (queryObj.get("discount") && cart && cart.id) {
+      console.log(cart.id);
+      applyDiscountToCart(cart.id, queryObj.get("discount")!).then((res) => {
+        if(res.cartDiscountCodesUpdate.cart.discountCodes.length > 0) {
+          toast({
+            title: "Discount Applied",
+            description: `Your discount has been applied!`,
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+          })
+        }
+      });
+    }
+  }, [cart.id]);
 
   return (
     <>
@@ -91,7 +112,6 @@ function MyApp({ Component, pageProps }: AppProps) {
               {router.pathname !== "/wholesale" && settings && (
                 <Banner data={settings.banner} />
               )}
-              {/* <NavBar /> */}
               {settings && <Navigation menu={settings.menu} />}
               <Component key={router.asPath} {...pageProps} />
             </CartContext.Provider>
