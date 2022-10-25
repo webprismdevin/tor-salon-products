@@ -1,5 +1,5 @@
 import type { PortableTextBlock } from "@portabletext/types";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { imageBuilder } from "../../../lib/sanity";
 
 type Props = {

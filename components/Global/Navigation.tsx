@@ -56,7 +56,12 @@ export default function Navigation({ menu }: MenuProps) {
             <Icon as={BiChevronDown} />
           </Stack>
           {menu.links.map((link) => (
-            <NextLink href={link.url} key={link._key} passHref>
+            <NextLink
+              legacyBehavior
+              href={link.url}
+              key={link._key}
+              passHref
+            >
               <Link>{link.title}</Link>
             </NextLink>
           ))}
@@ -64,7 +69,7 @@ export default function Navigation({ menu }: MenuProps) {
         <Stack direction={"row"} align="center" gap={6}>
           {user && user.isPro && (
             <Box display={["none", "inherit"]}>
-              <NextLink href="wholesale">
+              <NextLink legacyBehavior href="wholesale">
                 <Link>Wholesale</Link>
               </NextLink>
             </Box>
@@ -100,6 +105,7 @@ export default function Navigation({ menu }: MenuProps) {
                     <Text fontWeight={600}>{item.title}</Text>
                     {item.collectionLinks!.map((link) => (
                       <NextLink
+                        legacyBehavior
                         key={link._id}
                         href={`/${link._type}/${link.store.slug.current}`}
                         passHref
@@ -119,6 +125,7 @@ export default function Navigation({ menu }: MenuProps) {
                   )
                   .map((item) => (
                     <NextLink
+                      legacyBehavior
                       href={item.url}
                       key={item._key}
                       target={item.newWindow ? "_blank" : "_self"}
@@ -138,7 +145,7 @@ export default function Navigation({ menu }: MenuProps) {
 const Logo = () => {
   return (
     <Box>
-      <NextLink href="/" passHref>
+      <NextLink legacyBehavior href="/" passHref>
         <Img src={"/logo_240.png"} h={7} alt="TOR logo" />
       </NextLink>
     </Box>

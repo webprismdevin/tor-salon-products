@@ -21,7 +21,7 @@ import {
 } from "@chakra-ui/react";
 import { wrap } from "@popmotion/popcorn";
 import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { RatingStar } from "rating-star";
 import React, { useContext, useEffect, useState } from "react";
 import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from "react-icons/ai";

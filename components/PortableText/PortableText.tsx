@@ -22,7 +22,7 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { AnimatePresence, motion, useCycle } from "framer-motion";
-import NextImage from "next/image";
+import NextImage from "next/legacy/image";
 import NextLink from "next/link";
 import useAddToCart from "../../lib/useAddToCart";
 

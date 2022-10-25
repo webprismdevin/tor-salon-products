@@ -37,7 +37,7 @@ export default function Custom404() {
             <Button onClick={() => window.Tawk_API.maximize()}>
               Chat with us
             </Button>
-            <NextLink href="/help" passHref>
+            <NextLink href="/help" passHref legacyBehavior>
               <Button>FAQ</Button>
             </NextLink>
           </Stack>

@@ -36,7 +36,7 @@ import {
   ByProductTypes,
   MoreLinks,
 } from "../Menu/MenuSections";
-import NextImage from "next/image";
+import NextImage from "next/legacy/image";
 
 const Footer = () => {
   const { shop } = useContext(ShopContext);
@@ -208,7 +208,7 @@ const Footer = () => {
         </Stack>
         <Text w="full" textAlign={"center"} fontSize="xs">
           © {shop.name}. 2022. Crafted by{" "}
-          <NextLink href="https://webprism.co" passHref>
+          <NextLink href="https://webprism.co" passHref legacyBehavior>
             <Link>WEBPRISM</Link>
           </NextLink>
         </Text>
@@ -219,7 +219,7 @@ const Footer = () => {
 
 const FooterLink = ({ href, text }: { href: string; text: string }) => {
   return (
-    <NextLink href={href} passHref>
+    <NextLink href={href} legacyBehavior>
       <Link fontSize="sm">{text}</Link>
     </NextLink>
   );

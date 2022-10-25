@@ -1,5 +1,5 @@
 import { AspectRatio, Box } from "@chakra-ui/react";
-import NextImage from "next/image";
+import NextImage from "next/legacy/image";
 import { imageBuilder } from "../../lib/sanity";
 
 export default function HeroImage({ content }: any) {
