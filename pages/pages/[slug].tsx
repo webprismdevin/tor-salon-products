@@ -55,7 +55,7 @@ export default function Page({ page, productImages, bottomline }: any) {
     }
   }, []);
 
-  const heroTypeIsProduct = page.hero.content[0]._type === "productWithVariant";
+  const heroTypeIsProduct = page.hero?.content[0]?._type === "productWithVariant";
 
   return (
     <div>
@@ -93,7 +93,7 @@ export default function Page({ page, productImages, bottomline }: any) {
               <HeroImage content={page.hero.content[0]} />
             )}
         </ImageContext.Provider>
-        {page?.hero.content[0]._type === "imageWithProductHotspots" && (
+        {page.hero?.content[0]._type !== "productWithVariant" && (
           <Container maxW="container.lg" py={16}>
             <Heading as="h1">{page.title}</Heading>
             <PortableText colorTheme={page.colorTheme} blocks={page.body} />
@@ -172,7 +172,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const page = await sanity.fetch(query);
 
-  const heroTypeIsProduct = page.hero.content[0]._type === "productWithVariant";
+  const heroTypeIsProduct = page.hero?.content[0]._type === "productWithVariant";
 
   let productImages;
   if (heroTypeIsProduct) {

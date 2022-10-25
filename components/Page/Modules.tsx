@@ -5,6 +5,7 @@ import ReviewSlider from "../ReviewSlider";
 import SecondBuyButton from "./Modules/SecondBuyButton";
 import HairTypes from "./Modules/HairTypes";
 import ReviewSection from "./Modules/ReviewSection";
+import EmailSignup from "./Modules/EmailSignup";
 
 
 export default function Modules({ modules, product }: any) {
@@ -24,6 +25,8 @@ export default function Modules({ modules, product }: any) {
             return <HairTypes key={module._key} />
           case "reviewSection":
             return <ReviewSection key={module._key} />
+          case "module.emailSignup" :
+            return <EmailSignup key={module._key} {...module} />
           default:
             return null;
         }

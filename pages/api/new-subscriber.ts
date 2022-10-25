@@ -7,50 +7,56 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const { email, hairType } = JSON.parse(req.body);
+  const { email, tags, name } = JSON.parse(req.body);
 
-  console.log(email, hairType);
+  console.log(email, tags, name);
 
-  const mutation = gql`mutation customerCreate($input: CustomerInput!) {
-        customerCreate(input: $input) {
-          customer {
-            id
-            email
-            phone
-            taxExempt
-            acceptsMarketing
-          }
-          userErrors {
-            field
-            message
-          }
+  const mutation = gql`
+    mutation customerCreate($input: CustomerInput!) {
+      customerCreate(input: $input) {
+        customer {
+          id
+          firstName
+          lastName
+          tags
+          email
+          phone
+          taxExempt
+          acceptsMarketing
         }
-    }`;
+        userErrors {
+          field
+          message
+        }
+      }
+    }
+  `;
 
   const variables = {
     input: {
+      firstName: name.firstname ? name.firstname : "",
+      lastName: name.lastname ? name.lastname : "",
       email: email,
       emailMarketingConsent: {
         consentUpdatedAt: new Date(),
         marketingOptInLevel: "SINGLE_OPT_IN",
         marketingState: "SUBSCRIBED",
       },
-      tags: [hairType],
+      tags: [...tags],
       taxExempt: false,
     },
   };
 
   const adminGraphClient = new GraphQLClient(
-    'https://tor-salon-products.myshopify.com/admin/api/2022-07/graphql.json' as string,
+    "https://tor-salon-products.myshopify.com/admin/api/2022-07/graphql.json" as string,
     {
       headers: {
-        'X-Shopify-Access-Token': process.env.SHOPIFY_API_PASSWORD as string,
+        "X-Shopify-Access-Token": process.env.SHOPIFY_API_PASSWORD as string,
       },
     }
   );
 
   const response = await adminGraphClient.request(mutation, variables);
-  
 
   if (response.errors) {
     console.log(JSON.stringify(response.errors, null, 2));
