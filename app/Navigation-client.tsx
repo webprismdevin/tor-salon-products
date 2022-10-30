@@ -19,7 +19,7 @@ import AuthContext from "../lib/auth-context";
 import { MenuProps } from "../types/app_types";
 import Cart from "../components/Cart/Cart";
 import MobileMenu from "../components/Menu/MobileMenu";
-import { Search } from "../components/Search";
+import { Search } from "./Search-client";
 import { sanity } from "../lib/sanity";
 import useSWR from "swr";
 import MegaMenu from "./MegaMenu-client";
@@ -43,8 +43,7 @@ const settingsQuery = `*[ _type == "settings" ][0]
 }`;
 
 export default function Navigation() {
-  // const router = useRouter();
-  // const { user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const { data, error } = useSWR(settingsQuery, sanityFetcher);
 
   return (
@@ -79,14 +78,14 @@ export default function Navigation() {
           ))}
         </Stack>
         <Stack direction={"row"} align="center" gap={6}>
-          {/* {user && user.isPro && (
+          {user && user.isPro && (
             <Box display={["none", "inherit"]}>
               <NextLink legacyBehavior href="wholesale">
                 <Link>Wholesale</Link>
               </NextLink>
             </Box>
-          )} */}
-          {/* <Search router={router} /> */}
+          )}
+          <Search />
           <Auth />
           {/* <Cart /> */}
         </Stack>

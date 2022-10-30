@@ -3,12 +3,10 @@
 import {
   Box,
   Stack,
-  Img,
   Text,
   Icon,
   Link,
   BoxProps,
-  Flex,
 } from "@chakra-ui/react";
 import { AnimatePresence, motion, useCycle } from "framer-motion";
 import React from "react";
