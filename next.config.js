@@ -19,6 +19,7 @@ const nextConfig = {
     ],
     formats: ["image/avif", "image/webp"],
   },
+  // compiler: { emotion: true },
   experimental: {
     appDir: true,
     // concurrentFeatures: true,
