@@ -36,7 +36,7 @@ export default function Banner() {
 
   return (
     <MotionBox py={2} bg="black" color="white">
-      {!data && <>...</>}
+      {!data && <div style={{textAlign: "center"}}>...</div>}
       {error && <>...</>}
       {data && <AnimatePresence initial={true} custom={direction} mode="wait">
         <MotionBox

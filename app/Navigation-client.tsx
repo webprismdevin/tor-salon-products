@@ -18,7 +18,7 @@ import { BiChevronDown } from "react-icons/bi";
 import AuthContext from "../lib/auth-context";
 import { MenuProps } from "../types/app_types";
 import Cart from "../components/Cart/Cart";
-import MobileMenu from "../components/Menu/MobileMenu";
+import MobileMenu from "./MobileMenu-client";
 import { Search } from "./Search-client";
 import { sanity } from "../lib/sanity";
 import useSWR from "swr";
@@ -56,7 +56,7 @@ export default function Navigation() {
       shadow={"md"}
     >
       <Flex justify={"space-between"} width="full">
-        {/* <MobileMenu menu={data.menu} /> */}
+        <MobileMenu />
         <Stack
           direction={"row"}
           align="center"
