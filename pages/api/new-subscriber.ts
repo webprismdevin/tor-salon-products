@@ -11,42 +11,6 @@ export default async function handler(
 
   console.log(email, tags, name);
 
-  const mutation = gql`
-    mutation customerCreate($input: CustomerInput!) {
-      customerCreate(input: $input) {
-        customer {
-          id
-          firstName
-          lastName
-          tags
-          email
-          phone
-          taxExempt
-          acceptsMarketing
-        }
-        userErrors {
-          field
-          message
-        }
-      }
-    }
-  `;
-
-  const variables = {
-    input: {
-      firstName: name.firstname ? name.firstname : "",
-      lastName: name.lastname ? name.lastname : "",
-      email: email,
-      emailMarketingConsent: {
-        consentUpdatedAt: new Date(),
-        marketingOptInLevel: "SINGLE_OPT_IN",
-        marketingState: "SUBSCRIBED",
-      },
-      tags: [...tags],
-      taxExempt: false,
-    },
-  };
-
   const adminGraphClient = new GraphQLClient(
     "https://tor-salon-products.myshopify.com/admin/api/2022-07/graphql.json" as string,
     {
@@ -56,17 +20,124 @@ export default async function handler(
     }
   );
 
-  const response = await adminGraphClient.request(mutation, variables);
+  const query = gql`
+    query getCustomers($email: String!) {
+      customers(first: 10, query: $email) {
+        edges {
+          node {
+            id
+            email
+            tags
+          }
+        }
+      }
+    }
+  `;
 
-  if (response.errors) {
-    console.log(JSON.stringify(response.errors, null, 2));
+  const queryVariables = {
+    email: email,
+  };
+
+  const response = await adminGraphClient.request(query, queryVariables);
+
+  if (response.customers.edges.length > 0) {
+    const updateMutation = gql`
+      mutation customerUpdate($input: CustomerInput!) {
+        customerUpdate(input: $input) {
+          customer {
+            id
+            firstName
+            lastName
+            tags
+            email
+            phone
+            taxExempt
+            acceptsMarketing
+          }
+          userErrors {
+            field
+            message
+          }
+        }
+      }
+    `;
+
+    const updateVariables = {
+      input: {
+        id: response.customers.edges[0].node.id,
+        email: email,
+        tags: [...tags, ...response.customers.edges[0].node.tags],
+      },
+    };
+
+    const updateResponse = await adminGraphClient.request(
+      updateMutation,
+      updateVariables
+    );
+
+    if (response.errors) {
+      console.log(JSON.stringify(response.errors, null, 2));
+      res.send({
+        error: updateResponse.errors,
+      });
+      throw Error("There was a problem creating the user. Please check logs");
+    }
+
     res.send({
-      error: response.errors,
+      data: 'updated',
     });
-    throw Error("There was a problem creating the user. Please check logs");
-  }
+  } else if(response.customers.edges.length === 0) {
+    const createMutation = gql`
+      mutation customerCreate($input: CustomerInput!) {
+        customerCreate(input: $input) {
+          customer {
+            id
+            firstName
+            lastName
+            tags
+            email
+            phone
+            taxExempt
+            acceptsMarketing
+          }
+          userErrors {
+            field
+            message
+          }
+        }
+      }
+    `;
 
-  res.send({
-    data: response,
-  });
+    const createVariables = {
+      input: {
+        firstName: name.firstname ? name.firstname : "",
+        lastName: name.lastname ? name.lastname : "",
+        email: email,
+        emailMarketingConsent: {
+          consentUpdatedAt: new Date(),
+          marketingOptInLevel: "SINGLE_OPT_IN",
+          marketingState: "SUBSCRIBED",
+        },
+        tags: [...tags],
+        taxExempt: false,
+      },
+    };
+
+    const createResponse = await adminGraphClient.request(
+      createMutation,
+      createVariables
+    );
+
+    if (createResponse.errors) {
+      console.log(JSON.stringify(createResponse.errors, null, 2));
+      res.send({
+        error: createResponse.errors,
+      });
+      throw Error("There was a problem creating the user. Please check logs");
+    }
+
+    res.send({
+      data: 'created'
+    });
+  }
 }

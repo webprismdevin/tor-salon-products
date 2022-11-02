@@ -1,4 +1,4 @@
-import { Container, Heading } from "@chakra-ui/react";
+import { Box, Container, Heading } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 import Head from "next/head";
 import React, { Suspense, useEffect, useState } from "react";
@@ -58,7 +58,7 @@ export default function Page({ page, productImages, bottomline }: any) {
   const heroTypeIsProduct = page.hero?.content[0]?._type === "productWithVariant";
 
   return (
-    <div>
+    <Box pb={20}>
       <Head>
         <title>{page.seo?.title ? page.seo?.title : page.title}</title>
         <meta name="description" content={page.seo?.description} />
@@ -94,8 +94,8 @@ export default function Page({ page, productImages, bottomline }: any) {
             )}
         </ImageContext.Provider>
         {page.hero?.content[0]._type !== "productWithVariant" && (
-          <Container maxW="container.lg" py={16}>
-            <Heading as="h1">{page.title}</Heading>
+          <Container maxW="container.lg" pt={16} pb={8} centerContent>
+            <Heading as="h1" size={["lg", null, null, "xl"]}>{page.title}</Heading>
             <PortableText colorTheme={page.colorTheme} blocks={page.body} />
           </Container>
         )}
@@ -103,12 +103,12 @@ export default function Page({ page, productImages, bottomline }: any) {
           {page?.modules && (
             <Modules
               modules={page.modules}
-              product={page?.showHero && page.hero.content[0]?.product.store}
+              product={page?.showHero && page.hero.content[0]?.product?.store}
             />
           )}
         </Suspense>
       </VariantContext.Provider>
-    </div>
+    </Box>
   );
 }
 
