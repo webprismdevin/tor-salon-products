@@ -123,6 +123,7 @@ export default function EmailSignup({
             type="email"
             value={email}
             onChange={(e: any) => setEmail(e.target.value)}
+            placeholder="Enter your email address"
           />
           {!isError ? (
             <FormHelperText>
