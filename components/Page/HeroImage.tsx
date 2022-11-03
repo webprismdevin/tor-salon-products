@@ -1,18 +1,22 @@
 import { AspectRatio, Box } from "@chakra-ui/react";
+import { useNextSanityImage } from "next-sanity-image";
 import NextImage from "next/image";
-import { imageBuilder } from "../../lib/sanity";
+import { imageBuilder, sanity } from "../../lib/sanity";
 
 export default function HeroImage({ content }: any) {
+  const imageProps = useNextSanityImage(
+    sanity,
+    content.image
+  );
+    
   return (
-    <Box width={"100%"}  overflow={"hidden"}>
-      <AspectRatio ratio={[16 / 9, 4 / 3]} maxH={400}>
+    <Box width={"100%"} position="relative">
         <NextImage
-          src={imageBuilder(content.image).height(900).url()}
-          blurDataURL={imageBuilder(content.image).width(64).url()}
-          layout="fill"
-          objectFit="cover"
+          //@ts-ignore
+          {...imageProps}
+          layout="responsive"
+          sizes="(max-width: 800px) 100vw, 800px"
         />
-      </AspectRatio>
     </Box>
   );
 }
