@@ -12,10 +12,9 @@ import {
   Select,
 } from "@chakra-ui/react";
 import { motion, useAnimation } from "framer-motion";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FiArrowRight } from "react-icons/fi";
-import useSWR from "swr";
-import { sanity } from "../../lib/sanity";
 
 const MotionBox = motion<BoxProps>(Box);
 
@@ -23,7 +22,8 @@ declare interface MailingListSettings {
   settings: {
     title: string
     description: string
-    delay: number
+    delay: number,
+    hiddenRoutes: [string]
   }
 }
 
@@ -33,25 +33,20 @@ export default function MailingList({ settings }: MailingListSettings) {
   const [email, setEmail] = useState("");
   const [hairType, setHairType] = useState("");
   const [formStatus, setStatus] = useState("clean");
+  const router = useRouter();
+
+  const { hiddenRoutes } = settings;
 
   useEffect(() => {
-    // const height = document.body.scrollHeight;
-    // const trigger = height / 3;
+
+    const hideOnRoute = hiddenRoutes.includes(router.asPath);
 
     if (!popupShown) controls.start("initial");
-
-    // const interval = setInterval(() => {
-    //   if (window.scrollY > trigger && !popupShown) {
-    //     console.log(popupShown);
-    //     controls.start("animate");
-    //     setShown(true);
-    //   }
-    // }, 100);
 
     const interval = setInterval(async () => {
       const isSubbed = await window.localStorage.getItem("subscribed")
 
-      if (!popupShown && isSubbed !== "true") {
+      if (!popupShown && isSubbed !== "true" && !hideOnRoute) {
         // console.log(popupShown);
         controls.start("animate");
         setShown(true);
@@ -59,7 +54,7 @@ export default function MailingList({ settings }: MailingListSettings) {
     }, settings.delay);
 
     return () => clearInterval(interval);
-  }, [popupShown]);
+  }, [popupShown, router.asPath]);
 
   const animationVariants = {
     initial: {

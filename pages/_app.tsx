@@ -131,7 +131,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             }}
           />
         )}
-        {process.env.NODE_ENV === "production" && settings && (
+        {settings && (
           <Suspense fallback={`...`}>
             <MailingList settings={settings.emailPopup} />
           </Suspense>
