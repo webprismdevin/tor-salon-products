@@ -71,6 +71,23 @@ export default function MailingList({ settings }: MailingListSettings) {
   async function subscribe() {
     setStatus("loading");
 
+    window.dataLayer.push({
+      event: "join_email_list",
+      signUpMethod: "popup",
+      callback: () => {
+        console.log("fired join_email_list event to GTM");
+        window.localStorage.setItem("subscribed", "true")
+      },
+    });
+    window.dataLayer.push({
+      event: "generate_lead",
+      currency: 'USD',
+      value: 0,
+      callback: () => {
+        window.localStorage.setItem("subscribed", "true");
+      },
+    });
+
     const response = await fetch("/api/addsubscriber", {
       method: "POST",
       body: JSON.stringify({
@@ -81,24 +98,10 @@ export default function MailingList({ settings }: MailingListSettings) {
 
     if (!response) {
       setStatus("failure");
-      if (process.env.NODE_ENV === "production") {
-        window.dataLayer.push({
-          event: "join_email_list",
-          method: "popup",
-        });
-      }
     }
 
     if (response) {
       setStatus("success");
-      window.dataLayer.push({
-        event: "join_email_list",
-        signUpMethod: "popup",
-        callback: () => {
-          console.log("fired join_email_list event to GTM");
-          window.localStorage.setItem("subscribed", "true")
-        },
-      });
     }
   }
 

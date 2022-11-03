@@ -59,6 +59,14 @@ export default function EmailSignup({
           window.localStorage.setItem("subscribed", "true");
         },
       });
+      window.dataLayer.push({
+        event: "generate_lead",
+        currency: 'USD',
+        value: 0,
+        callback: () => {
+          window.localStorage.setItem("subscribed", "true");
+        },
+      });
     }
 
     console.log(result);
