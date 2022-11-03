@@ -15,7 +15,7 @@ export default function HeroImage({ content }: any) {
           //@ts-ignore
           {...imageProps}
           layout="responsive"
-          sizes="(max-width: 800px) 100vw, 800px"
+          sizes="(max-width: 800px) 100vw, 800px, 1200px, 1600px, 2200px"
         />
     </Box>
   );

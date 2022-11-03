@@ -140,7 +140,7 @@ export default function EmailSignup({
           ) : (
             <FormErrorMessage>This field is required</FormErrorMessage>
           )}
-          <Button mt={2} onClick={handleSubmit} isDisabled={isError}>
+          <Button w="full" size="lg" mt={2} onClick={handleSubmit} isDisabled={isError}>
             Submit
           </Button>
         </FormControl>
