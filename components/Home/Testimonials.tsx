@@ -35,7 +35,7 @@ const Testimonials = () => {
       <Text fontSize={36} textTransform="uppercase">
         Testimonials
       </Text>
-      <AnimatePresence exitBeforeEnter>
+      <AnimatePresence mode="wait">
         <MotionText
           fontSize={18}
           fontStyle={"italic"}

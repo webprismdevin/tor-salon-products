@@ -8,7 +8,7 @@ export interface MenuItemProps {
 
 export default function MenuLink({ text, href }: MenuItemProps) {
   return (
-    <NextLink href={href} passHref>
+    <NextLink href={href} passHref legacyBehavior>
       <Link>{text}</Link>
     </NextLink>
   );

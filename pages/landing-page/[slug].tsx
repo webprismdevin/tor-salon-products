@@ -41,7 +41,7 @@ const LandingPage = ({ landingPage, product }: any) => {
         <title>{landingPage.name}</title>
       </Head>
       <Flex p={4} bg="black" align="center" justify="flex-end">
-        <NextLink href="/">
+        <NextLink href="/" legacyBehavior>
           <Heading
             w="full"
             size={"2xl"}

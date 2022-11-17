@@ -105,109 +105,107 @@ export default function ThankYou() {
       </Container>
     );
 
-  return (
-    <>
-      <Head>
-        <title>Thank You!</title>
-        <meta
-          name="description"
-          content="Thank you for your purchase! You'll receive an order confirmation at the email your provided during checkout!"
-        />
-      </Head>
-      <Container py={20} maxW="container.xl">
-        <SimpleGrid templateColumns={"repeat(3, 1fr)"} gap={[8]}>
-          <GridItem colSpan={[3, 2]}>
-            <Stack spacing={8} align="flex-start">
-              <Box>
-                <Text fontSize="2xl" fontWeight={600}>
-                  Thank you, {data.displayAddress?.firstName}!
-                </Text>
-                <Text>
-                  We appreciate your business, and look forward to shipping your
-                  order!
-                </Text>
-              </Box>
-              <Box bg={"gray.200"} px={4} py={2} borderRadius={6}>
-                <Text>
-                  You&apos;ll receive an email shortly with your shipping and
-                  tracking details.
-                </Text>
-              </Box>
-              <Stack
-                display={["none", "inherit"]}
-                spacing={16}
-                justify="flex-start"
-                direction={["column", "row"]}
-              >
-                <ShippingDetails displayAddress={data.displayAddress} />
-                <BillingDetails billingAddress={data.billingAddress} />
-                <NextLink href="/" passHref>
-                  <Button>Continue Shopping</Button>
-                </NextLink>
-              </Stack>
-            </Stack>
-          </GridItem>
-          <GridItem
-            colSpan={[3, 1]}
-            bg={"gray.200"}
-            p={6}
-            borderRadius={6}
-            pos="sticky"
-          >
-            <Stack w="full" spacing={4}>
+  return <>
+    <Head>
+      <title>Thank You!</title>
+      <meta
+        name="description"
+        content="Thank you for your purchase! You'll receive an order confirmation at the email your provided during checkout!"
+      />
+    </Head>
+    <Container py={20} maxW="container.xl">
+      <SimpleGrid templateColumns={"repeat(3, 1fr)"} gap={[8]}>
+        <GridItem colSpan={[3, 2]}>
+          <Stack spacing={8} align="flex-start">
+            <Box>
               <Text fontSize="2xl" fontWeight={600}>
-                Order Summary
+                Thank you, {data.displayAddress?.firstName}!
               </Text>
-              <Divider borderColor={"black"} />
-              {data.lineItems.edges.map((product: any) => (
-                <LineItem key={product.node.id} product={product} />
-              ))}
-              <Divider borderColor={"black"} />
-              <PurchaseDetails data={data} />
-            </Stack>
-          </GridItem>
-          <GridItem colSpan={[3, 1]} display={["inherit", "none"]}>
+              <Text>
+                We appreciate your business, and look forward to shipping your
+                order!
+              </Text>
+            </Box>
+            <Box bg={"gray.200"} px={4} py={2} borderRadius={6}>
+              <Text>
+                You&apos;ll receive an email shortly with your shipping and
+                tracking details.
+              </Text>
+            </Box>
             <Stack
+              display={["none", "inherit"]}
               spacing={16}
               justify="flex-start"
               direction={["column", "row"]}
             >
               <ShippingDetails displayAddress={data.displayAddress} />
               <BillingDetails billingAddress={data.billingAddress} />
-              <NextLink href="/" passHref>
+              <NextLink href="/" passHref legacyBehavior>
                 <Button>Continue Shopping</Button>
               </NextLink>
             </Stack>
-          </GridItem>
-        </SimpleGrid>
-        {!auth && (
-          <>
-            <Divider pt={20} />
-            <VStack py={[5, 10]}>
-              <Text fontWeight={600}>Want to track your order?</Text>
-              <Text>
-                <NextLink href="/login" passHref>
-                  <Link textDecor={"underline"}>Create an account</Link>
-                </NextLink>{" "}
-                with the same email you used for your purchase. Or{" "}
-                <NextLink href="/login" passHref>
-                  <Link textDecor={"underline"}>login</Link>
-                </NextLink>
-                .
-              </Text>
-            </VStack>
-          </>
-        )}
-      </Container>
-      <noscript
-        dangerouslySetInnerHTML={{
-          __html: `<img src="https://www.facebook.com/tr?id=${
-            process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID
-          }&ev=Purchase&eid=${window.location.pathname.split("/")[2]}"/>`,
-        }}
-      />
-    </>
-  );
+          </Stack>
+        </GridItem>
+        <GridItem
+          colSpan={[3, 1]}
+          bg={"gray.200"}
+          p={6}
+          borderRadius={6}
+          pos="sticky"
+        >
+          <Stack w="full" spacing={4}>
+            <Text fontSize="2xl" fontWeight={600}>
+              Order Summary
+            </Text>
+            <Divider borderColor={"black"} />
+            {data.lineItems.edges.map((product: any) => (
+              <LineItem key={product.node.id} product={product} />
+            ))}
+            <Divider borderColor={"black"} />
+            <PurchaseDetails data={data} />
+          </Stack>
+        </GridItem>
+        <GridItem colSpan={[3, 1]} display={["inherit", "none"]}>
+          <Stack
+            spacing={16}
+            justify="flex-start"
+            direction={["column", "row"]}
+          >
+            <ShippingDetails displayAddress={data.displayAddress} />
+            <BillingDetails billingAddress={data.billingAddress} />
+            <NextLink href="/" passHref legacyBehavior>
+              <Button>Continue Shopping</Button>
+            </NextLink>
+          </Stack>
+        </GridItem>
+      </SimpleGrid>
+      {!auth && (
+        <>
+          <Divider pt={20} />
+          <VStack py={[5, 10]}>
+            <Text fontWeight={600}>Want to track your order?</Text>
+            <Text>
+              <NextLink href="/login" passHref legacyBehavior>
+                <Link textDecor={"underline"}>Create an account</Link>
+              </NextLink>{" "}
+              with the same email you used for your purchase. Or{" "}
+              <NextLink href="/login" passHref legacyBehavior>
+                <Link textDecor={"underline"}>login</Link>
+              </NextLink>
+              .
+            </Text>
+          </VStack>
+        </>
+      )}
+    </Container>
+    <noscript
+      dangerouslySetInnerHTML={{
+        __html: `<img src="https://www.facebook.com/tr?id=${
+          process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID
+        }&ev=Purchase&eid=${window.location.pathname.split("/")[2]}"/>`,
+      }}
+    />
+  </>;
 }
 
 function BillingDetails({ billingAddress }: any) {

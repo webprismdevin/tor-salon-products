@@ -1,5 +1,5 @@
 import { Stack, Text, AspectRatio } from "@chakra-ui/react"
-import NextImage from 'next/image'
+import NextImage from "next/legacy/image";
 import { imageBuilder } from "../../../lib/sanity"
 import { SanityImageReference } from "../../../types/sanity"
 

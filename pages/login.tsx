@@ -168,7 +168,7 @@ function SignIn({ router }: { router: NextRouter }) {
         <Button alignSelf={"flex-start"} onClick={handleAuth}>
           Sign In
         </Button>
-        <NextLink href="/reset-password" passHref>
+        <NextLink href="/reset-password" passHref legacyBehavior>
           <Link>
             <Text>Forgot Password?</Text>
           </Link>

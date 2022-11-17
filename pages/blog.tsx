@@ -42,7 +42,7 @@ const Posts = ({ posts }: any) => {
             <Stack pos="relative" zIndex={1} p={[4, 8]} align="flex-start">
               <Heading size="lg">{post.title}</Heading>
               <Text mt={2}>{post.subtitle}</Text>
-              <NextLink href={`/blog/${post.slug.current}`}>
+              <NextLink href={`/blog/${post.slug.current}`} legacyBehavior>
                 <Link py={2} _hover={{textDecor: "none"}} borderBottom="1px solid black">Read more →</Link>
               </NextLink>
             </Stack>

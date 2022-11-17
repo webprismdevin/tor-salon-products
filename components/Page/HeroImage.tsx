@@ -1,4 +1,6 @@
 import { AspectRatio, Box } from "@chakra-ui/react";
+import NextImage from "next/legacy/image";
+import { imageBuilder } from "../../lib/sanity";
 import { useNextSanityImage } from "next-sanity-image";
 import NextImage from "next/image";
 import { imageBuilder, sanity } from "../../lib/sanity";

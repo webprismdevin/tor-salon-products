@@ -197,7 +197,7 @@ function Orders({ userData }: any) {
                         "base64"
                       )}`}
                       passHref
-                    >
+                      legacyBehavior>
                       <Text>View</Text>
                     </NextLink>
                   </Link>

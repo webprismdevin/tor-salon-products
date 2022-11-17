@@ -152,338 +152,336 @@ const ProductPage = ({
 
   if (!product) return null;
 
-  return (
-    <>
-      <Head>
-        <title>{product.title} | TOR Salon Products</title>
-        <meta
-          name="description"
-          content={`${product.description.substring(0, 200)}...`}
-        />
-      </Head>
-      <SimpleGrid templateColumns={"repeat(2, 1fr)"}>
-        <GridItem colSpan={[2, 1]}>
-          <PhotoCarousel images={product.images.edges} />
-        </GridItem>
-        <GridItem colSpan={[2, 1]}>
-          <Stack
-            py={[4, 20]}
-            pl={[4, null, 4, 0]}
-            pr={[4, null, 10, 20]}
-            spacing={6}
-          >
-            <Stack direction={"row"} justify={"space-between"}>
-              <Heading maxW={[480]}>{product.title}</Heading>
-            <Stack>
-              {subscriptionPlan === "" ? <Heading fontWeight={600}>
-                  {formatter.format(parseInt(activeVariant.priceV2.amount))}
-                </Heading> : <Heading fontWeight={600}>
-                  <span style={{textDecoration: 'line-through', opacity: 0.6}}>{formatter.format(parseInt(activeVariant.priceV2.amount))}</span> <span style={{fontWeight: 400}}>{formatter.format(parseInt(activeVariant.priceV2.amount)*.95)}</span>
-                </Heading>}
-                {subscriptionPlan !== "" && <Text textAlign={"right"} color="red">Save 5% on every order!</Text>}
-            </Stack>
-            </Stack>
-            <Divider />
-            <HStack justify={"space-around"}>
-              <Stack
-                direction={["column", null, "column", "row"]}
-                align="center"
-                justify={"center"}
-                w={["100%", "50%"]}
-                cursor="pointer"
-                onClick={() =>
-                  reviewsSection.current?.scrollIntoView({
-                    behavior: "smooth",
-                  })
-                }
-                flexShrink={1}
-              >
-                <RatingStar
-                  id={product.id.split("/")[4]}
-                  rating={reviews.bottomline.average_score}
-                />
-                <Text>
-                  {reviews.bottomline.total_review} Review
-                  {reviews.bottomline.totalReviews === 1 ? "s" : ""}
-                </Text>
-              </Stack>
-              <Divider orientation="vertical" height={"60px"} px={[2, 0]} />
-              <Box w={["100%", "50%"]}>
-                <ReviewSubmit handle={product.title} gid={product.id}  />
-              </Box>
-            </HStack>
-            <Divider />
-            {variants.length > 1 && (
-              <Select
-                minW={"200px"}
-                value={activeVariant.id}
-                onChange={(e) => {
-                  handleActiveVariantChange(e.target.value);
-                }}
-              >
-                {variants.map((v: { node: VariantType }) => (
-                  <option key={v.node.id} value={v.node.id}>
-                    Size: {v.node.title}
-                  </option>
-                ))}
-              </Select>
-            )}
-            {/* {variants.length > 1 && (
-              <Swatches variants={variants} />
-            )} */}
-            <HStack
-              border={"1px solid black"}
-              alignSelf={["flex-end", "flex-start"]}
-              borderRadius={6}
-            >
-              <Button fontSize="2xl" variant="ghost" {...dec}>
-                -
-              </Button>
-              <Input w="50px" {...input} variant="ghost" textAlign="center" />
-              <Button fontSize="2xl" variant="ghost" {...inc}>
-                +
-              </Button>
-            </HStack>
-            {/* subscriptions */}
-            {product.sellingPlanGroups.edges.length > 0 && (
-              <SubscriptionPlan
-              subscriptionPlan={subscriptionPlan}
-              setSubscriptionPlan={setSubscriptionPlan}
-                sellingPlan={
-                  product.sellingPlanGroups.edges[0].node.sellingPlans
-                }
-              />
-            )}
-            {/* end subscriptions */}
-            <Button
-              position={["fixed", "static"]}
-              bottom={[7, 0]}
-              right={[4, 0]}
-              zIndex={[2, 0]}
-              w={["70%", "full"]}
-              onClick={handleAddToCart}
-              isDisabled={!activeVariant?.availableForSale}
-              size="lg"
-            >
-              {activeVariant?.availableForSale ? "Add To Cart" : "Sold Out!"}
-            </Button>
-            <Box
-              className="product_description_html_outer_container"
-              dangerouslySetInnerHTML={{
-                __html: product.descriptionHtml,
-              }}
-            />
-            <Accordion w="full" allowToggle>
-              {product.instructions && (
-                <AccordionItem>
-                  <h2>
-                    <AccordionButton>
-                      <Box flex="1" textAlign="left">
-                        Use Instructions &amp; Tips
-                      </Box>
-                      <AccordionIcon />
-                    </AccordionButton>
-                  </h2>
-                  <AccordionPanel p={4}>
-                    <Box
-                      className=""
-                      dangerouslySetInnerHTML={{
-                        __html: product.instructions.value,
-                      }}
-                    />
-                  </AccordionPanel>
-                </AccordionItem>
-              )}
-              {product.ingredients && (
-                <AccordionItem>
-                  <h2>
-                    <AccordionButton>
-                      <Box flex="1" textAlign="left">
-                        Ingredients
-                      </Box>
-                      <AccordionIcon />
-                    </AccordionButton>
-                  </h2>
-                  <AccordionPanel p={4}>
-                    <Box
-                      dangerouslySetInnerHTML={{
-                        __html: product.ingredients.value,
-                      }}
-                    />
-                  </AccordionPanel>
-                </AccordionItem>
-              )}
-              <AccordionItem>
-                <h2>
-                  <AccordionButton>
-                    <Box flex="1" textAlign="left">
-                      Money-back Guarantee
-                    </Box>
-                    <AccordionIcon />
-                  </AccordionButton>
-                </h2>
-                <AccordionPanel p={4}>
-                  We believe in our products. If you&apos;re not satisfied with
-                  your first few washes, or you don&apos;t find our products
-                  work for you, we&apos;ll buy it back. No hassles. Just pay
-                  return shipping and we&apos;ll refund your purchase.
-                </AccordionPanel>
-              </AccordionItem>
-              <AccordionItem>
-                <h2>
-                  <AccordionButton>
-                    <Box flex="1" textAlign="left">
-                      Shipping Policy
-                    </Box>
-                    <AccordionIcon />
-                  </AccordionButton>
-                </h2>
-                <AccordionPanel p={4}>
-                  <Stack spacing={2}>
-                    <Text>
-                      We want to get everyone their orders as soon as possible,
-                      and make our best effort to do so.
-                    </Text>
-                    <Text>
-                      Orders placed after 12pm (Mountain Time) Monday -
-                      Thursday, will ship the following morning. Orders placed
-                      after 11pm (Mountain Time) on Friday will ship the
-                      following Monday.
-                    </Text>
-                    <Text>
-                      The shipping companies in our town aren&apos;t open past
-                      noon on Friday. We appreciate your patience.
-                    </Text>
-                  </Stack>
-                </AccordionPanel>
-              </AccordionItem>
-            </Accordion>
-          </Stack>
-        </GridItem>
-      </SimpleGrid>
-      {collection && (
-        <Box bg={collection.color?.value ? collection.color.value : "white"}>
-          <Flex flexDir={["column-reverse", "row"]}>
-            <Box
-              w={["full", "50%"]}
-              pl={[8, 20]}
-              pr={[8, 40]}
-              py={[20, 40]}
-              pos="relative"
-            >
-              <Image
-                src={collection.typeImage?.reference.image.url}
-                alt=""
-                pos="absolute"
-                top={[0, 10]}
-                opacity={0.1}
-                w="70%"
-                left={[0, 20]}
-                zIndex={0}
-              />
-              <Stack
-                direction={["column"]}
-                spacing={6}
-                pos="relative"
-                zIndex={1}
-              >
-                <Heading>{collection.title}</Heading>
-                <Text>{collection.description}</Text>
-                <Stack
-                  direction={"row"}
-                  textAlign="left"
-                  justify="flex-start"
-                  spacing={6}
-                >
-                  <Box w="120px">
-                    <Image
-                      mb={2}
-                      boxSize={6}
-                      src={collection?.benefitOneIcon?.reference.image?.url}
-                      alt={collection?.benefitOneText?.value}
-                    />
-                    <Text>{collection?.benefitOneText?.value}</Text>
-                  </Box>
-                  <Box w="120px">
-                    <Image
-                      mb={2}
-                      boxSize={6}
-                      src={collection?.benefitTwoIcon?.reference.image.url}
-                      alt={collection?.benefitTwoText?.value}
-                    />
-                    <Text>{collection?.benefitTwoText?.value}</Text>
-                  </Box>
-                  <Box w="120px">
-                    <Image
-                      mb={2}
-                      boxSize={6}
-                      src={collection?.benefitThreeIcon?.reference.image.url}
-                      alt={collection?.benefitThreeText?.value}
-                    />
-                    <Text>{collection?.benefitThreeText?.value}</Text>
-                  </Box>
-                </Stack>
-              </Stack>
-            </Box>
-            <AspectRatio ratio={1 / 1} w={["full", "50%"]}>
-              <Image src={collection?.image?.url} alt="" />
-            </AspectRatio>
-          </Flex>
-          <Container maxW="container.xl" centerContent py={20}>
-            <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
-              {collection.products.edges.map((p: any, i: number) => (
-                <Product product={p} fontSize={24} key={i} />
-              ))}
-            </SimpleGrid>
-            <NextLink
-              href={returnCollection(collection.handle) as string}
-              passHref
-            >
-              <Button mt={[8]}>See Collection</Button>
-            </NextLink>
-          </Container>
-        </Box>
-      )}
-      {reviews && reviews.reviews.length > 0 && (
-        <Container
-          ref={reviewsSection}
-          maxW="container.lg"
-          pt={40}
-          pb={20}
-          centerContent
-          key={product.id.split("/")[4]}
+  return <>
+    <Head>
+      <title>{product.title} | TOR Salon Products</title>
+      <meta
+        name="description"
+        content={`${product.description.substring(0, 200)}...`}
+      />
+    </Head>
+    <SimpleGrid templateColumns={"repeat(2, 1fr)"}>
+      <GridItem colSpan={[2, 1]}>
+        <PhotoCarousel images={product.images.edges} />
+      </GridItem>
+      <GridItem colSpan={[2, 1]}>
+        <Stack
+          py={[4, 20]}
+          pl={[4, null, 4, 0]}
+          pr={[4, null, 10, 20]}
+          spacing={6}
         >
-          <Box w="full" py={12}>
-            <Heading>Reviews</Heading>
-            <Divider mt={6} />
-          </Box>
-          {reviews.reviews.map((r: any) => (
-            <Stack key={r.id} spacing={2}>
-              <HStack>
-                <RatingStar id={r.id.toString()} rating={r.score} />
-                <Text>Verified Review</Text>
-              </HStack>
-              <Text
-                fontSize="2xl"
-                textTransform={"capitalize"}
-                dangerouslySetInnerHTML={{
-                  __html: r.title,
-                }}
+          <Stack direction={"row"} justify={"space-between"}>
+            <Heading maxW={[480]}>{product.title}</Heading>
+          <Stack>
+            {subscriptionPlan === "" ? <Heading fontWeight={600}>
+                {formatter.format(parseInt(activeVariant.priceV2.amount))}
+              </Heading> : <Heading fontWeight={600}>
+                <span style={{textDecoration: 'line-through', opacity: 0.6}}>{formatter.format(parseInt(activeVariant.priceV2.amount))}</span> <span style={{fontWeight: 400}}>{formatter.format(parseInt(activeVariant.priceV2.amount)*.95)}</span>
+              </Heading>}
+              {subscriptionPlan !== "" && <Text textAlign={"right"} color="red">Save 5% on every order!</Text>}
+          </Stack>
+          </Stack>
+          <Divider />
+          <HStack justify={"space-around"}>
+            <Stack
+              direction={["column", null, "column", "row"]}
+              align="center"
+              justify={"center"}
+              w={["100%", "50%"]}
+              cursor="pointer"
+              onClick={() =>
+                reviewsSection.current?.scrollIntoView({
+                  behavior: "smooth",
+                })
+              }
+              flexShrink={1}
+            >
+              <RatingStar
+                id={product.id.split("/")[4]}
+                rating={reviews.bottomline.average_score}
               />
-              <Text
-                dangerouslySetInnerHTML={{
-                  __html: r.content,
-                }}
-              ></Text>
-              <Text fontStyle={"italic"} textTransform="capitalize">
-                {r.user.display_name}
+              <Text>
+                {reviews.bottomline.total_review} Review
+                {reviews.bottomline.totalReviews === 1 ? "s" : ""}
               </Text>
             </Stack>
-          ))}
+            <Divider orientation="vertical" height={"60px"} px={[2, 0]} />
+            <Box w={["100%", "50%"]}>
+              <ReviewSubmit handle={product.title} gid={product.id}  />
+            </Box>
+          </HStack>
+          <Divider />
+          {variants.length > 1 && (
+            <Select
+              minW={"200px"}
+              value={activeVariant.id}
+              onChange={(e) => {
+                handleActiveVariantChange(e.target.value);
+              }}
+            >
+              {variants.map((v: { node: VariantType }) => (
+                <option key={v.node.id} value={v.node.id}>
+                  Size: {v.node.title}
+                </option>
+              ))}
+            </Select>
+          )}
+          {/* {variants.length > 1 && (
+            <Swatches variants={variants} />
+          )} */}
+          <HStack
+            border={"1px solid black"}
+            alignSelf={["flex-end", "flex-start"]}
+            borderRadius={6}
+          >
+            <Button fontSize="2xl" variant="ghost" {...dec}>
+              -
+            </Button>
+            <Input w="50px" {...input} variant="ghost" textAlign="center" />
+            <Button fontSize="2xl" variant="ghost" {...inc}>
+              +
+            </Button>
+          </HStack>
+          {/* subscriptions */}
+          {product.sellingPlanGroups.edges.length > 0 && (
+            <SubscriptionPlan
+            subscriptionPlan={subscriptionPlan}
+            setSubscriptionPlan={setSubscriptionPlan}
+              sellingPlan={
+                product.sellingPlanGroups.edges[0].node.sellingPlans
+              }
+            />
+          )}
+          {/* end subscriptions */}
+          <Button
+            position={["fixed", "static"]}
+            bottom={[7, 0]}
+            right={[4, 0]}
+            zIndex={[2, 0]}
+            w={["70%", "full"]}
+            onClick={handleAddToCart}
+            isDisabled={!activeVariant?.availableForSale}
+            size="lg"
+          >
+            {activeVariant?.availableForSale ? "Add To Cart" : "Sold Out!"}
+          </Button>
+          <Box
+            className="product_description_html_outer_container"
+            dangerouslySetInnerHTML={{
+              __html: product.descriptionHtml,
+            }}
+          />
+          <Accordion w="full" allowToggle>
+            {product.instructions && (
+              <AccordionItem>
+                <h2>
+                  <AccordionButton>
+                    <Box flex="1" textAlign="left">
+                      Use Instructions &amp; Tips
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                </h2>
+                <AccordionPanel p={4}>
+                  <Box
+                    className=""
+                    dangerouslySetInnerHTML={{
+                      __html: product.instructions.value,
+                    }}
+                  />
+                </AccordionPanel>
+              </AccordionItem>
+            )}
+            {product.ingredients && (
+              <AccordionItem>
+                <h2>
+                  <AccordionButton>
+                    <Box flex="1" textAlign="left">
+                      Ingredients
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                </h2>
+                <AccordionPanel p={4}>
+                  <Box
+                    dangerouslySetInnerHTML={{
+                      __html: product.ingredients.value,
+                    }}
+                  />
+                </AccordionPanel>
+              </AccordionItem>
+            )}
+            <AccordionItem>
+              <h2>
+                <AccordionButton>
+                  <Box flex="1" textAlign="left">
+                    Money-back Guarantee
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel p={4}>
+                We believe in our products. If you&apos;re not satisfied with
+                your first few washes, or you don&apos;t find our products
+                work for you, we&apos;ll buy it back. No hassles. Just pay
+                return shipping and we&apos;ll refund your purchase.
+              </AccordionPanel>
+            </AccordionItem>
+            <AccordionItem>
+              <h2>
+                <AccordionButton>
+                  <Box flex="1" textAlign="left">
+                    Shipping Policy
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel p={4}>
+                <Stack spacing={2}>
+                  <Text>
+                    We want to get everyone their orders as soon as possible,
+                    and make our best effort to do so.
+                  </Text>
+                  <Text>
+                    Orders placed after 12pm (Mountain Time) Monday -
+                    Thursday, will ship the following morning. Orders placed
+                    after 11pm (Mountain Time) on Friday will ship the
+                    following Monday.
+                  </Text>
+                  <Text>
+                    The shipping companies in our town aren&apos;t open past
+                    noon on Friday. We appreciate your patience.
+                  </Text>
+                </Stack>
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
+        </Stack>
+      </GridItem>
+    </SimpleGrid>
+    {collection && (
+      <Box bg={collection.color?.value ? collection.color.value : "white"}>
+        <Flex flexDir={["column-reverse", "row"]}>
+          <Box
+            w={["full", "50%"]}
+            pl={[8, 20]}
+            pr={[8, 40]}
+            py={[20, 40]}
+            pos="relative"
+          >
+            <Image
+              src={collection.typeImage?.reference.image.url}
+              alt=""
+              pos="absolute"
+              top={[0, 10]}
+              opacity={0.1}
+              w="70%"
+              left={[0, 20]}
+              zIndex={0}
+            />
+            <Stack
+              direction={["column"]}
+              spacing={6}
+              pos="relative"
+              zIndex={1}
+            >
+              <Heading>{collection.title}</Heading>
+              <Text>{collection.description}</Text>
+              <Stack
+                direction={"row"}
+                textAlign="left"
+                justify="flex-start"
+                spacing={6}
+              >
+                <Box w="120px">
+                  <Image
+                    mb={2}
+                    boxSize={6}
+                    src={collection?.benefitOneIcon?.reference.image?.url}
+                    alt={collection?.benefitOneText?.value}
+                  />
+                  <Text>{collection?.benefitOneText?.value}</Text>
+                </Box>
+                <Box w="120px">
+                  <Image
+                    mb={2}
+                    boxSize={6}
+                    src={collection?.benefitTwoIcon?.reference.image.url}
+                    alt={collection?.benefitTwoText?.value}
+                  />
+                  <Text>{collection?.benefitTwoText?.value}</Text>
+                </Box>
+                <Box w="120px">
+                  <Image
+                    mb={2}
+                    boxSize={6}
+                    src={collection?.benefitThreeIcon?.reference.image.url}
+                    alt={collection?.benefitThreeText?.value}
+                  />
+                  <Text>{collection?.benefitThreeText?.value}</Text>
+                </Box>
+              </Stack>
+            </Stack>
+          </Box>
+          <AspectRatio ratio={1 / 1} w={["full", "50%"]}>
+            <Image src={collection?.image?.url} alt="" />
+          </AspectRatio>
+        </Flex>
+        <Container maxW="container.xl" centerContent py={20}>
+          <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
+            {collection.products.edges.map((p: any, i: number) => (
+              <Product product={p} fontSize={24} key={i} />
+            ))}
+          </SimpleGrid>
+          <NextLink
+            href={returnCollection(collection.handle) as string}
+            passHref
+            legacyBehavior>
+            <Button mt={[8]}>See Collection</Button>
+          </NextLink>
         </Container>
-      )}
-    </>
-  );
+      </Box>
+    )}
+    {reviews && reviews.reviews.length > 0 && (
+      <Container
+        ref={reviewsSection}
+        maxW="container.lg"
+        pt={40}
+        pb={20}
+        centerContent
+        key={product.id.split("/")[4]}
+      >
+        <Box w="full" py={12}>
+          <Heading>Reviews</Heading>
+          <Divider mt={6} />
+        </Box>
+        {reviews.reviews.map((r: any) => (
+          <Stack key={r.id} spacing={2}>
+            <HStack>
+              <RatingStar id={r.id.toString()} rating={r.score} />
+              <Text>Verified Review</Text>
+            </HStack>
+            <Text
+              fontSize="2xl"
+              textTransform={"capitalize"}
+              dangerouslySetInnerHTML={{
+                __html: r.title,
+              }}
+            />
+            <Text
+              dangerouslySetInnerHTML={{
+                __html: r.content,
+              }}
+            ></Text>
+            <Text fontStyle={"italic"} textTransform="capitalize">
+              {r.user.display_name}
+            </Text>
+          </Stack>
+        ))}
+      </Container>
+    )}
+  </>;
 };
 
 function PhotoCarousel({ images }: any) {

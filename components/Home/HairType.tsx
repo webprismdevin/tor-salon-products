@@ -6,7 +6,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import NextLink from "next/link";
-import NextImage from "next/image";
+import NextImage from "next/legacy/image";
 import { motion } from "framer-motion";
 
 const MotionBox = motion<BoxProps>(Box);
