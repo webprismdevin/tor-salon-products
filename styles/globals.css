@@ -101,3 +101,15 @@ div[data-framer-component-type='Text'] span {
     border-bottom: none;
   }
 } */
+
+.customHtml > table {
+  width: 100%;
+}
+
+.customHtml > table, th, td {
+  border: 1px solid black;
+}
+
+.customHtml, td {
+  padding: 10px;
+}

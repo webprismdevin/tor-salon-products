@@ -65,6 +65,9 @@ export default function PortableText({
           blockImages: (props: any) => (
             <ImagesBlock centered={true} {...props} />
           ),
+          customHtml: (props: any) => (
+            <Box w="full" className="customHtml" dangerouslySetInnerHTML={{ __html: props.node.html }} />
+          )
         },
       }}
     />

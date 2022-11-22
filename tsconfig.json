@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -31,9 +27,10 @@
     "./src/**/*",
     "pages/pages/[slug].tsx",
     "components/Global/NavBar.tsx.bak",
-    ".next/types/**/*.ts"
-, "pages/index.tsx.bak", "pages/index.tsx.bak"  ],
-  "exclude": [
-    "node_modules"
-  ]
+    ".next/types/**/*.ts",
+    "pages/index.tsx",
+    "pages/index.tsx",
+    "pages/pages/[slug].tsx"
+  ],
+  "exclude": ["node_modules"]
 }
