@@ -21,8 +21,14 @@ export default async function addToCart(cartId:string, variantId:string, qty?:nu
                   merchandise {
                     ... on ProductVariant {
                       id
+                      priceV2 {
+                        amount
+                      }
+                      title
                       product {
                         title
+                        id
+                        productType
                       }
                     }
                   }

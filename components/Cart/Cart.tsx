@@ -243,11 +243,11 @@ const Cart = ({ color }: { color?: string }) => {
                 Checkout
               </Button>
               <HStack w="full" justify={"space-around"}>
-                <Icon as={SiApplepay} boxSize={8} />
-                <Icon as={SiGooglepay} boxSize={10} />
-                <Icon as={SiMastercard} boxSize={8} />
-                <Icon as={SiVisa} boxSize={10} />
-                <Icon as={SiPaypal} boxSize={5} />
+                <Icon as={SiApplepay} boxSize={[6, 8]} />
+                <Icon as={SiGooglepay} boxSize={[8, 10]} />
+                <Icon as={SiMastercard} boxSize={[6, 8]} />
+                <Icon as={SiVisa} boxSize={[8, 10]} />
+                <Icon as={SiPaypal} boxSize={[4, 5]} />
               </HStack>
             </VStack>
           </DrawerFooter>
@@ -285,7 +285,7 @@ function TotalCost({ cart }: { cart: any }) {
       fontSize="lg"
       fontWeight={600}
     >
-      <Text>Total:</Text>
+      <Text>Estimated Total:</Text>
       <Text>{formatter.format(cart.estimatedCost.totalAmount.amount)}</Text>
     </Flex>
   );
