@@ -37,7 +37,7 @@ export default function Navigation({ menu }: MenuProps) {
       shadow={open ? "" : "md"}
     >
       <Flex justify={"space-between"} width="full">
-        <MobileMenu menu={menu} />
+        {menu && <MobileMenu menu={menu} />}
         <Stack
           direction={"row"}
           align="center"
@@ -55,7 +55,7 @@ export default function Navigation({ menu }: MenuProps) {
             <Text>Shop</Text>
             <Icon as={BiChevronDown} />
           </Stack>
-          {menu.links.map((link) => (
+          {menu && menu.links.map((link) => (
             <NextLink
               legacyBehavior
               href={link.url}
@@ -74,7 +74,7 @@ export default function Navigation({ menu }: MenuProps) {
               </NextLink>
             </Box>
           )}
-          <Search router={router} />
+          <Search />
           <Auth />
           <Cart />
         </Stack>
@@ -98,7 +98,7 @@ export default function Navigation({ menu }: MenuProps) {
             px={10}
           >
             <Stack direction="row" gap={16}>
-              {menu.mega_menu
+              {menu && menu.mega_menu
                 .filter((item) => item._type === "collectionGroup")
                 .map((item) => (
                   <Stack key={item._key}>
@@ -117,7 +117,7 @@ export default function Navigation({ menu }: MenuProps) {
                 ))}
               <Stack>
                 <Text fontWeight={600}>More</Text>
-                {menu.mega_menu
+                {menu && menu.mega_menu
                   .filter(
                     (item) =>
                       item._type === "linkExternal" ||

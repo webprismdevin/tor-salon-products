@@ -116,6 +116,8 @@ const ProductPage = ({
   async function handleAddToCart() {
     const response = await addToCart(cart.id, activeVariant.id, itemQty, subscriptionPlan);
 
+    console.log(response)
+
     setCart({
       ...cart,
       status: "dirty",

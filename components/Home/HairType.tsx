@@ -1,15 +1,11 @@
-import {
-  Box,
-  BoxProps,
-  Text,
-  AspectRatio,
-} from "@chakra-ui/react";
+import { Box, BoxProps, Text, AspectRatio, chakra } from "@chakra-ui/react";
 import React from "react";
 import NextLink from "next/link";
 import NextImage from "next/legacy/image";
 import { motion } from "framer-motion";
 
 const MotionBox = motion<BoxProps>(Box);
+const ChakraNL = chakra(NextLink);
 
 const HairType = ({
   typeImage,
@@ -23,11 +19,10 @@ const HairType = ({
   link: string;
 }) => {
   return (
-    <NextLink href={link} passHref>
+    <ChakraNL href={link} width={["full", "33.33%"]}>
       <MotionBox
         py={[20, 48]}
         pos="relative"
-        width={["full", "33.33%"]}
         display={"grid"}
         placeItems={"center"}
         initial="initial"
@@ -85,7 +80,7 @@ const HairType = ({
           {title}
         </Text>
       </MotionBox>
-    </NextLink>
+    </ChakraNL>
   );
 };
 

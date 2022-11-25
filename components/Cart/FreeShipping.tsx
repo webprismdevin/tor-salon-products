@@ -1,9 +1,6 @@
-import { useRouter } from "next/router";
 import { Box, Stack, Text, Progress } from "@chakra-ui/react";
 
 export default function FreeShippingProgress({ cart }: { cart?: any }) {
-  const router = useRouter();
-
   if(cart && cart.lines && cart.lines.length === 0) return null
 
   return (
@@ -13,7 +10,7 @@ export default function FreeShippingProgress({ cart }: { cart?: any }) {
           <Box>
             {cart.estimatedCost.totalAmount.amount < 100 ? (
               <Text textAlign={"center"}>
-                Add ${100 - cart.estimatedCost.totalAmount.amount} for free
+                Add ${100 - Math.ceil(cart.estimatedCost.totalAmount.amount)} for free
                 shipping!
               </Text>
             ) : (

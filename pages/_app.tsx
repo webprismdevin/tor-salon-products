@@ -18,7 +18,7 @@ import useSWR from "swr";
 import applyDiscountToCart from "../lib/Cart/applyDiscountToCart";
 
 const Banner = dynamic(() => import("../components/Global/Banner"));
-const Navigation = dynamic(() => import("../components/Global/Navigation"), { ssr: false });
+const Navigation = dynamic(() => import("../components/Global/Navigation"));
 const Follow = dynamic(() => import("../components/Global/Follow"), {
   ssr: false,
 });
@@ -112,7 +112,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               {router.pathname !== "/wholesale" && settings && (
                 <Banner data={settings.banner} />
               )}
-              {settings && <Navigation menu={settings.menu} />}
+              <Navigation menu={settings?.menu} />
               <Component key={router.asPath} {...pageProps} />
             </CartContext.Provider>
             <Follow />

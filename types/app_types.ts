@@ -1,7 +1,7 @@
 import { CollectionLink } from "./sanity";
 
 export interface MenuProps {
-    menu: {
+    menu?: {
       links: [
         {
           _key: string;

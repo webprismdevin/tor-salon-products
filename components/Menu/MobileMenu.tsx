@@ -80,7 +80,7 @@ const MobileMenu = ({ menu }: MenuProps) => {
                   Shop
                 </Text>
                 <Accordion w="full" allowToggle>
-                  {menu.mega_menu
+                  {menu && menu.mega_menu
                     .filter((item) => item._type === "collectionGroup")
                     .map((item) => (
                       <AccordionItem key={item._key}>
@@ -118,7 +118,7 @@ const MobileMenu = ({ menu }: MenuProps) => {
                     </h2>
                     <AccordionPanel>
                       <Stack>
-                        {menu.mega_menu
+                        {menu && menu.mega_menu
                           .filter(
                             (item) =>
                               item._type === "linkExternal" ||
@@ -138,7 +138,7 @@ const MobileMenu = ({ menu }: MenuProps) => {
                   </AccordionItem>
                 </Accordion>
               </Box>
-              {menu.links.map((link) => (
+              {menu && menu.links.map((link) => (
                 <NextLink
                   href={link.url}
                   key={link._key}
