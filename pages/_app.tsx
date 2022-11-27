@@ -16,6 +16,8 @@ import "../styles/globals.css";
 import { sanity } from "../lib/sanity";
 import useSWR from "swr";
 import applyDiscountToCart from "../lib/Cart/applyDiscountToCart";
+import { Analytics } from '@vercel/analytics/react';
+
 
 const Banner = dynamic(() => import("../components/Global/Banner"));
 const Navigation = dynamic(() => import("../components/Global/Navigation"));
@@ -163,6 +165,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           }}
         />
       )}
+      <Analytics />
     </>
   );
 }
