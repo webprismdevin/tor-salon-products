@@ -1,5 +1,10 @@
 import type { AppProps } from "next/app";
-import { extendTheme, ChakraProvider, ColorModeScript, useToast } from "@chakra-ui/react";
+import {
+  extendTheme,
+  ChakraProvider,
+  ColorModeScript,
+  useToast,
+} from "@chakra-ui/react";
 import CartContext from "../lib/CartContext";
 import ShopContext from "../lib/shop-context";
 import Head from "next/head";
@@ -16,8 +21,7 @@ import "../styles/globals.css";
 import { sanity } from "../lib/sanity";
 import useSWR from "swr";
 import applyDiscountToCart from "../lib/Cart/applyDiscountToCart";
-import { Analytics } from '@vercel/analytics/react';
-
+import { Analytics } from "@vercel/analytics/react";
 
 const Banner = dynamic(() => import("../components/Global/Banner"));
 const Navigation = dynamic(() => import("../components/Global/Navigation"));
@@ -66,7 +70,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [user, setUser, token, setToken] = useUser();
   const { data: settings, error } = useSWR(settingsQuery, sanityFetcher);
   const shop = { name: "TOR Salon Products" };
-  const toast = useToast()
+  const toast = useToast();
 
   useEffect(() => {
     if (typeof window) {
@@ -84,14 +88,14 @@ function MyApp({ Component, pageProps }: AppProps) {
     if (queryObj.get("discount") && cart && cart.id) {
       console.log(cart.id);
       applyDiscountToCart(cart.id, queryObj.get("discount")!).then((res) => {
-        if(res.cartDiscountCodesUpdate.cart.discountCodes.length > 0) {
+        if (res.cartDiscountCodesUpdate.cart.discountCodes.length > 0) {
           toast({
             title: "Discount Applied",
             description: `Your discount has been applied!`,
             status: "success",
             duration: 5000,
             isClosable: true,
-          })
+          });
         }
       });
     }
@@ -166,6 +170,12 @@ function MyApp({ Component, pageProps }: AppProps) {
         />
       )}
       <Analytics />
+      <Script
+        id="plausible"
+        defer
+        data-domain="torsalonproducts.com"
+        src="https://plausible.io/js/script.js"
+      />
     </>
   );
 }
