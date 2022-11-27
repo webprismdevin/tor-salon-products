@@ -5,23 +5,30 @@ import {
   ColorModeScript,
   useToast,
 } from "@chakra-ui/react";
+//context
 import CartContext from "../lib/CartContext";
 import ShopContext from "../lib/shop-context";
+import AuthContext from "../lib/auth-context";
+//next & react deps
 import Head from "next/head";
 import dynamic from "next/dynamic";
-import themeConfig from "../lib/theme";
-import AuthContext from "../lib/auth-context";
-import useUser from "../lib/useUser";
 import Script from "next/script";
-import { theme as defaultTheme, ThemeConfig } from "@chakra-ui/theme";
-import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import "@fontsource/raleway/400.css";
-import "../styles/globals.css";
+import { Suspense, useEffect, useState } from "react";
+//libs
 import { sanity } from "../lib/sanity";
 import useSWR from "swr";
 import applyDiscountToCart from "../lib/Cart/applyDiscountToCart";
+import useUser from "../lib/useUser";
+//analytics
 import { Analytics } from "@vercel/analytics/react";
+import PlausibleProvider from 'next-plausible'
+//styles & theme
+import { theme as defaultTheme, ThemeConfig } from "@chakra-ui/theme";
+import themeConfig from "../lib/theme";
+import "../styles/globals.css";
+import "@fontsource/raleway/400.css";
+
 
 const Banner = dynamic(() => import("../components/Global/Banner"));
 const Navigation = dynamic(() => import("../components/Global/Navigation"));
@@ -103,6 +110,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
+    <PlausibleProvider domain="torsalonproducts.com">
       <ChakraProvider theme={customTheme}>
         <AuthContext.Provider value={{ user, setUser, token, setToken }}>
           <ShopContext.Provider value={{ shop }}>
@@ -169,13 +177,8 @@ function MyApp({ Component, pageProps }: AppProps) {
           }}
         />
       )}
+      </PlausibleProvider>
       <Analytics />
-      <Script
-        id="plausible"
-        defer
-        data-domain="torsalonproducts.com"
-        src="https://plausible.io/js/script.js"
-      />
     </>
   );
 }

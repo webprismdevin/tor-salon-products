@@ -1,4 +1,7 @@
 /** @type {import('next').NextConfig} */
+
+const { withPlausibleProxy } = require('next-plausible')
+
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true'
 });
@@ -46,4 +49,4 @@ const nextConfig = {
   }
 }
 
-module.exports = withBundleAnalyzer(nextConfig)
+module.exports = withPlausibleProxy()(withBundleAnalyzer(nextConfig))

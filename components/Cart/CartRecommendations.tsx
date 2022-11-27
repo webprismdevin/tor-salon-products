@@ -82,7 +82,7 @@ export default function CartRecommendations() {
   if(router.asPath.includes("/offer")) return <></>
 
   return (
-    <Box w="full" display={["none", null, "inherit"]}>
+    <Box w="full" display={["none", null, "block"]}>
       <Text size="md" fontWeight="bold">
         Recommended For You
       </Text>
