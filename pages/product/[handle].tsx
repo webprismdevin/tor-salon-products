@@ -42,7 +42,6 @@ import { RatingStar } from "rating-star";
 import ReviewSubmit from "../../components/Product/ReviewSubmit";
 import addToCart from "../../lib/Cart/addToCart";
 import SubscriptionPlan from "../../components/Product/SubscriptionPlan";
-import { usePlausible } from "next-plausible";
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -79,7 +78,6 @@ const ProductPage = ({
   collections: any;
   reviews: any;
 }) => {
-  const plausible = usePlausible();
   const [itemQty, setItemQty] = useState(1);
   const { cart, setCart } = useContext(CartContext);
   const [activeVariant, setActiveVariant] = useState<VariantType>(() => {
