@@ -15,16 +15,17 @@ import { motion, useAnimation } from "framer-motion";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FiArrowRight } from "react-icons/fi";
+import { usePlausible } from "next-plausible";
 
 const MotionBox = motion<BoxProps>(Box);
 
 declare interface MailingListSettings {
   settings: {
-    title: string
-    description: string
-    delay: number,
-    hiddenRoutes: [string]
-  }
+    title: string;
+    description: string;
+    delay: number;
+    hiddenRoutes: [string];
+  };
 }
 
 export default function MailingList({ settings }: MailingListSettings) {
@@ -34,17 +35,17 @@ export default function MailingList({ settings }: MailingListSettings) {
   const [hairType, setHairType] = useState("");
   const [formStatus, setStatus] = useState("clean");
   const router = useRouter();
+  const plausible = usePlausible();
 
   const { hiddenRoutes } = settings;
 
   useEffect(() => {
-
     const hideOnRoute = hiddenRoutes.includes(router.asPath);
 
     if (!popupShown) controls.start("initial");
 
     const interval = setInterval(async () => {
-      const isSubbed = await window.localStorage.getItem("subscribed")
+      const isSubbed = await window.localStorage.getItem("subscribed");
 
       if (!popupShown && isSubbed !== "true" && !hideOnRoute) {
         // console.log(popupShown);
@@ -58,30 +59,32 @@ export default function MailingList({ settings }: MailingListSettings) {
 
   const animationVariants = {
     initial: {
-      y: 0
+      y: 0,
     },
     animate: {
-      y: -608
+      y: -608,
     },
     close: {
-      y: 0
+      y: 0,
     },
   };
 
   async function subscribe() {
     setStatus("loading");
 
+    plausible("Subscribe", { props: { method: "popup" } });
+
     window.dataLayer.push({
       event: "join_email_list",
       signUpMethod: "popup",
       callback: () => {
         console.log("fired join_email_list event to GTM");
-        window.localStorage.setItem("subscribed", "true")
+        window.localStorage.setItem("subscribed", "true");
       },
     });
     window.dataLayer.push({
       event: "generate_lead",
-      currency: 'USD',
+      currency: "USD",
       value: 0,
       callback: () => {
         window.localStorage.setItem("subscribed", "true");
@@ -92,7 +95,7 @@ export default function MailingList({ settings }: MailingListSettings) {
       method: "POST",
       body: JSON.stringify({
         email,
-        hairType
+        hairType,
       }),
     }).then((res) => res.json());
 
@@ -139,9 +142,7 @@ export default function MailingList({ settings }: MailingListSettings) {
       </MotionBox>
       <Stack spacing={2}>
         <Heading>
-          {formStatus === "success"
-            ? "Check your inbox!"
-            : settings.title }
+          {formStatus === "success" ? "Check your inbox!" : settings.title}
         </Heading>
         <InputGroup display={formStatus === "success" ? "none" : "inherit"}>
           <Input
@@ -170,12 +171,16 @@ export default function MailingList({ settings }: MailingListSettings) {
             )}
           </InputRightElement>
         </InputGroup>
-        {email !== "" &&  formStatus !== "success" &&
-          <Select placeholder="Select your hair type" onChange={e => setHairType(e.target.value)}>
+        {email !== "" && formStatus !== "success" && (
+          <Select
+            placeholder="Select your hair type"
+            onChange={(e) => setHairType(e.target.value)}
+          >
             <option value="Curly">Curly</option>
             <option value="Fine/Thin">Fine/Thin</option>
             <option value="Medium/Thick">Medium/Thick</option>
-          </Select>}
+          </Select>
+        )}
         <Text>
           {formStatus === "success"
             ? "We're grateful to have you join! Check your inbox for your special discount."

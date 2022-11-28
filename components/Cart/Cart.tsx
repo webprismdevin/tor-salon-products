@@ -32,12 +32,14 @@ import CartRecommendations from "./CartRecommendations";
 import ShopPayInstallments from "./ShopPayInstallments";
 import DiscountCodeInput from "./DiscountCodeInput";
 import { SiApplepay, SiGooglepay, SiMastercard, SiPaypal, SiVisa } from "react-icons/si";
+import { usePlausible } from "next-plausible";
 
 const Cart = ({ color }: { color?: string }) => {
   const { cart, setCart } = useContext(CartContext);
   const [cartQty, setCartQty] = useState<number | null>(null);
   const router = useRouter();
   const toast = useToast();
+  const plausible = usePlausible();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -126,6 +128,8 @@ const Cart = ({ color }: { color?: string }) => {
 
   async function handleCheckout() {
     if (process.env.NODE_ENV === "production") {
+      plausible("checkout")
+
       window.dataLayer.push({
         event: "begin_checkout",
         eventCallback: () => (window.location.href = cart.checkoutUrl),

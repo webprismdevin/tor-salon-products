@@ -24,7 +24,7 @@ const nextConfig = {
   },
   // compiler: { emotion: true },
   experimental: {
-    appDir: true,
+    // appDir: true,
     // concurrentFeatures: true,
     urlImports: [
       "https://framer.com/m/",

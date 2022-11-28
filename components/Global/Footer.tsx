@@ -37,11 +37,13 @@ import {
   MoreLinks,
 } from "../Menu/MenuSections";
 import NextImage from "next/legacy/image";
+import { usePlausible } from "next-plausible";
 
 const Footer = () => {
   const { shop } = useContext(ShopContext);
   const [email, setEmail] = useState("");
   const [formStatus, setStatus] = useState("clean");
+  const plausible = usePlausible();
 
   async function subscribe() {
     setStatus("loading");
@@ -58,6 +60,8 @@ const Footer = () => {
     }
 
     if (response) {
+      plausible("Subscribe", { props: { method: "footer" } });
+
       setEmail("");
       setStatus("success");
       if (process.env.NODE_ENV === "production") {
