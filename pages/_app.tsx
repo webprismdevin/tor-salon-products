@@ -45,6 +45,7 @@ declare global {
   interface Window {
     Tawk_API: any;
     dataLayer: any;
+    comet: any;
   }
 }
 
@@ -120,6 +121,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                   name="facebook-domain-verification"
                   content="bk02y72cdwvcwzina508gmb7xv87g6"
                 />
+                <meta name="cometly-domain-verification" content="6de624a4-60c8-4edd-aad5-822f79a45528"/>
               </Head>
               <CartContext.Provider value={{ cart, setCart }}>
                 {router.pathname !== "/wholesale" && settings && (
@@ -180,8 +182,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Script
         src="https://t.cometlytrack.com/e?uid=cb9398-7126-b99785-s"
         onLoad={() => {
-          //@ts-ignore
-          comet("init");
+          window.comet("init");
         }}
       />
       <Analytics />

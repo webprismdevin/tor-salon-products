@@ -72,6 +72,7 @@ export default function MailingList({ settings }: MailingListSettings) {
   async function subscribe() {
     setStatus("loading");
 
+    window.comet('subscribe');
     plausible("Subscribe", { props: { method: "popup" } });
 
     window.dataLayer.push({

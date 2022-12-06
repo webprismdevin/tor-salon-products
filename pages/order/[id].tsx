@@ -64,12 +64,15 @@ export default function ThankYou() {
 
     if (urlParams.get("event") === "purchase" && data) {
 
+
       const user_data = {
         em: createHash("sha256").update(data.email).digest("hex"),
       };
 
       const orderId = window.location.pathname.split("/")[2];
       const orderValue = parseFloat(data.currentTotalPriceSet.shopMoney.amount);
+
+      window.comet('purchase', {amount: orderValue});
 
       const itemsArray = data.lineItems.edges.map((i: LineItemType) => ({
         item_id: i.node.id, //string

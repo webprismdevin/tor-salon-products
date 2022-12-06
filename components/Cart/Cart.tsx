@@ -128,6 +128,7 @@ const Cart = ({ color }: { color?: string }) => {
 
   async function handleCheckout() {
     if (process.env.NODE_ENV === "production") {
+      window.comet('initiate_checkout')
       plausible("Checkout")
 
       window.dataLayer.push({
