@@ -22,13 +22,12 @@ import applyDiscountToCart from "../lib/Cart/applyDiscountToCart";
 import useUser from "../lib/useUser";
 //analytics
 import { Analytics } from "@vercel/analytics/react";
-import PlausibleProvider from 'next-plausible'
+import PlausibleProvider from "next-plausible";
 //styles & theme
 import { theme as defaultTheme, ThemeConfig } from "@chakra-ui/theme";
 import themeConfig from "../lib/theme";
 import "../styles/globals.css";
 import "@fontsource/raleway/400.css";
-
 
 const Banner = dynamic(() => import("../components/Global/Banner"));
 const Navigation = dynamic(() => import("../components/Global/Navigation"));
@@ -110,74 +109,81 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
-    <PlausibleProvider domain="torsalonproducts.com">
-      <ChakraProvider theme={customTheme}>
-        <AuthContext.Provider value={{ user, setUser, token, setToken }}>
-          <ShopContext.Provider value={{ shop }}>
-            <Head>
-              <meta name="theme-color" content="#ffffff" />
-              <link rel="shortcut icon" href="/favicon.png" />
-              <meta
-                name="facebook-domain-verification"
-                content="bk02y72cdwvcwzina508gmb7xv87g6"
-              />
-            </Head>
-            <CartContext.Provider value={{ cart, setCart }}>
-              {router.pathname !== "/wholesale" && settings && (
-                <Banner data={settings.banner} />
-              )}
-              <Navigation menu={settings?.menu} />
-              <Component key={router.asPath} {...pageProps} />
-            </CartContext.Provider>
-            <Follow />
-            <Suspense fallback={"..."}>
-              <Footer />
+      <PlausibleProvider domain="torsalonproducts.com">
+        <ChakraProvider theme={customTheme}>
+          <AuthContext.Provider value={{ user, setUser, token, setToken }}>
+            <ShopContext.Provider value={{ shop }}>
+              <Head>
+                <meta name="theme-color" content="#ffffff" />
+                <link rel="shortcut icon" href="/favicon.png" />
+                <meta
+                  name="facebook-domain-verification"
+                  content="bk02y72cdwvcwzina508gmb7xv87g6"
+                />
+              </Head>
+              <CartContext.Provider value={{ cart, setCart }}>
+                {router.pathname !== "/wholesale" && settings && (
+                  <Banner data={settings.banner} />
+                )}
+                <Navigation menu={settings?.menu} />
+                <Component key={router.asPath} {...pageProps} />
+              </CartContext.Provider>
+              <Follow />
+              <Suspense fallback={"..."}>
+                <Footer />
+              </Suspense>
+            </ShopContext.Provider>
+          </AuthContext.Provider>
+          <ColorModeScript initialColorMode={customTheme.initialColorMode} />
+          {process.env.NODE_ENV === "production" && (
+            <Script
+              id="tawk_tag"
+              strategy="lazyOnload"
+              dangerouslySetInnerHTML={{
+                __html: `var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();`,
+              }}
+            />
+          )}
+          {settings && (
+            <Suspense fallback={`...`}>
+              <MailingList settings={settings.emailPopup} />
             </Suspense>
-          </ShopContext.Provider>
-        </AuthContext.Provider>
-        <ColorModeScript initialColorMode={customTheme.initialColorMode} />
+          )}
+        </ChakraProvider>
         {process.env.NODE_ENV === "production" && (
           <Script
-            id="tawk_tag"
-            strategy="lazyOnload"
+            id="tagManager"
             dangerouslySetInnerHTML={{
-              __html: `var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();`,
-            }}
-          />
-        )}
-        {settings && (
-          <Suspense fallback={`...`}>
-            <MailingList settings={settings.emailPopup} />
-          </Suspense>
-        )}
-      </ChakraProvider>
-      {process.env.NODE_ENV === "production" && (
-        <Script
-          id="tagManager"
-          dangerouslySetInnerHTML={{
-            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+              __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
             j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             'https://gtm.torsalonproducts.com/kthlknzv.js?id='+i+dl;f.parentNode.insertBefore(j,f);
             })(window,document,'script','dataLayer','GTM-MKG7C6H');`,
-          }}
-        />
-      )}
-      <Script src="https://dttrk.com/shopify/track.js?shop=tor-salon-products.myshopify.com" />
-      <noscript
-        dangerouslySetInnerHTML={{
-          __html: `<img src="//api.yotpo.com/conversion_tracking.gif?app_key=bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l&order_id={{order_name|handleize}}&order_amount={{subtotal_price|money_without_currency}}&order_currency={{ shop.currency }}" width="1" height="1" />`,
-        }}
-      />
-      {process.env.NODE_ENV === "production" && (
+            }}
+          />
+        )}
+        <Script src="https://dttrk.com/shopify/track.js?shop=tor-salon-products.myshopify.com" />
         <noscript
           dangerouslySetInnerHTML={{
-            __html: `<iframe src="https://gtm.torsalonproducts.com/ns.html?id=GTM-MKG7C6H"
-            height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
+            __html: `<img src="//api.yotpo.com/conversion_tracking.gif?app_key=bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l&order_id={{order_name|handleize}}&order_amount={{subtotal_price|money_without_currency}}&order_currency={{ shop.currency }}" width="1" height="1" />`,
           }}
         />
-      )}
+        {process.env.NODE_ENV === "production" && (
+          <noscript
+            dangerouslySetInnerHTML={{
+              __html: `<iframe src="https://gtm.torsalonproducts.com/ns.html?id=GTM-MKG7C6H"
+            height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
+            }}
+          />
+        )}
       </PlausibleProvider>
+      <Script
+        src="https://t.cometlytrack.com/e?uid=cb9398-7126-b99785-s"
+        onLoad={() => {
+          //@ts-ignore
+          comet("init");
+        }}
+      />
       <Analytics />
     </>
   );

@@ -64,7 +64,6 @@ export default function ThankYou() {
 
     if (urlParams.get("event") === "purchase" && data) {
 
-
       const user_data = {
         em: createHash("sha256").update(data.email).digest("hex"),
       };
