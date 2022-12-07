@@ -33,5 +33,5 @@
     "pages/index.tsx",
     "pages/pages/[slug].tsx"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "cypress"]
 }
