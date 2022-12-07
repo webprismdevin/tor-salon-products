@@ -26,12 +26,9 @@ import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
 import React, {
   useState,
-  useContext,
   useRef,
   useEffect,
-  Suspense,
 } from "react";
-import CartContext from "../../lib/CartContext";
 import formatter from "../../lib/formatter";
 import { GetStaticProps } from "next";
 import Product from "../../components/Product/Product";
@@ -40,8 +37,8 @@ import { wrap } from "@popmotion/popcorn";
 import NextLink from "next/link";
 import { RatingStar } from "rating-star";
 import ReviewSubmit from "../../components/Product/ReviewSubmit";
-import addToCart from "../../lib/Cart/addToCart";
 import SubscriptionPlan from "../../components/Product/SubscriptionPlan";
+import useAddToCart from "../../lib/useAddToCart";
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -79,7 +76,7 @@ const ProductPage = ({
   reviews: any;
 }) => {
   const [itemQty, setItemQty] = useState(1);
-  const { cart, setCart } = useContext(CartContext);
+  const { addItemToCart } = useAddToCart();
   const [activeVariant, setActiveVariant] = useState<VariantType>(() => {
     if (!product) return null;
 
@@ -113,20 +110,7 @@ const ProductPage = ({
   const variants = product?.variants.edges;
 
   async function handleAddToCart() {
-    const response = await addToCart(
-      cart.id,
-      activeVariant.id,
-      itemQty,
-      subscriptionPlan
-    );
-
-    console.log(response);
-
-    setCart({
-      ...cart,
-      status: "dirty",
-      lines: response.cartLinesAdd.cart.lines,
-    });
+    addItemToCart(activeVariant.id, itemQty, subscriptionPlan)
   }
 
   function handleActiveVariantChange(id: string) {
@@ -251,9 +235,6 @@ const ProductPage = ({
                 ))}
               </Select>
             )}
-            {/* {variants.length > 1 && (
-            <Swatches variants={variants} />
-          )} */}
             <HStack
               border={"1px solid black"}
               alignSelf={["flex-end", "flex-start"]}

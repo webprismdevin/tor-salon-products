@@ -7,11 +7,13 @@ import formatter from "../../lib/formatter";
 import addToCart from "../../lib/Cart/addToCart";
 import CartContext from "../../lib/CartContext";
 import { useRouter } from "next/router";
+import useAddToCart from "../../lib/useAddToCart";
 
 export default function CartRecommendations() {
   const { cart, setCart } = useContext(CartContext);
   const [recommendations, setRecommendations] = useState<[any] | null>();
   const router = useRouter()
+  const { addItemToCart } = useAddToCart();
 
   async function getRecommendations(productId: string) {
     const query = gql`{
@@ -48,35 +50,7 @@ export default function CartRecommendations() {
   }, [cart.lines]);
 
   async function handleAddToCart(rec: any) {
-    console.log(rec);
-    const response = await addToCart(cart.id, rec.variants.edges[0].node.id, 1);
-
-    setCart({
-      ...cart,
-      status: "dirty",
-      lines: response.cartLinesAdd.cart.lines,
-    });
-
-    if (window.dataLayer) {
-      window.dataLayer.push({ ecommerce: null }); // Clear the previous ecommerce object.
-      window.dataLayer.push({
-        event: "add_to_cart",
-        ecommerce: {
-          items: [
-            {
-              item_id: rec.id,
-              item_name: rec.title,
-              affiliation: "Storefront",
-              item_brand: "TOR",
-              value: rec.variants.edges[0].node.priceV2.amount,
-              item_variant: rec.variants.edges[0].node.title,
-              currency: "USD",
-              item_category: rec.productType,
-            },
-          ],
-        },
-      });
-    }
+    addItemToCart(rec.variants.edges[0].node.id, 1, "");
   }
 
   if(router.asPath.includes("/offer")) return <></>

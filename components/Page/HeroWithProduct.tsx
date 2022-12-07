@@ -25,13 +25,13 @@ import Image from "next/legacy/image";
 import { RatingStar } from "rating-star";
 import React, { useContext, useEffect, useState } from "react";
 import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from "react-icons/ai";
-import addToCart from "../../lib/Cart/addToCart";
 import CartContext from "../../lib/CartContext";
 import { imageBuilder } from "../../lib/sanity";
 import { VariantContext } from "../../lib/pages/variant-context";
 import { ImageContext } from "../../lib/pages/image-context";
 import { SanityColorTheme, SanityImageReference } from "../../types/sanity";
 import PortableText from "../PortableText/PortableText";
+import useAddToCart from "../../lib/useAddToCart";
 
 export default function HeroWithProduct({
   hero,
@@ -222,7 +222,7 @@ function MainImage({ images }: { images: [any] }) {
         left={2}
         opacity={0.6}
       />
-      <AnimatePresence initial={true} custom={direction} mode='wait'>
+      <AnimatePresence initial={true} custom={direction} mode="wait">
         <MotionAspect
           flexShrink={0}
           ratio={1 / 1}
@@ -392,15 +392,10 @@ export function AddToCart() {
   const { variant } = useContext(VariantContext);
   const { cart, setCart } = useContext(CartContext);
   const [qty, setQty] = useState<any>(1);
+  const { addItemToCart } = useAddToCart();
 
   async function handleAddToCart() {
-    const response = await addToCart(cart.id, variant, qty, "");
-
-    setCart({
-      ...cart,
-      status: "dirty",
-      lines: response.cartLinesAdd.cart.lines,
-    });
+    addItemToCart(variant, qty, "");
   }
 
   return (
@@ -456,9 +451,9 @@ function Modules({ modules }: { modules: [ModuleProps] }) {
           case "trustIcons":
             return <TrustIcons key={module._key} groups={module.iconGroups} />;
           case "productDetails":
-            return <PortableText blocks={module.body!} key={module._key}  />;
+            return <PortableText blocks={module.body!} key={module._key} />;
           case "module.accordion":
-            return <HeroAccordion groups={module.groups} key={module._key}  />;
+            return <HeroAccordion groups={module.groups} key={module._key} />;
           default:
             return;
         }

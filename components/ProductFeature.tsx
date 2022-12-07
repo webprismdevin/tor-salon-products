@@ -16,40 +16,43 @@ import formatter from "../lib/formatter";
 import CartContext from "../lib/CartContext";
 import addToCart from "../lib/Cart/addToCart";
 import { useContext } from "react";
+import useAddToCart from "../lib/useAddToCart";
 
 export default function ProductFeature({ reference }: any) {
   const { cart, setCart } = useContext(CartContext);
+  const { addItemToCart } =  useAddToCart()
 
   async function handleAddToCart() {
-    const response = await addToCart(cart.id, reference.variants.edges[0].node.id, 1, "")
+    addItemToCart(reference.variants.edges[0].node.id, 1, "");
+    // const response = await addToCart(cart.id, reference.variants.edges[0].node.id, 1, "")
 
-    setCart({
-      ...cart,
-      status: "dirty",
-      lines: response.cartLinesAdd.cart.lines,
-    });
+    // setCart({
+    //   ...cart,
+    //   status: "dirty",
+    //   lines: response.cartLinesAdd.cart.lines,
+    // });
 
-    if (window.dataLayer) {
-      window.dataLayer.push({ ecommerce: null }); // Clear the previous ecommerce object.
-      window.dataLayer.push({
-        event: "add_to_cart",
-        ecommerce: {
-          items: [
-            {
-              item_id: reference.id,
-              item_name: reference.title,
-              affiliation: "Storefront",
-              item_brand: "TOR",
-              value: reference.priceRange.maxVariantPrice.amount,
-              item_variant: reference.title,
-              currency: "USD",
-              item_category: reference.productType,
-            },
-          ],
-        },
-        'eventTimeout' : 1200
-      });
-    }
+    // if (window.dataLayer) {
+    //   window.dataLayer.push({ ecommerce: null }); // Clear the previous ecommerce object.
+    //   window.dataLayer.push({
+    //     event: "add_to_cart",
+    //     ecommerce: {
+    //       items: [
+    //         {
+    //           item_id: reference.id,
+    //           item_name: reference.title,
+    //           affiliation: "Storefront",
+    //           item_brand: "TOR",
+    //           value: reference.priceRange.maxVariantPrice.amount,
+    //           item_variant: reference.title,
+    //           currency: "USD",
+    //           item_category: reference.productType,
+    //         },
+    //       ],
+    //     },
+    //     'eventTimeout' : 1200
+    //   });
+    // }
   }
 
   return (

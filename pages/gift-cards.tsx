@@ -25,6 +25,7 @@ import Product from "../components/Product/Product";
 import Script from "next/script";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { wrap } from "@popmotion/popcorn";
+import useAddToCart from "../lib/useAddToCart";
 
 declare interface VariantType {
   id: string;
@@ -36,46 +37,18 @@ declare interface VariantType {
 }
 
 export default function GiftCards({ product }: any) {
-  // const [itemQty, setItemQty] = useState(1);
   const { cart, setCart } = useContext(CartContext);
-  // const [yjsLoaded, setLoaded] = useState(false);
   const [activeVariant, setActiveVariant] = useState<VariantType>(() => {
     if (!product) return null;
 
     return product.variants.edges[0].node;
   });
-
-  // const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
-  //   useNumberInput({
-  //     step: 1,
-  //     defaultValue: itemQty,
-  //     min: 1,
-  //     precision: 0,
-  //     onChange: (valueAsString: string, valueAsNumber: number) =>
-  //       setItemQty(valueAsNumber),
-  //   });
-
-  // const inc = getIncrementButtonProps();
-  // const dec = getDecrementButtonProps();
-  // const input = getInputProps();
+  const { addItemToCart } = useAddToCart();
 
   const variants = product?.variants.edges;
 
   async function addToCart() {
-    const response = await fetch("/api/addtocart", {
-      method: "POST",
-      body: JSON.stringify({
-        variantId: activeVariant.id,
-        cartId: cart.id,
-        qty: 1,
-      }),
-    }).then((res) => res.json());
-
-    setCart({
-      ...cart,
-      status: "dirty",
-      lines: response.response.cartLinesAdd.cart.lines,
-    });
+    addItemToCart(activeVariant.id, 1, "");
   }
 
   function handleActiveVariantChange(id: string) {

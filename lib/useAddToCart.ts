@@ -1,3 +1,4 @@
+//this is not the typical ATC function
 import { useContext } from "react"
 import addToCart from "./Cart/addToCart";
 import CartContext from "./CartContext"
@@ -20,6 +21,20 @@ export default function useAddToCart(){
         });
     }
 
+    const addItemToCart = async (variantId:string, qty: number, subscriptionPlan: string) => {
+      console.log("fired addItemToCart")
+      const response = await addToCart(cart.id, variantId, qty, subscriptionPlan);
+
+      window.comet('add_to_cart');
+      plausible("Add To Cart")
+
+      setCart({
+        ...cart,
+        status: "dirty",
+        lines: response.cartLinesAdd.cart.lines,
+      });
+  }
+
     const instantCheckout = async (variantId: string) => {
       const response = await addToCart(cart.id, variantId, 1, "");
 
@@ -37,5 +52,5 @@ export default function useAddToCart(){
       }
     }
 
-    return [ singleAddToCart, instantCheckout ]
+    return { singleAddToCart, addItemToCart, instantCheckout }
 }

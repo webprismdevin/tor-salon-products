@@ -1,7 +1,9 @@
 import { gql } from "graphql-request";
+import { usePlausible } from "next-plausible";
 import graphClient from "../graph-client";
 
 export default async function addToCart(cartId:string, variantId:string, qty?:number, sellingPlanId?: string){
+
     const query = sellingPlanId !== "" ? gql`
       mutation AddToCart($cartId: ID!, $variantId: ID!, $sellingPlanId: ID!) {
         cartLinesAdd(

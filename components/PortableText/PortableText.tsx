@@ -93,7 +93,7 @@ export const ProductAnnotation = ({
 }: ProductAnnotationProps) => {
   const { productWithVariant } = mark;
   const [open, cycleOpen] = useCycle(false, true);
-  const [singleAddToCart, instantCheckout] = useAddToCart();
+  const { singleAddToCart, instantCheckout } = useAddToCart();
 
   const product = productWithVariant.product.store;
   const hasVariant = productWithVariant.variant;
