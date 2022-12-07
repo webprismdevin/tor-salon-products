@@ -11,7 +11,7 @@ export default function useAddToCart(){
         const response = await addToCart(cart.id, variantId, 1, "");
 
         window.comet('add_to_cart');
-        plausible("Add to Cart")
+        plausible("Add_To_Cart")
 
         setCart({
           ...cart,
