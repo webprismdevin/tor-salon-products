@@ -64,7 +64,7 @@ const Product = ({
             </span>
           )}
       </Text>
-      {prod.variants.edges.length === 1 ? <Button onClick={handleAddToCart} mt={4} size="lg">Add To Cart</Button> : <NextLink href={`/product/${prod.handle}`}><Button mt={4} size="lg">Select Size</Button></NextLink>}
+      {prod.variants.edges?.length === 1 ? <Button onClick={handleAddToCart} mt={4} size="lg">Add To Cart</Button> : <NextLink href={`/product/${prod.handle}`}><Button mt={4} size="lg">Select Size</Button></NextLink>}
     </GridItem>
   );
 };

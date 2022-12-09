@@ -436,7 +436,7 @@ const ProductPage = ({
           <Container maxW="container.xl" centerContent py={20}>
             <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
               {collection.products.edges.map((p: any, i: number) => (
-                <Product product={p} fontSize={24} key={i} />
+                <Product product={p} key={i} />
               ))}
             </SimpleGrid>
             <NextLink
@@ -702,6 +702,13 @@ export const getStaticProps: GetStaticProps = async (context) => {
                   compareAtPriceRange {
                     maxVariantPrice {
                       amount
+                    }
+                  }
+                  variants(first: 2) {
+                    edges {
+                      node {
+                        id
+                      }
                     }
                   }
                   images(first: 1) {
