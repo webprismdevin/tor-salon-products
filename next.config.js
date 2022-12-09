@@ -44,6 +44,11 @@ const nextConfig = {
       source: '/offer/try-tor',
       destination: '/pages/wash-style-bundle',
       permanent: true
+    },
+    {
+      source: '/type/:handle*',
+      destination: '/collection/:handle*',
+      permanent: true
     }]
   }
 }

@@ -7,11 +7,9 @@ import {
   Box,
   Stack,
   SimpleGrid,
-  GridItem,
   AspectRatio,
   Image,
   Flex,
-  Icon,
 } from "@chakra-ui/react";
 import getCollections from "../../lib/get-collections";
 import ProductFeature from "../../components/ProductFeature";
@@ -30,28 +28,20 @@ export default function CollectionPage({
     <>
       <Head>
         <title>{data.title} | TOR Salon Products</title>
-        <meta name="description" content={`${data.description.substring(0, 200)}...`}
- />
+        <meta
+          name="description"
+          content={`${data.description.substring(0, 200)}...`}
+        />
       </Head>
       <Flex
         flexDir={["column-reverse", "row"]}
         bg={data.color?.value ? data.color.value : "white"}
       >
-        <Box w={["full", "50%"]} px={[8, 20]} py={[20, 20]} pos="relative">
+        <Box w={["full", "50%"]} px={[8, 20]} py={[10, 20]} pos="relative">
           <Stack direction={["column"]} spacing={6} pos="relative" zIndex={1}>
             <Heading as="h1">{data.title}</Heading>
-            <Text 
-              maxW={600}
-              dangerouslySetInnerHTML={{
-              __html: data.descriptionHtml
-            }}/>
-            <Stack
-              direction={"row"}
-              textAlign="left"
-              justify="flex-start"
-              spacing={6}
-            >
-              <Box w="120px">
+            <Stack direction={"row"} justify="flex-start" spacing={6}>
+              <Stack align={"center"} textAlign="center" w="120px">
                 <Image
                   mb={2}
                   boxSize={6}
@@ -59,8 +49,8 @@ export default function CollectionPage({
                   alt={data.benefitOneText?.value}
                 />
                 <Text>{data.benefitOneText?.value}</Text>
-              </Box>
-              <Box w="120px">
+              </Stack>
+              <Stack align={"center"} textAlign="center" w="120px">
                 <Image
                   mb={2}
                   boxSize={6}
@@ -68,8 +58,8 @@ export default function CollectionPage({
                   alt={data.benefitTwoText?.value}
                 />
                 <Text>{data.benefitTwoText?.value}</Text>
-              </Box>
-              <Box w="120px">
+              </Stack>
+              <Stack align={"center"} textAlign="center" w="120px">
                 <Image
                   mb={2}
                   boxSize={6}
@@ -77,11 +67,18 @@ export default function CollectionPage({
                   alt={data.benefitThreeText?.value}
                 />
                 <Text>{data.benefitThreeText?.value}</Text>
-              </Box>
+              </Stack>
             </Stack>
+            <Text
+              maxW={600}
+              dangerouslySetInnerHTML={{
+                __html: data.descriptionHtml,
+              }}
+            />
           </Stack>
         </Box>
-        <AspectRatio ratio={1 / 1} w={["full", "50%"]}>
+
+        <AspectRatio ratio={[2/1]} w={["full", "50%"]} maxH={["200px", null, "100%"]}>
           <Image src={data.image?.url} alt="" />
         </AspectRatio>
       </Flex>
@@ -89,7 +86,11 @@ export default function CollectionPage({
         <ProductFeature reference={data.collectionFeature.reference} />
       )}
       <Container maxW="container.xl" pt={10} pb={20}>
-        <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
+        <SimpleGrid
+          templateColumns={["repeat(1, 1fr)", null, null, "repeat(3, 1fr)"]}
+          w="full"
+          gap={12}
+        >
           {data.products.edges.map((p: any) => (
             <Product product={p} key={p.node.id} />
           ))}
@@ -122,7 +123,7 @@ export async function getStaticProps(context: any) {
     }
   );
 
-  console.log(handle)
+  console.log(handle);
 
   // Shopify Request
   const query = gql`{
@@ -175,14 +176,14 @@ export async function getStaticProps(context: any) {
         color: metafield(namespace:"collection", key:"color"){
           value
         }
-        products(first: 100, sortKey: BEST_SELLING) {
+        products(first: 100) {
                 edges{
                     node {
                       id
                       title
                       description
                       handle
-                      variants(first: 1) {
+                      variants(first: 2) {
                         edges {
                           node {
                             id

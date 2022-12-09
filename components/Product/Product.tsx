@@ -1,4 +1,5 @@
-import { Text, GridItem, AspectRatio, Image } from "@chakra-ui/react";
+import { Text, GridItem, AspectRatio, Image, Link, Button } from "@chakra-ui/react";
+import useAddToCart from "lib/useAddToCart";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import formatter from "../../lib/formatter";
@@ -10,28 +11,61 @@ const Product = ({
   product: any;
   fontSize?: number;
 }) => {
+  const { addItemToCart } = useAddToCart();
   const prod = product.node;
-  const router = useRouter();
+
+  const handleAddToCart = () => {
+    addItemToCart(prod.variants.edges[0].node.id, 1, "");
+  }
 
   return (
-    <NextLink href={`/product/${prod.handle}`} passHref>
-      <GridItem
-        colSpan={[3, 3, 3, 1]}
-        textAlign="center"
-        placeItems={"center"}
-        display={"grid"}
-        pos={"relative"}
-        cursor={"pointer"}
-      >
+    <GridItem
+      colSpan={[3, 3, 3, 1]}
+      textAlign="center"
+      placeItems={"center"}
+      display={"grid"}
+      pos={"relative"}
+      cursor={"pointer"}
+    >
+      <NextLink href={`/product/${prod.handle}`} passHref>
         <AspectRatio ratio={1 / 1} boxSize={300} mb={4}>
-          <Image src={prod.images.edges[0]?.node.url} alt={prod.title} borderRadius={6} />
+          <Image
+            src={prod.images.edges[0]?.node.url}
+            alt={prod.title}
+            borderRadius={6}
+          />
         </AspectRatio>
-        <Text fontSize={fontSize ? fontSize : 32} maxW="300px" lineHeight={1.3} mb={2}>
+      </NextLink>
+      <NextLink href={`/product/${prod.handle}`} passHref>
+        <Link fontSize={[24, null, 32]} maxW="300px" lineHeight={1.3}>
           {prod.title}
-        </Text>
-        <Text>{formatter.format(prod.priceRange.minVariantPrice.amount)}{prod.priceRange.minVariantPrice?.amount !== prod.priceRange.maxVariantPrice.amount ? ` - ${formatter.format(prod.priceRange.maxVariantPrice.amount)}` : ""}{prod.compareAtPriceRange?.maxVariantPrice.amount !== "0.0" && prod.compareAtPriceRange?.maxVariantPrice.amount !== prod.priceRange.maxVariantPrice.amount && <span style={{textDecoration: 'line-through', marginLeft: 12, opacity: 0.4, fontSize: 18}}>{formatter.format(prod.compareAtPriceRange?.maxVariantPrice.amount)}</span>}</Text>
-      </GridItem>
-    </NextLink>
+        </Link>
+      </NextLink>
+      <Text mt={2}>
+        {formatter.format(prod.priceRange.minVariantPrice.amount)}
+        {prod.priceRange.minVariantPrice?.amount !==
+        prod.priceRange.maxVariantPrice.amount
+          ? ` - ${formatter.format(prod.priceRange.maxVariantPrice.amount)}`
+          : ""}
+        {prod.compareAtPriceRange?.maxVariantPrice.amount !== "0.0" &&
+          prod.compareAtPriceRange?.maxVariantPrice.amount !==
+            prod.priceRange.maxVariantPrice.amount && (
+            <span
+              style={{
+                textDecoration: "line-through",
+                marginLeft: 12,
+                opacity: 0.4,
+                fontSize: 18,
+              }}
+            >
+              {formatter.format(
+                prod.compareAtPriceRange?.maxVariantPrice.amount
+              )}
+            </span>
+          )}
+      </Text>
+      {prod.variants.edges.length === 1 ? <Button onClick={handleAddToCart} mt={4} size="lg">Add To Cart</Button> : <NextLink href={`/product/${prod.handle}`}><Button mt={4} size="lg">Select Size</Button></NextLink>}
+    </GridItem>
   );
 };
 

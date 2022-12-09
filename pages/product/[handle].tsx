@@ -444,7 +444,7 @@ const ProductPage = ({
               passHref
               legacyBehavior
             >
-              <Button mt={[8]}>See Collection</Button>
+              <Button mt={[8]} variant="ghost">See Collection</Button>
             </NextLink>
           </Container>
         </Box>
@@ -835,6 +835,13 @@ export const getStaticProps: GetStaticProps = async (context) => {
               compareAtPriceRange {
                 maxVariantPrice {
                   amount
+                }
+              }
+              variants(first: 2){
+                edges {
+                  node {
+                    id
+                  }
                 }
               }
               images(first: 1) {
