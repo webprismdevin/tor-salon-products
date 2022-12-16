@@ -3,9 +3,16 @@ import { useContext } from "react"
 import addToCart from "./Cart/addToCart";
 import CartContext from "./CartContext"
 import { usePlausible } from "next-plausible"
+import { createHash } from "crypto";
+import AuthContext from "./auth-context";
+
+function hash(data: string) {
+  return createHash("sha256").update(data).digest("hex")
+}
 
 export default function useAddToCart(){
     const { cart, setCart } = useContext(CartContext)
+    const { user } = useContext(AuthContext);
     const plausible = usePlausible()
 
     const singleAddToCart = async (variantId:string) => {
@@ -33,6 +40,30 @@ export default function useAddToCart(){
         status: "dirty",
         lines: response.cartLinesAdd.cart.lines,
       });
+
+      console.log(response.cartLinesAdd.cart.lines)
+
+      if (window.dataLayer) {
+        window.dataLayer.push({ ecommerce: null });
+        window.dataLayer.push({
+          event: "add_to_cart",
+          currency: "USD",
+          value: response.cartLinesAdd.cart.lines.edges[0].node.merchandise.priceV2.amount,
+          user_data: {
+            email: user ? hash(user.email) : null,
+          },
+          items: [
+            {
+              item_id: response.cartLinesAdd.cart.lines.edges[0].node.merchandise.product.id,
+              item_name: response.cartLinesAdd.cart.lines.edges[0].node.merchandise.product.title,
+              item_category: response.cartLinesAdd.cart.lines.edges[0].node.merchandise.product.productType,
+              price: response.cartLinesAdd.cart.lines.edges[0].node.merchandise.priceV2.amount,
+              quantity: 1,
+              item_variant: response.cartLinesAdd.cart.lines.edges[0].node.merchandise.title,
+            }
+          ],
+        });
+      }
   }
 
     const instantCheckout = async (variantId: string) => {

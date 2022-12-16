@@ -28,6 +28,7 @@ import React, {
   useState,
   useRef,
   useEffect,
+  useContext,
 } from "react";
 import formatter from "../../lib/formatter";
 import { GetStaticProps } from "next";
@@ -39,6 +40,8 @@ import { RatingStar } from "rating-star";
 import ReviewSubmit from "../../components/Product/ReviewSubmit";
 import SubscriptionPlan from "../../components/Product/SubscriptionPlan";
 import useAddToCart from "../../lib/useAddToCart";
+import AuthContext from "lib/auth-context";
+import { createHash } from "crypto";
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -75,6 +78,7 @@ const ProductPage = ({
   collections: any;
   reviews: any;
 }) => {
+  const { user } = useContext(AuthContext);
   const [itemQty, setItemQty] = useState(1);
   const { addItemToCart } = useAddToCart();
   const [activeVariant, setActiveVariant] = useState<VariantType>(() => {
@@ -119,26 +123,34 @@ const ProductPage = ({
   }
 
   useEffect(() => {
+    function hash(data: string) {
+      return createHash("sha256").update(data).digest("hex")
+    }
+
+    user && console.log(hash(user.email))
+
     if (window.dataLayer) {
+      window.dataLayer.push({ ecommerce: null });
       window.dataLayer.push({
         event: "view_item",
-        ecommerce: {
-          items: [
-            {
-              item_id: product.id,
-              item_name: product.title,
-              affiliation: "Storefront",
-              item_brand: "TOR",
-              value: activeVariant.priceV2.amount,
-              item_variant: activeVariant.title,
-              currency: "USD",
-              item_category: product.productType,
-            },
-          ],
+        user_data: {
+          email: user ? hash(user.email) : null,
         },
+        items: [
+          {
+            item_id: product.id,
+            item_name: product.title,
+            affiliation: "Storefront",
+            item_brand: "TOR",
+            item_category: product.productType,
+            value: activeVariant.priceV2.amount,
+            item_variant: activeVariant.title,
+            currency: "USD",
+          },
+        ],
       });
     }
-  }, [activeVariant]);
+  }, [activeVariant, user]);
 
   if (!product) return null;
 

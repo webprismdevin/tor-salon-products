@@ -8,9 +8,11 @@ export default async function handler(
   const query = gql`
     {
         order(id: "${req.query.orderId}") {
+            id
             displayAddress {
                 name
                 firstName
+                lastName
                 address1
                 address2
                 city
@@ -22,6 +24,7 @@ export default async function handler(
             billingAddress{
                 name
                 firstName
+                lastName
                 address1
                 address2
                 city
@@ -30,6 +33,13 @@ export default async function handler(
                 country
             }
             email
+            customer {
+                id 
+                firstName
+                lastName
+                email
+                phone
+            }
             note
             lineItems(first: 100) {
               edges {

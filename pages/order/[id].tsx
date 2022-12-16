@@ -17,7 +17,7 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import formatter from "../../lib/formatter";
 import { createHash } from "crypto";
-import { usePlausible } from 'next-plausible'
+import { usePlausible } from "next-plausible";
 
 declare interface LineItemType {
   node: {
@@ -25,13 +25,14 @@ declare interface LineItemType {
     image: { url: string };
     name: string;
     currentQuantity: number;
+    discountedTotalSet: { shopMoney: { amount: string } };
   };
 }
 
 export default function ThankYou() {
   const [auth, setAuth] = useState(false);
   const [data, setData] = useState<any>(null);
-  const plausible = usePlausible()
+  const plausible = usePlausible();
 
   const getOrder = async (id: string) => {
     const response = await fetch(`/api/get-order?orderId=${id}`).then((res) =>
@@ -59,46 +60,55 @@ export default function ThankYou() {
     getOrder(window.location.pathname.split("/")[2]);
   }, []);
 
+  function hash(data: string) {
+    return createHash("sha256").update(data).digest("hex")
+  }
+
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
 
-    if (urlParams.get("event") === "purchase" && data) {
-
-
+    if (data) {
       const user_data = {
-        em: createHash("sha256").update(data.email).digest("hex"),
+        email: hash(data.email),
       };
 
-      const orderId = window.location.pathname.split("/")[2];
+      console.log(user_data);
+    }
+
+    if (urlParams.get("event") === "purchase" && data) {
       const orderValue = parseFloat(data.currentTotalPriceSet.shopMoney.amount);
 
-      window.comet('purchase', {amount: orderValue});
+      // window.comet("purchase", { amount: orderValue });
 
       const itemsArray = data.lineItems.edges.map((i: LineItemType) => ({
         item_id: i.node.id, //string
         item_name: i.node.name, //string
-        currency: "USD", //string
         quantity: i.node.currentQuantity, //number
+        price: parseFloat(i.node.discountedTotalSet.shopMoney.amount), //number
+        currency: "USD", //string
+        item_brand: "TOR Salon Products", //string
       }));
 
       if (window.dataLayer) {
         window.dataLayer.push({ ecommerce: null });
         window.dataLayer.push({
           event: "purchase",
-          ecommerce: {
-            affiliation: "Storefront",
-            value: orderValue,
-            transaction_id: orderId, //string
-            currency: data.currencyCode,
-            items: itemsArray,
+          transaction_id: data.id,
+          currency: "USD",
+          value: orderValue,
+          user_data: {
+            email_address: hash(data.email),
+            phone_number: data.phone ? hash(data.phone) : null,
+            address: {
+              first_name: data.customer?.firstName ? hash(data.customer.firstName) : null,
+              last_name: data.customer?.lastName ? hash(data.customer.lastName) : null,
+              city: hash(data.displayAddress.city),
+              region: hash(data.displayAddress.province),
+              postal_code: hash(data.displayAddress.zip),
+              country: hash(data.displayAddress.country),
+            },
           },
-          eventModel: {
-            user_data,
-            value: orderValue,
-            currency: data.currencyCode,
-            transaction_id: orderId,
-          },
-          eventCallback: () => console.log("event pushed"),
+          items: itemsArray,
         });
       }
     }
@@ -111,35 +121,69 @@ export default function ThankYou() {
       </Container>
     );
 
-  return <>
-    <Head>
-      <title>Thank You!</title>
-      <meta
-        name="description"
-        content="Thank you for your purchase! You'll receive an order confirmation at the email your provided during checkout!"
-      />
-    </Head>
-    <Container py={20} maxW="container.xl">
-      <SimpleGrid templateColumns={"repeat(3, 1fr)"} gap={[8]}>
-        <GridItem colSpan={[3, 2]}>
-          <Stack spacing={8} align="flex-start">
-            <Box>
+  return (
+    <>
+      <Head>
+        <title>Thank You!</title>
+        <meta
+          name="description"
+          content="Thank you for your purchase! You'll receive an order confirmation at the email your provided during checkout!"
+        />
+      </Head>
+      <Container py={20} maxW="container.xl">
+        <SimpleGrid templateColumns={"repeat(3, 1fr)"} gap={[8]}>
+          <GridItem colSpan={[3, 2]}>
+            <Stack spacing={8} align="flex-start">
+              <Box>
+                <Text fontSize="2xl" fontWeight={600}>
+                  Thank you, {data.displayAddress?.firstName}!
+                </Text>
+                <Text>
+                  We appreciate your business, and look forward to shipping your
+                  order!
+                </Text>
+              </Box>
+              <Box bg={"gray.200"} px={4} py={2} borderRadius={6}>
+                <Text>
+                  You&apos;ll receive an email shortly with your shipping and
+                  tracking details.
+                </Text>
+              </Box>
+              <Stack
+                display={["none", "inherit"]}
+                spacing={16}
+                justify="flex-start"
+                direction={["column", "row"]}
+              >
+                <ShippingDetails displayAddress={data.displayAddress} />
+                <BillingDetails billingAddress={data.billingAddress} />
+                <NextLink href="/" passHref legacyBehavior>
+                  <Button>Continue Shopping</Button>
+                </NextLink>
+              </Stack>
+            </Stack>
+          </GridItem>
+          <GridItem
+            colSpan={[3, 1]}
+            bg={"gray.200"}
+            p={6}
+            borderRadius={6}
+            pos="sticky"
+          >
+            <Stack w="full" spacing={4}>
               <Text fontSize="2xl" fontWeight={600}>
-                Thank you, {data.displayAddress?.firstName}!
+                Order Summary
               </Text>
-              <Text>
-                We appreciate your business, and look forward to shipping your
-                order!
-              </Text>
-            </Box>
-            <Box bg={"gray.200"} px={4} py={2} borderRadius={6}>
-              <Text>
-                You&apos;ll receive an email shortly with your shipping and
-                tracking details.
-              </Text>
-            </Box>
+              <Divider borderColor={"black"} />
+              {data.lineItems.edges.map((product: any) => (
+                <LineItem key={product.node.id} product={product} />
+              ))}
+              <Divider borderColor={"black"} />
+              <PurchaseDetails data={data} />
+            </Stack>
+          </GridItem>
+          <GridItem colSpan={[3, 1]} display={["inherit", "none"]}>
             <Stack
-              display={["none", "inherit"]}
               spacing={16}
               justify="flex-start"
               direction={["column", "row"]}
@@ -150,68 +194,36 @@ export default function ThankYou() {
                 <Button>Continue Shopping</Button>
               </NextLink>
             </Stack>
-          </Stack>
-        </GridItem>
-        <GridItem
-          colSpan={[3, 1]}
-          bg={"gray.200"}
-          p={6}
-          borderRadius={6}
-          pos="sticky"
-        >
-          <Stack w="full" spacing={4}>
-            <Text fontSize="2xl" fontWeight={600}>
-              Order Summary
-            </Text>
-            <Divider borderColor={"black"} />
-            {data.lineItems.edges.map((product: any) => (
-              <LineItem key={product.node.id} product={product} />
-            ))}
-            <Divider borderColor={"black"} />
-            <PurchaseDetails data={data} />
-          </Stack>
-        </GridItem>
-        <GridItem colSpan={[3, 1]} display={["inherit", "none"]}>
-          <Stack
-            spacing={16}
-            justify="flex-start"
-            direction={["column", "row"]}
-          >
-            <ShippingDetails displayAddress={data.displayAddress} />
-            <BillingDetails billingAddress={data.billingAddress} />
-            <NextLink href="/" passHref legacyBehavior>
-              <Button>Continue Shopping</Button>
-            </NextLink>
-          </Stack>
-        </GridItem>
-      </SimpleGrid>
-      {!auth && (
-        <>
-          <Divider pt={20} />
-          <VStack py={[5, 10]}>
-            <Text fontWeight={600}>Want to track your order?</Text>
-            <Text>
-              <NextLink href="/login" passHref legacyBehavior>
-                <Link textDecor={"underline"}>Create an account</Link>
-              </NextLink>{" "}
-              with the same email you used for your purchase. Or{" "}
-              <NextLink href="/login" passHref legacyBehavior>
-                <Link textDecor={"underline"}>login</Link>
-              </NextLink>
-              .
-            </Text>
-          </VStack>
-        </>
-      )}
-    </Container>
-    <noscript
-      dangerouslySetInnerHTML={{
-        __html: `<img src="https://www.facebook.com/tr?id=${
-          process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID
-        }&ev=Purchase&eid=${window.location.pathname.split("/")[2]}"/>`,
-      }}
-    />
-  </>;
+          </GridItem>
+        </SimpleGrid>
+        {!auth && (
+          <>
+            <Divider pt={20} />
+            <VStack py={[5, 10]}>
+              <Text fontWeight={600}>Want to track your order?</Text>
+              <Text>
+                <NextLink href="/login" passHref legacyBehavior>
+                  <Link textDecor={"underline"}>Create an account</Link>
+                </NextLink>{" "}
+                with the same email you used for your purchase. Or{" "}
+                <NextLink href="/login" passHref legacyBehavior>
+                  <Link textDecor={"underline"}>login</Link>
+                </NextLink>
+                .
+              </Text>
+            </VStack>
+          </>
+        )}
+      </Container>
+      <noscript
+        dangerouslySetInnerHTML={{
+          __html: `<img src="https://www.facebook.com/tr?id=${
+            process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID
+          }&ev=Purchase&eid=${window.location.pathname.split("/")[2]}"/>`,
+        }}
+      />
+    </>
+  );
 }
 
 function BillingDetails({ billingAddress }: any) {
@@ -305,7 +317,8 @@ function LineItem({ product }: any) {
 }
 
 // old GTM code from Shopify
-{/* <script>
+{
+  /* <script>
 (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
             j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -315,4 +328,5 @@ function LineItem({ product }: any) {
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKG7C6H"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) --> */}
+<!-- End Google Tag Manager (noscript) --> */
+}
