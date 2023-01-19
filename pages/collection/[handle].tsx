@@ -69,7 +69,7 @@ export default function CollectionPage({
                 <Text>{data.benefitThreeText?.value}</Text>
               </Stack>
             </Stack>
-            <Text
+            <Box
               maxW={600}
               dangerouslySetInnerHTML={{
                 __html: data.descriptionHtml,

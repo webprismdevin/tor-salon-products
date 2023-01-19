@@ -47,6 +47,7 @@ declare global {
     Tawk_API: any;
     dataLayer: any;
     comet: any;
+    fbq: any;
   }
 }
 

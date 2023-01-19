@@ -36,7 +36,7 @@ const Product = ({
           />
         </AspectRatio>
       </NextLink>
-      <NextLink href={`/product/${prod.handle}`} passHref>
+      <NextLink href={`/product/${prod.handle}`} passHref legacyBehavior>
         <Link fontSize={[24, null, 32]} maxW="300px" lineHeight={1.3}>
           {prod.title}
         </Link>

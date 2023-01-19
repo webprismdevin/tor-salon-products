@@ -523,7 +523,7 @@ function PhotoCarousel({ images }: any) {
       maxH={["400px", "100%"]}
     >
       <AspectRatio ratio={1}>
-        <AnimatePresence exitBeforeEnter>
+        <AnimatePresence mode="wait">
           <MotionImage
             key={images[index].node.url}
             src={images[index].node.url}

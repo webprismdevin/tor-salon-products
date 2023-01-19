@@ -33,15 +33,31 @@ import ShopPayInstallments from "./ShopPayInstallments";
 import DiscountCodeInput from "./DiscountCodeInput";
 import { SiApplepay, SiGooglepay, SiMastercard, SiPaypal, SiVisa } from "react-icons/si";
 import { usePlausible } from "next-plausible";
+import AuthContext from "lib/auth-context";
+import { createHash } from "crypto";
+
+declare interface LineItemType {
+  node: {
+    id: string;
+    image: { url: string };
+    name: string;
+    currentQuantity: number;
+    discountedTotalSet: { shopMoney: { amount: string } };
+  };
+}
 
 const Cart = ({ color }: { color?: string }) => {
+  const { user } = useContext(AuthContext);
   const { cart, setCart } = useContext(CartContext);
   const [cartQty, setCartQty] = useState<number | null>(null);
   const router = useRouter();
-  const toast = useToast();
   const plausible = usePlausible();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  function hash(data: string) {
+    return createHash("sha256").update(data).digest("hex")
+  }  
 
   useEffect(() => {
     if (cart.lines.length > 1) {
@@ -127,15 +143,43 @@ const Cart = ({ color }: { color?: string }) => {
   }
 
   async function handleCheckout() {
+
+    const itemsArray = cart.lines.edges.map((i: LineItemType) => ({
+      item_id: i.node.id, //string
+      item_name: i.node.name, //string
+      quantity: i.node.currentQuantity, //number
+      price: parseFloat(i.node.discountedTotalSet.shopMoney.amount), //number
+      currency: "USD", //string
+      item_brand: "TOR Salon Products", //string
+    }));
+
+    console.log(itemsArray)
+
     if (process.env.NODE_ENV === "production") {
       window.comet('initiate_checkout')
       plausible("Checkout")
 
-      window.dataLayer.push({
-        event: "begin_checkout",
-        eventCallback: () => (window.location.href = cart.checkoutUrl),
-        eventTimeout: 2400,
-      });
+      if (window.dataLayer) {
+        window.dataLayer.push({ ecommerce: null });
+        window.dataLayer.push({
+          event: "add_to_cart",
+          currency: "USD",
+          value: cart.estimatedCost.totalAmount.amount,
+          user_data: {
+            email: user ? hash(user.email) : null,
+          },
+          items: [
+            // {
+            //   item_id: response.cartLinesAdd.cart.lines.edges[0].node.merchandise.product.id,
+            //   item_name: response.cartLinesAdd.cart.lines.edges[0].node.merchandise.product.title,
+            //   item_category: response.cartLinesAdd.cart.lines.edges[0].node.merchandise.product.productType,
+            //   price: response.cartLinesAdd.cart.lines.edges[0].node.merchandise.priceV2.amount,
+            //   quantity: 1,
+            //   item_variant: response.cartLinesAdd.cart.lines.edges[0].node.merchandise.title,
+            // }
+          ],
+        });
+      }
     }
     if (process.env.NODE_ENV === "development") {
       window.location.href = cart.checkoutUrl;
