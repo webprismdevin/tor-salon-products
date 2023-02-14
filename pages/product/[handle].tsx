@@ -127,15 +127,15 @@ const ProductPage = ({
       return createHash("sha256").update(data).digest("hex")
     }
 
-    user && console.log(hash(user.email))
+    // user && console.log(hash(user.email))
 
     if (window.dataLayer) {
       window.dataLayer.push({ ecommerce: null });
       window.dataLayer.push({
         event: "view_item",
-        user_data: {
-          email: user ? hash(user.email) : null,
-        },
+        // user_data: {
+        //   email: user ? hash(user.email) : null,
+        // },
         items: [
           {
             item_id: product.id,
