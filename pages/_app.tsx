@@ -110,11 +110,13 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   const hasUserConsent = true;
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const analytics = {
     hasUserConsent,
     ...analyticsShopData,
     ...pageProps.analytics,
   };
+
   const pagePropsWithAppAnalytics = {
     ...pageProps,
     analytics,
@@ -162,6 +164,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       });
     }
   }, [cart.id]);
+
+  useShopifyCookies();
+
 
   return (
     <>

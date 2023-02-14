@@ -23,6 +23,7 @@ import { FiArrowRight, FiBookOpen, FiCreditCard, FiGift } from "react-icons/fi";
 import dynamic from "next/dynamic";
 import { sanity } from "../lib/sanity";
 import curlyHairGirl from "../public/images/home/img1.png";
+import { AnalyticsPageType } from "@shopify/hydrogen-react";
 
 const Testimonials = dynamic(() => import("../components/Home/Testimonials"));
 const ProductFeature = dynamic(() => import("../components/Home/HomeFeature"));
@@ -661,6 +662,9 @@ export async function getStaticProps() {
       collection: res.featured,
       products: res.featured.products.edges,
       body: res.body.products.edges,
+      analytics: {
+        pageType: AnalyticsPageType.home,
+      }
     },
     revalidate: 10,
   };
