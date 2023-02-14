@@ -30,6 +30,13 @@ import "../styles/globals.css";
 import "@fontsource/raleway/400.css";
 import AnalyticsScripts from "components/AnalyticsScripts";
 
+import {
+  sendShopifyAnalytics,
+  getClientBrowserParameters,
+  AnalyticsEventName,
+  useShopifyCookies,
+} from '@shopify/hydrogen-react';
+
 const Banner = dynamic(() => import("../components/Global/Banner"));
 const Navigation = dynamic(() => import("../components/Global/Navigation"));
 const Follow = dynamic(() => import("../components/Global/Follow"), {
@@ -50,6 +57,26 @@ declare global {
     fbq: any;
   }
 }
+
+async function sendPageView(analyticsPageData:any) {
+  const payload = {
+    ...getClientBrowserParameters(),
+    ...analyticsPageData,
+  };
+
+  console.log(payload)
+
+  sendShopifyAnalytics({
+    eventName: AnalyticsEventName.PAGE_VIEW,
+    payload,
+  });
+}
+
+const analyticsShopData = {
+  shopId: 'gid://shopify/Shop/62876287222',
+  currency: 'USD',
+  acceptedLanguage: 'en',
+};
 
 const customTheme: ThemeConfig = extendTheme(defaultTheme, themeConfig);
 
@@ -80,6 +107,32 @@ function MyApp({ Component, pageProps }: AppProps) {
   const { data: settings, error } = useSWR(settingsQuery, sanityFetcher);
   const shop = { name: "TOR Salon Products" };
   const toast = useToast();
+
+  const hasUserConsent = true;
+
+  const analytics = {
+    hasUserConsent,
+    ...analyticsShopData,
+    ...pageProps.analytics,
+  };
+  const pagePropsWithAppAnalytics = {
+    ...pageProps,
+    analytics,
+  };
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      sendPageView(analytics);
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [analytics, router.events]);
+
+  useShopifyCookies();
 
   useEffect(() => {
     if (typeof window) {
@@ -133,7 +186,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                   <Banner data={settings.banner} />
                 )}
                 <Navigation menu={settings?.menu} />
-                <Component key={router.asPath} {...pageProps} />
+                <Component key={router.asPath} {...pagePropsWithAppAnalytics} />
               </CartContext.Provider>
               <Follow />
               <Suspense fallback={"..."}>

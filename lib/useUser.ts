@@ -53,7 +53,7 @@ function useUser() {
 
     setUser({
       ...response.customer,
-      isPro: response.customer.tags.includes("Professional"),
+      isPro: response.customer?.tags.includes("Professional"),
     });
   }
 
