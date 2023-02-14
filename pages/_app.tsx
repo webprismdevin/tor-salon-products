@@ -35,7 +35,9 @@ import {
   getClientBrowserParameters,
   AnalyticsEventName,
   useShopifyCookies,
-} from '@shopify/hydrogen-react';
+  ShopifyPageViewPayload,
+  ShopifyProvider,
+} from "@shopify/hydrogen-react";
 
 const Banner = dynamic(() => import("../components/Global/Banner"));
 const Navigation = dynamic(() => import("../components/Global/Navigation"));
@@ -58,13 +60,14 @@ declare global {
   }
 }
 
-async function sendPageView(analyticsPageData:any) {
+// shopify analytics
+function sendPageView(analyticsPageData: ShopifyPageViewPayload) {
   const payload = {
     ...getClientBrowserParameters(),
     ...analyticsPageData,
   };
 
-  console.log(payload)
+  console.log(payload);
 
   sendShopifyAnalytics({
     eventName: AnalyticsEventName.PAGE_VIEW,
@@ -73,10 +76,13 @@ async function sendPageView(analyticsPageData:any) {
 }
 
 const analyticsShopData = {
-  shopId: 'gid://shopify/Shop/62876287222',
-  currency: 'USD',
-  acceptedLanguage: 'en',
+  shopId: "gid://shopify/Shop/62876287222",
+  currency: "USD",
+  acceptedLanguage: "en",
 };
+
+let isInit = false;
+// shopify analytics
 
 const customTheme: ThemeConfig = extendTheme(defaultTheme, themeConfig);
 
@@ -127,10 +133,16 @@ function MyApp({ Component, pageProps }: AppProps) {
       sendPageView(analytics);
     };
 
-    router.events.on('routeChangeComplete', handleRouteChange);
+    // First load event guard
+    if (!isInit) {
+      isInit = true;
+      sendPageView(analytics);
+    }
+
+    router.events.on("routeChangeComplete", handleRouteChange);
 
     return () => {
-      router.events.off('routeChangeComplete', handleRouteChange);
+      router.events.off("routeChangeComplete", handleRouteChange);
     };
   }, [analytics, router.events]);
 
@@ -165,38 +177,46 @@ function MyApp({ Component, pageProps }: AppProps) {
     }
   }, [cart.id]);
 
-  useShopifyCookies();
-
-
   return (
     <>
       <PlausibleProvider domain="torsalonproducts.com">
         <ChakraProvider theme={customTheme}>
           <AuthContext.Provider value={{ user, setUser, token, setToken }}>
             <ShopContext.Provider value={{ shop }}>
-              <Head>
-                <meta name="theme-color" content="#ffffff" />
-                <link rel="shortcut icon" href="/favicon.png" />
-                <meta
-                  name="facebook-domain-verification"
-                  content="bk02y72cdwvcwzina508gmb7xv87g6"
-                />
-                <meta
-                  name="cometly-domain-verification"
-                  content="6de624a4-60c8-4edd-aad5-822f79a45528"
-                />
-              </Head>
-              <CartContext.Provider value={{ cart, setCart }}>
-                {router.pathname !== "/wholesale" && settings && (
-                  <Banner data={settings.banner} />
-                )}
-                <Navigation menu={settings?.menu} />
-                <Component key={router.asPath} {...pagePropsWithAppAnalytics} />
-              </CartContext.Provider>
-              <Follow />
-              <Suspense fallback={"..."}>
-                <Footer />
-              </Suspense>
+              <ShopifyProvider
+                storeDomain="https://tor-salon-products.myshopify.com"
+                storefrontToken="a37e8b74cb52b6e0609c948c43bb0a5c"
+                storefrontApiVersion="2023-01"
+                countryIsoCode="US"
+                languageIsoCode="EN"
+              >
+                <Head>
+                  <meta name="theme-color" content="#ffffff" />
+                  <link rel="shortcut icon" href="/favicon.png" />
+                  <meta
+                    name="facebook-domain-verification"
+                    content="bk02y72cdwvcwzina508gmb7xv87g6"
+                  />
+                  <meta
+                    name="cometly-domain-verification"
+                    content="6de624a4-60c8-4edd-aad5-822f79a45528"
+                  />
+                </Head>
+                <CartContext.Provider value={{ cart, setCart }}>
+                  {router.pathname !== "/wholesale" && settings && (
+                    <Banner data={settings.banner} />
+                  )}
+                  <Navigation menu={settings?.menu} />
+                  <Component
+                    key={router.asPath}
+                    {...pagePropsWithAppAnalytics}
+                  />
+                </CartContext.Provider>
+                <Follow />
+                <Suspense fallback={"..."}>
+                  <Footer />
+                </Suspense>
+              </ShopifyProvider>
             </ShopContext.Provider>
           </AuthContext.Provider>
           <ColorModeScript initialColorMode={customTheme.initialColorMode} />
