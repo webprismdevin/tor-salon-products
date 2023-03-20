@@ -77,8 +77,6 @@ export default function ThankYou() {
     if (urlParams.get("event") === "purchase" && data) {
       const orderValue = parseFloat(data.currentTotalPriceSet.shopMoney.amount);
 
-      window.comet("purchase", { amount: orderValue });
-
       const itemsArray = data.lineItems.edges.map((i: LineItemType) => ({
         item_id: i.node.id, //string
         item_name: i.node.name, //string

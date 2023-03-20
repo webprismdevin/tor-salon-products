@@ -13,10 +13,13 @@ export default async function updateCartItemQty(
           id
           checkoutUrl
           estimatedCost {
-            totalAmount {
-              amount
+            subtotalAmount {
+                amount
             }
-          }
+            totalAmount {
+                amount
+            }
+        }
           discountCodes {
             applicable
             code

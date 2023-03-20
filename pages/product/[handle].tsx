@@ -42,6 +42,7 @@ import SubscriptionPlan from "../../components/Product/SubscriptionPlan";
 import useAddToCart from "../../lib/useAddToCart";
 import AuthContext from "lib/auth-context";
 import { createHash } from "crypto";
+import { AnalyticsPageType, ShopifySalesChannel } from "@shopify/hydrogen-react";
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -68,6 +69,7 @@ const returnCollection = (handle: string) => {
 };
 
 const ProductPage = ({
+  handle,
   product,
   collection,
   reviews,
@@ -162,6 +164,18 @@ const ProductPage = ({
           name="description"
           content={`${product.description.substring(0, 200)}...`}
         />
+        <meta property="og:title" content={product.title}/>
+        <meta property="og:description" content={product.description.substring(0, 500)}/>
+        <meta property="og:url" content={`https://torsalonproducts.com/products/${handle}`} />
+        <meta property="og:image" content={product.images.edges[0].node.url}/>
+        <meta property="product:brand" content="TOR Salon Products"/>
+        <meta property="product:availability" content="in stock"/>
+        <meta property="product:condition" content="new"/>
+        <meta property="product:price:amount" content={activeVariant.priceV2.amount}/>
+        <meta property="product:price:currency" content="USD"/>
+        <meta property="product:catalog_id" content="711750850270833"/>
+        <meta property="product:category" content="486" />
+        <meta property="product:retailer_item_id" content={product.id}/>
       </Head>
       <SimpleGrid templateColumns={"repeat(2, 1fr)"}>
         <GridItem colSpan={[2, 1]}>
@@ -952,6 +966,12 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   return {
     props: {
+      analytics: {
+        pageType: AnalyticsPageType.product,
+        salesChannel: ShopifySalesChannel.headless,
+        resourceId: res.product.id
+      },
+      handle,
       key: handle,
       reviews: reviews.response,
       product: res.product,
