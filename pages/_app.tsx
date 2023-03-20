@@ -197,10 +197,6 @@ function MyApp({ Component, pageProps }: AppProps) {
                     name="facebook-domain-verification"
                     content="bk02y72cdwvcwzina508gmb7xv87g6"
                   />
-                  <meta
-                    name="cometly-domain-verification"
-                    content="6de624a4-60c8-4edd-aad5-822f79a45528"
-                  />
                 </Head>
                 <CartContext.Provider value={{ cart, setCart }}>
                   {router.pathname !== "/wholesale" && settings && (

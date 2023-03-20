@@ -18,7 +18,6 @@ export default function useAddToCart() {
   const singleAddToCart = async (variantId: string) => {
     const response = await addToCart(cart.id, variantId, 1, "");
 
-    window.comet("add_to_cart");
     plausible("Add_To_Cart");
 
     setCart({
@@ -37,7 +36,6 @@ export default function useAddToCart() {
     const response = await addToCart(cart.id, variantId, qty, subscriptionPlan);
 
     if (process.env.NODE_ENV === "production") {
-      window.comet("add_to_cart");
       plausible("Add To Cart");
     }
 
