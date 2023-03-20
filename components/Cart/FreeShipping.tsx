@@ -8,9 +8,9 @@ export default function FreeShippingProgress({ cart }: { cart?: any }) {
       <Stack direction="row" w="full" justify={"space-between"}>
         <Box>
           <Box>
-            {cart.estimatedCost.subtotalAmount.amount < 100 ? (
+            {cart.estimatedCost?.subtotalAmount?.amount < 100 ? (
               <Text textAlign={"center"}>
-                Add ${100 - Math.ceil(cart.estimatedCost.subtotalAmount.amount)} for free
+                Add ${100 - Math.ceil(cart.estimatedCost?.subtotalAmount?.amount)} for free
                 shipping!
               </Text>
             ) : (
@@ -23,9 +23,9 @@ export default function FreeShippingProgress({ cart }: { cart?: any }) {
       <Progress
         mt={2}
         size="lg"
-        value={cart.estimatedCost.subtotalAmount.amount}
+        value={cart.estimatedCost?.subtotalAmount?.amount}
         colorScheme={
-          cart.estimatedCost.subtotalAmount.amount < 100 ? "orange" : "green"
+          cart.estimatedCost?.subtotalAmount?.amount < 100 ? "orange" : "green"
         }
       />
     </Box>
