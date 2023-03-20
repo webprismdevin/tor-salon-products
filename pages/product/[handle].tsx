@@ -162,6 +162,18 @@ const ProductPage = ({
           name="description"
           content={`${product.description.substring(0, 200)}...`}
         />
+        <meta property="og:title" content={product.title}/>
+        <meta property="og:product:retailer_item_id" content={product.id}/>
+        <meta property="og:description" content={product.description.substring(0, 500)}/>
+        <meta property="og:url" content={`https://torsalonproducts.com/products/${product.handle}`} />
+        <meta property="og:image" content={product.images.edges[0].node.url}/>
+        <meta property="product:brand" content="TOR Salon Products"/>
+        <meta property="product:availability" content="in stock"/>
+        <meta property="product:condition" content="new"/>
+        <meta property="product:price:amount" content={activeVariant.priceV2.amount}/>
+        <meta property="product:price:currency" content="USD"/>
+        <meta property="product:catalog_id" content="711750850270833"/>
+        <meta property="product:category" content="486" />
       </Head>
       <SimpleGrid templateColumns={"repeat(2, 1fr)"}>
         <GridItem colSpan={[2, 1]}>
