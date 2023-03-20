@@ -60,18 +60,19 @@ export default function ThankYou() {
   }, []);
 
   function hash(data: string) {
-    return createHash("sha256").update(data).digest("hex")
+    return createHash("sha256").update(data).digest("hex");
   }
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
 
     if (data) {
-      const user_data = {
-        email: hash(data.email),
-      };
+      const { email, phone } = data.customer;
 
-      console.log(user_data);
+      const user_data = {
+        email: email ? hash(email) : null,
+        phone: phone ? hash(phone) : null,
+      };
     }
 
     if (urlParams.get("event") === "purchase" && data) {
@@ -94,11 +95,15 @@ export default function ThankYou() {
           currency: "USD",
           value: orderValue,
           user_data: {
-            email_address: hash(data.email),
-            phone_number: data.phone ? hash(data.phone) : null,
+            email_address: data.email ? hash(data.email) : null,
+            phone_number: data.customer.phone ? hash(data.phone) : null,
             address: {
-              first_name: data.customer?.firstName ? hash(data.customer.firstName) : null,
-              last_name: data.customer?.lastName ? hash(data.customer.lastName) : null,
+              first_name: data.customer?.firstName
+                ? hash(data.customer.firstName)
+                : null,
+              last_name: data.customer?.lastName
+                ? hash(data.customer.lastName)
+                : null,
               city: hash(data.displayAddress.city),
               region: hash(data.displayAddress.province),
               postal_code: hash(data.displayAddress.zip),

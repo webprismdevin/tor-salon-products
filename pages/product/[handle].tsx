@@ -583,7 +583,7 @@ export async function getStaticPaths() {
     process.env.NEXT_PUBLIC_SHOPIFY_URL!,
     {
       headers: {
-        "X-Shopify-Storefront-Access-Token": process.env.NEXT_PUBLIC_TOKEN!,
+        "X-Shopify-Storefront-Access-Token": process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN!,
       },
     }
   );
@@ -659,7 +659,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     process.env.NEXT_PUBLIC_SHOPIFY_URL!,
     {
       headers: {
-        "X-Shopify-Storefront-Access-Token": process.env.NEXT_PUBLIC_TOKEN!,
+        "X-Shopify-Storefront-Access-Token": process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN!,
       },
     }
   );

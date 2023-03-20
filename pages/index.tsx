@@ -510,7 +510,7 @@ export async function getStaticProps() {
     process.env.NEXT_PUBLIC_SHOPIFY_URL!,
     {
       headers: {
-        "X-Shopify-Storefront-Access-Token": process.env.NEXT_PUBLIC_TOKEN!,
+        "X-Shopify-Storefront-Access-Token": process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN!,
       },
     }
   );
