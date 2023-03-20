@@ -1,7 +1,7 @@
 import { createStorefrontClient } from "@shopify/hydrogen-react";
 
 const client = createStorefrontClient({
-    privateStorefrontToken: process.env.SHOPIFY_STOREFRONT_TOKEN!,
+    publicStorefrontToken: "a37e8b74cb52b6e0609c948c43bb0a5c",
     storeDomain: 'tor-salon-products.myshopify.com',
     storefrontApiVersion: process.env.SHOPIFY_API_VERSION!,
   });

@@ -42,6 +42,7 @@ import SubscriptionPlan from "../../components/Product/SubscriptionPlan";
 import useAddToCart from "../../lib/useAddToCart";
 import AuthContext from "lib/auth-context";
 import { createHash } from "crypto";
+import { AnalyticsPageType, ShopifySalesChannel } from "@shopify/hydrogen-react";
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -964,6 +965,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   return {
     props: {
+      analytics: {
+        pageType: AnalyticsPageType.product,
+        salesChannel: ShopifySalesChannel.headless,
+        resourceId: res.product.id
+      },
       key: handle,
       reviews: reviews.response,
       product: res.product,
