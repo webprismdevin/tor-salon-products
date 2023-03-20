@@ -4,14 +4,6 @@ export default function AnalyticsScripts() {
   if (process.env.NODE_ENV === "production")
     return (
       <>
-        {/* Cometly */}
-        <Script
-          src="https://t.cometlytrack.com/e?uid=cb9398-7126-b99785-s"
-          onLoad={() => {
-            // @ts-ignore
-            window.comet("init");
-          }}
-        />
         <Script
           id="facebook_pixel"
           strategy="afterInteractive"

@@ -35,7 +35,7 @@ import {
   getClientBrowserParameters,
   AnalyticsEventName,
   useShopifyCookies,
-  ShopifyPageViewPayload,
+  type ShopifyPageViewPayload,
   ShopifyProvider,
 } from "@shopify/hydrogen-react";
 
@@ -62,17 +62,17 @@ declare global {
 
 // shopify analytics
 function sendPageView(analyticsPageData: ShopifyPageViewPayload) {
-  const payload = {
+  const payload: ShopifyPageViewPayload = {
     ...getClientBrowserParameters(),
     ...analyticsPageData,
   };
-
-  console.log(payload);
-
+  console.log(payload)
   sendShopifyAnalytics({
     eventName: AnalyticsEventName.PAGE_VIEW,
     payload,
   });
+
+  console.log("sendPageView")
 }
 
 const analyticsShopData = {
@@ -196,10 +196,6 @@ function MyApp({ Component, pageProps }: AppProps) {
                   <meta
                     name="facebook-domain-verification"
                     content="bk02y72cdwvcwzina508gmb7xv87g6"
-                  />
-                  <meta
-                    name="cometly-domain-verification"
-                    content="6de624a4-60c8-4edd-aad5-822f79a45528"
                   />
                 </Head>
                 <CartContext.Provider value={{ cart, setCart }}>
