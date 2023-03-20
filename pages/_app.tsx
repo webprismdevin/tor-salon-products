@@ -35,7 +35,7 @@ import {
   getClientBrowserParameters,
   AnalyticsEventName,
   useShopifyCookies,
-  ShopifyPageViewPayload,
+  type ShopifyPageViewPayload,
   ShopifyProvider,
 } from "@shopify/hydrogen-react";
 
@@ -62,17 +62,17 @@ declare global {
 
 // shopify analytics
 function sendPageView(analyticsPageData: ShopifyPageViewPayload) {
-  const payload = {
+  const payload: ShopifyPageViewPayload = {
     ...getClientBrowserParameters(),
     ...analyticsPageData,
   };
-
-  console.log(payload);
-
+  console.log(payload)
   sendShopifyAnalytics({
     eventName: AnalyticsEventName.PAGE_VIEW,
     payload,
   });
+
+  console.log("sendPageView")
 }
 
 const analyticsShopData = {
