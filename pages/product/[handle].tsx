@@ -69,6 +69,7 @@ const returnCollection = (handle: string) => {
 };
 
 const ProductPage = ({
+  handle,
   product,
   collection,
   reviews,
@@ -164,9 +165,8 @@ const ProductPage = ({
           content={`${product.description.substring(0, 200)}...`}
         />
         <meta property="og:title" content={product.title}/>
-        <meta property="og:product:retailer_item_id" content={product.id}/>
         <meta property="og:description" content={product.description.substring(0, 500)}/>
-        <meta property="og:url" content={`https://torsalonproducts.com/products/${product.handle}`} />
+        <meta property="og:url" content={`https://torsalonproducts.com/products/${handle}`} />
         <meta property="og:image" content={product.images.edges[0].node.url}/>
         <meta property="product:brand" content="TOR Salon Products"/>
         <meta property="product:availability" content="in stock"/>
@@ -175,6 +175,7 @@ const ProductPage = ({
         <meta property="product:price:currency" content="USD"/>
         <meta property="product:catalog_id" content="711750850270833"/>
         <meta property="product:category" content="486" />
+        <meta property="product:retailer_item_id" content={product.id}/>
       </Head>
       <SimpleGrid templateColumns={"repeat(2, 1fr)"}>
         <GridItem colSpan={[2, 1]}>
@@ -970,6 +971,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         salesChannel: ShopifySalesChannel.headless,
         resourceId: res.product.id
       },
+      handle,
       key: handle,
       reviews: reviews.response,
       product: res.product,
