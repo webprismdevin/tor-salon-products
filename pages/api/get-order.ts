@@ -124,7 +124,7 @@ export default async function handler(
     "https://tor-salon-products.myshopify.com/admin/api/2022-07/graphql.json" as string,
     {
       headers: {
-        "X-Shopify-Access-Token": process.env.SHOPIFY_API_PASSWORD as string,
+        "X-Shopify-Access-Token": process.env.SHOPIFY_ADMIN_API_PASSWORD as string,
       },
     }
   );
