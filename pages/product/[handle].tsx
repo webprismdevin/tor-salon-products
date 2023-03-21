@@ -163,7 +163,7 @@ const ProductPage = ({
 
     const pid = extractGID(activeVariant.id)
 
-    console.log(pid)
+    // console.log(pid)
 
     if(window.fbq){
       const pixelParams = {
@@ -171,11 +171,10 @@ const ProductPage = ({
         content_type: 'product_group',
         content_name: product.title,
         value: activeVariant.priceV2.amount,
-        currency: 'USD',
-        test_event_code: 'TEST38910',
+        currency: 'USD'
       }
 
-      console.log(pixelParams)
+      // console.log(pixelParams)
 
       window.fbq('track', 'ViewContent', pixelParams);
     }
