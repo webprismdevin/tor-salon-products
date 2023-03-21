@@ -49,6 +49,7 @@ import {
   ShopifyAnalyticsPayload,
 } from "@shopify/hydrogen-react";
 import CartContext from "lib/CartContext";
+import extractGID from "lib/extract-gid";
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -158,6 +159,25 @@ const ProductPage = ({
   useEffect(() => {
     function hash(data: string) {
       return createHash("sha256").update(data).digest("hex");
+    }
+
+    const pid = extractGID(activeVariant.id)
+
+    console.log(pid)
+
+    if(window.fbq){
+      const pixelParams = {
+        content_ids: [pid],
+        content_type: 'product_group',
+        content_name: product.title,
+        value: activeVariant.priceV2.amount,
+        currency: 'USD',
+        test_event_code: 'TEST38910',
+      }
+
+      console.log(pixelParams)
+
+      window.fbq('track', 'ViewContent', pixelParams);
     }
 
     // user && console.log(hash(user.email))

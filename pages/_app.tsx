@@ -142,7 +142,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       router.events.off("routeChangeComplete", handleRouteChange);
     };
   }, [analytics, router.events]);
-  useShopifyCookies();
+  useShopifyCookies({ hasUserConsent });
 
   useEffect(() => {
     if (typeof window) {
