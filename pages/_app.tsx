@@ -70,7 +70,7 @@ function sendPageView(analyticsPageData: ShopifyPageViewPayload) {
   sendShopifyAnalytics({
     eventName: AnalyticsEventName.PAGE_VIEW,
     payload,
-  });
+  }, "tor-salon-products.myshopify.com");
 }
 
 const analyticsShopData = {
@@ -128,7 +128,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {     
     const handleRouteChange = () => {
       sendPageView(analytics);
-      console.log("pageview sent")
     };
 
     router.events.on("routeChangeComplete", handleRouteChange);
@@ -137,7 +136,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     if (!isInit) {
       isInit = true;
       sendPageView(analytics);
-      console.log("pageview sent")
     }
 
     return () => {
@@ -178,7 +176,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <ShopifyProvider
-        storeDomain="https://tor-salon-products.myshopify.com"
+        storeDomain="tor-salon-products.myshopify.com"
         storefrontToken="a37e8b74cb52b6e0609c948c43bb0a5c"
         storefrontApiVersion="2023-01"
         countryIsoCode="US"
