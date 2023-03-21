@@ -187,7 +187,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   if (heroTypeIsProduct) {
     reviewResponse = await fetch(
-      `https://api.yotpo.com/v1/apps/${process.env.YOTPO_APP_KEY}/reviews?deleted=false&utoken=${process.env.YOTPO_UTOKEN}&count=100`
+      `https://api.yotpo.com/v1/apps/${process.env.NEXT_PUBLIC_YOTPO_APP_KEY}/reviews?deleted=false&utoken=${process.env.NEXT_PUBLIC_YOTPO_UTOKEN}&count=100`
     ).then((Response) => Response.json());
 
     scoreAverage =

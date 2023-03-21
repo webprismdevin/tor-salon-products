@@ -24,12 +24,7 @@ import {
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useContext,
-} from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import formatter from "../../lib/formatter";
 import { GetStaticProps } from "next";
 import Product from "../../components/Product/Product";
@@ -42,7 +37,18 @@ import SubscriptionPlan from "../../components/Product/SubscriptionPlan";
 import useAddToCart from "../../lib/useAddToCart";
 import AuthContext from "lib/auth-context";
 import { createHash } from "crypto";
-import { AnalyticsPageType, ShopifySalesChannel } from "@shopify/hydrogen-react";
+import {
+  type StorefrontApiResponseOk,
+  useShop,
+  AnalyticsPageType,
+  sendShopifyAnalytics,
+  AnalyticsEventName,
+  getClientBrowserParameters,
+  type ShopifyAddToCartPayload,
+  ShopifyAnalyticsProduct,
+  ShopifyAnalyticsPayload,
+} from "@shopify/hydrogen-react";
+import CartContext from "lib/CartContext";
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -72,17 +78,21 @@ const ProductPage = ({
   handle,
   product,
   collection,
+  collections,
   reviews,
+  analytics,
 }: {
   handle: string;
   product: any;
   collection: any;
   collections: any;
   reviews: any;
+  analytics: ShopifyAnalyticsPayload;
 }) => {
   const { user } = useContext(AuthContext);
   const [itemQty, setItemQty] = useState(1);
   const { addItemToCart } = useAddToCart();
+  const { cart } = useContext(CartContext);
   const [activeVariant, setActiveVariant] = useState<VariantType>(() => {
     if (!product) return null;
 
@@ -116,7 +126,28 @@ const ProductPage = ({
   const variants = product?.variants.edges;
 
   async function handleAddToCart() {
-    addItemToCart(activeVariant.id, itemQty, subscriptionPlan)
+    if (analytics.products) {
+      const payload: ShopifyAddToCartPayload = {
+        ...getClientBrowserParameters(),
+        ...analytics,
+        cartId: cart?.id,
+        products: [
+          {
+            ...analytics.products[0],
+            quantity: 1,
+          },
+        ],
+      };
+
+      sendShopifyAnalytics({
+        eventName: AnalyticsEventName.ADD_TO_CART,
+        payload,
+      });
+
+      console.log("pageview sent")
+    }
+
+    addItemToCart(activeVariant.id, itemQty, subscriptionPlan);
   }
 
   function handleActiveVariantChange(id: string) {
@@ -126,7 +157,7 @@ const ProductPage = ({
 
   useEffect(() => {
     function hash(data: string) {
-      return createHash("sha256").update(data).digest("hex")
+      return createHash("sha256").update(data).digest("hex");
     }
 
     // user && console.log(hash(user.email))
@@ -156,26 +187,37 @@ const ProductPage = ({
 
   if (!product) return null;
 
+  const seoTitle = `${product.title} | TOR Salon Products`;
+
   return (
     <>
       <Head>
-        <title>{product.title} | TOR Salon Products</title>
+        <title>{seoTitle}</title>
         <meta
           name="description"
           content={`${product.description.substring(0, 200)}...`}
         />
-        <meta property="og:title" content={product.title}/>
-        <meta property="og:description" content={product.description.substring(0, 500)}/>
-        <meta property="og:url" content={`https://torsalonproducts.com/products/${handle}`} />
-        <meta property="og:image" content={product.images.edges[0].node.url}/>
-        <meta property="product:brand" content="TOR Salon Products"/>
-        <meta property="product:availability" content="in stock"/>
-        <meta property="product:condition" content="new"/>
-        <meta property="product:price:amount" content={activeVariant.priceV2.amount}/>
-        <meta property="product:price:currency" content="USD"/>
-        <meta property="product:catalog_id" content="711750850270833"/>
+        <meta property="og:title" content={product.title} />
+        <meta
+          property="og:description"
+          content={product.description.substring(0, 500)}
+        />
+        <meta
+          property="og:url"
+          content={`https://torsalonproducts.com/products/${handle}`}
+        />
+        <meta property="og:image" content={product.images.edges[0].node.url} />
+        <meta property="product:brand" content="TOR Salon Products" />
+        <meta property="product:availability" content="in stock" />
+        <meta property="product:condition" content="new" />
+        <meta
+          property="product:price:amount"
+          content={activeVariant.priceV2.amount}
+        />
+        <meta property="product:price:currency" content="USD" />
+        <meta property="product:catalog_id" content="711750850270833" />
         <meta property="product:category" content="486" />
-        <meta property="product:retailer_item_id" content={product.id}/>
+        <meta property="product:retailer_item_id" content={product.id} />
       </Head>
       <SimpleGrid templateColumns={"repeat(2, 1fr)"}>
         <GridItem colSpan={[2, 1]}>
@@ -470,7 +512,9 @@ const ProductPage = ({
               passHref
               legacyBehavior
             >
-              <Button mt={[8]} variant="ghost">See Collection</Button>
+              <Button mt={[8]} variant="ghost">
+                See Collection
+              </Button>
             </NextLink>
           </Container>
         </Box>
@@ -583,7 +627,8 @@ export async function getStaticPaths() {
     process.env.NEXT_PUBLIC_SHOPIFY_URL!,
     {
       headers: {
-        "X-Shopify-Storefront-Access-Token": process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN!,
+        "X-Shopify-Storefront-Access-Token":
+          process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN!,
       },
     }
   );
@@ -659,14 +704,16 @@ export const getStaticProps: GetStaticProps = async (context) => {
     process.env.NEXT_PUBLIC_SHOPIFY_URL!,
     {
       headers: {
-        "X-Shopify-Storefront-Access-Token": process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN!,
+        "X-Shopify-Storefront-Access-Token":
+          process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN!,
       },
     }
   );
 
   // Shopify Request
-  const query = gql`{
+  const productQuery = gql`{
     product(handle: "${handle}") {
+      vendor
       id
       title
       descriptionHtml
@@ -836,7 +883,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     }
   }`;
 
-  const res = await graphQLClient.request(query);
+  const res = await graphQLClient.request(productQuery);
 
   if (res.errors) {
     console.log(JSON.stringify(res.errors, null, 2));
@@ -964,12 +1011,21 @@ export const getStaticProps: GetStaticProps = async (context) => {
     }/reviews.json`
   ).then((res) => res.json());
 
+  const productAnalytics: ShopifyAnalyticsProduct = {
+    productGid: res.product.id,
+    variantGid: res.product.variants.edges[0].node.id,
+    name: res.product.title,
+    variantName: res.product.variants.edges[0].node.title,
+    brand: res.product.vendor,
+    price: res.product.variants.edges[0].node.priceV2.amount,
+  };
+
   return {
     props: {
       analytics: {
         pageType: AnalyticsPageType.product,
-        salesChannel: ShopifySalesChannel.headless,
-        resourceId: res.product.id
+        resourceId: res.product.id,
+        products: [productAnalytics],
       },
       handle,
       key: handle,

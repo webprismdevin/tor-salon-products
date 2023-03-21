@@ -664,8 +664,7 @@ export async function getStaticProps() {
       body: res.body.products.edges,
       analytics: {
         pageType: AnalyticsPageType.home,
-        salesChannel: ShopifySalesChannel.headless
-      }
+      },
     },
     revalidate: 10,
   };
