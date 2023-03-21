@@ -32,6 +32,7 @@ declare interface LineItemType {
 export default function ThankYou() {
   const [auth, setAuth] = useState(false);
   const [data, setData] = useState<any>(null);
+  const plausible = usePlausible();
 
   const getOrder = async (id: string) => {
     const response = await fetch(`/api/get-order?orderId=${id}`).then((res) =>
@@ -77,6 +78,8 @@ export default function ThankYou() {
 
     if (urlParams.get("event") === "purchase" && data) {
       const orderValue = parseFloat(data.currentTotalPriceSet.shopMoney.amount);
+
+      plausible("Purchase", { props: { orderValue: orderValue } });
 
       const itemsArray = data.lineItems.edges.map((i: LineItemType) => ({
         item_id: i.node.id, //string
