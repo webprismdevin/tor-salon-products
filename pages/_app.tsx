@@ -66,13 +66,11 @@ function sendPageView(analyticsPageData: ShopifyPageViewPayload) {
     ...getClientBrowserParameters(),
     ...analyticsPageData,
   };
-  console.log(payload)
+
   sendShopifyAnalytics({
     eventName: AnalyticsEventName.PAGE_VIEW,
     payload,
   });
-
-  console.log("sendPageView")
 }
 
 const analyticsShopData = {
@@ -117,35 +115,35 @@ function MyApp({ Component, pageProps }: AppProps) {
   const hasUserConsent = true;
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const analytics = {
+  const analytics: ShopifyPageViewPayload = {
     hasUserConsent,
     ...analyticsShopData,
     ...pageProps.analytics,
   };
-
   const pagePropsWithAppAnalytics = {
     ...pageProps,
     analytics,
   };
 
-  useEffect(() => {
+  useEffect(() => {     
     const handleRouteChange = () => {
       sendPageView(analytics);
+      console.log("pageview sent")
     };
+
+    router.events.on("routeChangeComplete", handleRouteChange);
 
     // First load event guard
     if (!isInit) {
       isInit = true;
       sendPageView(analytics);
+      console.log("pageview sent")
     }
-
-    router.events.on("routeChangeComplete", handleRouteChange);
 
     return () => {
       router.events.off("routeChangeComplete", handleRouteChange);
     };
   }, [analytics, router.events]);
-
   useShopifyCookies();
 
   useEffect(() => {
@@ -179,17 +177,17 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <PlausibleProvider domain="torsalonproducts.com">
-        <ChakraProvider theme={customTheme}>
-          <AuthContext.Provider value={{ user, setUser, token, setToken }}>
-            <ShopContext.Provider value={{ shop }}>
-              <ShopifyProvider
-                storeDomain="https://tor-salon-products.myshopify.com"
-                storefrontToken="a37e8b74cb52b6e0609c948c43bb0a5c"
-                storefrontApiVersion="2023-01"
-                countryIsoCode="US"
-                languageIsoCode="EN"
-              >
+      <ShopifyProvider
+        storeDomain="https://tor-salon-products.myshopify.com"
+        storefrontToken="a37e8b74cb52b6e0609c948c43bb0a5c"
+        storefrontApiVersion="2023-01"
+        countryIsoCode="US"
+        languageIsoCode="EN"
+      >
+        <PlausibleProvider domain="torsalonproducts.com">
+          <ChakraProvider theme={customTheme}>
+            <AuthContext.Provider value={{ user, setUser, token, setToken }}>
+              <ShopContext.Provider value={{ shop }}>
                 <Head>
                   <meta name="theme-color" content="#ffffff" />
                   <link rel="shortcut icon" href="/favicon.png" />
@@ -212,28 +210,28 @@ function MyApp({ Component, pageProps }: AppProps) {
                 <Suspense fallback={"..."}>
                   <Footer />
                 </Suspense>
-              </ShopifyProvider>
-            </ShopContext.Provider>
-          </AuthContext.Provider>
-          <ColorModeScript initialColorMode={customTheme.initialColorMode} />
-          {process.env.NODE_ENV === "production" && (
-            <Script
-              id="tawk_tag"
-              strategy="lazyOnload"
-              dangerouslySetInnerHTML={{
-                __html: `var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();`,
-              }}
-            />
-          )}
-          {settings && (
-            <Suspense fallback={`...`}>
-              <MailingList settings={settings.emailPopup} />
-            </Suspense>
-          )}
-        </ChakraProvider>
-      </PlausibleProvider>
-      <AnalyticsScripts />
-      <Analytics />
+              </ShopContext.Provider>
+            </AuthContext.Provider>
+            <ColorModeScript initialColorMode={customTheme.initialColorMode} />
+            {process.env.NODE_ENV === "production" && (
+              <Script
+                id="tawk_tag"
+                strategy="lazyOnload"
+                dangerouslySetInnerHTML={{
+                  __html: `var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();`,
+                }}
+              />
+            )}
+            {settings && (
+              <Suspense fallback={`...`}>
+                <MailingList settings={settings.emailPopup} />
+              </Suspense>
+            )}
+          </ChakraProvider>
+        </PlausibleProvider>
+        <AnalyticsScripts />
+        <Analytics />
+      </ShopifyProvider>
     </>
   );
 }

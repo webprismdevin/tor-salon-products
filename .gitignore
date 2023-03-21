@@ -40,7 +40,5 @@ yarn-error.log*
 #modules
 /node_modules
 /sanity/node_modules
-public/sitemap-0.xml
-
 .vscode
 public/sitemap-0.xml
