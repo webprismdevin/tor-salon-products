@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 import formatter from "../../lib/formatter";
 import { createHash } from "crypto";
 import { usePlausible } from "next-plausible";
+import extractGID from "lib/extract-gid";
 
 declare interface LineItemType {
   node: {
@@ -60,62 +61,74 @@ export default function ThankYou() {
     getOrder(window.location.pathname.split("/")[2]);
   }, []);
 
-  function hash(data: string) {
-    return createHash("sha256").update(data).digest("hex");
-  }
+  // function hash(data: string) {
+  //   return createHash("sha256").update(data).digest("hex");
+  // }
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
 
-    if (data) {
-      const { email, phone } = data.customer;
+    // if (data) {
+    //   const { email, phone } = data.customer;
 
-      const user_data = {
-        email: email ? hash(email) : null,
-        phone: phone ? hash(phone) : null,
-      };
-    }
+    //   const user_data = {
+    //     email: email ? hash(email) : null,
+    //     phone: phone ? hash(phone) : null,
+    //   };
+    // }
 
     if (urlParams.get("event") === "purchase" && data) {
       const orderValue = parseFloat(data.currentTotalPriceSet.shopMoney.amount);
 
       plausible("Purchase", { props: { orderValue: orderValue } });
 
-      const itemsArray = data.lineItems.edges.map((i: LineItemType) => ({
-        item_id: i.node.id, //string
-        item_name: i.node.name, //string
-        quantity: i.node.currentQuantity, //number
-        price: parseFloat(i.node.discountedTotalSet.shopMoney.amount), //number
-        currency: "USD", //string
-        item_brand: "TOR Salon Products", //string
-      }));
-
-      if (window.dataLayer) {
-        window.dataLayer.push({ ecommerce: null });
-        window.dataLayer.push({
-          event: "purchase",
-          transaction_id: data.id,
-          currency: "USD",
-          value: orderValue,
-          user_data: {
-            email_address: data.email ? hash(data.email) : null,
-            phone_number: data.customer.phone ? hash(data.phone) : null,
-            address: {
-              first_name: data.customer?.firstName
-                ? hash(data.customer.firstName)
-                : null,
-              last_name: data.customer?.lastName
-                ? hash(data.customer.lastName)
-                : null,
-              city: hash(data.displayAddress.city),
-              region: hash(data.displayAddress.province),
-              postal_code: hash(data.displayAddress.zip),
-              country: hash(data.displayAddress.country),
-            },
-          },
-          items: itemsArray,
+      if(window.fbq){
+        const content_ids = data.lineItems.edges.map((i: LineItemType) => extractGID(i.node.id));
+          
+        window.fbq('track', 'Purchase', {
+          value: orderValue, 
+          currency: 'USD',
+          content_type: 'product',
+          content_ids,
+          test_event_code: 'TEST38910'
         });
       }
+
+      // const itemsArray = data.lineItems.edges.map((i: LineItemType) => ({
+      //   item_id: i.node.id, //string
+      //   item_name: i.node.name, //string
+      //   quantity: i.node.currentQuantity, //number
+      //   price: parseFloat(i.node.discountedTotalSet.shopMoney.amount), //number
+      //   currency: "USD", //string
+      //   item_brand: "TOR Salon Products", //string
+      // }));
+
+      // if (window.dataLayer) {
+      //   window.dataLayer.push({ ecommerce: null });
+      //   window.dataLayer.push({
+      //     event: "purchase",
+      //     transaction_id: data.id,
+      //     currency: "USD",
+      //     value: orderValue,
+      //     user_data: {
+      //       email_address: data.email ? hash(data.email) : null,
+      //       phone_number: data.customer.phone ? hash(data.phone) : null,
+      //       address: {
+      //         first_name: data.customer?.firstName
+      //           ? hash(data.customer.firstName)
+      //           : null,
+      //         last_name: data.customer?.lastName
+      //           ? hash(data.customer.lastName)
+      //           : null,
+      //         city: hash(data.displayAddress.city),
+      //         region: hash(data.displayAddress.province),
+      //         postal_code: hash(data.displayAddress.zip),
+      //         country: hash(data.displayAddress.country),
+      //       },
+      //     },
+      //     items: itemsArray,
+      //   });
+      // }
     }
   }, [data]);
 
