@@ -168,7 +168,7 @@ const ProductPage = ({
     if(window.fbq){
       const pixelParams = {
         content_ids: [pid],
-        content_type: 'product_group',
+        content_type: 'product',
         content_name: product.title,
         value: activeVariant.priceV2.amount,
         currency: 'USD'
