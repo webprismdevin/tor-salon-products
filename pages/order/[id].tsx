@@ -90,7 +90,6 @@ export default function ThankYou() {
           currency: 'USD',
           content_type: 'product',
           content_ids,
-          test_event_code: 'TEST38910'
         });
       }
 
