@@ -50,6 +50,7 @@ import {
 } from "@shopify/hydrogen-react";
 import CartContext from "lib/CartContext";
 import extractGID from "lib/extract-gid";
+import StarIcon from "components/icons/StarIcon";
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -317,13 +318,19 @@ const ProductPage = ({
                 }
                 flexShrink={1}
               >
-                <RatingStar
-                  id={product.id.split("/")[4]}
-                  rating={reviews.bottomline.average_score}
-                />
+                <div style={{ display: "flex" }}>
+                  {Array.from(
+                    Array(Math.floor(reviews.bottomline.average_score)).keys()
+                  ).map((i) => (
+                    <StarIcon color={"#f5c317"} key={i} />
+                  ))}
+                </div>
                 <Text>
-                  {reviews.bottomline.total_review} Review
-                  {reviews.bottomline.totalReviews === 1 ? "s" : ""}
+                  {reviews.bottomline.total_review === 0
+                    ? "No"
+                    : reviews.bottomline.total_review}{" "}
+                  Review
+                  {reviews.bottomline.total_review !== 1 ? "s" : ""}
                 </Text>
               </Stack>
               <Divider orientation="vertical" height={"60px"} px={[2, 0]} />
@@ -347,17 +354,31 @@ const ProductPage = ({
                 ))}
               </Select>
             )}
-            <HStack
-              border={"1px solid black"}
-              alignSelf={["flex-end", "flex-start"]}
-              borderRadius={6}
-            >
-              <Button fontSize="2xl" variant="ghost" {...dec}>
-                -
-              </Button>
-              <Input w="50px" {...input} variant="ghost" textAlign="center" />
-              <Button fontSize="2xl" variant="ghost" {...inc}>
-                +
+            <HStack>
+              <HStack
+                border={"1px solid black"}
+                alignSelf={["stretch"]}
+                borderRadius={6}
+              >
+                <Button fontSize="2xl" variant="ghost" {...dec}>
+                  -
+                </Button>
+                <Input w="50px" {...input} variant="ghost" textAlign="center" />
+                <Button fontSize="2xl" variant="ghost" {...inc}>
+                  +
+                </Button>
+              </HStack>
+              <Button
+                position={["fixed", "static"]}
+                bottom={[7, 0]}
+                right={[4, 0]}
+                zIndex={[2, 0]}
+                w={["70%", "full"]}
+                onClick={handleAddToCart}
+                isDisabled={!activeVariant?.availableForSale}
+                size="lg"
+              >
+                {activeVariant?.availableForSale ? "Add To Cart" : "Sold Out!"}
               </Button>
             </HStack>
             {/* subscriptions */}
@@ -371,18 +392,6 @@ const ProductPage = ({
               />
             )}
             {/* end subscriptions */}
-            <Button
-              position={["fixed", "static"]}
-              bottom={[7, 0]}
-              right={[4, 0]}
-              zIndex={[2, 0]}
-              w={["70%", "full"]}
-              onClick={handleAddToCart}
-              isDisabled={!activeVariant?.availableForSale}
-              size="lg"
-            >
-              {activeVariant?.availableForSale ? "Add To Cart" : "Sold Out!"}
-            </Button>
             <Box
               className="product_description_html_outer_container"
               dangerouslySetInnerHTML={{
