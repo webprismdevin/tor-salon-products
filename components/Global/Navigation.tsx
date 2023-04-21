@@ -67,13 +67,6 @@ export default function Navigation({ menu }: MenuProps) {
           ))}
         </Stack>
         <Stack direction={"row"} align="center" gap={6}>
-          {user && user.isPro && (
-            <Box display={["none", "inherit"]}>
-              <NextLink legacyBehavior href="wholesale">
-                <Link>Wholesale</Link>
-              </NextLink>
-            </Box>
-          )}
           <Search />
           <Auth />
           <Cart />

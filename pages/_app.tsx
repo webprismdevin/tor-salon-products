@@ -67,10 +67,13 @@ function sendPageView(analyticsPageData: ShopifyPageViewPayload) {
     ...analyticsPageData,
   };
 
-  sendShopifyAnalytics({
-    eventName: AnalyticsEventName.PAGE_VIEW,
-    payload,
-  }, "tor-salon-products.myshopify.com");
+  sendShopifyAnalytics(
+    {
+      eventName: AnalyticsEventName.PAGE_VIEW,
+      payload,
+    },
+    "tor-salon-products.myshopify.com"
+  );
 }
 
 const analyticsShopData = {
@@ -125,7 +128,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     analytics,
   };
 
-  useEffect(() => {     
+  useEffect(() => {
     const handleRouteChange = () => {
       sendPageView(analytics);
     };
@@ -178,7 +181,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ShopifyProvider
         storeDomain="tor-salon-products.myshopify.com"
         storefrontToken="a37e8b74cb52b6e0609c948c43bb0a5c"
-        storefrontApiVersion="2023-01"
+        storefrontApiVersion="2023-04"
         countryIsoCode="US"
         languageIsoCode="EN"
       >
@@ -192,6 +195,19 @@ function MyApp({ Component, pageProps }: AppProps) {
                   <meta
                     name="facebook-domain-verification"
                     content="bk02y72cdwvcwzina508gmb7xv87g6"
+                  />
+                  <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                      __html: `{
+                        "@context": "https://schema.org",
+                        "@type": "Organization",
+                        "name": "TOR Salon Products",
+                        "url": "https://torsalonproducts.com",
+                        "logo": "https://torsalonproducts.com/tor_square_logo.png",
+                        "sameAs": ["https://www.facebook.com/torproducts", "https://www.instagram.com/tor_salonproducts/"]
+                      }`,
+                    }}
                   />
                 </Head>
                 <CartContext.Provider value={{ cart, setCart }}>

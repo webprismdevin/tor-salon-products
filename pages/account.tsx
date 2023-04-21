@@ -80,11 +80,6 @@ export default function Account() {
             <Flex justify={"space-between"}>
               <Heading>Account</Heading>
               <Stack direction={["column", null, null, "row"]} spacing={6}>
-                {user.isPro && (
-                  <Button onClick={() => router.push("/wholesale")}>
-                    Shop Wholesale
-                  </Button>
-                )}
                 <Button variant="outline" onClick={logout}>
                   Logout
                 </Button>

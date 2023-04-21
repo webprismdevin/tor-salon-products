@@ -145,7 +145,7 @@ const ProductPage = ({
         payload,
       });
 
-      console.log("pageview sent")
+      console.log("pageview sent");
     }
 
     addItemToCart(activeVariant.id, itemQty, subscriptionPlan);
@@ -161,22 +161,22 @@ const ProductPage = ({
       return createHash("sha256").update(data).digest("hex");
     }
 
-    const pid = extractGID(activeVariant.id)
+    const pid = extractGID(activeVariant.id);
 
     // console.log(pid)
 
-    if(window.fbq){
+    if (window.fbq) {
       const pixelParams = {
         content_ids: [pid],
-        content_type: 'product',
+        content_type: "product",
         content_name: product.title,
         value: activeVariant.priceV2.amount,
-        currency: 'USD'
-      }
+        currency: "USD",
+      };
 
       // console.log(pixelParams)
 
-      window.fbq('track', 'ViewContent', pixelParams);
+      window.fbq("track", "ViewContent", pixelParams);
     }
 
     // user && console.log(hash(user.email))
@@ -237,6 +237,31 @@ const ProductPage = ({
         <meta property="product:catalog_id" content="711750850270833" />
         <meta property="product:category" content="486" />
         <meta property="product:retailer_item_id" content={product.id} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: `{
+              "@context": "https://schema.org",
+              "@type": "Product",
+              "name": "${product.title}",
+              "image": "${product.images.edges[0].node.url}",
+              "description": "${product.description.substring(0, 500)}",
+              "brand": "TOR Salon Products",
+              "sku": "${product.id}",
+              "offers": {
+                "@type": "Offer",
+                "priceCurrency": "USD",
+                "price": "${activeVariant.priceV2.amount}",
+                "itemCondition": "https://schema.org/NewCondition",
+                "availability": "https://schema.org/InStock",
+                "seller": {
+                  "@type": "Organization",
+                  "name": "TOR Salon Products"
+                }
+              }
+            }`,
+          }}
+        />
       </Head>
       <SimpleGrid templateColumns={"repeat(2, 1fr)"}>
         <GridItem colSpan={[2, 1]}>
