@@ -145,7 +145,7 @@ const ProductPage = ({
         payload,
       });
 
-      console.log("pageview sent");
+      console.log("add to cart sent", payload);
     }
 
     addItemToCart(activeVariant.id, itemQty, subscriptionPlan);
