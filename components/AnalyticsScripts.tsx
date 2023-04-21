@@ -18,7 +18,7 @@ export default function AnalyticsScripts() {
           s.parentNode.insertBefore(t,s)}(window, document,'script',
           'https://connect.facebook.net/en_US/fbevents.js');
           fbq('init', '711750850270833');
-          fbq('track', 'PageView');          `,
+          fbq('track', 'PageView');`,
           }}
         />
         {/* Google Tag Manager */}

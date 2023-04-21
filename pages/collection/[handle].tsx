@@ -19,9 +19,11 @@ import { AnalyticsPageType } from "@shopify/hydrogen-react";
 export default function CollectionPage({
   handle,
   data,
+  analytics
 }: {
   handle: string;
   data: any;
+  analytics?: any;
 }) {
   if (!data) return null;
 
@@ -108,7 +110,7 @@ export default function CollectionPage({
           gap={12}
         >
           {data.products.edges.map((p: any) => (
-            <Product product={p} key={p.node.id} />
+            <Product product={p} key={p.node.id} analytics={analytics} />
           ))}
         </SimpleGrid>
       </Container>
