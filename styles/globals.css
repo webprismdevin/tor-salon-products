@@ -32,6 +32,10 @@
   font-weight: 400
 }
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
   /* overflow-x: hidden; */
@@ -84,23 +88,6 @@ div[data-framer-component-type='Text'] span {
 .product_description_hmtl_outer_container > li {
   margin: 4px 0px;
 }
-
-/* .blog_article:first-child, .blog_article:nth-child(3n + 4), .blog_article:nth-child(3) {
-  border: 2px solid black
-}
-.blog_article:nth-child(2){
-  border-top: 2px solid black;
-  border-bottom: 2px solid black;
-}
-
-@media(max-width: 560px){
-  .blog_article:nth-child(2){
-    border-left: 2px solid black;
-    border-right: 2px solid black;
-    border-top: none;
-    border-bottom: none;
-  }
-} */
 
 .customHtml > table {
   width: 100%;

@@ -21,6 +21,7 @@ import {
   AccordionIcon,
   Divider,
   GridItem,
+  Tag,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
@@ -33,6 +34,7 @@ import { wrap } from "@popmotion/popcorn";
 import NextLink from "next/link";
 import { RatingStar } from "rating-star";
 import ReviewSubmit from "../../components/Product/ReviewSubmit";
+import Reviews from "./../../components/Product/Reviews";
 import SubscriptionPlan from "../../components/Product/SubscriptionPlan";
 import useAddToCart from "../../lib/useAddToCart";
 import AuthContext from "lib/auth-context";
@@ -275,6 +277,16 @@ const ProductPage = ({
             pr={[4, null, 10, 20]}
             spacing={6}
           >
+            <div className="flex items-center">
+              <RatingStar
+                id="star_rating"
+                size={18}
+                rating={reviews.bottomline.average_score}
+              />
+              <span className="text-sm">
+                [{reviews.bottomline.total_review}]
+              </span>
+            </div>
             <Stack direction={"row"} justify={"space-between"}>
               <Heading maxW={[480]}>{product.title}</Heading>
               <Stack>
@@ -304,7 +316,7 @@ const ProductPage = ({
               </Stack>
             </Stack>
             <Divider />
-            <HStack justify={"space-around"}>
+            {/* <HStack justify={"space-around"}>
               <Stack
                 direction={["column", null, "column", "row"]}
                 align="center"
@@ -337,8 +349,8 @@ const ProductPage = ({
               <Box w={["100%", "50%"]}>
                 <ReviewSubmit handle={product.title} gid={product.id} />
               </Box>
-            </HStack>
-            <Divider />
+            </HStack> */}
+            {/* <Divider /> */}
             {variants.length > 1 && (
               <Select
                 minW={"200px"}
@@ -371,9 +383,10 @@ const ProductPage = ({
               <Button
                 position={["fixed", "static"]}
                 bottom={[7, 0]}
-                right={[4, 0]}
+                right={[2, 0]}
+                left={[2, 0]}
                 zIndex={[2, 0]}
-                w={["70%", "full"]}
+                w={[null, null, "full"]}
                 onClick={handleAddToCart}
                 isDisabled={!activeVariant?.availableForSale}
                 size="lg"
@@ -572,44 +585,7 @@ const ProductPage = ({
           </Container>
         </Box>
       )}
-      {reviews && reviews.reviews.length > 0 && (
-        <Container
-          ref={reviewsSection}
-          maxW="container.lg"
-          pt={40}
-          pb={20}
-          centerContent
-          key={product.id.split("/")[4]}
-        >
-          <Box w="full" py={12}>
-            <Heading>Reviews</Heading>
-            <Divider mt={6} />
-          </Box>
-          {reviews.reviews.map((r: any) => (
-            <Stack key={r.id} spacing={2}>
-              <HStack>
-                <RatingStar id={r.id.toString()} rating={r.score} />
-                <Text>Verified Review</Text>
-              </HStack>
-              <Text
-                fontSize="2xl"
-                textTransform={"capitalize"}
-                dangerouslySetInnerHTML={{
-                  __html: r.title,
-                }}
-              />
-              <Text
-                dangerouslySetInnerHTML={{
-                  __html: r.content,
-                }}
-              ></Text>
-              <Text fontStyle={"italic"} textTransform="capitalize">
-                {r.user.display_name}
-              </Text>
-            </Stack>
-          ))}
-        </Container>
-      )}
+      <Reviews data={reviews} />
     </>
   );
 };
