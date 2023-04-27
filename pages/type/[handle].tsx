@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import ProductFeature from "../../components/ProductFeature";
 import Product from "../../components/Product/Product";
+import { AnalyticsPageType } from "@shopify/hydrogen-react";
 
 export default function CollectionPage({
   handle,
@@ -49,10 +50,11 @@ export default function CollectionPage({
           <Stack direction={["column"]} spacing={6} pos="relative" zIndex={1}>
             <Heading as="h1">{data.title}</Heading>
             <Box
-            maxW={600}
-            dangerouslySetInnerHTML={{
-              __html: data.descriptionHtml
-            }} />
+              maxW={600}
+              dangerouslySetInnerHTML={{
+                __html: data.descriptionHtml,
+              }}
+            />
             <Stack
               direction={"row"}
               textAlign="left"
@@ -96,9 +98,12 @@ export default function CollectionPage({
       <ProductFeature reference={data.products.edges[0].node} />
       <Container maxW="container.xl" pt={10} pb={20}>
         <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
-          {data.products.edges.map((p: any, index: number) => index !== 0 && (
-            <Product product={p} key={p.node.id} fontSize={24} />
-          ))}
+          {data.products.edges.map(
+            (p: any, index: number) =>
+              index !== 0 && (
+                <Product product={p} key={p.node.id} fontSize={24} />
+              )
+          )}
         </SimpleGrid>
       </Container>
     </>
@@ -123,7 +128,8 @@ export async function getStaticProps(context: any) {
     process.env.NEXT_PUBLIC_SHOPIFY_URL!,
     {
       headers: {
-        "X-Shopify-Storefront-Access-Token": process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN!,
+        "X-Shopify-Storefront-Access-Token":
+          process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN!,
       },
     }
   );
@@ -131,6 +137,8 @@ export async function getStaticProps(context: any) {
   // Shopify Request
   const query = gql`{
     collection(handle: "${handle}") {
+      id
+      handle
       title
       description
       descriptionHtml
@@ -278,6 +286,11 @@ export async function getStaticProps(context: any) {
 
   return {
     props: {
+      analytics: {
+        pageType: AnalyticsPageType.collection,
+        resourceId: res.collection.id,
+        collectionHandle: res.collection.handle,
+      },
       handle: handle,
       data: res.collection,
     },

@@ -7,7 +7,6 @@ import {
 } from "@chakra-ui/react";
 //context
 import CartContext from "../lib/CartContext";
-import ShopContext from "../lib/shop-context";
 import AuthContext from "../lib/auth-context";
 //next & react deps
 import Head from "next/head";
@@ -27,7 +26,6 @@ import PlausibleProvider from "next-plausible";
 import { theme as defaultTheme, ThemeConfig } from "@chakra-ui/theme";
 import themeConfig from "../lib/theme";
 import "../styles/globals.css";
-import "@fontsource/raleway/400.css";
 import AnalyticsScripts from "components/AnalyticsScripts";
 
 import {
@@ -72,7 +70,7 @@ function sendPageView(analyticsPageData: ShopifyPageViewPayload) {
       eventName: AnalyticsEventName.PAGE_VIEW,
       payload,
     },
-    "tor-salon-products.myshopify.com"
+    "checkout.torsalonproducts.com"
   );
 }
 
@@ -179,7 +177,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <ShopifyProvider
-        storeDomain="tor-salon-products.myshopify.com"
+        storeDomain="checkout.torsalonproducts.com"
         storefrontToken="a37e8b74cb52b6e0609c948c43bb0a5c"
         storefrontApiVersion="2023-04"
         countryIsoCode="US"
@@ -188,18 +186,17 @@ function MyApp({ Component, pageProps }: AppProps) {
         <PlausibleProvider domain="torsalonproducts.com">
           <ChakraProvider theme={customTheme}>
             <AuthContext.Provider value={{ user, setUser, token, setToken }}>
-              <ShopContext.Provider value={{ shop }}>
-                <Head>
-                  <meta name="theme-color" content="#ffffff" />
-                  <link rel="shortcut icon" href="/favicon.png" />
-                  <meta
-                    name="facebook-domain-verification"
-                    content="bk02y72cdwvcwzina508gmb7xv87g6"
-                  />
-                  <script
-                    type="application/ld+json"
-                    dangerouslySetInnerHTML={{
-                      __html: `{
+              <Head>
+                <meta name="theme-color" content="#ffffff" />
+                <link rel="shortcut icon" href="/favicon.png" />
+                <meta
+                  name="facebook-domain-verification"
+                  content="bk02y72cdwvcwzina508gmb7xv87g6"
+                />
+                <script
+                  type="application/ld+json"
+                  dangerouslySetInnerHTML={{
+                    __html: `{
                         "@context": "https://schema.org",
                         "@type": "Organization",
                         "name": "TOR Salon Products",
@@ -207,35 +204,23 @@ function MyApp({ Component, pageProps }: AppProps) {
                         "logo": "https://torsalonproducts.com/tor_square_logo.png",
                         "sameAs": ["https://www.facebook.com/torproducts", "https://www.instagram.com/tor_salonproducts/"]
                       }`,
-                    }}
-                  />
-                </Head>
-                <CartContext.Provider value={{ cart, setCart }}>
-                  {router.pathname !== "/wholesale" && settings && (
-                    <Banner data={settings.banner} />
-                  )}
-                  <Navigation menu={settings?.menu} />
-                  <Component
-                    key={router.asPath}
-                    {...pagePropsWithAppAnalytics}
-                  />
-                </CartContext.Provider>
-                <Follow />
-                <Suspense fallback={"..."}>
-                  <Footer />
-                </Suspense>
-              </ShopContext.Provider>
+                  }}
+                />
+              </Head>
+              <CartContext.Provider value={{ cart, setCart }}>
+                {router.pathname !== "/wholesale" && settings && (
+                  <Banner data={settings.banner} />
+                )}
+                <Navigation menu={settings?.menu} />
+                <Component key={router.asPath} {...pagePropsWithAppAnalytics} />
+              </CartContext.Provider>
+              <Follow />
+              <Suspense fallback={"..."}>
+                <Footer />
+              </Suspense>
             </AuthContext.Provider>
             <ColorModeScript initialColorMode={customTheme.initialColorMode} />
-            {process.env.NODE_ENV === "production" && (
-              <Script
-                id="tawk_tag"
-                strategy="lazyOnload"
-                dangerouslySetInnerHTML={{
-                  __html: `var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();`,
-                }}
-              />
-            )}
+            <TawkTo />
             {settings && (
               <Suspense fallback={`...`}>
                 <MailingList settings={settings.emailPopup} />
@@ -251,3 +236,19 @@ function MyApp({ Component, pageProps }: AppProps) {
 }
 
 export default MyApp;
+
+function TawkTo({}) {
+  return (
+    <>
+      {process.env.NODE_ENV === "production" && (
+        <Script
+          id="tawk_tag"
+          strategy="lazyOnload"
+          dangerouslySetInnerHTML={{
+            __html: `var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();`,
+          }}
+        />
+      )}
+    </>
+  );
+}
