@@ -17,7 +17,6 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import formatter from "../../lib/formatter";
 import { createHash } from "crypto";
-import { usePlausible } from "next-plausible";
 import extractGID from "lib/extract-gid";
 
 declare interface LineItemType {
@@ -33,7 +32,6 @@ declare interface LineItemType {
 export default function ThankYou() {
   const [auth, setAuth] = useState(false);
   const [data, setData] = useState<any>(null);
-  const plausible = usePlausible();
 
   const getOrder = async (id: string) => {
     const response = await fetch(`/api/get-order?orderId=${id}`).then((res) =>
@@ -79,8 +77,6 @@ export default function ThankYou() {
 
     if (urlParams.get("event") === "purchase" && data) {
       const orderValue = parseFloat(data.currentTotalPriceSet.shopMoney.amount);
-
-      plausible("Purchase", { props: { orderValue: orderValue } });
 
       if(window.fbq){
         const content_ids = data.lineItems.edges.map((i: LineItemType) => extractGID(i.node.id));
