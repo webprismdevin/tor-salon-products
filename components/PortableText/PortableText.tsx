@@ -25,6 +25,8 @@ import { AnimatePresence, motion, useCycle } from "framer-motion";
 import NextImage from "next/legacy/image";
 import NextLink from "next/link";
 import useAddToCart from "../../lib/useAddToCart";
+import { usePlausible } from "next-plausible";
+import { useState } from "react";
 
 type Props = {
   blocks: SanityBlock[];
@@ -66,13 +68,84 @@ export default function PortableText({
             <ImagesBlock centered={true} {...props} />
           ),
           customHtml: (props: any) => (
-            <Box w="full" className="customHtml" dangerouslySetInnerHTML={{ __html: props.node.html }} />
-          )
+            <Box
+              w="full"
+              className="customHtml"
+              dangerouslySetInnerHTML={{ __html: props.node.html }}
+            />
+          ),
+          signupForm: (props: any) => <SignupForm {...props} />,
         },
       }}
     />
   );
 }
+
+const SignupForm = (data: any) => {
+  const { tags } = data.node;
+
+  const plausible = usePlausible();
+  console.log(tags);
+
+  const handleSubmit = async (event: any) => {
+    // Stop the form from submitting and refreshing the page.
+    event.preventDefault();
+
+    // Get data from the form.
+    const data = {
+      name: {
+        firstname: event.target.first.value,
+        lastname: event.target.last.value,
+      },
+      email: event.target.email.value,
+      tags: event.target.tags.value,
+    };
+
+    // Send the data to the server in JSON format.
+    const JSONdata = JSON.stringify(data);
+
+    // API endpoint where we send form data.
+    const endpoint = "/api/new-subscriber";
+
+    // Form the request for sending data to the server.
+    const options = {
+      // The method is POST because we are sending data.
+      method: "POST",
+      // Tell the server we're sending JSON.
+      headers: {
+        "Content-Type": "application/json",
+      },
+      // Body of the request is the JSON data we created above.
+      body: JSONdata,
+    };
+
+    // Send the form data to our forms API on Vercel and get a response.
+    const response = await fetch(endpoint, options);
+
+    // Get the response data from server as JSON.
+    // If server returns the name submitted, that means the form works.
+    const result = await response.json();
+    alert(`Is this your full name: ${result.data}`);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input type="text" placeholder="First Name" name="first" />
+      <input type="text" placeholder="Last Name" name="last" />
+      <input
+        type="email"
+        placeholder="Email"
+        name="email"
+        pattern="^\S+@\S+$"
+      />
+      {tags &&
+        tags.map((tag: string) => (
+          <input key={tag} type="hidden" name="tags" value={tag} />
+        ))}
+      <input type="submit" value="Submit" />
+    </form>
+  );
+};
 
 type ProductAnnotationProps = PortableTextBlock & {
   colorTheme?: SanityColorTheme;
@@ -97,14 +170,14 @@ export const ProductAnnotation = ({
 
   const product = productWithVariant.product.store;
   const hasVariant = productWithVariant.variant;
-  
+
   const variant = hasVariant
-      ? productWithVariant.variant.store
-      : productWithVariant.product.store;
+    ? productWithVariant.variant.store
+    : productWithVariant.product.store;
 
   const variantId = hasVariant
-      ? productWithVariant.variant?.store?.gid
-      : productWithVariant.product.store.variants[0].store.gid
+    ? productWithVariant.variant?.store?.gid
+    : productWithVariant.product.store.variants[0].store.gid;
 
   return (
     <Box
@@ -114,7 +187,12 @@ export const ProductAnnotation = ({
       onMouseEnter={() => cycleOpen()}
       onMouseLeave={() => cycleOpen()}
     >
-      <chakra.span bg={colorTheme?.background.hex} px={colorTheme ? 1 : 0}  textDecor={colorTheme ? "none" : "underline"} textDecorationStyle={"dashed"}>
+      <chakra.span
+        bg={colorTheme?.background.hex}
+        px={colorTheme ? 1 : 0}
+        textDecor={colorTheme ? "none" : "underline"}
+        textDecorationStyle={"dashed"}
+      >
         {children[0]}
       </chakra.span>
       <AnimatePresence>
@@ -134,13 +212,23 @@ export const ProductAnnotation = ({
           >
             <Stack spacing={6}>
               <AspectRatio ratio={1 / 1} w={198}>
-                <NextImage src={variant.previewImageUrl ? variant.previewImageUrl : product.previewImageUrl} layout="fill" loading="eager" />
+                <NextImage
+                  src={
+                    variant.previewImageUrl
+                      ? variant.previewImageUrl
+                      : product.previewImageUrl
+                  }
+                  layout="fill"
+                  loading="eager"
+                />
               </AspectRatio>
               <Box>
                 <NextLink href={`/product/${product.slug.current}`}>
                   <Link fontWeight={500}>{product.title}</Link>
                 </NextLink>
-                {productWithVariant.variant && <Text color={"blackAlpha.600"}>{variant.title}</Text>}
+                {productWithVariant.variant && (
+                  <Text color={"blackAlpha.600"}>{variant.title}</Text>
+                )}
                 <Text>
                   {productWithVariant.variant ? (
                     <span>${variant.price}</span>

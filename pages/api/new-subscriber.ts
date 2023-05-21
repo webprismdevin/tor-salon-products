@@ -7,7 +7,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const { email, tags, name } = JSON.parse(req.body);
+  const { email, tags, name } = req.body;
 
   console.log(email, tags, name);
 
@@ -15,7 +15,8 @@ export default async function handler(
     "https://tor-salon-products.myshopify.com/admin/api/2022-07/graphql.json" as string,
     {
       headers: {
-        "X-Shopify-Access-Token": process.env.SHOPIFY_ADMIN_API_PASSWORD as string,
+        "X-Shopify-Access-Token": process.env
+          .SHOPIFY_ADMIN_API_PASSWORD as string,
       },
     }
   );
@@ -66,7 +67,7 @@ export default async function handler(
       input: {
         id: response.customers.edges[0].node.id,
         email: email,
-        tags: [...tags, ...response.customers.edges[0].node.tags],
+        tags: [tags, ...response.customers.edges[0].node.tags],
       },
     };
 
@@ -84,9 +85,9 @@ export default async function handler(
     }
 
     res.send({
-      data: 'updated',
+      data: "updated",
     });
-  } else if(response.customers.edges.length === 0) {
+  } else if (response.customers.edges.length === 0) {
     const createMutation = gql`
       mutation customerCreate($input: CustomerInput!) {
         customerCreate(input: $input) {
@@ -137,7 +138,7 @@ export default async function handler(
     }
 
     res.send({
-      data: 'created'
+      data: "created",
     });
   }
 }
