@@ -54,7 +54,7 @@ export default async function getProducts() {
     }
   `;
 
-  const res = await graphClient.request(query);
+  const res:any = await graphClient.request(query);
 
   if (res.errors) {
     console.log(JSON.stringify(res.errors, null, 2));

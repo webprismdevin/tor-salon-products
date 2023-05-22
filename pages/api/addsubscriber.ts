@@ -49,7 +49,7 @@ export default async function handler(
     }
   );
 
-  const response = await adminGraphClient.request(mutation, variables);
+  const response:any = await adminGraphClient.request(mutation, variables);
   
 
   if (response.errors) {

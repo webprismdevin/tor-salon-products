@@ -36,7 +36,7 @@ export default async function handler(
     password: data.password,
   };
 
-  const response = await graphClient.request(mutation, variables);
+  const response:any = await graphClient.request(mutation, variables);
 
   if (response.errors) {
     console.log(JSON.stringify(response.errors, null, 2));

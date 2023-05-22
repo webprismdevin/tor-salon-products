@@ -32,7 +32,7 @@ export default function Navigation({ menu }: MenuProps) {
       p={7}
       pos="sticky"
       top={0}
-      zIndex={2}
+      zIndex={20}
       bg="white"
       shadow={open ? "" : "md"}
     >

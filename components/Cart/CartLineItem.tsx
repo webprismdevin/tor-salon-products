@@ -73,7 +73,7 @@ function ItemQty({ product }: { product: any; }) {
   const input = getInputProps({ readOnly: false });
 
   async function handleQtyUpdate(newQty: string) {
-    const resp = await updateCartItemQty(cart.id, product.node.id, parseInt(newQty));
+    const resp:any = await updateCartItemQty(cart.id, product.node.id, parseInt(newQty));
 
     console.log(resp.cartLinesUpdate)
 
