@@ -39,8 +39,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
 const query = `*[ _type == "page" && slug.current == $slug ][0]
 {
-  modules[]{
-    ...,
-    ${MODULE_FRAGMENT}
-  }
+  ...,
+  ${MODULE_FRAGMENT}
 }`;

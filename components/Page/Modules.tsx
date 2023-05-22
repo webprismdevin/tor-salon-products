@@ -187,8 +187,7 @@ function CollectionGrid({ data }: { data: any }) {
     >
       {collections.map((collection: any) => (
         <Link
-          // href={collection.to}
-          href="/"
+          href={collection.to}
           className={collectionClass}
           key={collection._key}
         >

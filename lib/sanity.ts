@@ -44,17 +44,17 @@ export const getClient = (usePreview: boolean | undefined) =>
 export const COLLECTION = groq`
   _id,
   "gid": collection->store.gid,
-  "slug": "/collections/" + collection->store.slug.current,
+  "slug": "/collection/" + collection->store.slug.current,
   "vector": collection->vector.asset->url,
 `;
 
 const COLLECTION_LINK = groq`
-"to":'/collections/' + collection->store.slug.current`;
+"to":'/collection/' + collection->store.slug.current`;
 
 export const LINK = groq`
   "documentType": _type,
   (_type == "collection") => {
-    "slug": "/collections/" + store.slug.current,
+    "slug": "/collection/" + store.slug.current,
   },
   (_type == "home") => {
     "slug": "/",
@@ -117,7 +117,7 @@ export const CTA_FRAGMENT = groq`
     ...reference-> {
       "documentType": _type,
       (_type == "collection") => {
-        "to": "/collections/" + store.slug.current,
+        "to": "/collection/" + store.slug.current,
       },
       (_type == "home") => {
         "to": "/",
@@ -159,7 +159,7 @@ modules[]{
   _type,
   (_type == 'component.swimlane') => {
       "gid": collection->store.gid,
-      "to": "/collections/" + collection->store.slug.current,
+      "to": "/collection/" + collection->store.slug.current,
       "handle": collection->store.slug.current,
   },
   (_type == 'component.hero') => {
