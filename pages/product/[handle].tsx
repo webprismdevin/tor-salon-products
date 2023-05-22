@@ -711,7 +711,7 @@ export async function getStaticPaths() {
     }
   `;
 
-  const res = await graphQLClient.request(query);
+  const res:any = await graphQLClient.request(query);
 
   if (res.errors) {
     console.log(JSON.stringify(res.errors, null, 2));
@@ -912,7 +912,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     }
   }`;
 
-  const res = await graphQLClient.request(productQuery);
+  const res:any = await graphQLClient.request(productQuery);
 
   if (res.errors) {
     console.log(JSON.stringify(res.errors, null, 2));
@@ -1017,7 +1017,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       }
     }`;
 
-  const collectionRes = await graphQLClient.request(collectionQuery);
+  const collectionRes:any = await graphQLClient.request(collectionQuery);
 
   if (collectionRes.errors) {
     console.log(JSON.stringify(res.errors, null, 2));

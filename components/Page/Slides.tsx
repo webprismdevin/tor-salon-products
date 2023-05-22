@@ -119,11 +119,15 @@ export default function Slides({ data }: { data: any }) {
 export const NavArrowLeft = ({
   color,
   size,
+  className,
+  onClick,
   ...props
 }: {
   color?: string;
   size?: number;
-  props: any;
+  className?: string;
+  onClick: () => void;
+  props?: any;
 }) => {
   return (
     <svg
@@ -150,11 +154,15 @@ export const NavArrowLeft = ({
 export const NavArrowRight = ({
   color,
   size,
+  className,
+  onClick,
   ...props
 }: {
   color?: string;
   size?: number;
-  props: any;
+  className?: string;
+  onClick: () => void;
+  props?: any;
 }) => {
   return (
     <svg

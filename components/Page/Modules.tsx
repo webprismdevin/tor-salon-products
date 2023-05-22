@@ -9,6 +9,9 @@ import EmailSignup from "./Modules/EmailSignup";
 import { imageBuilder } from "lib/sanity";
 import Image from "next/image";
 import Link from "next/link";
+import { SanityImageAssetDocument } from "@sanity/client";
+import { useScroll, useTransform, motion } from "framer-motion";
+import { useRef } from "react";
 import PortableText from "components/PortableText/PortableText";
 import Slides from "./Slides";
 
@@ -32,7 +35,7 @@ export default function Modules({ modules, product }: any) {
           case "module.emailSignup":
             return <EmailSignup key={module._key} {...module} />;
           case "component.hero":
-            return <Hero key={module._key} {...module} />;
+            return <Hero key={module._key} data={module} />;
           case "component.textWithImage":
             return <TextWithImage key={module._key} data={module} />;
           case "component.collectionGrid":
@@ -49,50 +52,95 @@ export default function Modules({ modules, product }: any) {
   );
 }
 
-const Hero = ({ title, caption, image, layout: direction }: any) => {
+export type Hero = {
+  _key: string;
+  image: {
+    asset: SanityImageAssetDocument;
+    alt: string;
+    loading?: "lazy" | "eager";
+    width: number;
+    height: number;
+  };
+  title: string;
+  caption: string;
+  cta?: {
+    text: string;
+    to: string;
+  };
+  layout?: "left" | "right" | "center";
+  size?: "small" | "medium" | "large";
+};
+
+export function Hero({ data }: { data: Hero }) {
+  const { image, title, caption, cta, layout, size } = data;
+
+  const ref = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+
   return (
-    <div className="relative h-[500px] flex items-center text-white">
-      <Image
-        src={imageBuilder(image).url()}
-        alt={image?.alt}
-        fill
-        className="object-cover object-center z-0"
-      />
-      <div className="z-10 p-8 md:p-12 lg:p-16">
-        <h2 className="text-2xl">{caption}</h2>
-        <h1 className="text-5xl font-bold">{title}</h1>
+    <div
+      key={data._key}
+      className={`flex-column align-center relative flex ${
+        size === "small" ? "h-[500px]" : "h-[800px]"
+      } overflow-hidden p-8 lg:p-24 ${layout === "right" && "justify-end"} ${
+        layout === "center" && "justify-center text-center"
+      }`}
+      ref={ref}
+    >
+      <motion.div
+        style={{ y }}
+        className="absolute left-0 top-0 z-0 h-full w-full"
+      >
+        <Image
+          src={imageBuilder(image.asset).format("webp").quality(80).url()}
+          sizes={"100vw"}
+          className="mx-auto mt-0 min-h-full w-auto object-cover"
+          alt={image.alt}
+          fill
+          loading={image.loading ? image.loading : "lazy"}
+        />
+      </motion.div>
+      <div
+        className={`${
+          layout === "right" && "text-right"
+        } z-1 relative self-center text-contrast max-w-prose`}
+      >
+        <p className="text-shadow text-xl font-bold lg:text-2xl">{caption}</p>
+        <h2 className="text-shadow mb-4 font-heading text-4xl uppercase lg:text-6xl">
+          {title}
+        </h2>
+        {cta?.to && <Link href={cta.to}>{cta.text}</Link>}
       </div>
     </div>
   );
-};
+}
 
 function TextWithImage({ data }: { data: any }) {
   return (
     <div
-      className={`flex flex-col lg:flex-row ${data.image ?? "justify-center"} ${
-        data.layout === "right" && "lg:flex-row-reverse"
-      }`}
+      className={`flex flex-col w-full lg:flex-row ${
+        data.image ? "justify-between" : ""
+      } ${data.layout === "right" ? "lg:flex-row-reverse" : ""}`}
       key={data._key}
     >
       <div
-        className={`max-w-full self-center p-8 ${
+        className={`max-w-full grow-1 self-center p-8 ${
           data.image ? "lg:max-w-[50%]" : "lg:max-w-screen-lg"
         } lg:p-24`}
       >
         <div className={`${data.image ?? "justify-center text-center"}`}>
-          <p className="font-heading text-3xl md:text-5xl lg:text-7xl">
+          <p className="font-heading text-base">{data.caption}</p>
+          <p className="font-heading text-2xl md:text-3xl lg:text-4xl">
             {data.title}
-          </p>
-          <p className="font-heading text-xl md:text-3xl lg:text-5xl">
-            {data.caption}
           </p>
         </div>
         <div className="mt-4">
-          {data?.content && (
-            <div className="max-w-prose">
-              <PortableText blocks={data.content} />
-            </div>
-          )}
+          {data?.content && <PortableText blocks={data.content} />}
           {data.cta && (
             <div className="mt-4">
               <Link href={data.cta.to} className="border-b-2 border-white">
@@ -103,12 +151,13 @@ function TextWithImage({ data }: { data: any }) {
         </div>
       </div>
       {data.image && (
-        <div className=" relative aspect-square min-w-[50%]">
+        <div className="relative aspect-square min-w-[50%]">
           <Image
             src={imageBuilder(data.image).format("webp").url()}
             alt={data.image.alt ? data.image.alt : "Image"}
-            sizes="(min-width: 1024px) 50vw, 100vw"
-            className="absolute h-full w-full object-cover object-center"
+            // sizes="(min-width: 1024px) 50vw, 100vw"
+            className="absolute w-full object-cover left-0 right-0"
+            fill
           />
         </div>
       )}

@@ -1,5 +1,4 @@
 import BlockContent from "@sanity/block-content-to-react";
-import type { Block as SanityBlock } from "@sanity/types";
 import AccordionBlock from "./Blocks/Accordion";
 // import LinkEmailAnnotation from './annotations/LinkEmail';
 // import LinkExternalAnnotation from './annotations/LinkExternal';
@@ -26,10 +25,9 @@ import NextImage from "next/legacy/image";
 import NextLink from "next/link";
 import useAddToCart from "../../lib/useAddToCart";
 import { usePlausible } from "next-plausible";
-import { useState } from "react";
 
 type Props = {
-  blocks: SanityBlock[];
+  blocks: any[];
   className?: string;
   centered?: boolean;
   colorTheme?: SanityColorTheme;
@@ -88,10 +86,8 @@ const SignupForm = (data: any) => {
   console.log(tags);
 
   const handleSubmit = async (event: any) => {
-    // Stop the form from submitting and refreshing the page.
     event.preventDefault();
 
-    // Get data from the form.
     const data = {
       name: {
         firstname: event.target.first.value,
@@ -101,38 +97,42 @@ const SignupForm = (data: any) => {
       tags: event.target.tags.value,
     };
 
-    // Send the data to the server in JSON format.
     const JSONdata = JSON.stringify(data);
 
-    // API endpoint where we send form data.
-    const endpoint = "/api/new-subscriber";
-
-    // Form the request for sending data to the server.
     const options = {
-      // The method is POST because we are sending data.
       method: "POST",
-      // Tell the server we're sending JSON.
       headers: {
         "Content-Type": "application/json",
       },
-      // Body of the request is the JSON data we created above.
       body: JSONdata,
     };
 
     // Send the form data to our forms API on Vercel and get a response.
-    const response = await fetch(endpoint, options);
+    const response = await fetch("/api/new-subscriber", options);
 
     // Get the response data from server as JSON.
     // If server returns the name submitted, that means the form works.
     const result = await response.json();
-    alert(`Is this your full name: ${result.data}`);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input type="text" placeholder="First Name" name="first" />
-      <input type="text" placeholder="Last Name" name="last" />
+    <form
+      onSubmit={handleSubmit}
+      className="grid grid-cols-1 md:grid-cols-2 mx-auto gap-4">
       <input
+        className="py-2 px-3 rounded border-2"
+        type="text"
+        placeholder="First Name"
+        name="first"
+      />
+      <input
+        className="py-2 px-3 rounded border-2"
+        type="text"
+        placeholder="Last Name"
+        name="last"
+      />
+      <input
+        className="py-2 px-3 rounded border-2 col-span-2"
         type="email"
         placeholder="Email"
         name="email"
@@ -142,7 +142,11 @@ const SignupForm = (data: any) => {
         tags.map((tag: string) => (
           <input key={tag} type="hidden" name="tags" value={tag} />
         ))}
-      <input type="submit" value="Submit" />
+      <input
+        type="submit"
+        value="Submit"
+        className="px-4 py-2 rounded bg-black text-white font-bold"
+      />
     </form>
   );
 };

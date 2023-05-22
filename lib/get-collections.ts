@@ -16,7 +16,7 @@ export default async function getCollections(ignore: string) {
     }
   `;
 
-  const response = await graphClient.request(query);
+  const response:any = await graphClient.request(query);
 
   if (response.errors) {
     console.log(JSON.stringify(response.errors, null, 2));

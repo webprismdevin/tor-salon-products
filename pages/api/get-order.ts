@@ -129,7 +129,7 @@ export default async function handler(
     }
   );
 
-  const response = await adminGraphClient.request(query);
+  const response:any = await adminGraphClient.request(query);
 
   if (response.errors) {
     console.log(JSON.stringify(response.errors, null, 2));

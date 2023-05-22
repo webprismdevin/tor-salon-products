@@ -644,7 +644,7 @@ export async function getStaticProps() {
     }
   `;
 
-  const res = await graphQLClient.request(query);
+  const res:any = await graphQLClient.request(query);
 
   if (res.errors) {
     console.log(JSON.stringify(res.errors, null, 2));

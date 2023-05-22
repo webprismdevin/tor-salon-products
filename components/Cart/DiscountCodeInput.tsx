@@ -23,7 +23,7 @@ export default function DiscountCodeInput() {
   const toast = useToast();
 
   async function applyDiscount() {
-    const response = await applyDiscountToCart(cart.id, code);
+    const response:any = await applyDiscountToCart(cart.id, code);
 
     if (response.error) {
       toast({

@@ -160,7 +160,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     if (queryObj.get("discount") && cart && cart.id) {
       console.log(cart.id);
-      applyDiscountToCart(cart.id, queryObj.get("discount")!).then((res) => {
+      applyDiscountToCart(cart.id, queryObj.get("discount")!).then((res:any) => {
         if (res.cartDiscountCodesUpdate.cart.discountCodes.length > 0) {
           toast({
             title: "Discount Applied",

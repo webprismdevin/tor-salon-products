@@ -89,7 +89,7 @@ const Cart = ({ color }: { color?: string }) => {
     );
 
     if (localCartData) {
-      const existingCart = await loadCart(localCartData.id);
+      const existingCart:any = await loadCart(localCartData.id);
 
       if (existingCart.cart !== null) {
         if (
@@ -130,7 +130,7 @@ const Cart = ({ color }: { color?: string }) => {
   }
 
   async function removeItem(lineItemId: string) {
-    const resp = await removeCartItem(cart.id, lineItemId);
+    const resp:any = await removeCartItem(cart.id, lineItemId);
 
     console.log(resp.cartLinesRemove);
 

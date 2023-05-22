@@ -44,7 +44,7 @@ export default function CartRecommendations() {
   useEffect(() => {
     console.log("fired");
 
-    getRecommendations(cart.lines[cart.lines.length - 1].node.merchandise.product.id).then((res) =>
+    getRecommendations(cart.lines[cart.lines.length - 1].node.merchandise.product.id).then((res:any) =>
       setRecommendations(res.productRecommendations)
     );
   }, [cart.lines]);
