@@ -3,7 +3,7 @@ import Head from "next/head";
 import React, { Suspense, useEffect, useState } from "react";
 import { imageBuilder, MODULE_FRAGMENT, sanity } from "../../lib/sanity";
 import dynamic from "next/dynamic";
-import Modules from "components/Page/Modules";
+import Modules from "components/Modules";
 
 export default function Page({ page, productImages, bottomline }: any) {
   return (

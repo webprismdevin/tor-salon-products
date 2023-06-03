@@ -1,11 +1,11 @@
 import React, { Fragment } from "react";
-import BigTextBlock from "./Modules/BigTextBlock";
-import FeaturedInformation from "./Modules/FeaturedInformation";
-import ReviewSlider from "../ReviewSlider";
-import SecondBuyButton from "./Modules/SecondBuyButton";
-import HairTypes from "./Modules/HairTypes";
-import ReviewSection from "./Modules/ReviewSection";
-import EmailSignup from "./Modules/EmailSignup";
+import BigTextBlock from "./Page/Modules/BigTextBlock";
+import FeaturedInformation from "./Page/Modules/FeaturedInformation";
+import ReviewSlider from "./ReviewSlider";
+import SecondBuyButton from "./Page/Modules/SecondBuyButton";
+import HairTypes from "./Page/Modules/HairTypes";
+import ReviewSection from "./Page/Modules/ReviewSection";
+import EmailSignup from "./Page/Modules/EmailSignup";
 import { imageBuilder } from "lib/sanity";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,7 +13,7 @@ import { SanityImageAssetDocument } from "@sanity/client";
 import { useScroll, useTransform, motion } from "framer-motion";
 import { useRef } from "react";
 import PortableText from "components/PortableText/PortableText";
-import Slides from "./Slides";
+import Slides from "./Page/Slides";
 
 export default function Modules({ modules, product }: any) {
   return (
@@ -114,7 +114,7 @@ export function Hero({ data }: { data: Hero }) {
         <h2 className="text-shadow mb-4 font-heading text-4xl uppercase lg:text-6xl">
           {title}
         </h2>
-        {cta?.to && <Link href={cta.to}>{cta.text}</Link>}
+        {cta?.to && <Link className="px-4 py-2 rounded bg-black text-white font-bold" href={cta.to}>{cta.text}</Link>}
       </div>
     </div>
   );
@@ -130,7 +130,7 @@ function TextWithImage({ data }: { data: any }) {
     >
       <div
         className={`max-w-full grow-1 self-center p-8 ${
-          data.image ? "lg:max-w-[50%]" : "lg:max-w-screen-lg"
+          data.image ? "lg:max-w-[50%]" : "lg:max-w-screen-lg mx-auto"
         } lg:p-24`}
       >
         <div className={`${data.image ?? "justify-center text-center"}`}>

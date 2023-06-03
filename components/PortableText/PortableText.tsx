@@ -113,12 +113,21 @@ const SignupForm = (data: any) => {
     // Get the response data from server as JSON.
     // If server returns the name submitted, that means the form works.
     const result = await response.json();
+
+    // track the event with Plausible
+    plausible("Subscribe", {
+      props: {
+        method: "landing page",
+        tag: tags
+      },
+    });
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="grid grid-cols-1 md:grid-cols-2 mx-auto gap-4">
+      className="grid grid-cols-1 md:grid-cols-2 mx-auto gap-4"
+    >
       <input
         className="py-2 px-3 rounded border-2"
         type="text"

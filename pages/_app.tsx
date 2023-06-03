@@ -15,7 +15,7 @@ import Script from "next/script";
 import { useRouter } from "next/router";
 import { Suspense, useEffect, useState } from "react";
 //libs
-import { sanity } from "../lib/sanity";
+import { CTA_FRAGMENT, sanity } from "../lib/sanity";
 import useSWR from "swr";
 import applyDiscountToCart from "../lib/Cart/applyDiscountToCart";
 import useUser from "../lib/useUser";
@@ -90,6 +90,24 @@ export const sanityFetcher = (query: string) => sanity.fetch(query);
 const settingsQuery = `*[ _type == "settings" ][0]
 { 
   ...,
+  banner[] {
+    text,
+    ...reference-> {
+      "documentType": _type,
+      (_type == "collection") => {
+        "to": "/collection/" + store.slug.current,
+      },
+      (_type == "home") => {
+        "to": "/",
+      },
+      (_type == "page") => {
+        "to": "/pages/" + slug.current,
+      },
+      (_type == "product" && store.status == "active") => {
+        "to": "/product/" + store.slug.current,
+      },
+    }
+  },
   menu { 
     mega_menu[]{
       ...,
@@ -160,17 +178,19 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     if (queryObj.get("discount") && cart && cart.id) {
       console.log(cart.id);
-      applyDiscountToCart(cart.id, queryObj.get("discount")!).then((res:any) => {
-        if (res.cartDiscountCodesUpdate.cart.discountCodes.length > 0) {
-          toast({
-            title: "Discount Applied",
-            description: `Your discount has been applied!`,
-            status: "success",
-            duration: 5000,
-            isClosable: true,
-          });
+      applyDiscountToCart(cart.id, queryObj.get("discount")!).then(
+        (res: any) => {
+          if (res.cartDiscountCodesUpdate.cart.discountCodes.length > 0) {
+            toast({
+              title: "Discount Applied",
+              description: `Your discount has been applied!`,
+              status: "success",
+              duration: 5000,
+              isClosable: true,
+            });
+          }
         }
-      });
+      );
     }
   }, [cart.id]);
 
