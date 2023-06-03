@@ -138,7 +138,7 @@ export default function Navigation({ menu }: MenuProps) {
 const Logo = () => {
   return (
     <Box>
-      <NextLink legacyBehavior href="/" passHref>
+      <NextLink href="/">
         <Img src={"/logo_240.png"} h={7} alt="TOR logo" />
       </NextLink>
     </Box>

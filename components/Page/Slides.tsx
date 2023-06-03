@@ -132,6 +132,8 @@ export const NavArrowLeft = ({
   return (
     <svg
       {...props}
+      onClick={onClick}
+      className={className}
       width={size ? size : 24}
       height={size ? size : 24}
       strokeWidth="1.5"
@@ -167,6 +169,8 @@ export const NavArrowRight = ({
   return (
     <svg
       {...props}
+      onClick={onClick}
+      className={className}
       width={size ? size : 24}
       height={size ? size : 24}
       strokeWidth="1.5"
