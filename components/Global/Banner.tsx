@@ -28,8 +28,8 @@ export default function Banner({ data }: BannerSettings) {
   }, [page]);
 
   return (
-    <motion.div className="flex justify-between py-2 bg-black text-white">
-      <NavArrowLeft onClick={() => paginate(-1)} className="opacity-50 cursor-pointer" />
+    <motion.div className="flex justify-center py-2 bg-black text-white">
+      {/* <NavArrowLeft onClick={() => paginate(-1)} className="opacity-50 cursor-pointer" /> */}
       <AnimatePresence initial={true} custom={direction} mode="wait">
         <MotionBox
           custom={direction}
@@ -54,7 +54,7 @@ export default function Banner({ data }: BannerSettings) {
           )}
         </MotionBox>
       </AnimatePresence>
-      <NavArrowRight onClick={() => paginate(1)} className="opacity-50 cursor-pointer" />
+      {/* <NavArrowRight onClick={() => paginate(1)} className="opacity-50 cursor-pointer" /> */}
     </motion.div>
   );
 }
