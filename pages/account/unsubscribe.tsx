@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Unsubscribe() {
   return (
     <div className="flex flex-col items-center justify-center w-full h-screen">
@@ -6,7 +8,7 @@ export default function Unsubscribe() {
         You have been unsubscribed from our mailing list.
       </p>
       <p className="text-center">
-        <a href="/" className="underline">Return to home page</a>
+        <Link href="/" className="underline">Return to home page</Link>
       </p>
     </div>
   );
