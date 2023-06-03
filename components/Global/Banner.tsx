@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { wrap } from "@popmotion/popcorn";
 import Link from "next/link";
-import { NavArrowLeft, NavArrowRight } from "components/Page/Slides";
+// import { NavArrowLeft, NavArrowRight } from "components/Page/Slides";
 
 const MotionBox = motion<BoxProps>(Box);
 
