@@ -187,7 +187,7 @@ modules[]{
     ...,
     ${CTA_FRAGMENT}
   },
-  (_type == 'component.faqSection') => {
+  (_type == 'component.faq') => {
     ...,
     faqs[]->{
       _id,

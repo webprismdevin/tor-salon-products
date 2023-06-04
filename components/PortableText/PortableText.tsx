@@ -83,7 +83,6 @@ const SignupForm = (data: any) => {
   const { tags } = data.node;
 
   const plausible = usePlausible();
-  console.log(tags);
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();

@@ -40,7 +40,7 @@ export default function FAQ({ data }: any) {
   );
 }
 
-function FaqAccordion({ faqs }: any) {
+export function FaqAccordion({ faqs }: any) {
   return (
     <Accordion allowMultiple allowToggle minW="50%">
       {faqs.map((faq: any) => (
