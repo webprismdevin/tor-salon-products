@@ -1,4 +1,4 @@
-import React, { Fragment, Suspense } from "react";
+import React, { Fragment, Suspense, useState } from "react";
 import { imageBuilder } from "lib/sanity";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,12 +7,12 @@ import { useScroll, useTransform, motion } from "framer-motion";
 import { useRef } from "react";
 import PortableText from "components/PortableText/PortableText";
 import Slides from "./Slides";
-// import ReviewCarousel from "./Modules/ReviewCarousel";
 import dynamic from "next/dynamic";
+import ProductGrid from "./ProductGrid";
 
 const ReviewCarousel = dynamic(() => import("./ReviewCarousel"));
 
-export default function Modules({ modules, product }: any) {
+export default function Modules({ modules }: any) {
   return (
     <React.Fragment>
       {modules.map((module: any) => {
@@ -35,6 +35,8 @@ export default function Modules({ modules, product }: any) {
             );
           case "component.faq":
             return <FAQs key={module._key} data={module} />;
+          case 'component.productGrid':
+            return <ProductGrid key={module._key} data={module} />;
           default:
             return null;
         }
@@ -296,9 +298,6 @@ function FAQs({ data }: { data: any }) {
     </div>
   );
 }
-
-import { useState } from "react";
-
 const Accordion = ({ faq }: { faq: { question: string; answer: string } }) => {
   const [isOpen, setIsOpen] = useState(false);
 

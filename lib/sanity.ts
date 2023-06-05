@@ -195,5 +195,18 @@ modules[]{
       answer
     }
   },
+  (_type == 'component.productGrid') => {
+    ...,
+    products[]->{
+      "gid": store.gid,
+      "to": "/product/" + store.slug.current,
+      "featuredImage": store.previewImageUrl,
+      "title": store.title,
+      "priceRange": store.priceRange,
+      "compareAtPrice": store.compareAtPrice,
+      "handle": store.slug.current
+    },
+    ${CTA_FRAGMENT}
+  },
 }
 `;
