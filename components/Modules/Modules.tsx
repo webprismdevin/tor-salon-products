@@ -123,9 +123,9 @@ export function Hero({ data }: { data: Hero }) {
 function TextWithImage({ data }: { data: any }) {
   return (
     <div
-      className={`flex flex-col w-full lg:flex-row ${
+      className={`flex w-full lg:flex-row ${
         data.image ? "justify-between" : ""
-      } ${data.layout === "right" ? "lg:flex-row-reverse" : ""}`}
+      } ${data.layout === "right" ? "flex-col md:flex-row-reverse" : "flex-col-reverse"}`}
       key={data._key}
     >
       <div
@@ -151,7 +151,7 @@ function TextWithImage({ data }: { data: any }) {
         </div>
       </div>
       {data.image && (
-        <div className="relative aspect-square min-w-[50%]">
+        <div className="relative aspect-[16/9] md:aspect-square min-w-[50%]">
           <Image
             src={imageBuilder(data.image).format("webp").url()}
             alt={data.image.alt ? data.image.alt : "Image"}

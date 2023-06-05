@@ -8,6 +8,9 @@ import Modules from "components/Modules/Modules";
 export default function Page({ page, productImages, bottomline }: any) {
   return (
     <div className="">
+      <Head>
+        <title>{page.title}</title>
+      </Head>
       <Modules modules={page.modules} />
     </div>
   );
