@@ -74,23 +74,6 @@ export default function MailingList({ settings }: MailingListSettings) {
 
     plausible("Subscribe", { props: { method: "popup" } });
 
-    window.dataLayer.push({
-      event: "join_email_list",
-      signUpMethod: "popup",
-      callback: () => {
-        console.log("fired join_email_list event to GTM");
-        window.localStorage.setItem("subscribed", "true");
-      },
-    });
-    window.dataLayer.push({
-      event: "generate_lead",
-      currency: "USD",
-      value: 0,
-      callback: () => {
-        window.localStorage.setItem("subscribed", "true");
-      },
-    });
-
     const response = await fetch("/api/addsubscriber", {
       method: "POST",
       body: JSON.stringify({

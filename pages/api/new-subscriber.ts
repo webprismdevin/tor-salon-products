@@ -7,7 +7,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const { email, tags, name } = req.body;
+  const { email, tags, name } = JSON.parse(req.body);
 
   console.log(email, tags, name);
 
@@ -15,8 +15,7 @@ export default async function handler(
     "https://tor-salon-products.myshopify.com/admin/api/2022-07/graphql.json" as string,
     {
       headers: {
-        "X-Shopify-Access-Token": process.env
-          .SHOPIFY_ADMIN_API_PASSWORD as string,
+        "X-Shopify-Access-Token": process.env.SHOPIFY_ADMIN_API_PASSWORD as string,
       },
     }
   );
@@ -39,7 +38,7 @@ export default async function handler(
     email: email,
   };
 
-  const response:any = await adminGraphClient.request(query, queryVariables);
+  const response = await adminGraphClient.request(query, queryVariables) as any;
 
   if (response.customers.edges.length > 0) {
     const updateMutation = gql`
@@ -67,14 +66,14 @@ export default async function handler(
       input: {
         id: response.customers.edges[0].node.id,
         email: email,
-        tags: [tags, ...response.customers.edges[0].node.tags],
+        tags: [...tags, ...response.customers.edges[0].node.tags],
       },
     };
 
-    const updateResponse:any = await adminGraphClient.request(
+    const updateResponse = await adminGraphClient.request(
       updateMutation,
       updateVariables
-    );
+    ) as any;
 
     if (response.errors) {
       console.log(JSON.stringify(response.errors, null, 2));
@@ -85,9 +84,9 @@ export default async function handler(
     }
 
     res.send({
-      data: "updated",
+      data: 'updated',
     });
-  } else if (response.customers.edges.length === 0) {
+  } else if(response.customers.edges.length === 0) {
     const createMutation = gql`
       mutation customerCreate($input: CustomerInput!) {
         customerCreate(input: $input) {
@@ -124,10 +123,10 @@ export default async function handler(
       },
     };
 
-    const createResponse:any = await adminGraphClient.request(
+    const createResponse = await adminGraphClient.request(
       createMutation,
       createVariables
-    );
+    ) as any;
 
     if (createResponse.errors) {
       console.log(JSON.stringify(createResponse.errors, null, 2));
@@ -138,7 +137,7 @@ export default async function handler(
     }
 
     res.send({
-      data: "created",
+      data: 'created'
     });
   }
 }

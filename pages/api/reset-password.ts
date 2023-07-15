@@ -30,7 +30,7 @@ export default async function handler(
       "email": req.query.email
   }
 
-  const response:any = await graphClient.request(query, variables);
+  const response = await graphClient.request(query, variables) as any;
 
   if (response.errors) {
     console.log(JSON.stringify(response.errors, null, 2));

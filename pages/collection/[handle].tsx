@@ -14,37 +14,23 @@ import {
 import getCollections from "../../lib/get-collections";
 import ProductFeature from "../../components/ProductFeature";
 import Product from "../../components/Product/Product";
-import { AnalyticsPageType } from "@shopify/hydrogen-react";
 
 export default function CollectionPage({
   handle,
   data,
-  analytics
 }: {
   handle: string;
   data: any;
-  analytics?: any;
 }) {
   if (!data) return null;
 
   return (
     <>
       <Head>
-        <title>{`${data.title} | TOR Salon Products`}</title>
+        <title>{data.title} | TOR Salon Products</title>
         <meta
           name="description"
           content={`${data.description.substring(0, 200)}...`}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: `{
-              "@context": "https://schema.org",
-              "@type": "CollectionPage",
-              "name": "${data.title}",
-              "description": "${data.description}"
-            }`,
-          }}
         />
       </Head>
       <Flex
@@ -92,11 +78,7 @@ export default function CollectionPage({
           </Stack>
         </Box>
 
-        <AspectRatio
-          ratio={[2 / 1]}
-          w={["full", "50%"]}
-          maxH={["200px", null, "100%"]}
-        >
+        <AspectRatio ratio={[2/1]} w={["full", "50%"]} maxH={["200px", null, "100%"]}>
           <Image src={data.image?.url} alt="" />
         </AspectRatio>
       </Flex>
@@ -110,7 +92,7 @@ export default function CollectionPage({
           gap={12}
         >
           {data.products.edges.map((p: any) => (
-            <Product product={p} key={p.node.id} analytics={analytics} />
+            <Product product={p} key={p.node.id} />
           ))}
         </SimpleGrid>
       </Container>
@@ -136,8 +118,7 @@ export async function getStaticProps(context: any) {
     process.env.NEXT_PUBLIC_SHOPIFY_URL!,
     {
       headers: {
-        "X-Shopify-Storefront-Access-Token":
-          process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN!,
+        "X-Shopify-Storefront-Access-Token": process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN!,
       },
     }
   );
@@ -147,7 +128,6 @@ export async function getStaticProps(context: any) {
   // Shopify Request
   const query = gql`{
         collection(handle: "${handle}"){
-        id
         title
         description
         descriptionHtml
@@ -236,7 +216,7 @@ export async function getStaticProps(context: any) {
       }
     }`;
 
-  const res:any = await graphQLClient.request(query);
+  const res = await graphQLClient.request(query) as any;
 
   if (res.errors) {
     console.log(JSON.stringify(res.errors, null, 2));
@@ -247,11 +227,6 @@ export async function getStaticProps(context: any) {
     props: {
       handle: handle,
       data: res.collection,
-      analytics: {
-        pageType: AnalyticsPageType.collection,
-        resourceId: res.collection.id,
-        collectionHandle: handle,
-      },
     },
     revalidate: 60,
   };

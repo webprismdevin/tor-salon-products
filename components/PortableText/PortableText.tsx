@@ -1,4 +1,5 @@
 import BlockContent from "@sanity/block-content-to-react";
+// import type { Block as SanityBlock } from "@sanity/types";
 import AccordionBlock from "./Blocks/Accordion";
 // import LinkEmailAnnotation from './annotations/LinkEmail';
 // import LinkExternalAnnotation from './annotations/LinkExternal';
@@ -24,7 +25,6 @@ import { AnimatePresence, motion, useCycle } from "framer-motion";
 import NextImage from "next/legacy/image";
 import NextLink from "next/link";
 import useAddToCart from "../../lib/useAddToCart";
-import { usePlausible } from "next-plausible";
 
 type Props = {
   blocks: any[];
@@ -66,98 +66,13 @@ export default function PortableText({
             <ImagesBlock centered={true} {...props} />
           ),
           customHtml: (props: any) => (
-            <Box
-              w="full"
-              className="customHtml"
-              dangerouslySetInnerHTML={{ __html: props.node.html }}
-            />
-          ),
-          signupForm: (props: any) => <SignupForm {...props} />,
+            <Box w="full" className="customHtml" dangerouslySetInnerHTML={{ __html: props.node.html }} />
+          )
         },
       }}
     />
   );
 }
-
-const SignupForm = (data: any) => {
-  const { tags } = data.node;
-
-  const plausible = usePlausible();
-
-  const handleSubmit = async (event: any) => {
-    event.preventDefault();
-
-    const data = {
-      name: {
-        firstname: event.target.first.value,
-        lastname: event.target.last.value,
-      },
-      email: event.target.email.value,
-      tags: event.target.tags.value,
-    };
-
-    const JSONdata = JSON.stringify(data);
-
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSONdata,
-    };
-
-    // Send the form data to our forms API on Vercel and get a response.
-    const response = await fetch("/api/new-subscriber", options);
-
-    // Get the response data from server as JSON.
-    // If server returns the name submitted, that means the form works.
-    const result = await response.json();
-
-    // track the event with Plausible
-    plausible("Subscribe", {
-      props: {
-        method: "landing page",
-        tag: tags
-      },
-    });
-  };
-
-  return (
-    <form
-      onSubmit={handleSubmit}
-      className="grid grid-cols-1 md:grid-cols-2 mx-auto gap-4"
-    >
-      <input
-        className="py-2 px-3 rounded border-2"
-        type="text"
-        placeholder="First Name"
-        name="first"
-      />
-      <input
-        className="py-2 px-3 rounded border-2"
-        type="text"
-        placeholder="Last Name"
-        name="last"
-      />
-      <input
-        className="py-2 px-3 rounded border-2 col-span-2"
-        type="email"
-        placeholder="Email"
-        name="email"
-        pattern="^\S+@\S+$"
-      />
-      {tags &&
-        tags.map((tag: string) => (
-          <input key={tag} type="hidden" name="tags" value={tag} />
-        ))}
-      <input
-        type="submit"
-        value="Submit"
-        className="px-4 py-2 rounded bg-black text-white font-bold"
-      />
-    </form>
-  );
-};
 
 type ProductAnnotationProps = PortableTextBlock & {
   colorTheme?: SanityColorTheme;
@@ -182,14 +97,14 @@ export const ProductAnnotation = ({
 
   const product = productWithVariant.product.store;
   const hasVariant = productWithVariant.variant;
-
+  
   const variant = hasVariant
-    ? productWithVariant.variant.store
-    : productWithVariant.product.store;
+      ? productWithVariant.variant.store
+      : productWithVariant.product.store;
 
   const variantId = hasVariant
-    ? productWithVariant.variant?.store?.gid
-    : productWithVariant.product.store.variants[0].store.gid;
+      ? productWithVariant.variant?.store?.gid
+      : productWithVariant.product.store.variants[0].store.gid
 
   return (
     <Box
@@ -199,12 +114,7 @@ export const ProductAnnotation = ({
       onMouseEnter={() => cycleOpen()}
       onMouseLeave={() => cycleOpen()}
     >
-      <chakra.span
-        bg={colorTheme?.background.hex}
-        px={colorTheme ? 1 : 0}
-        textDecor={colorTheme ? "none" : "underline"}
-        textDecorationStyle={"dashed"}
-      >
+      <chakra.span bg={colorTheme?.background.hex} px={colorTheme ? 1 : 0}  textDecor={colorTheme ? "none" : "underline"} textDecorationStyle={"dashed"}>
         {children[0]}
       </chakra.span>
       <AnimatePresence>
@@ -224,23 +134,13 @@ export const ProductAnnotation = ({
           >
             <Stack spacing={6}>
               <AspectRatio ratio={1 / 1} w={198}>
-                <NextImage
-                  src={
-                    variant.previewImageUrl
-                      ? variant.previewImageUrl
-                      : product.previewImageUrl
-                  }
-                  layout="fill"
-                  loading="eager"
-                />
+                <NextImage src={variant.previewImageUrl ? variant.previewImageUrl : product.previewImageUrl} layout="fill" loading="eager" />
               </AspectRatio>
               <Box>
                 <NextLink href={`/product/${product.slug.current}`}>
                   <Link fontWeight={500}>{product.title}</Link>
                 </NextLink>
-                {productWithVariant.variant && (
-                  <Text color={"blackAlpha.600"}>{variant.title}</Text>
-                )}
+                {productWithVariant.variant && <Text color={"blackAlpha.600"}>{variant.title}</Text>}
                 <Text>
                   {productWithVariant.variant ? (
                     <span>${variant.price}</span>

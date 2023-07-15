@@ -21,7 +21,6 @@ import {
   AccordionIcon,
   Divider,
   GridItem,
-  Tag,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
@@ -34,7 +33,6 @@ import { wrap } from "@popmotion/popcorn";
 import NextLink from "next/link";
 import { RatingStar } from "rating-star";
 import ReviewSubmit from "../../components/Product/ReviewSubmit";
-import Reviews from "./../../components/Product/Reviews";
 import SubscriptionPlan from "../../components/Product/SubscriptionPlan";
 import useAddToCart from "../../lib/useAddToCart";
 import AuthContext from "lib/auth-context";
@@ -51,8 +49,6 @@ import {
   ShopifyAnalyticsPayload,
 } from "@shopify/hydrogen-react";
 import CartContext from "lib/CartContext";
-import extractGID from "lib/extract-gid";
-import StarIcon from "components/icons/StarIcon";
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -100,9 +96,11 @@ const ProductPage = ({
   const [activeVariant, setActiveVariant] = useState<VariantType>(() => {
     if (!product) return null;
 
-    return product.variants.edges.find(
+    const variant =  product.variants.edges.find(
       (edge: any) => edge.node.availableForSale === true
     ).node;
+
+    return variant ?? null;
   });
 
   //subscription plans
@@ -148,7 +146,7 @@ const ProductPage = ({
         payload,
       });
 
-      console.log("add to cart sent", payload);
+      console.log("pageview sent")
     }
 
     addItemToCart(activeVariant.id, itemQty, subscriptionPlan);
@@ -158,54 +156,6 @@ const ProductPage = ({
     const cv = variants.filter((v: any) => v.node.id === id);
     setActiveVariant(cv[0].node);
   }
-
-  useEffect(() => {
-    function hash(data: string) {
-      return createHash("sha256").update(data).digest("hex");
-    }
-
-    const pid = extractGID(activeVariant.id);
-
-    // console.log(pid)
-
-    if (window.fbq) {
-      const pixelParams = {
-        content_ids: [pid],
-        content_type: "product",
-        content_name: product.title,
-        value: activeVariant.priceV2.amount,
-        currency: "USD",
-      };
-
-      // console.log(pixelParams)
-
-      window.fbq("track", "ViewContent", pixelParams);
-    }
-
-    // user && console.log(hash(user.email))
-
-    if (window.dataLayer) {
-      window.dataLayer.push({ ecommerce: null });
-      window.dataLayer.push({
-        event: "view_item",
-        // user_data: {
-        //   email: user ? hash(user.email) : null,
-        // },
-        items: [
-          {
-            item_id: product.id,
-            item_name: product.title,
-            affiliation: "Storefront",
-            item_brand: "TOR",
-            item_category: product.productType,
-            value: activeVariant.priceV2.amount,
-            item_variant: activeVariant.title,
-            currency: "USD",
-          },
-        ],
-      });
-    }
-  }, [activeVariant, user]);
 
   if (!product) return null;
 
@@ -240,31 +190,6 @@ const ProductPage = ({
         <meta property="product:catalog_id" content="711750850270833" />
         <meta property="product:category" content="486" />
         <meta property="product:retailer_item_id" content={product.id} />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: `{
-              "@context": "https://schema.org",
-              "@type": "Product",
-              "name": "${product.title}",
-              "image": "${product.images.edges[0].node.url}",
-              "description": "${product.description.substring(0, 500)}",
-              "brand": "TOR Salon Products",
-              "sku": "${product.id}",
-              "offers": {
-                "@type": "Offer",
-                "priceCurrency": "USD",
-                "price": "${activeVariant.priceV2.amount}",
-                "itemCondition": "https://schema.org/NewCondition",
-                "availability": "https://schema.org/InStock",
-                "seller": {
-                  "@type": "Organization",
-                  "name": "TOR Salon Products"
-                }
-              }
-            }`,
-          }}
-        />
       </Head>
       <SimpleGrid templateColumns={"repeat(2, 1fr)"}>
         <GridItem colSpan={[2, 1]}>
@@ -277,16 +202,6 @@ const ProductPage = ({
             pr={[4, null, 10, 20]}
             spacing={6}
           >
-            <div className="flex items-center">
-              <RatingStar
-                id="star_rating"
-                size={18}
-                rating={reviews.bottomline.average_score}
-              />
-              <span className="text-sm">
-                [{reviews.bottomline.total_review}]
-              </span>
-            </div>
             <Stack direction={"row"} justify={"space-between"}>
               <Heading maxW={[480]}>{product.title}</Heading>
               <Stack>
@@ -316,7 +231,7 @@ const ProductPage = ({
               </Stack>
             </Stack>
             <Divider />
-            {/* <HStack justify={"space-around"}>
+            <HStack justify={"space-around"}>
               <Stack
                 direction={["column", null, "column", "row"]}
                 align="center"
@@ -330,27 +245,21 @@ const ProductPage = ({
                 }
                 flexShrink={1}
               >
-                <div style={{ display: "flex" }}>
-                  {Array.from(
-                    Array(Math.floor(reviews.bottomline.average_score)).keys()
-                  ).map((i) => (
-                    <StarIcon color={"#f5c317"} key={i} />
-                  ))}
-                </div>
+                <RatingStar
+                  id={product.id.split("/")[4]}
+                  rating={reviews.bottomline.average_score}
+                />
                 <Text>
-                  {reviews.bottomline.total_review === 0
-                    ? "No"
-                    : reviews.bottomline.total_review}{" "}
-                  Review
-                  {reviews.bottomline.total_review !== 1 ? "s" : ""}
+                  {reviews.bottomline.total_review} Review
+                  {reviews.bottomline.totalReviews === 1 ? "s" : ""}
                 </Text>
               </Stack>
               <Divider orientation="vertical" height={"60px"} px={[2, 0]} />
               <Box w={["100%", "50%"]}>
                 <ReviewSubmit handle={product.title} gid={product.id} />
               </Box>
-            </HStack> */}
-            {/* <Divider /> */}
+            </HStack>
+            <Divider />
             {variants.length > 1 && (
               <Select
                 minW={"200px"}
@@ -366,32 +275,17 @@ const ProductPage = ({
                 ))}
               </Select>
             )}
-            <HStack>
-              <HStack
-                border={"1px solid black"}
-                alignSelf={["stretch"]}
-                borderRadius={6}
-              >
-                <Button fontSize="2xl" variant="ghost" {...dec}>
-                  -
-                </Button>
-                <Input w="50px" {...input} variant="ghost" textAlign="center" />
-                <Button fontSize="2xl" variant="ghost" {...inc}>
-                  +
-                </Button>
-              </HStack>
-              <Button
-                position={["fixed", "static"]}
-                bottom={[7, 0]}
-                right={[2, 0]}
-                left={[2, 0]}
-                zIndex={[2, 0]}
-                w={[null, null, "full"]}
-                onClick={handleAddToCart}
-                isDisabled={!activeVariant?.availableForSale}
-                size="lg"
-              >
-                {activeVariant?.availableForSale ? "Add To Cart" : "Sold Out!"}
+            <HStack
+              border={"1px solid black"}
+              alignSelf={["flex-end", "flex-start"]}
+              borderRadius={6}
+            >
+              <Button fontSize="2xl" variant="ghost" {...dec}>
+                -
+              </Button>
+              <Input w="50px" {...input} variant="ghost" textAlign="center" />
+              <Button fontSize="2xl" variant="ghost" {...inc}>
+                +
               </Button>
             </HStack>
             {/* subscriptions */}
@@ -405,6 +299,18 @@ const ProductPage = ({
               />
             )}
             {/* end subscriptions */}
+            <Button
+              position={["fixed", "static"]}
+              bottom={[7, 0]}
+              right={[4, 0]}
+              zIndex={[2, 0]}
+              w={["70%", "full"]}
+              onClick={handleAddToCart}
+              isDisabled={!activeVariant?.availableForSale}
+              size="lg"
+            >
+              {activeVariant?.availableForSale ? "Add To Cart" : "Sold Out!"}
+            </Button>
             <Box
               className="product_description_html_outer_container"
               dangerouslySetInnerHTML={{
@@ -585,7 +491,44 @@ const ProductPage = ({
           </Container>
         </Box>
       )}
-      <Reviews data={reviews} />
+      {reviews && reviews.reviews.length > 0 && (
+        <Container
+          ref={reviewsSection}
+          maxW="container.lg"
+          pt={40}
+          pb={20}
+          centerContent
+          key={product.id.split("/")[4]}
+        >
+          <Box w="full" py={12}>
+            <Heading>Reviews</Heading>
+            <Divider mt={6} />
+          </Box>
+          {reviews.reviews.map((r: any) => (
+            <Stack key={r.id} spacing={2}>
+              <HStack>
+                <RatingStar id={r.id.toString()} rating={r.score} />
+                <Text>Verified Review</Text>
+              </HStack>
+              <Text
+                fontSize="2xl"
+                textTransform={"capitalize"}
+                dangerouslySetInnerHTML={{
+                  __html: r.title,
+                }}
+              />
+              <Text
+                dangerouslySetInnerHTML={{
+                  __html: r.content,
+                }}
+              ></Text>
+              <Text fontStyle={"italic"} textTransform="capitalize">
+                {r.user.display_name}
+              </Text>
+            </Stack>
+          ))}
+        </Container>
+      )}
     </>
   );
 };
@@ -711,7 +654,7 @@ export async function getStaticPaths() {
     }
   `;
 
-  const res:any = await graphQLClient.request(query);
+  const res = await graphQLClient.request(query) as any;
 
   if (res.errors) {
     console.log(JSON.stringify(res.errors, null, 2));
@@ -912,7 +855,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     }
   }`;
 
-  const res:any = await graphQLClient.request(productQuery);
+  const res = await graphQLClient.request(productQuery) as any;
 
   if (res.errors) {
     console.log(JSON.stringify(res.errors, null, 2));
@@ -1017,7 +960,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       }
     }`;
 
-  const collectionRes:any = await graphQLClient.request(collectionQuery);
+  const collectionRes = await graphQLClient.request(collectionQuery) as any;
 
   if (collectionRes.errors) {
     console.log(JSON.stringify(res.errors, null, 2));

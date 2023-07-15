@@ -1,6 +1,24 @@
 import { gql } from "graphql-request";
 import graphClient from "../graph-client";
 
+export type DiscountCodeResponse = {
+  cartDiscountCodesUpdate: {
+    cart: {
+      discountCodes: {
+        applicable: boolean;
+        code: string;
+      }[];
+    };
+    userErrors: {
+      field: string;
+      message: string;
+    }[];
+  };
+  error?: {
+    message: string;
+  }[];
+};
+
 export default async function applyDiscountToCart(
   cartId: string,
   discountCode: string
@@ -29,5 +47,5 @@ export default async function applyDiscountToCart(
 
   const response = await graphClient.request(mutation, variables);
 
-  return response;
+  return response as DiscountCodeResponse;
 }

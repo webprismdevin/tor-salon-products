@@ -2,13 +2,15 @@ import { Box, Text, BoxProps } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { wrap } from "@popmotion/popcorn";
-import Link from "next/link";
-// import { NavArrowLeft, NavArrowRight } from "components/Page/Slides";
 
 const MotionBox = motion<BoxProps>(Box);
 
 declare interface BannerSettings {
-  data: [any];
+  data: [
+    {
+      text: string;
+    }
+  ];
 }
 
 export default function Banner({ data }: BannerSettings) {
@@ -22,14 +24,13 @@ export default function Banner({ data }: BannerSettings) {
   useEffect(() => {
     const interval = setInterval(() => {
       paginate(1);
-    }, 3200);
+    }, 2900);
 
     return () => clearInterval(interval);
   }, [page]);
 
   return (
-    <motion.div className="flex justify-center py-2 bg-black text-white">
-      {/* <NavArrowLeft onClick={() => paginate(-1)} className="opacity-50 cursor-pointer" /> */}
+    <MotionBox py={2} bg="black" color="white">
       <AnimatePresence initial={true} custom={direction} mode="wait">
         <MotionBox
           custom={direction}
@@ -45,16 +46,9 @@ export default function Banner({ data }: BannerSettings) {
           }}
           key={page}
         >
-          {data[index].to ? (
-            <Link href={data[index].to}>
-              <p className="text-center">{data[index].text}</p>
-            </Link>
-          ) : (
-            <p className="text-center">{data[index].text}</p>
-          )}
+          <Text textAlign={"center"}>{data[index].text}</Text>
         </MotionBox>
       </AnimatePresence>
-      {/* <NavArrowRight onClick={() => paginate(1)} className="opacity-50 cursor-pointer" /> */}
-    </motion.div>
+    </MotionBox>
   );
 }

@@ -44,7 +44,7 @@ function useUser() {
     }
   `;
 
-    const response:any = await graphClient.request(mutation);
+    const response = await graphClient.request(mutation) as any;
 
     if (response.errors) {
       console.log(JSON.stringify(response.errors, null, 2));

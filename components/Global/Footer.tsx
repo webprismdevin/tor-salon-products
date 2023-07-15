@@ -60,13 +60,6 @@ const Footer = () => {
 
       setEmail("");
       setStatus("success");
-      if (process.env.NODE_ENV === "production") {
-        window.dataLayer.push({
-          event: "join_email_list",
-          signUpMethod: "popup",
-          callback: () => console.log("fired join_email_list event to GTM"),
-        });
-      }
     }
   }
 

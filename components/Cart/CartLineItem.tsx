@@ -12,6 +12,11 @@ import React, { useContext } from "react";
 import updateCartItemQty from "../../lib/Cart/updateCartItemQty";
 import CartContext from "../../lib/CartContext";
 import formatter from "../../lib/formatter";
+import { CartResponse } from "./Cart";
+
+export type UpdateItemQtyCartResponse = {
+  cartLinesUpdate: CartResponse;
+}
 
 export function CartLineItem({
   product, removeItem,
@@ -73,7 +78,7 @@ function ItemQty({ product }: { product: any; }) {
   const input = getInputProps({ readOnly: false });
 
   async function handleQtyUpdate(newQty: string) {
-    const resp:any = await updateCartItemQty(cart.id, product.node.id, parseInt(newQty));
+    const resp = await updateCartItemQty(cart.id, product.node.id, parseInt(newQty)) as UpdateItemQtyCartResponse;
 
     console.log(resp.cartLinesUpdate)
 
