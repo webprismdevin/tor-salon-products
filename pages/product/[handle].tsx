@@ -96,9 +96,11 @@ const ProductPage = ({
   const [activeVariant, setActiveVariant] = useState<VariantType>(() => {
     if (!product) return null;
 
-    return product.variants.edges.find(
+    const variant =  product.variants.edges.find(
       (edge: any) => edge.node.availableForSale === true
     ).node;
+
+    return variant ?? null;
   });
 
   //subscription plans
