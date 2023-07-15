@@ -1,6 +1,20 @@
 import graphClient from "./graph-client";
 import { gql } from "graphql-request";
 
+export type CollectionResponse = {
+  collections: {
+    edges: {
+      node: {
+        handle: string;
+        title: string;
+      };
+    }[];
+  };
+  errors?: {
+    message: string;
+  }[];
+};
+
 //gets all collections and filters out homepage collections
 export default async function getCollections(ignore: string) {
   const query = gql`
@@ -16,18 +30,13 @@ export default async function getCollections(ignore: string) {
     }
   `;
 
-  const response = await graphClient.request(query);
+  const response = await graphClient.request(query) as CollectionResponse;
 
   if (response.errors) {
     console.log(JSON.stringify(response.errors, null, 2));
 
     throw Error("There was a problem getting the variant. Please check logs");
   }
-
-  // console.log(response)
-
-  // const paths = response.collections.edges.map((edge:any) => ({ handle: edge.node.handle}) )
-  // console.log(paths)
 
   return response;
 }

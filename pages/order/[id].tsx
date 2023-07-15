@@ -16,8 +16,6 @@ import NextLink from "next/link";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import formatter from "../../lib/formatter";
-import { createHash } from "crypto";
-import { usePlausible } from "next-plausible";
 
 declare interface LineItemType {
   node: {
@@ -58,63 +56,6 @@ export default function ThankYou() {
   useEffect(() => {
     getOrder(window.location.pathname.split("/")[2]);
   }, []);
-
-  function hash(data: string) {
-    return createHash("sha256").update(data).digest("hex");
-  }
-
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-
-    if (data) {
-      const { email, phone } = data.customer;
-
-      const user_data = {
-        email: email ? hash(email) : null,
-        phone: phone ? hash(phone) : null,
-      };
-    }
-
-    if (urlParams.get("event") === "purchase" && data) {
-      const orderValue = parseFloat(data.currentTotalPriceSet.shopMoney.amount);
-
-      const itemsArray = data.lineItems.edges.map((i: LineItemType) => ({
-        item_id: i.node.id, //string
-        item_name: i.node.name, //string
-        quantity: i.node.currentQuantity, //number
-        price: parseFloat(i.node.discountedTotalSet.shopMoney.amount), //number
-        currency: "USD", //string
-        item_brand: "TOR Salon Products", //string
-      }));
-
-      if (window.dataLayer) {
-        window.dataLayer.push({ ecommerce: null });
-        window.dataLayer.push({
-          event: "purchase",
-          transaction_id: data.id,
-          currency: "USD",
-          value: orderValue,
-          user_data: {
-            email_address: data.email ? hash(data.email) : null,
-            phone_number: data.customer.phone ? hash(data.phone) : null,
-            address: {
-              first_name: data.customer?.firstName
-                ? hash(data.customer.firstName)
-                : null,
-              last_name: data.customer?.lastName
-                ? hash(data.customer.lastName)
-                : null,
-              city: hash(data.displayAddress.city),
-              region: hash(data.displayAddress.province),
-              postal_code: hash(data.displayAddress.zip),
-              country: hash(data.displayAddress.country),
-            },
-          },
-          items: itemsArray,
-        });
-      }
-    }
-  }, [data]);
 
   if (!data)
     return (
@@ -316,19 +257,4 @@ function LineItem({ product }: any) {
       </Box>
     </Stack>
   );
-}
-
-// old GTM code from Shopify
-{
-  /* <script>
-(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://gtm.torsalonproducts.com/kthlknzv.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-MKG7C6H');
-</script>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKG7C6H"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) --> */
 }

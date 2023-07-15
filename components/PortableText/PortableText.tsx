@@ -1,5 +1,5 @@
 import BlockContent from "@sanity/block-content-to-react";
-import type { Block as SanityBlock } from "@sanity/types";
+// import type { Block as SanityBlock } from "@sanity/types";
 import AccordionBlock from "./Blocks/Accordion";
 // import LinkEmailAnnotation from './annotations/LinkEmail';
 // import LinkExternalAnnotation from './annotations/LinkExternal';
@@ -27,7 +27,7 @@ import NextLink from "next/link";
 import useAddToCart from "../../lib/useAddToCart";
 
 type Props = {
-  blocks: SanityBlock[];
+  blocks: any[];
   className?: string;
   centered?: boolean;
   colorTheme?: SanityColorTheme;

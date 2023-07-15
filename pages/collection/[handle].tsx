@@ -216,7 +216,7 @@ export async function getStaticProps(context: any) {
       }
     }`;
 
-  const res = await graphQLClient.request(query);
+  const res = await graphQLClient.request(query) as any;
 
   if (res.errors) {
     console.log(JSON.stringify(res.errors, null, 2));

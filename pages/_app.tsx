@@ -54,9 +54,6 @@ const MailingList = dynamic(() => import("../components/Global/MailingList"), {
 declare global {
   interface Window {
     Tawk_API: any;
-    dataLayer: any;
-    comet: any;
-    fbq: any;
   }
 }
 
@@ -180,7 +177,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ShopifyProvider
         storeDomain="https://tor-salon-products.myshopify.com"
         storefrontToken="a37e8b74cb52b6e0609c948c43bb0a5c"
-        storefrontApiVersion="2023-01"
+        storefrontApiVersion={process.env.NEXT_PUBLIC_SHOPIFY_API_VER!}
         countryIsoCode="US"
         languageIsoCode="EN"
       >

@@ -157,36 +157,6 @@ const ProductPage = ({
     setActiveVariant(cv[0].node);
   }
 
-  useEffect(() => {
-    function hash(data: string) {
-      return createHash("sha256").update(data).digest("hex");
-    }
-
-    // user && console.log(hash(user.email))
-
-    if (window.dataLayer) {
-      window.dataLayer.push({ ecommerce: null });
-      window.dataLayer.push({
-        event: "view_item",
-        // user_data: {
-        //   email: user ? hash(user.email) : null,
-        // },
-        items: [
-          {
-            item_id: product.id,
-            item_name: product.title,
-            affiliation: "Storefront",
-            item_brand: "TOR",
-            item_category: product.productType,
-            value: activeVariant.priceV2.amount,
-            item_variant: activeVariant.title,
-            currency: "USD",
-          },
-        ],
-      });
-    }
-  }, [activeVariant, user]);
-
   if (!product) return null;
 
   const seoTitle = `${product.title} | TOR Salon Products`;
@@ -684,7 +654,7 @@ export async function getStaticPaths() {
     }
   `;
 
-  const res = await graphQLClient.request(query);
+  const res = await graphQLClient.request(query) as any;
 
   if (res.errors) {
     console.log(JSON.stringify(res.errors, null, 2));
@@ -885,7 +855,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     }
   }`;
 
-  const res = await graphQLClient.request(productQuery);
+  const res = await graphQLClient.request(productQuery) as any;
 
   if (res.errors) {
     console.log(JSON.stringify(res.errors, null, 2));
@@ -990,7 +960,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       }
     }`;
 
-  const collectionRes = await graphQLClient.request(collectionQuery);
+  const collectionRes = await graphQLClient.request(collectionQuery) as any;
 
   if (collectionRes.errors) {
     console.log(JSON.stringify(res.errors, null, 2));

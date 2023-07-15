@@ -31,7 +31,13 @@ import removeCartItem from "../../lib/Cart/removeCartItem";
 import CartRecommendations from "./CartRecommendations";
 import ShopPayInstallments from "./ShopPayInstallments";
 import DiscountCodeInput from "./DiscountCodeInput";
-import { SiApplepay, SiGooglepay, SiMastercard, SiPaypal, SiVisa } from "react-icons/si";
+import {
+  SiApplepay,
+  SiGooglepay,
+  SiMastercard,
+  SiPaypal,
+  SiVisa,
+} from "react-icons/si";
 import { usePlausible } from "next-plausible";
 import AuthContext from "lib/auth-context";
 import { createHash } from "crypto";
@@ -46,6 +52,30 @@ declare interface LineItemType {
   };
 }
 
+export type CartResponse = {
+  cart: {
+    checkoutUrl: string;
+    id: string;
+    status: "clean" | "dirty";
+    estimatedCost: {
+      totalAmount: {
+        amount: number;
+      };
+      subtotalAmount: {
+        amount: number;
+      };
+    };
+    lines: {
+      edges: LineItemType[];
+    };
+    discountCodes: [any];
+  };
+};
+
+export type RemoveItemCartResponse = {
+  cartLinesRemove: CartResponse
+};
+
 const Cart = ({ color }: { color?: string }) => {
   const { user } = useContext(AuthContext);
   const { cart, setCart } = useContext(CartContext);
@@ -54,10 +84,6 @@ const Cart = ({ color }: { color?: string }) => {
   const plausible = usePlausible();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  function hash(data: string) {
-    return createHash("sha256").update(data).digest("hex")
-  }  
 
   useEffect(() => {
     if (cart.lines.length > 1) {
@@ -89,7 +115,7 @@ const Cart = ({ color }: { color?: string }) => {
     );
 
     if (localCartData) {
-      const existingCart = await loadCart(localCartData.id);
+      const existingCart = (await loadCart(localCartData.id)) as CartResponse;
 
       if (existingCart.cart !== null) {
         if (
@@ -105,7 +131,7 @@ const Cart = ({ color }: { color?: string }) => {
           status: "clean",
           estimatedCost: existingCart.cart.estimatedCost,
           lines: existingCart.cart.lines.edges,
-          discount: existingCart.cart.discountCodes,
+          discountCodes: existingCart.cart.discountCodes,
         });
 
         return;
@@ -130,7 +156,10 @@ const Cart = ({ color }: { color?: string }) => {
   }
 
   async function removeItem(lineItemId: string) {
-    const resp = await removeCartItem(cart.id, lineItemId);
+    const resp = (await removeCartItem(
+      cart.id,
+      lineItemId
+    )) as RemoveItemCartResponse;
 
     console.log(resp.cartLinesRemove);
 
@@ -143,12 +172,10 @@ const Cart = ({ color }: { color?: string }) => {
   }
 
   async function handleCheckout() {
-
     if (process.env.NODE_ENV === "production") {
-      plausible("Checkout")
+      plausible("Checkout");
 
       window.location.href = cart.checkoutUrl;
-
     }
     if (process.env.NODE_ENV === "development") {
       window.location.href = cart.checkoutUrl;

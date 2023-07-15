@@ -6,11 +6,14 @@ import { wrap } from "@popmotion/popcorn";
 const MotionBox = motion<BoxProps>(Box);
 
 declare interface BannerSettings {
-  data: []
+  data: [
+    {
+      text: string;
+    }
+  ];
 }
 
 export default function Banner({ data }: BannerSettings) {
-
   const [[page, direction], setPage] = useState([0, 0]);
   const index = wrap(0, data.length, page);
 
@@ -28,7 +31,7 @@ export default function Banner({ data }: BannerSettings) {
 
   return (
     <MotionBox py={2} bg="black" color="white">
-      <AnimatePresence initial={true} custom={direction} mode='wait'>
+      <AnimatePresence initial={true} custom={direction} mode="wait">
         <MotionBox
           custom={direction}
           initial={{
@@ -43,7 +46,7 @@ export default function Banner({ data }: BannerSettings) {
           }}
           key={page}
         >
-          <Text textAlign={"center"}>{data[index]}</Text>
+          <Text textAlign={"center"}>{data[index].text}</Text>
         </MotionBox>
       </AnimatePresence>
     </MotionBox>

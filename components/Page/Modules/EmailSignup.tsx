@@ -50,25 +50,6 @@ export default function EmailSignup({
       setStatus("submitted");
     }
 
-    if(window.dataLayer){
-      window.dataLayer.push({
-        event: "join_email_list",
-        signUpMethod: `email_signup_${encodeURIComponent(title)}`,
-        callback: () => {
-          console.log("fired join_email_list event to GTM");
-          window.localStorage.setItem("subscribed", "true");
-        },
-      });
-      window.dataLayer.push({
-        event: "generate_lead",
-        currency: 'USD',
-        value: 0,
-        callback: () => {
-          window.localStorage.setItem("subscribed", "true");
-        },
-      });
-    }
-
     console.log(result);
 
     if (result.error) {

@@ -30,7 +30,7 @@ export default async function handler(
         input: requestData
     };
 
-    const response = await graphClient.request(mutation, variables);
+    const response = await graphClient.request(mutation, variables) as any;
 
     if (response.errors) {
         console.log(JSON.stringify(response.errors, null, 2));

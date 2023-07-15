@@ -39,23 +39,10 @@ export default function Page({ page, productImages, bottomline }: any) {
       page?.showHero && page.hero.content[0]._type === "productWithVariant"
         ? "product"
         : "product_group";
-
-    if (window.dataLayer) {
-      window.dataLayer.push({ ecommerce: null });
-      window.dataLayer.push({
-        event: "view-item",
-        eventModel: {
-          content_type,
-          content_ids: [page.slug.current],
-          content_name: page.title,
-          currency: "USD",
-        },
-        eventCallback: () => console.log("event fired"),
-      });
-    }
   }, []);
 
-  const heroTypeIsProduct = page.hero?.content[0]?._type === "productWithVariant";
+  const heroTypeIsProduct =
+    page.hero?.content[0]?._type === "productWithVariant";
 
   return (
     <Box pb={20}>
@@ -95,7 +82,9 @@ export default function Page({ page, productImages, bottomline }: any) {
         </ImageContext.Provider>
         {page.hero?.content[0]._type !== "productWithVariant" && (
           <Container maxW="container.lg" pt={16} pb={8} centerContent>
-            <Heading as="h1" size={["lg", null, null, "xl"]}>{page.title}</Heading>
+            <Heading as="h1" size={["lg", null, null, "xl"]}>
+              {page.title}
+            </Heading>
             <PortableText colorTheme={page.colorTheme} blocks={page.body} />
           </Container>
         )}
@@ -121,7 +110,7 @@ export const getStaticPaths = async () => {
     paths: pages.map((doc: any) => ({
       params: { slug: doc.slug.current },
     })),
-    fallback: 'blocking',
+    fallback: "blocking",
   };
 };
 
@@ -172,7 +161,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const page = await sanity.fetch(query);
 
-  const heroTypeIsProduct = page.hero?.content[0]._type === "productWithVariant";
+  const heroTypeIsProduct =
+    page.hero?.content[0]._type === "productWithVariant";
 
   let productImages;
   if (heroTypeIsProduct) {
@@ -198,7 +188,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
     reviewCount = reviewResponse.reviews.length;
   } else {
-    reviewResponse = null, scoreAverage = null, reviewCount = null
+    (reviewResponse = null), (scoreAverage = null), (reviewCount = null);
   }
 
   return {

@@ -9,6 +9,30 @@ import CartContext from "../../lib/CartContext";
 import { useRouter } from "next/router";
 import useAddToCart from "../../lib/useAddToCart";
 
+type RecommendationsResponse = {
+  productRecommendations: [
+    {
+      title: string;
+      id: string;
+      productType: string;
+      variants: {
+        edges: [
+          {
+            node: {
+              id: string;
+              title: string;
+              priceV2: {
+                amount: string;
+                currencyCode: string;
+              };
+            };
+          }
+        ];
+      };
+    }
+  ];
+};
+
 export default function CartRecommendations() {
   const { cart, setCart } = useContext(CartContext);
   const [recommendations, setRecommendations] = useState<[any] | null>();
@@ -36,7 +60,7 @@ export default function CartRecommendations() {
             }
           }`;
 
-    const response = await graphClient.request(query);
+    const response = await graphClient.request(query) as RecommendationsResponse;
 
     return response;
   }

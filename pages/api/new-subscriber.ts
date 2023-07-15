@@ -38,7 +38,7 @@ export default async function handler(
     email: email,
   };
 
-  const response = await adminGraphClient.request(query, queryVariables);
+  const response = await adminGraphClient.request(query, queryVariables) as any;
 
   if (response.customers.edges.length > 0) {
     const updateMutation = gql`
@@ -73,7 +73,7 @@ export default async function handler(
     const updateResponse = await adminGraphClient.request(
       updateMutation,
       updateVariables
-    );
+    ) as any;
 
     if (response.errors) {
       console.log(JSON.stringify(response.errors, null, 2));
@@ -126,7 +126,7 @@ export default async function handler(
     const createResponse = await adminGraphClient.request(
       createMutation,
       createVariables
-    );
+    ) as any;
 
     if (createResponse.errors) {
       console.log(JSON.stringify(createResponse.errors, null, 2));

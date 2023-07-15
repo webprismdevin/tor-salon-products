@@ -1,6 +1,56 @@
 import { gql } from "graphql-request";
 import graphClient from "./graph-client";
 
+export type ProductsResponse = {
+  collections: {
+    edges: {
+      node: {
+        id: string;
+        title: string;
+        description: string;
+        handle: string;
+        products: {
+          edges: {
+            node: {
+              id: string;
+              title: string;
+              description: string;
+              handle: string;
+              variants: {
+                edges: {
+                  node: {
+                    id: string;
+                  };
+                }[];
+              };
+              images: {
+                edges: {
+                  node: {
+                    altText: string;
+                    transformedSrc: string;
+                  };
+                }[];
+              };
+              priceRange: {
+                maxVariantPrice: {
+                  amount: string;
+                };
+              };
+              compareAtPriceRange: {
+                maxVariantPrice: {
+                  amount: string;
+                };
+              };
+            };
+          }[];
+        };
+      };
+    }[];
+  };
+  errors?: {
+    message: string;
+  }[];
+};
 
 export default async function getProducts() {
   // Shopify Request
@@ -54,14 +104,14 @@ export default async function getProducts() {
     }
   `;
 
-  const res = await graphClient.request(query);
+  const res = (await graphClient.request(query)) as ProductsResponse;
 
   if (res.errors) {
     console.log(JSON.stringify(res.errors, null, 2));
     throw Error("Unable to retrieve Shopify Products. Please check logs");
   }
 
-  console.log(res)
+  console.log(res);
 
   return res;
 }

@@ -57,7 +57,7 @@ export default async function handler(
 
   const response = await adminGraphClient.request(query, {
     input: variables,
-  });
+  }) as any;
 
   if (response.errors) {
     console.log(JSON.stringify(response.errors, null, 2));

@@ -33,7 +33,7 @@ export default async function handler(
         "resetUrl": data.resetUrl
       }
   
-    const response = await graphClient.request(mutation, variables);
+    const response = await graphClient.request(mutation, variables) as any;
   
     if (response.errors) {
       console.log(JSON.stringify(response.errors, null, 2));

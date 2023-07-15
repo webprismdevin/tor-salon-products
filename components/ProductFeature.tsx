@@ -24,35 +24,6 @@ export default function ProductFeature({ reference }: any) {
 
   async function handleAddToCart() {
     addItemToCart(reference.variants.edges[0].node.id, 1, "");
-    // const response = await addToCart(cart.id, reference.variants.edges[0].node.id, 1, "")
-
-    // setCart({
-    //   ...cart,
-    //   status: "dirty",
-    //   lines: response.cartLinesAdd.cart.lines,
-    // });
-
-    // if (window.dataLayer) {
-    //   window.dataLayer.push({ ecommerce: null }); // Clear the previous ecommerce object.
-    //   window.dataLayer.push({
-    //     event: "add_to_cart",
-    //     ecommerce: {
-    //       items: [
-    //         {
-    //           item_id: reference.id,
-    //           item_name: reference.title,
-    //           affiliation: "Storefront",
-    //           item_brand: "TOR",
-    //           value: reference.priceRange.maxVariantPrice.amount,
-    //           item_variant: reference.title,
-    //           currency: "USD",
-    //           item_category: reference.productType,
-    //         },
-    //       ],
-    //     },
-    //     'eventTimeout' : 1200
-    //   });
-    // }
   }
 
   return (
