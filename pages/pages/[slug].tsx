@@ -13,7 +13,7 @@ import { VariantContext } from "../../lib/pages/variant-context";
 import { ImageContext } from "../../lib/pages/image-context";
 import dynamic from "next/dynamic";
 
-const Modules = dynamic(() => import("../../components/Page/Modules"), {
+const Modules = dynamic(() => import("../../components/Modules/Modules"), {
   suspense: true,
 });
 
