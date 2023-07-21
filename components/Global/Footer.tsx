@@ -117,9 +117,10 @@ const Footer = () => {
                 Learn
               </Text>
               <Divider />
-              <FooterLink href="/salon-finder" text={"Salon Finder"} />
+              <FooterLink href="/blog" text={"Blog"} />
               <FooterLink href="/professionals" text={"Professionals"} />
-              {/* <FooterLink href="/blog" text={"Blog"} /> */}
+              <FooterLink href="/salon-finder" text={"Salon Finder"} />
+              <FooterLink href="https://faire.com/direct/torsalonproducts" text={"Wholesale"} />
               <FooterLink href="/about" text={"About TOR"} />
             </Stack>
             <Stack>
@@ -140,7 +141,6 @@ const Footer = () => {
               >
                 Ambassadors
               </Link>
-              {/* <FooterLink href={"/our-friends"} text={"Our Friends"} /> */}
             </Stack>
           </Stack>
           <Stack>

@@ -142,23 +142,12 @@ export const Logo = () => {
 };
 
 const Auth = () => {
-  const { user } = useContext(AuthContext);
-  const router = useRouter();
-
-  function handleLoginOrAccount() {
-    if (user && user.id) router.push("/account");
-    else router.push("/login");
-  }
-
   return (
-    <Icon
-      as={AiOutlineUser}
-      boxSize={6}
-      onClick={handleLoginOrAccount}
-      _hover={{
-        opacity: 0.4,
-      }}
-      transition={"opacity 200ms ease"}
-    />
+    <a href="https://account.torsalonproducts.com" target="_blank" className="hover:opacity-40 transition-opacity transitition-duration-200">
+      <Icon
+        as={AiOutlineUser}
+        boxSize={6}
+      />
+    </a>
   );
 };
