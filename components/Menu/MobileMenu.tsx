@@ -151,7 +151,7 @@ const MobileMenu = ({ menu }: MenuProps) => {
                   <Link>{link.title}</Link>
                 </NextLink>
               ))}
-              <MenuLink href="/account" text="Account" />
+              <MenuLink href="https://account.torsalonproducts.com" text="Account" />
               <MenuLink href={"/help"} text="Help &amp; FAQ" />
               {user && user.isPro && (
                 <MenuLink href="/wholesale" text="Wholesale" />
