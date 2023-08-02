@@ -114,6 +114,7 @@ export const LINK_EXTERNAL = groq`
 export const CTA_FRAGMENT = groq`
   cta {
     "text": title,
+    ...,
     ...reference-> {
       "documentType": _type,
       (_type == "collection") => {
@@ -194,6 +195,11 @@ modules[]{
       question,
       answer
     }
+  },
+  (_type == 'component.collection') => {
+    ...,
+    "handle": collection->store.slug.current,
+    ${COLLECTION}
   },
   (_type == 'component.productGrid') => {
     ...,

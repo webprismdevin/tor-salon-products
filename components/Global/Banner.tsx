@@ -30,7 +30,8 @@ export default function Banner({ data }: BannerSettings) {
   }, [page]);
 
   return (
-    <MotionBox py={2} bg="black" color="white">
+    <motion.div className="flex justify-center py-2 bg-black text-white">
+      {/* <NavArrowLeft onClick={() => paginate(-1)} className="opacity-50 cursor-pointer" /> */}
       <AnimatePresence initial={true} custom={direction} mode="wait">
         <MotionBox
           custom={direction}
@@ -49,6 +50,6 @@ export default function Banner({ data }: BannerSettings) {
           <Text textAlign={"center"}>{data[index].text}</Text>
         </MotionBox>
       </AnimatePresence>
-    </MotionBox>
+    </motion.div>
   );
 }

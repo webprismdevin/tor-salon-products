@@ -85,11 +85,11 @@ const Product = ({
         </AspectRatio>
       </NextLink>
       <NextLink href={`/product/${prod.handle}`} passHref legacyBehavior>
-        <Link fontSize={[24, null, 32]} maxW="300px" lineHeight={1.3}>
+        <Link fontSize={[18, null, 22]} maxW="300px" lineHeight={1.3}>
           {prod.title}
         </Link>
       </NextLink>
-      <Text mt={2}>
+      <Text mt={2} flex={1}> 
         {formatter.format(prod.priceRange.minVariantPrice.amount)}
         {prod.priceRange.minVariantPrice?.amount !==
         prod.priceRange.maxVariantPrice.amount
