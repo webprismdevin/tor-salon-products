@@ -32,7 +32,7 @@ export default function Navigation({ menu }: MenuProps) {
       p={7}
       pos="sticky"
       top={0}
-      zIndex={2}
+      zIndex={20}
       bg="white"
       shadow={open ? "" : "md"}
     >
@@ -67,13 +67,6 @@ export default function Navigation({ menu }: MenuProps) {
           ))}
         </Stack>
         <Stack direction={"row"} align="center" gap={6}>
-          {user && user.isPro && (
-            <Box display={["none", "inherit"]}>
-              <NextLink legacyBehavior href="wholesale">
-                <Link>Wholesale</Link>
-              </NextLink>
-            </Box>
-          )}
           <Search />
           <Auth />
           <Cart />
@@ -145,7 +138,7 @@ export default function Navigation({ menu }: MenuProps) {
 const Logo = () => {
   return (
     <Box>
-      <NextLink legacyBehavior href="/" passHref>
+      <NextLink href="/">
         <Img src={"/logo_240.png"} h={7} alt="TOR logo" />
       </NextLink>
     </Box>

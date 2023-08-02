@@ -1,36 +1,40 @@
 @font-face {
-  font-family: 'Futura';
+  font-family: "Futura";
   src: url("/fonts/futura-medium-bt.ttf");
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'ApercuPro';
+  font-family: "ApercuPro";
   src: url("/fonts/apercu_light_pro.otf");
   font-display: swap;
-  font-weight: 300
+  font-weight: 300;
 }
 
 @font-face {
-  font-family: 'ApercuPro';
+  font-family: "ApercuPro";
   src: url("/fonts/apercu_regular_pro.otf");
   font-display: swap;
-  font-weight: 400
+  font-weight: 400;
 }
 
 @font-face {
-  font-family: 'ApercuPro';
+  font-family: "ApercuPro";
   src: url("/fonts/apercu_medium_pro.otf");
   font-display: swap;
-  font-weight: 500
+  font-weight: 500;
 }
 
 @font-face {
-  font-family: 'OggRoman';
+  font-family: "OggRoman";
   src: url("/fonts/Ogg-Roman.otf");
   font-display: swap;
-  font-weight: 400
+  font-weight: 400;
 }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 html,
 body {
@@ -59,7 +63,7 @@ a {
   width: 0px;
 }
 
-div[data-framer-component-type='Text'] span {
+div[data-framer-component-type="Text"] span {
   font-size: var(--framer-font-size) !important;
   line-height: var(--framer-line-height) !important;
 }
@@ -73,7 +77,8 @@ div[data-framer-component-type='Text'] span {
   margin: 6px 0px;
 }
 
-.product_description_hmtl_outer_container > ul, ol {
+.product_description_hmtl_outer_container > ul,
+ol {
   list-style-position: inside;
 }
 
@@ -85,31 +90,38 @@ div[data-framer-component-type='Text'] span {
   margin: 4px 0px;
 }
 
-/* .blog_article:first-child, .blog_article:nth-child(3n + 4), .blog_article:nth-child(3) {
-  border: 2px solid black
-}
-.blog_article:nth-child(2){
-  border-top: 2px solid black;
-  border-bottom: 2px solid black;
-}
-
-@media(max-width: 560px){
-  .blog_article:nth-child(2){
-    border-left: 2px solid black;
-    border-right: 2px solid black;
-    border-top: none;
-    border-bottom: none;
-  }
-} */
-
 .customHtml > table {
   width: 100%;
 }
 
-.customHtml > table, th, td {
+.customHtml > table,
+th,
+td {
   border: 1px solid black;
 }
 
-.customHtml, td {
+.customHtml,
+td {
   padding: 10px;
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - 1rem));
+  }
+}
+
+.scroll {
+  animation: scroll 30s linear infinite;
+}
+
+.reverse {
+  animation-direction: reverse;
+}
+
+.text-shadow {
+  text-shadow: 5px 3px 6px rgba(0, 0, 0, 0.4);
 }

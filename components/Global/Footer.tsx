@@ -14,7 +14,7 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { FiArrowRight } from "react-icons/fi";
 import {
   SiGooglemybusiness,
@@ -23,13 +23,10 @@ import {
   SiYoutube,
   SiVisa,
   SiMastercard,
-  SiDiscover,
-  SiAmericanexpress,
   SiApplepay,
   SiGooglepay,
   SiPaypal,
 } from "react-icons/si";
-import ShopContext from "../../lib/shop-context";
 import {
   BodyAndSkin,
   ByHairType,
@@ -40,7 +37,6 @@ import NextImage from "next/legacy/image";
 import { usePlausible } from "next-plausible";
 
 const Footer = () => {
-  const { shop } = useContext(ShopContext);
   const [email, setEmail] = useState("");
   const [formStatus, setStatus] = useState("clean");
   const plausible = usePlausible();
@@ -196,7 +192,12 @@ const Footer = () => {
             </Text>
           </Stack>
         </Stack>
-        <Stack alignSelf={"flex-end"} align="center" direction="row" spacing={4}>
+        <Stack
+          alignSelf={"flex-end"}
+          align="center"
+          direction="row"
+          spacing={4}
+        >
           <Icon as={SiApplepay} boxSize={8} />
           <Icon as={SiGooglepay} boxSize={10} />
           <Icon as={SiMastercard} boxSize={8} />
@@ -204,7 +205,7 @@ const Footer = () => {
           <Icon as={SiPaypal} boxSize={5} />
         </Stack>
         <Text w="full" textAlign={"center"} fontSize="xs">
-          © {shop.name}. 2022. Crafted by{" "}
+          © TOR Salon Products. {new Date().getFullYear()}. Crafted by{" "}
           <NextLink href="https://webprism.co" passHref legacyBehavior>
             <Link>WEBPRISM</Link>
           </NextLink>

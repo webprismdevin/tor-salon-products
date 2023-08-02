@@ -15,7 +15,6 @@ import {
 import { NextRouter, useRouter } from "next/router";
 import NextLink from "next/link";
 import Head from "next/head";
-import ShopContext from "../lib/shop-context";
 import AuthContext from "../lib/auth-context";
 
 function returnToast(response: any) {
@@ -54,8 +53,6 @@ function returnToast(response: any) {
 export default function Login() {
   const [signIn, toggleSignIn] = useState(true);
   const router = useRouter();
-  const toast = useToast();
-  const { shop } = useContext(ShopContext);
 
   return (
     <Box pt={40} pb={20}>
