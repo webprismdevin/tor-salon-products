@@ -209,7 +209,7 @@ function TextWithImage({ data }: { data: any }) {
         </div>
         <div className="mt-4 flex flex-col items-start">
           {data?.content && <PortableText blocks={data.content} />}
-          <CallToAction data={data} />
+          {data.cta && <CallToAction data={data} />}
         </div>
       </div>
       {data.image && (
@@ -228,18 +228,15 @@ function TextWithImage({ data }: { data: any }) {
 }
 
 function CallToAction({ data }: any) {
-  if (!data.cta) return <></>;
-
-  if (data.cta)
-    return (
-      <div className="rounded bg-black px-6 py-3 text-white">
-        <Link
-          href={data.cta.useRelativePath ? data.cta.relativeLink : data.cta.to}
-        >
-          {data.cta.text}
-        </Link>
-      </div>
-    );
+  return (
+    <div className="rounded bg-black px-6 py-3 text-white">
+      <Link
+        href={data.cta.useRelativePath ? data.cta.relativeLink : data.cta.to}
+      >
+        {data.cta.text}
+      </Link>
+    </div>
+  );
 }
 
 function CollectionGrid({ data }: { data: any }) {
