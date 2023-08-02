@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, Suspense, useEffect } from "react";
 import BigTextBlock from "./Page/Modules/BigTextBlock";
 import FeaturedInformation from "./Page/Modules/FeaturedInformation";
 import ReviewSlider from "./ReviewSlider";
@@ -14,6 +14,9 @@ import { useScroll, useTransform, motion } from "framer-motion";
 import { useRef } from "react";
 import PortableText from "components/PortableText/PortableText";
 import Slides from "./Page/Slides";
+import graphClient from "lib/graph-client";
+import { collection_query } from "pages/collection/[handle]";
+import Product from "./Product/Product";
 
 export default function Modules({ modules, product }: any) {
   return (
@@ -44,6 +47,8 @@ export default function Modules({ modules, product }: any) {
             return <Marquee key={module._key} data={module} />;
           case "component.slides":
             return <Slides key={module._key} data={module} />;
+          case "component.collection":
+            return <Collection key={module._key} data={module} />;
           default:
             return null;
         }
@@ -114,19 +119,65 @@ export function Hero({ data }: { data: Hero }) {
         <h2 className="text-shadow mb-4 font-heading text-4xl uppercase lg:text-6xl">
           {title}
         </h2>
-        {cta?.to && <Link className="px-4 py-2 rounded bg-black text-white font-bold" href={cta.to}>{cta.text}</Link>}
+        {cta?.to && (
+          <Link
+            className="px-4 py-2 rounded bg-black text-white font-bold"
+            href={cta.to}
+          >
+            {cta.text}
+          </Link>
+        )}
       </div>
     </div>
   );
 }
 
 function Collection({ data }: any) {
+  const [products, setProducts] = React.useState<any[] | null>(null);
+
+  const getProducts = async () => {
+    const { collection } = await graphClient.request(collection_query, {
+      handle: data.handle,
+    });
+
+    setProducts(collection.products.edges);
+  };
+
+  useEffect(() => {
+    getProducts();
+  }, []);
+
+  if (!products) return <></>;
+
   return (
-    <div className="flex flex-col gap-2 mx-auto max-w-prose p-4 md:p-8 lg:p-12">
-      <h2 className="font-heading text-2xl md:text-3xl lg:text-4xl text-center pb-4">
-        {data.title}
-      </h2>
+    <div className="flex flex-col gap-2 w-full py-4 md:py-8">
+      <div className="px-9">
+        <h2 className="font-heading text-2xl md:text-3xl lg:text-4xl text-center md:text-left pb-4">
+          {data.title}
+        </h2>
+        <p>{data.subtitle}</p>
+      </div>
+      <div className="flex snap-x overflow-auto">
+        {products.map((product: any) => {
+          return (
+            <div
+              className="snap-start first:ml-8 last:mr-8"
+              key={product.node.id}
+            >
+              <Product product={product} />
+            </div>
+          );
+        })}
+      </div>
     </div>
+  );
+}
+
+export function SanityProductCard({ product }: { product: any }) {
+  return (
+    <Link href={`/products/${product.handle}`}>
+      <p>{product.title}</p>
+    </Link>
   );
 }
 

@@ -19,7 +19,7 @@ import { AnalyticsPageType } from "@shopify/hydrogen-react";
 export default function CollectionPage({
   handle,
   data,
-  analytics
+  analytics,
 }: {
   handle: string;
   data: any;
@@ -144,99 +144,9 @@ export async function getStaticProps(context: any) {
 
   console.log(handle);
 
-  // Shopify Request
-  const query = gql`{
-        collection(handle: "${handle}"){
-        id
-        title
-        description
-        descriptionHtml
-        image {
-          url
-        }
-        benefitOneIcon: metafield(namespace: "collection", key: "benefit_1_icon") {
-          reference {
-            __typename
-            ... on MediaImage {
-              image {
-                url
-              }
-            }
-          }
-        }
-        benefitOneText: metafield(namespace: "collection", key: "benefit_1_text") {
-          value
-        }
-        benefitTwoIcon: metafield(namespace: "collection", key: "benefit_2_icon") {
-          reference {
-            __typename
-            ... on MediaImage {
-              image {
-                url
-              }
-            }
-          }
-        }
-        benefitTwoText: metafield(namespace: "collection", key: "benefit_2_text") {
-          value
-        }
-        benefitThreeIcon: metafield(namespace: "collection", key: "benefit_3_icon") {
-          reference {
-            __typename
-            ... on MediaImage {
-              image {
-                url
-              }
-            }
-          }
-        }
-        benefitThreeText: metafield(namespace: "collection", key: "benefit_3_text") {
-          value
-        }
-        color: metafield(namespace:"collection", key:"color"){
-          value
-        }
-        products(first: 100) {
-                edges{
-                    node {
-                      id
-                      title
-                      description
-                      handle
-                      variants(first: 2) {
-                        edges {
-                          node {
-                            id
-                          }
-                        }
-                      }
-                      images(first: 2) {
-                        edges {
-                          node {
-                            url
-                          }
-                        }
-                      }
-                      priceRange {
-                        maxVariantPrice {
-                          amount
-                        }
-                        minVariantPrice {
-                          amount
-                        }
-                      }
-                      compareAtPriceRange {
-                        maxVariantPrice {
-                          amount
-                        }
-                      }
-                    } 
-                }
-            }
-      }
-    }`;
-
-  const res:any = await graphQLClient.request(query);
+  const res: any = await graphQLClient.request(collection_query, {
+    handle: handle,
+  });
 
   if (res.errors) {
     console.log(JSON.stringify(res.errors, null, 2));
@@ -256,3 +166,113 @@ export async function getStaticProps(context: any) {
     revalidate: 60,
   };
 }
+
+export const collection_query = gql`
+  query getCollection($handle: String!) {
+    collection(handle: $handle) {
+      id
+      title
+      description
+      descriptionHtml
+      image {
+        url
+      }
+      benefitOneIcon: metafield(
+        namespace: "collection"
+        key: "benefit_1_icon"
+      ) {
+        reference {
+          __typename
+          ... on MediaImage {
+            image {
+              url
+            }
+          }
+        }
+      }
+      benefitOneText: metafield(
+        namespace: "collection"
+        key: "benefit_1_text"
+      ) {
+        value
+      }
+      benefitTwoIcon: metafield(
+        namespace: "collection"
+        key: "benefit_2_icon"
+      ) {
+        reference {
+          __typename
+          ... on MediaImage {
+            image {
+              url
+            }
+          }
+        }
+      }
+      benefitTwoText: metafield(
+        namespace: "collection"
+        key: "benefit_2_text"
+      ) {
+        value
+      }
+      benefitThreeIcon: metafield(
+        namespace: "collection"
+        key: "benefit_3_icon"
+      ) {
+        reference {
+          __typename
+          ... on MediaImage {
+            image {
+              url
+            }
+          }
+        }
+      }
+      benefitThreeText: metafield(
+        namespace: "collection"
+        key: "benefit_3_text"
+      ) {
+        value
+      }
+      color: metafield(namespace: "collection", key: "color") {
+        value
+      }
+      products(first: 100) {
+        edges {
+          node {
+            id
+            title
+            description
+            handle
+            variants(first: 2) {
+              edges {
+                node {
+                  id
+                }
+              }
+            }
+            images(first: 2) {
+              edges {
+                node {
+                  url
+                }
+              }
+            }
+            priceRange {
+              maxVariantPrice {
+                amount
+              }
+              minVariantPrice {
+                amount
+              }
+            }
+            compareAtPriceRange {
+              maxVariantPrice {
+                amount
+              }
+            }
+          }
+        }
+      }
+    }
+  }`;

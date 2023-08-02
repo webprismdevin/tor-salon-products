@@ -195,5 +195,10 @@ modules[]{
       answer
     }
   },
+  (_type == 'component.collection') => {
+    ...,
+    "handle": collection->store.slug.current,
+    ${COLLECTION}
+  }
 }
 `;
