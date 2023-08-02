@@ -7,7 +7,6 @@ import {
 } from "@chakra-ui/react";
 //context
 import CartContext from "../lib/CartContext";
-import ShopContext from "../lib/shop-context";
 import AuthContext from "../lib/auth-context";
 //next & react deps
 import Head from "next/head";
@@ -184,7 +183,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         <PlausibleProvider domain="torsalonproducts.com">
           <ChakraProvider theme={customTheme}>
             <AuthContext.Provider value={{ user, setUser, token, setToken }}>
-              <ShopContext.Provider value={{ shop }}>
                 <Head>
                   <meta name="theme-color" content="#ffffff" />
                   <link rel="shortcut icon" href="/favicon.png" />
@@ -207,7 +205,6 @@ function MyApp({ Component, pageProps }: AppProps) {
                 <Suspense fallback={"..."}>
                   <Footer />
                 </Suspense>
-              </ShopContext.Provider>
             </AuthContext.Provider>
             <ColorModeScript initialColorMode={customTheme.initialColorMode} />
             {process.env.NODE_ENV === "production" && (
