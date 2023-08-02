@@ -29,7 +29,7 @@ export default function Navigation({ menu }: MenuProps) {
 
   return (
     <Box
-      p={7}
+      p={[4, null, null, 6]}
       pos="sticky"
       top={0}
       zIndex={20}
@@ -135,8 +135,8 @@ export default function Navigation({ menu }: MenuProps) {
 
 export const Logo = () => {
   return (
-    <NextLink href="/" className="flex-shrink-0">
-      <Img src={"/logo_240.png"} h={7} alt="TOR logo" />
+    <NextLink href="/" className="flex-shrink-0 grid items-center">
+      <Img src={"/logo_240.png"} h={[5, null, null, 7]} alt="TOR logo" />
     </NextLink>
   );
 };
