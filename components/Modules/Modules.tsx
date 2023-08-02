@@ -64,6 +64,8 @@ export type Hero = {
   cta?: {
     text: string;
     to: string;
+    useRelativePath?: boolean;
+    relativeLink?: string;
   };
   layout?: "left" | "right" | "center";
   size?: "small" | "medium" | "large";
@@ -207,17 +209,7 @@ function TextWithImage({ data }: { data: any }) {
         </div>
         <div className="mt-4 flex flex-col items-start">
           {data?.content && <PortableText blocks={data.content} />}
-          {data.cta && (
-            <div className="rounded bg-black px-6 py-3 text-white">
-              <Link
-                href={
-                  data.cta.useRelativePath ? data.cta.relativeLink : data.cta.to
-                }
-              >
-                {data.cta.text}
-              </Link>
-            </div>
-          )}
+          <CallToAction data={data} />
         </div>
       </div>
       {data.image && (
@@ -229,6 +221,24 @@ function TextWithImage({ data }: { data: any }) {
             className="absolute w-full object-cover left-0 right-0"
             fill
           />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CallToAction(data: any) {
+  return (
+    <div>
+      {data.cta && (
+        <div className="rounded bg-black px-6 py-3 text-white">
+          <Link
+            href={
+              data.cta.useRelativePath ? data.cta.relativeLink : data.cta.to
+            }
+          >
+            {data.cta.text}
+          </Link>
         </div>
       )}
     </div>
