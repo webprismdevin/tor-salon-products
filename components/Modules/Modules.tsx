@@ -227,22 +227,19 @@ function TextWithImage({ data }: { data: any }) {
   );
 }
 
-function CallToAction(data: any) {
-  return (
-    <div>
-      {data.cta && (
-        <div className="rounded bg-black px-6 py-3 text-white">
-          <Link
-            href={
-              data.cta.useRelativePath ? data.cta.relativeLink : data.cta.to
-            }
-          >
-            {data.cta.text}
-          </Link>
-        </div>
-      )}
-    </div>
-  );
+function CallToAction({ data }: any) {
+  if (!data.cta) return <></>;
+
+  if (data.cta)
+    return (
+      <div className="rounded bg-black px-6 py-3 text-white">
+        <Link
+          href={data.cta.useRelativePath ? data.cta.relativeLink : data.cta.to}
+        >
+          {data.cta.text}
+        </Link>
+      </div>
+    );
 }
 
 function CollectionGrid({ data }: { data: any }) {
