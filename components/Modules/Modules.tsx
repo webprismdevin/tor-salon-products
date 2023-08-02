@@ -1,4 +1,4 @@
-import React, { Fragment, Suspense, useState } from "react";
+import React, { Fragment, Suspense, useEffect, useState } from "react";
 import { imageBuilder } from "lib/sanity";
 import Image from "next/image";
 import Link from "next/link";
@@ -6,11 +6,10 @@ import { SanityImageAssetDocument } from "@sanity/client";
 import { useScroll, useTransform, motion } from "framer-motion";
 import { useRef } from "react";
 import PortableText from "components/PortableText/PortableText";
-import Slides from "./Page/Slides";
+import Slides from "./Slides";
 import graphClient from "lib/graph-client";
 import { collection_query } from "pages/collection/[handle]";
-import Product from "./Product/Product";
-import Slides from "./Slides";
+import Product from "components/Product/Product";
 import dynamic from "next/dynamic";
 import ProductGrid from "./ProductGrid";
 
@@ -41,7 +40,7 @@ export default function Modules({ modules }: any) {
             );
           case "component.faq":
             return <FAQs key={module._key} data={module} />;
-          case 'component.productGrid':
+          case "component.productGrid":
             return <ProductGrid key={module._key} data={module} />;
           default:
             return null;
@@ -152,9 +151,9 @@ function Collection({ data }: any) {
   if (!products) return <></>;
 
   return (
-    <div className="flex flex-col gap-2 w-full py-4 md:py-8">
+    <div className="flex flex-col gap-2 w-full py-4 md:py-8 text-center md:text-left">
       <div className="px-9">
-        <h2 className="font-heading text-2xl md:text-3xl lg:text-4xl text-center md:text-left pb-4">
+        <h2 className="font-heading text-2xl md:text-3xl lg:text-4xl pb-4">
           {data.title}
         </h2>
         <p>{data.subtitle}</p>
@@ -187,14 +186,18 @@ function TextWithImage({ data }: { data: any }) {
   return (
     <div
       className={`flex w-full lg:flex-row ${
-        data.image ? "justify-between" : ""
-      } ${data.layout === "right" ? "flex-col md:flex-row-reverse" : "flex-col-reverse"}`}
+        data.size === "small" ? "md:max-h-[500px]" : ""
+      } ${data.image ? "justify-between" : ""} ${
+        data.layout === "right"
+          ? "flex-col-reverse md:flex-row-reverse"
+          : "flex-col"
+      }`}
       key={data._key}
     >
       <div
-        className={`max-w-full grow-1 self-center p-8 ${
-          data.image ? "lg:max-w-[50%]" : "lg:max-w-screen-lg mx-auto"
-        } lg:p-24`}
+        className={`max-w-full grow-1 self-center ${
+          data.image ? "p-8 lg:p-24" : "p-4"
+        } ${data.image ? "lg:max-w-[50%]" : "lg:max-w-screen-lg mx-auto"}`}
       >
         <div className={`${data.image ?? "justify-center text-center"}`}>
           <p className="font-heading text-base">{data.caption}</p>
@@ -202,12 +205,16 @@ function TextWithImage({ data }: { data: any }) {
             {data.title}
           </p>
         </div>
-        <div className="mt-4">
+        <div className="mt-4 flex flex-col items-start">
           {data?.content && <PortableText blocks={data.content} />}
           {data.cta && (
-            <div className="mt-4">
-              <Link href={data.cta.to} className="border-b-2 border-white">
-                Learn more
+            <div className="rounded bg-black px-6 py-3 text-white">
+              <Link
+                href={
+                  data.cta.useRelativePath ? data.cta.relativeLink : data.cta.to
+                }
+              >
+                {data.cta.text}
               </Link>
             </div>
           )}
@@ -235,41 +242,49 @@ function CollectionGrid({ data }: { data: any }) {
     "absolute left-0 top-0 z-0 h-full w-full object-cover object-center";
 
   const collectionClass =
-    "relative grid place-items-center font-heading text-2xl uppercase min-h-[100px] md:min-h-[200px]";
+    "relative grid place-items-center font-heading text-2xl uppercase min-h-[150px] md:min-h-[200px]";
 
   function isEven(n: number) {
     return n % 2 == 0;
   }
 
   return (
-    <div
-      className={`grid min-h-[300px] ${
-        isEven(collections.length) ? "grid-cols-2" : "grid-cols-1"
-      } gap-4 p-4 md:min-h-[400px] md:grid-cols-3`}
-      key={data._key}
-    >
-      {collections.map((collection: any) => (
-        <Link
-          href={collection?.to ?? "/"}
-          className={collectionClass}
-          key={collection._key}
-        >
-          <Image
-            className={imageClass}
-            src={imageBuilder(collection.image)
-              .height(800)
-              .format("webp")
-              .url()}
-            alt=""
-            loading={data.loading ?? "lazy"}
-            sizes={"33vw"}
-            fill
-          />
-          <span className="z-10 text-shadow relative text-center text-2xl text-white md:text-3xl lg:text-5xl">
-            {collection.title}
-          </span>
-        </Link>
-      ))}
+    <div id="collection-grid">
+      <div className="text-center px-8 md:px-12 md:mt-12 pb-4">
+        <h2 className="font-heading text-2xl md:text-3xl lg:text-4xl text-center pb-4">
+          {data.title}
+        </h2>
+        <p>{data.subtitle}</p>
+      </div>
+      <div
+        className={`grid min-h-[300px] ${
+          isEven(collections.length) ? "grid-cols-2" : "grid-cols-1"
+        } gap-4 p-4 md:min-h-[400px] md:grid-cols-3`}
+        key={data._key}
+      >
+        {collections.map((collection: any) => (
+          <Link
+            href={collection?.to ?? "/"}
+            className={collectionClass}
+            key={collection._key}
+          >
+            <Image
+              className={imageClass}
+              src={imageBuilder(collection.image)
+                .height(800)
+                .format("webp")
+                .url()}
+              alt=""
+              loading={data.loading ?? "lazy"}
+              sizes={"33vw"}
+              fill
+            />
+            <span className="z-10 text-shadow relative text-center text-2xl text-white md:text-3xl lg:text-5xl">
+              {collection.title}
+            </span>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }
