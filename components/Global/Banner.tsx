@@ -2,8 +2,6 @@ import { Box, Text, BoxProps } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { wrap } from "@popmotion/popcorn";
-import Link from "next/link";
-// import { NavArrowLeft, NavArrowRight } from "components/Page/Slides";
 
 const MotionBox = motion<BoxProps>(Box);
 
@@ -26,7 +24,7 @@ export default function Banner({ data }: BannerSettings) {
   useEffect(() => {
     const interval = setInterval(() => {
       paginate(1);
-    }, 3200);
+    }, 2900);
 
     return () => clearInterval(interval);
   }, [page]);
@@ -52,7 +50,6 @@ export default function Banner({ data }: BannerSettings) {
           <Text textAlign={"center"}>{data[index].text}</Text>
         </MotionBox>
       </AnimatePresence>
-      {/* <NavArrowRight onClick={() => paginate(1)} className="opacity-50 cursor-pointer" /> */}
     </motion.div>
   );
 }

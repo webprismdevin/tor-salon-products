@@ -55,16 +55,12 @@ export default function Navigation({ menu }: MenuProps) {
             <Text>Shop</Text>
             <Icon as={BiChevronDown} />
           </Stack>
-          {menu && menu.links.map((link) => (
-            <NextLink
-              legacyBehavior
-              href={link.url}
-              key={link._key}
-              passHref
-            >
-              <Link>{link.title}</Link>
-            </NextLink>
-          ))}
+          {menu &&
+            menu.links.map((link) => (
+              <NextLink legacyBehavior href={link.url} key={link._key} passHref>
+                <Link>{link.title}</Link>
+              </NextLink>
+            ))}
         </Stack>
         <Stack direction={"row"} align="center" gap={6}>
           <Search />
@@ -91,41 +87,43 @@ export default function Navigation({ menu }: MenuProps) {
             px={10}
           >
             <Stack direction="row" gap={16}>
-              {menu && menu.mega_menu
-                .filter((item) => item._type === "collectionGroup")
-                .map((item) => (
-                  <Stack key={item._key}>
-                    <Text fontWeight={600}>{item.title}</Text>
-                    {item.collectionLinks!.map((link) => (
-                      <NextLink
-                        legacyBehavior
-                        key={link._id}
-                        href={`/${link._type}/${link.store.slug.current}`}
-                        passHref
-                      >
-                        <Link>{link.store.title}</Link>
-                      </NextLink>
-                    ))}
-                  </Stack>
-                ))}
+              {menu &&
+                menu.mega_menu
+                  .filter((item) => item._type === "collectionGroup")
+                  .map((item) => (
+                    <Stack key={item._key}>
+                      <Text fontWeight={600}>{item.title}</Text>
+                      {item.collectionLinks!.map((link) => (
+                        <NextLink
+                          legacyBehavior
+                          key={link._id}
+                          href={`/${link._type}/${link.store.slug.current}`}
+                          passHref
+                        >
+                          <Link>{link.store.title}</Link>
+                        </NextLink>
+                      ))}
+                    </Stack>
+                  ))}
               <Stack>
                 <Text fontWeight={600}>More</Text>
-                {menu && menu.mega_menu
-                  .filter(
-                    (item) =>
-                      item._type === "linkExternal" ||
-                      item._type === "linkInternal"
-                  )
-                  .map((item) => (
-                    <NextLink
-                      legacyBehavior
-                      href={item.url}
-                      key={item._key}
-                      target={item.newWindow ? "_blank" : "_self"}
-                    >
-                      <Link>{item.title}</Link>
-                    </NextLink>
-                  ))}
+                {menu &&
+                  menu.mega_menu
+                    .filter(
+                      (item) =>
+                        item._type === "linkExternal" ||
+                        item._type === "linkInternal"
+                    )
+                    .map((item) => (
+                      <NextLink
+                        legacyBehavior
+                        href={item.url}
+                        key={item._key}
+                        target={item.newWindow ? "_blank" : "_self"}
+                      >
+                        <Link>{item.title}</Link>
+                      </NextLink>
+                    ))}
               </Stack>
             </Stack>
           </MotionBox>
@@ -135,34 +133,21 @@ export default function Navigation({ menu }: MenuProps) {
   );
 }
 
-const Logo = () => {
+export const Logo = () => {
   return (
-    <Box>
-      <NextLink href="/">
-        <Img src={"/logo_240.png"} h={7} alt="TOR logo" />
-      </NextLink>
-    </Box>
+    <NextLink href="/" className="flex-shrink-0">
+      <Img src={"/logo_240.png"} h={7} alt="TOR logo" />
+    </NextLink>
   );
 };
 
 const Auth = () => {
-  const { user } = useContext(AuthContext);
-  const router = useRouter();
-
-  function handleLoginOrAccount() {
-    if (user && user.id) router.push("/account");
-    else router.push("/login");
-  }
-
   return (
-    <Icon
-      as={AiOutlineUser}
-      boxSize={6}
-      onClick={handleLoginOrAccount}
-      _hover={{
-        opacity: 0.4,
-      }}
-      transition={"opacity 200ms ease"}
-    />
+    <a href="https://account.torsalonproducts.com" target="_blank" className="hover:opacity-40 transition-opacity transitition-duration-200">
+      <Icon
+        as={AiOutlineUser}
+        boxSize={6}
+      />
+    </a>
   );
 };

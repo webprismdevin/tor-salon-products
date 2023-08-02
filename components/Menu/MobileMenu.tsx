@@ -27,6 +27,7 @@ import MenuLink from "./MenuLink";
 import AuthContext from "../../lib/auth-context";
 import { MenuProps } from "../../types/app_types";
 import { CollectionLink } from "../../types/sanity";
+import { Logo } from "components/Global/Navigation";
 
 const MobileMenu = ({ menu }: MenuProps) => {
   const {
@@ -47,19 +48,21 @@ const MobileMenu = ({ menu }: MenuProps) => {
 
   return (
     <>
-      <Icon
-        display={["inherit", "none"]}
-        as={AiOutlineMenu}
-        onClick={menuOnOpen}
-        style={{
-          cursor: "pointer",
-        }}
-        boxSize={[6]}
-        _hover={{
-          opacity: 0.4,
-        }}
-        transition={"opacity 200ms ease"}
-      />
+      <div className="flex gap-4 md:hidden">
+        <Icon
+          as={AiOutlineMenu}
+          onClick={menuOnOpen}
+          style={{
+            cursor: "pointer",
+          }}
+          boxSize={[6]}
+          _hover={{
+            opacity: 0.4,
+          }}
+          transition={"opacity 200ms ease"}
+        />
+        <Logo />
+      </div>
       <Drawer
         isOpen={menuIsOpen}
         placement="left"
@@ -70,7 +73,7 @@ const MobileMenu = ({ menu }: MenuProps) => {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>
-            <Text fontFamily={"Futura"}>TOR</Text>
+            <Text fontFamily={"Futura"}>TOR Salon Products</Text>
           </DrawerHeader>
           <DrawerBody p={8}>
             <VStack spacing={4} alignItems={"flex-start"} w="full">
@@ -148,7 +151,7 @@ const MobileMenu = ({ menu }: MenuProps) => {
                   <Link>{link.title}</Link>
                 </NextLink>
               ))}
-              <MenuLink href="/account" text="Account" />
+              <MenuLink href="https://account.torsalonproducts.com" text="Account" />
               <MenuLink href={"/help"} text="Help &amp; FAQ" />
               {user && user.isPro && (
                 <MenuLink href="/wholesale" text="Wholesale" />

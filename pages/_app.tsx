@@ -105,7 +105,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [cart, setCart] = useState<any>({ id: null, lines: [] });
   const [user, setUser, token, setToken] = useUser();
   const { data: settings, error } = useSWR(settingsQuery, sanityFetcher);
-  const shop = { name: "TOR Salon Products" };
   const toast = useToast();
 
   const hasUserConsent = true;

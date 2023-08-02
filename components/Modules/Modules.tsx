@@ -1,11 +1,4 @@
-import React, { Fragment, Suspense, useEffect } from "react";
-import BigTextBlock from "./Page/Modules/BigTextBlock";
-import FeaturedInformation from "./Page/Modules/FeaturedInformation";
-import ReviewSlider from "./ReviewSlider";
-import SecondBuyButton from "./Page/Modules/SecondBuyButton";
-import HairTypes from "./Page/Modules/HairTypes";
-import ReviewSection from "./Page/Modules/ReviewSection";
-import EmailSignup from "./Page/Modules/EmailSignup";
+import React, { Fragment, Suspense, useState } from "react";
 import { imageBuilder } from "lib/sanity";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,26 +10,17 @@ import Slides from "./Page/Slides";
 import graphClient from "lib/graph-client";
 import { collection_query } from "pages/collection/[handle]";
 import Product from "./Product/Product";
+import Slides from "./Slides";
+import dynamic from "next/dynamic";
+import ProductGrid from "./ProductGrid";
 
-export default function Modules({ modules, product }: any) {
+const ReviewCarousel = dynamic(() => import("./ReviewCarousel"));
+
+export default function Modules({ modules }: any) {
   return (
     <React.Fragment>
       {modules.map((module: any) => {
         switch (module._type) {
-          case "module.featuredInformation":
-            return <FeaturedInformation key={module._key} module={module} />;
-          case "module.bigTextBlock":
-            return <BigTextBlock key={module._key} module={module} />;
-          case "module.reviewSlider":
-            return <ReviewSlider key={module._key} reviews={module.reviews} />;
-          case "additionalBuyButton":
-            return <SecondBuyButton product={product} key={module._key} />;
-          case "hairTypeSection":
-            return <HairTypes key={module._key} />;
-          case "reviewSection":
-            return <ReviewSection key={module._key} />;
-          case "module.emailSignup":
-            return <EmailSignup key={module._key} {...module} />;
           case "component.hero":
             return <Hero key={module._key} data={module} />;
           case "component.textWithImage":
@@ -49,6 +33,16 @@ export default function Modules({ modules, product }: any) {
             return <Slides key={module._key} data={module} />;
           case "component.collection":
             return <Collection key={module._key} data={module} />;
+          case "component.reviewCarousel":
+            return (
+              <Suspense key={module._key}>
+                <ReviewCarousel data={module} />
+              </Suspense>
+            );
+          case "component.faq":
+            return <FAQs key={module._key} data={module} />;
+          case 'component.productGrid':
+            return <ProductGrid key={module._key} data={module} />;
           default:
             return null;
         }
@@ -192,9 +186,9 @@ export function SanityProductCard({ product }: { product: any }) {
 function TextWithImage({ data }: { data: any }) {
   return (
     <div
-      className={`flex flex-col w-full lg:flex-row ${
+      className={`flex w-full lg:flex-row ${
         data.image ? "justify-between" : ""
-      } ${data.layout === "right" ? "lg:flex-row-reverse" : ""}`}
+      } ${data.layout === "right" ? "flex-col md:flex-row-reverse" : "flex-col-reverse"}`}
       key={data._key}
     >
       <div
@@ -220,7 +214,7 @@ function TextWithImage({ data }: { data: any }) {
         </div>
       </div>
       {data.image && (
-        <div className="relative aspect-square min-w-[50%]">
+        <div className="relative aspect-[16/9] md:aspect-square min-w-[50%]">
           <Image
             src={imageBuilder(data.image).format("webp").url()}
             alt={data.image.alt ? data.image.alt : "Image"}
@@ -354,3 +348,45 @@ function Marquee({ data }: { data: any }) {
     </div>
   );
 }
+
+function FAQs({ data }: { data: any }) {
+  return (
+    <div className="flex flex-col gap-2 mx-auto max-w-prose p-4 md:p-8 lg:p-12">
+      <h2 className="font-heading text-2xl md:text-3xl lg:text-4xl text-center pb-4">
+        {data.title}
+      </h2>
+      {data.faqs.map((faq: any) => (
+        <Accordion faq={faq} key={faq._id} />
+      ))}
+    </div>
+  );
+}
+const Accordion = ({ faq }: { faq: { question: string; answer: string } }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="flex flex-col pt-2 border-2 rounded py-2 px-4">
+      <div
+        className="flex flex-row gap-2 cursor-pointer items-center justify-between"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <h3 className="font-heading text-xl">{faq.question}</h3>
+        <svg
+          className={`w-6 h-6 transform transition-transform ${
+            isOpen ? "rotate-180" : ""
+          }`}
+          viewBox="0 0 24 24"
+        >
+          <path fill="currentColor" d="M7 10l5 5 5-5z" />
+        </svg>
+      </div>
+      <div
+        className={`overflow-hidden transition-all ${
+          isOpen ? "max-h-96" : "max-h-0"
+        }`}
+      >
+        <p className="font-body text-base pt-2">{faq.answer}</p>
+      </div>
+    </div>
+  );
+};
