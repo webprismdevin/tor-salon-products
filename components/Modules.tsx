@@ -120,6 +120,16 @@ export function Hero({ data }: { data: Hero }) {
   );
 }
 
+function Collection({ data }: any) {
+  return (
+    <div className="flex flex-col gap-2 mx-auto max-w-prose p-4 md:p-8 lg:p-12">
+      <h2 className="font-heading text-2xl md:text-3xl lg:text-4xl text-center pb-4">
+        {data.title}
+      </h2>
+    </div>
+  );
+}
+
 function TextWithImage({ data }: { data: any }) {
   return (
     <div
@@ -187,7 +197,7 @@ function CollectionGrid({ data }: { data: any }) {
     >
       {collections.map((collection: any) => (
         <Link
-          href={collection.to}
+          href={collection?.to ?? "/"}
           className={collectionClass}
           key={collection._key}
         >
