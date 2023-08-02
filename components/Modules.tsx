@@ -132,13 +132,21 @@ export function Hero({ data }: { data: Hero }) {
   );
 }
 
+export type CollectionResponse = {
+  collection: {
+    products: {
+      edges: any[];
+    };
+  };
+};
+
 function Collection({ data }: any) {
   const [products, setProducts] = React.useState<any[] | null>(null);
 
   const getProducts = async () => {
-    const { collection } = await graphClient.request(collection_query, {
+    const { collection } = (await graphClient.request(collection_query, {
       handle: data.handle,
-    });
+    })) as CollectionResponse;
 
     setProducts(collection.products.edges);
   };

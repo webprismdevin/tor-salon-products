@@ -35,7 +35,7 @@ export default function ProductGrid({ data }: { data: any }) {
         >
           {data.products.map((product: any) => (
             <Link
-              href={product.to ?? '/'}
+              href={product.to ?? "/"}
               key={product.gid}
               className="flex flex-col justify-center items-center p-6 bg-slate-200 h-full w-full text-center"
             >
