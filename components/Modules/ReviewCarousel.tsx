@@ -12,10 +12,6 @@ export default function ReviewCarousel({ data }: { data: any }) {
     fetcher
   );
 
-  useEffect(() => {
-    console.log(response);
-  }, [response]);
-
   if (!data) {
     return <Loader />;
   }
@@ -38,7 +34,7 @@ export default function ReviewCarousel({ data }: { data: any }) {
               <div className="flex items-center gap-2 mb-2">
                 <RatingStar
                   id={review.id}
-                  rating={review.score}
+                  rating={Number(review.score)}
                   size={16}
                   colors={{ stroke: "#000000", mask: "#000000" }}
                 />

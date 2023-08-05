@@ -34,8 +34,8 @@ export default function Modules({ modules }: any) {
             return <Collection key={module._key} data={module} />;
           case "component.reviewCarousel":
             return (
-              <Suspense key={module._key}>
-                <ReviewCarousel data={module} />
+              <Suspense>
+                <ReviewCarousel data={module} key={module._key} />
               </Suspense>
             );
           case "component.faq":
@@ -185,15 +185,22 @@ export function SanityProductCard({ product }: { product: any }) {
 }
 
 function TextWithImage({ data }: { data: any }) {
+  const layoutClass =
+    data.layout === "right"
+      ? "flex-col-reverse md:flex-row-reverse"
+      : "flex-col";
+
+  const sizeClass = data.size === "small" ? "md:max-h-[500px]" : "";
+
   return (
     <div
-      className={`flex w-full lg:flex-row ${
-        data.size === "small" ? "md:max-h-[500px]" : ""
-      } ${data.image ? "justify-between" : ""} ${
-        data.layout === "right"
-          ? "flex-col-reverse md:flex-row-reverse"
-          : "flex-col"
-      }`}
+      style={{
+        backgroundColor: data.colorTheme?.background?.hex ?? "#ffffff",
+        color: data.colorTheme?.text?.hex ?? "#121212",
+      }}
+      className={`flex w-full lg:flex-row  ${
+        data.image ? "justify-between" : ""
+      } ${layoutClass} ${sizeClass}`}
       key={data._key}
     >
       <div
@@ -227,11 +234,17 @@ function TextWithImage({ data }: { data: any }) {
   );
 }
 
-function CallToAction(data: any) {
+function CallToAction({ data }: { data: any }) {
   return (
     <div>
-      {data.cta && (
-        <div className="rounded bg-black px-6 py-3 text-white">
+      {data.cta?.text && (
+        <div
+          className="rounded py-2 px-4 text-lg font-bold"
+          style={{
+            backgroundColor: data.colorTheme?.text?.hex ?? "#000000",
+            color: data.colorTheme?.background?.hex ?? "#ffffff",
+          }}
+        >
           <Link
             href={
               data.cta.useRelativePath ? data.cta.relativeLink : data.cta.to

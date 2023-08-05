@@ -200,7 +200,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                     {...pagePropsWithAppAnalytics}
                   />
                 </CartContext.Provider>
-                <Follow />
+                {/* <Follow /> */}
                 <Suspense fallback={"..."}>
                   <Footer />
                 </Suspense>

@@ -157,6 +157,7 @@ export const COLLECTION_GRID_FRAGMENT = groq`
 export const MODULE_FRAGMENT = groq`
 modules[]{
   ...,
+  colorTheme->,
   _type,
   (_type == 'component.swimlane') => {
       "gid": collection->store.gid,
@@ -186,6 +187,7 @@ modules[]{
   ${COLLECTION_GRID_FRAGMENT},
   (_type == 'component.textWithImage') => {
     ...,
+    colorTheme->,
     ${CTA_FRAGMENT}
   },
   (_type == 'component.faq') => {
