@@ -216,7 +216,7 @@ function TextWithImage({ data }: { data: any }) {
         </div>
         <div className="mt-4 flex flex-col items-start">
           {data?.content && <PortableText blocks={data.content} />}
-          <CallToAction data={data} />
+          {data.cta && <CallToAction data={data} />}
         </div>
       </div>
       {data.image && (
