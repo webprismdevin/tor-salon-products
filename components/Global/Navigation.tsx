@@ -1,3 +1,4 @@
+'use client';
 import {
   Box,
   Stack,
@@ -10,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { AnimatePresence, motion, useAnimation, useCycle } from "framer-motion";
 import NextLink from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import { AiOutlineUser } from "react-icons/ai";
 import { BiChevronDown } from "react-icons/bi";

@@ -15,7 +15,7 @@ import Script from "next/script";
 import { useRouter } from "next/router";
 import { Suspense, useEffect, useState } from "react";
 //libs
-import { sanity } from "../lib/sanity";
+import { sanity, settingsQuery } from "../lib/sanity";
 import useSWR from "swr";
 import applyDiscountToCart from "../lib/Cart/applyDiscountToCart";
 import useUser from "../lib/useUser";
@@ -81,24 +81,6 @@ let isInit = false;
 const customTheme: ThemeConfig = extendTheme(defaultTheme, themeConfig);
 
 export const sanityFetcher = (query: string) => sanity.fetch(query);
-
-const settingsQuery = `*[ _type == "settings" ][0]
-{ 
-  ...,
-  menu { 
-    mega_menu[]{
-      ...,
-      _type == 'collectionGroup' => @{ 
-        collectionLinks[]-> 
-      },
-      _type != 'collectionGroup' => @
-    },
-    links[]{
-      _type == 'reference' => @->,
-      _type != 'reference' => @,
-    }
-  } 
-}`;
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();

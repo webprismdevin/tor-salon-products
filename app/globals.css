@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: "ApercuPro";
+    src: url('/fonts/apercu_regular_pro.otf');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "ApercuPro";
+    src: url('/fonts/apercu_medium_pro.otf');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "ApercuPro";
+    src: url('/fonts/apercu_bold_pro.otf');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "FuturaTS-Medium";
+    src: url('/fonts/futura-medium-bt.ttf');
+    font-weight: 500;
+    font-style: normal;
+}

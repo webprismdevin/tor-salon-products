@@ -41,6 +41,24 @@ export const previewClient = sanityClient({
 export const getClient = (usePreview: boolean | undefined) =>
   usePreview ? previewClient : sanityClient;
 
+export const settingsQuery = `*[ _type == "settings" ][0]
+  { 
+    ...,
+    menu { 
+      mega_menu[]{
+        ...,
+        _type == 'collectionGroup' => @{ 
+          collectionLinks[]-> 
+        },
+        _type != 'collectionGroup' => @
+      },
+      links[]{
+        _type == 'reference' => @->,
+        _type != 'reference' => @,
+      }
+    } 
+  }`;
+
 export const COLLECTION = groq`
   _id,
   "gid": collection->store.gid,
