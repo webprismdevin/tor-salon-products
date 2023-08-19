@@ -27,8 +27,6 @@ export default function Slides({ data }: { data: any }) {
     setPage([page + newDirection, newDirection]);
   };
 
-  // return <div>Send data</div>;
-
   return (
     <motion.div
       className="relative h-screen max-h-[700px] w-screen"

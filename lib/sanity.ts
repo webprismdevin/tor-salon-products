@@ -154,6 +154,7 @@ export const CTA_FRAGMENT = groq`
 //homepage fragments
 export const HERO_FRAGMENT = groq`
     ...,
+    colorTheme->,
     image {
       ...,
       "height": asset-> metadata.dimensions.height,

@@ -1,10 +1,15 @@
-import { sanity } from "lib/sanity";
+import Modules from "components/Modules/Modules";
+import { MODULE_FRAGMENT, sanity } from "lib/sanity";
 import { Metadata } from "next";
+import { Suspense } from "react";
 
 async function getData() {
-  const res = await sanity.fetch(`*[_type == "homepage"][0]`);
+  const res = await sanity.fetch(`*[_type == "home"][0]{
+    ...,
+    ${MODULE_FRAGMENT}
+  }`);
 
-  console.log(res)
+  console.log(res);
 
   if (!res) {
     // This will activate the closest `error.js` Error Boundary
@@ -14,12 +19,22 @@ async function getData() {
   return res;
 }
 
-export const metadata: Metadata = {
-  title: "My Page Title",
-};
+export async function generateMetadata() {
+  const data = await getData();
+
+  return {
+    title: data?.seo_title ?? "TOR Salon Products",
+  };
+}
 
 export default async function Page() {
   const data = await getData();
 
-  return <div>New home page</div>;
+  return (
+    <div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Modules modules={data.modules} />
+      </Suspense>
+    </div>
+  );
 }

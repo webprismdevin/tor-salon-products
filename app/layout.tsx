@@ -1,7 +1,8 @@
 import Header from "components/Header";
 import { sanity, settingsQuery } from "lib/sanity";
 import { Metadata } from "next";
-import "./globals.css";
+import './globals.css';
+
 
 export async function getData() {
   const res = await sanity.fetch(settingsQuery);

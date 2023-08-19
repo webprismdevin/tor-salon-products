@@ -1,3 +1,4 @@
+"use client";
 import React, { Fragment, Suspense, useEffect, useState } from "react";
 import { imageBuilder } from "lib/sanity";
 import Image from "next/image";
@@ -16,6 +17,8 @@ import ProductGrid from "./ProductGrid";
 const ReviewCarousel = dynamic(() => import("./ReviewCarousel"));
 
 export default function Modules({ modules }: any) {
+  if (!modules) return <>No section modules to display</>;
+
   return (
     <React.Fragment>
       {modules.map((module: any) => {
@@ -67,6 +70,14 @@ export type Hero = {
     useRelativePath?: boolean;
     relativeLink?: string;
   };
+  colorTheme?: {
+    background?: {
+      hex: string;
+    };
+    text?: {
+      hex: string;
+    };
+  };
   layout?: "left" | "right" | "center";
   size?: "small" | "medium" | "large";
 };
@@ -91,6 +102,10 @@ export function Hero({ data }: { data: Hero }) {
         layout === "center" && "justify-center text-center"
       }`}
       ref={ref}
+      style={{
+        backgroundColor: data.colorTheme?.background?.hex ?? "#ffffff",
+        color: data.colorTheme?.text?.hex ?? "#121212",
+      }}
     >
       <motion.div
         style={{ y }}
@@ -108,9 +123,9 @@ export function Hero({ data }: { data: Hero }) {
       <div
         className={`${
           layout === "right" && "text-right"
-        } z-1 relative self-center text-contrast max-w-prose`}
+        } z-1 relative self-center max-w-prose`}
       >
-        <p className="text-shadow text-xl font-bold lg:text-2xl">{caption}</p>
+        <p className="text-shadow text-xl lg:text-2xl">{caption}</p>
         <h2 className="text-shadow mb-4 font-heading text-4xl uppercase lg:text-6xl">
           {title}
         </h2>
@@ -153,9 +168,20 @@ function Collection({ data }: any) {
   if (!products) return <></>;
 
   return (
-    <div className="flex flex-col gap-2 w-full py-4 md:py-8 text-center md:text-left">
+    <div
+      className="flex flex-col gap-2 w-full py-4 md:py-8 text-center md:text-left no-scrollbar"
+      style={{
+        background: data.colorTheme?.background?.hex ?? "#ffffff",
+        color: data.colorTheme?.text?.hex ?? "#121212",
+      }}
+    >
       <div className="px-9">
-        <h2 className="font-heading text-2xl md:text-3xl lg:text-4xl pb-4">
+        <h2
+          className="font-heading text-2xl md:text-3xl lg:text-4xl pb-4"
+          style={{
+            color: data.colorTheme?.text?.hex ?? "#121212",
+          }}
+        >
           {data.title}
         </h2>
         <p>{data.subtitle}</p>
