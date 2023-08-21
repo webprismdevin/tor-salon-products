@@ -1,8 +1,11 @@
+import Footer from "components/Global/Footer";
 import Header from "components/Header";
 import { sanity, settingsQuery } from "lib/sanity";
 import { Metadata } from "next";
-import './globals.css';
-
+import PlausibleProvider from "next-plausible";
+import CartProvider from "./cart-provider";
+import ThemeProvider from "./chakra-provider";
+import "./globals.css";
 
 export async function getData() {
   const res = await sanity.fetch(settingsQuery);
@@ -21,8 +24,6 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({
-  // Layouts must accept a children prop.
-  // This will be populated with nested layouts or pages
   children,
 }: {
   children: React.ReactNode;
@@ -31,10 +32,18 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body>
-        <Header menu={settings?.menu} />
-        {children}
-      </body>
+      <head>
+        <PlausibleProvider domain="torsalonproducts.com" />
+      </head>
+      <ThemeProvider>
+        <CartProvider>
+          <body>
+            <Header menu={settings?.menu} />
+            {children}
+          </body>
+        </CartProvider>
+        <Footer />
+      </ThemeProvider>
     </html>
   );
 }

@@ -9,8 +9,6 @@ async function getData() {
     ${MODULE_FRAGMENT}
   }`);
 
-  console.log(res);
-
   if (!res) {
     // This will activate the closest `error.js` Error Boundary
     throw new Error("Failed to fetch data");

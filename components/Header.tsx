@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Cart from "./Cart/Cart";
+import MobileMenu from "./Menu/MobileMenu";
 import MenuDesktop from "./MenuDesktop";
 
 export type MenuProps = any;
@@ -12,6 +14,7 @@ export default function Header({ menu }: HeaderProps) {
     <div className="grid grid-cols-3 w-full p-4 shadow-md items-center sticky top-0 z-50 bg-white">
       <div className="col-span-1">
         <MenuDesktop menu={menu} />
+        <MobileMenu menu={menu} />
       </div>
       <Link
         href="/"
@@ -27,7 +30,7 @@ export default function Header({ menu }: HeaderProps) {
         >
           <IconUser />
         </a>
-        <div>Cart</div>
+        <Cart />
       </div>
     </div>
   );

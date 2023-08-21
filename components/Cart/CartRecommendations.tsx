@@ -1,11 +1,9 @@
 import { Box, Button, Stack, Text } from "@chakra-ui/react";
-
 import graphClient from "../../lib/graph-client";
 import { gql } from "graphql-request";
 import { useContext, useEffect, useState } from "react";
 import formatter from "../../lib/formatter";
-import addToCart from "../../lib/Cart/addToCart";
-import CartContext from "../../lib/CartContext";
+import { CartContext } from "../../app/cart-provider";
 import { useRouter } from "next/router";
 import useAddToCart from "../../lib/useAddToCart";
 
@@ -36,7 +34,6 @@ type RecommendationsResponse = {
 export default function CartRecommendations() {
   const { cart, setCart } = useContext(CartContext);
   const [recommendations, setRecommendations] = useState<[any] | null>();
-  const router = useRouter()
   const { addItemToCart } = useAddToCart();
 
   async function getRecommendations(productId: string) {
@@ -60,7 +57,9 @@ export default function CartRecommendations() {
             }
           }`;
 
-    const response = await graphClient.request(query) as RecommendationsResponse;
+    const response = (await graphClient.request(
+      query
+    )) as RecommendationsResponse;
 
     return response;
   }
@@ -68,16 +67,14 @@ export default function CartRecommendations() {
   useEffect(() => {
     console.log("fired");
 
-    getRecommendations(cart.lines[cart.lines.length - 1].node.merchandise.product.id).then((res:any) =>
-      setRecommendations(res.productRecommendations)
-    );
+    getRecommendations(
+      cart.lines[cart.lines.length - 1].node.merchandise.product.id
+    ).then((res: any) => setRecommendations(res.productRecommendations));
   }, [cart.lines]);
 
   async function handleAddToCart(rec: any) {
     addItemToCart(rec.variants.edges[0].node.id, 1, "");
   }
-
-  if(router.asPath.includes("/offer")) return <></>
 
   return (
     <Box w="full" display={["none", null, "block"]}>
@@ -102,7 +99,11 @@ export default function CartRecommendations() {
                 </span>
               )}
             </Text>
-            <Button variant="outline" onClick={() => handleAddToCart(rec)} size="sm">
+            <Button
+              variant="outline"
+              onClick={() => handleAddToCart(rec)}
+              size="sm"
+            >
               Add for{" "}
               {formatter.format(rec.variants.edges[0].node.priceV2.amount)}
             </Button>

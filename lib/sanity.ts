@@ -166,6 +166,7 @@ export const HERO_FRAGMENT = groq`
 export const COLLECTION_GRID_FRAGMENT = groq`
 (_type == 'component.collectionGrid') => {
   ...,
+  colorTheme->,
   collections[]{
     ...,
     ${COLLECTION_LINK}
@@ -200,7 +201,8 @@ modules[]{
         ...,
         "height": asset-> metadata.dimensions.height,
         "width": asset-> metadata.dimensions.width
-      }
+      },
+      colorTheme->,
     }
   },
   ${COLLECTION_GRID_FRAGMENT},

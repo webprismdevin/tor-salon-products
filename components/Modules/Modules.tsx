@@ -7,13 +7,14 @@ import { SanityImageAssetDocument } from "@sanity/client";
 import { useScroll, useTransform, motion } from "framer-motion";
 import { useRef } from "react";
 import PortableText from "components/PortableText/PortableText";
-import Slides from "./Slides";
+import Slides from "./Slides_v2/index";
 import graphClient from "lib/graph-client";
 import { collection_query } from "pages/collection/[handle]";
 import Product from "components/Product/Product";
 import dynamic from "next/dynamic";
-import ProductGrid from "./ProductGrid";
-
+import ProductGrid from "./ProductGrid_v2";
+import ProductCard from "./ProductGrid_v2/ProductCard";
+import { Button } from "components/Button";
 const ReviewCarousel = dynamic(() => import("./ReviewCarousel"));
 
 export default function Modules({ modules }: any) {
@@ -131,7 +132,11 @@ export function Hero({ data }: { data: Hero }) {
         </h2>
         {cta?.to && (
           <Link
-            className="px-4 py-2 rounded bg-black text-white font-bold"
+            style={{
+              backgroundColor: data.colorTheme?.text?.hex ?? "#000000",
+              color: data.colorTheme?.background?.hex ?? "#ffffff",
+            }}
+            className="py-3 px-5 font-heading text-xl uppercase"
             href={cta.to}
           >
             {cta.text}
@@ -186,14 +191,22 @@ function Collection({ data }: any) {
         </h2>
         <p>{data.subtitle}</p>
       </div>
-      <div className="flex snap-x overflow-auto">
+      <div className="flex snap-x overflow-auto gap-4 md:gap-12">
         {products.map((product: any) => {
           return (
             <div
-              className="snap-start first:ml-8 last:mr-8"
+              className="snap-center first:ml-8 last:mr-8"
               key={product.node.id}
             >
-              <Product product={product} />
+              <ProductCard
+                product={{
+                  gid: product.node.id,
+                  title: product.node.title,
+                  featuredImage: product.node.images.edges[0].node.url,
+                  price: product.node.priceRange.minVariantPrice.amount,
+                  handle: product.node.handle,
+                }}
+              />
             </div>
           );
         })}
@@ -240,9 +253,9 @@ function TextWithImage({ data }: { data: any }) {
             {data.title}
           </p>
         </div>
-        <div className="mt-4 flex flex-col items-start">
+        <div className="mt-4 flex flex-col items-start gap-4">
           {data?.content && <PortableText blocks={data.content} />}
-          {data.cta && <CallToAction data={data} />}
+          {data.cta && <Button href={data.cta?.to}>{data.cta?.text}</Button>}
         </div>
       </div>
       {data.image && (
@@ -298,8 +311,15 @@ function CollectionGrid({ data }: { data: any }) {
   }
 
   return (
-    <div id="collection-grid">
-      <div className="text-center px-8 md:px-12 md:mt-12 pb-4">
+    <div
+      id="collection-grid"
+      className={!data.title && !data.subtitle ? "" : "py-4 md:py-8"}
+      style={{
+        backgroundColor: data.colorTheme?.background?.hex ?? "#ffffff",
+        color: data.colorTheme?.text?.hex ?? "#121212",
+      }}
+    >
+      <div className="text-center px-8 md:px-12 pb-4">
         <h2 className="font-heading text-2xl md:text-3xl lg:text-4xl text-center pb-4">
           {data.title}
         </h2>

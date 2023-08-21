@@ -15,7 +15,7 @@ declare type MenuLinkProps = {
 
 export default function MenuDesktop({ menu }: MenuProps) {
   return (
-    <div className="flex flex-row items-center gap-4 z-10">
+    <div className="flex-row items-center gap-4 z-10 hidden md:flex">
       <Suspense fallback={<Shop />}>
         <MegaMenu menu={menu} />
       </Suspense>

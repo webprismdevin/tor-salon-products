@@ -59,6 +59,7 @@
     "autoprefixer": "^10.4.13",
     "cross-env": "^7.0.3",
     "cypress": "^12.1.0",
+    "encoding": "^0.1.13",
     "eslint": "^8.29.0",
     "eslint-config-next": "^13.0.7",
     "next-unused": "^0.0.6",

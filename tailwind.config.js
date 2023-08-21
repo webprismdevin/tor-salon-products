@@ -5,6 +5,7 @@ module.exports = {
     "./app/**/**/*.{js,ts,jsx,tsx}",
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
+    "./components/**/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     borderRadius: {
@@ -14,7 +15,12 @@ module.exports = {
       heading: ["FuturaTS-Medium", "sans-serif"],
       sans: ["ApercuPro", "sans-serif"],
     },
-    extend: {},
+    extend: {
+      colors: {
+        primary: "#121212",
+        contrast: "#FFFFFF",
+      },
+    },
   },
   plugins: [],
 };
