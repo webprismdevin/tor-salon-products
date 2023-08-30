@@ -50,7 +50,19 @@ const nextConfig = {
       destination: '/collection/:handle*',
       permanent: true
     }]
-  }
+  },
+  async rewrites() {
+    return [
+        {
+            source: '/js/script.manual.revenue.js',
+            destination: 'https://plausible.io/js/script.manual.revenue.js'
+        },
+        {
+            source: '/api/event', // Or '/api/event/' if you have `trailingSlash: true` in this config
+            destination: 'https://plausible.io/api/event'
+        }
+    ];
+},
 }
 
 module.exports = withPlausibleProxy()(withBundleAnalyzer(nextConfig))
