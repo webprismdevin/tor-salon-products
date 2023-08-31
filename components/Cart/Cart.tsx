@@ -93,6 +93,7 @@ const Cart = ({ color }: { color?: string }) => {
     }
 
     if (cart.lines.length === 1) {
+      // @ts-ignore
       setCartQty(cart.lines[0].node.quantity);
     }
   }, [cart]);

@@ -68,6 +68,7 @@ export default function CartRecommendations() {
     console.log("fired");
 
     getRecommendations(
+      // @ts-ignore
       cart.lines[cart.lines.length - 1].node.merchandise.product.id
     ).then((res: any) => setRecommendations(res.productRecommendations));
   }, [cart.lines]);
