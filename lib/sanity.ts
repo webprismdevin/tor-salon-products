@@ -41,6 +41,24 @@ export const previewClient = sanityClient({
 export const getClient = (usePreview: boolean | undefined) =>
   usePreview ? previewClient : sanityClient;
 
+export const settingsQuery = `*[ _type == "settings" ][0]
+  { 
+    ...,
+    menu { 
+      mega_menu[]{
+        ...,
+        _type == 'collectionGroup' => @{ 
+          collectionLinks[]-> 
+        },
+        _type != 'collectionGroup' => @
+      },
+      links[]{
+        _type == 'reference' => @->,
+        _type != 'reference' => @,
+      }
+    } 
+  }`;
+
 export const COLLECTION = groq`
   _id,
   "gid": collection->store.gid,
@@ -136,6 +154,7 @@ export const CTA_FRAGMENT = groq`
 //homepage fragments
 export const HERO_FRAGMENT = groq`
     ...,
+    colorTheme->,
     image {
       ...,
       "height": asset-> metadata.dimensions.height,
@@ -147,6 +166,7 @@ export const HERO_FRAGMENT = groq`
 export const COLLECTION_GRID_FRAGMENT = groq`
 (_type == 'component.collectionGrid') => {
   ...,
+  colorTheme->,
   collections[]{
     ...,
     ${COLLECTION_LINK}
@@ -157,6 +177,7 @@ export const COLLECTION_GRID_FRAGMENT = groq`
 export const MODULE_FRAGMENT = groq`
 modules[]{
   ...,
+  colorTheme->,
   _type,
   (_type == 'component.swimlane') => {
       "gid": collection->store.gid,
@@ -180,12 +201,14 @@ modules[]{
         ...,
         "height": asset-> metadata.dimensions.height,
         "width": asset-> metadata.dimensions.width
-      }
+      },
+      colorTheme->,
     }
   },
   ${COLLECTION_GRID_FRAGMENT},
   (_type == 'component.textWithImage') => {
     ...,
+    colorTheme->,
     ${CTA_FRAGMENT}
   },
   (_type == 'component.faq') => {

@@ -1,7 +1,7 @@
 //this is not the typical ATC function
 import { useContext } from "react";
 import addToCart, { AddToCartResponse } from "./Cart/addToCart";
-import CartContext from "./CartContext";
+import { CartContext } from "../app/cart-provider";
 import { usePlausible } from "next-plausible";
 import AuthContext from "./auth-context";
 
@@ -27,7 +27,12 @@ export default function useAddToCart() {
     qty: number,
     subscriptionPlan: string
   ) => {
-    const response = await addToCart(cart.id, variantId, qty, subscriptionPlan) as any;
+    const response = (await addToCart(
+      cart.id,
+      variantId,
+      qty,
+      subscriptionPlan
+    )) as any;
 
     if (process.env.NODE_ENV === "production") {
       plausible("Add To Cart");

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Flex,
   Box,
@@ -18,10 +20,9 @@ import {
   useToast,
   HStack,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import React, { useEffect, useContext, useState } from "react";
-import { AiOutlineShopping, AiOutlineShoppingCart } from "react-icons/ai";
-import CartContext from "../../lib/CartContext";
+import { AiOutlineShoppingCart } from "react-icons/ai";
+import { CartContext } from "../../app/cart-provider";
 import formatter from "../../lib/formatter";
 import FreeShippingProgress from "./FreeShipping";
 import { CartLineItem } from "../Cart/CartLineItem";
@@ -39,8 +40,6 @@ import {
   SiVisa,
 } from "react-icons/si";
 import { usePlausible } from "next-plausible";
-import AuthContext from "lib/auth-context";
-import { createHash } from "crypto";
 
 declare interface LineItemType {
   node: {
@@ -73,14 +72,13 @@ export type CartResponse = {
 };
 
 export type RemoveItemCartResponse = {
-  cartLinesRemove: CartResponse
+  cartLinesRemove: CartResponse;
 };
 
+
 const Cart = ({ color }: { color?: string }) => {
-  const { user } = useContext(AuthContext);
   const { cart, setCart } = useContext(CartContext);
   const [cartQty, setCartQty] = useState<number | null>(null);
-  const router = useRouter();
   const plausible = usePlausible();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -184,52 +182,29 @@ const Cart = ({ color }: { color?: string }) => {
 
   return (
     <>
-      <Box
+      <div
         onClick={onOpen}
-        style={{
-          cursor: "pointer",
-          display: "inline-flex",
-          alignItems: "flex-start",
-          transition: "opacity 200ms ease",
-        }}
-        _hover={{
-          opacity: 0.4,
-        }}
-        transition={"opacity 200ms ease"}
+        className="cursor-pointer inline-flex items-start flex-start transition-opacity transition-duration-200 hover:opacity-40"
       >
-        <Icon
-          as={AiOutlineShopping}
-          style={{
-            display: "inline",
-          }}
-          boxSize={6}
-          color={color ? color : "black"}
-        />
-        <Text
-          fontSize={12}
-          mt={["-8px"]}
-          style={{
-            display: "inline",
-          }}
-        >
+        <div className="inline">Cart</div>
+        <div className="inline -mt-[8px] text-sm">
           {cart.lines.length > 0 && cartQty}
-        </Text>
-      </Box>
-      <Drawer isOpen={isOpen} placement="right" onClose={onClose} size={"md"}>
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>
-            <Stack spacing={2}>
-              <Text
-                fontSize={"2xl"}
-                textTransform={"uppercase"}
-                fontWeight="bold"
-              >
-                Your Cart
-              </Text>
-              <Divider />
-              {!router.asPath.includes("/offer") && (
+        </div>
+      </div>
+        <Drawer isOpen={isOpen} placement="right" onClose={onClose} size={"md"}>
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerHeader>
+              <Stack spacing={2}>
+                <Text
+                  fontSize={"2xl"}
+                  textTransform={"uppercase"}
+                  fontWeight="bold"
+                >
+                  Your Cart
+                </Text>
+                <Divider />
                 <>
                   <Text fontSize={"md"}>
                     Free U.S. shipping on orders of $100+
@@ -237,67 +212,68 @@ const Cart = ({ color }: { color?: string }) => {
                   <FreeShippingProgress cart={cart} />
                   <Divider />
                 </>
-              )}
-            </Stack>
-          </DrawerHeader>
-          <DrawerBody pl={[4]} pr={[4, 6]}>
-            <VStack
-              justifyContent={cart.lines.length === 0 ? "center" : "flex-start"}
-              alignItems={cart.lines.length === 0 ? "center" : "flex-start"}
-              h="full"
-              w="full"
-            >
-              {cart.lines.length === 0 && <EmptyCart />}
-              {cart.lines.length > 0 && (
-                <>
-                  {cart.lines.map((l: any) => (
-                    <React.Fragment key={l.node.id}>
-                      <CartLineItem product={l} removeItem={removeItem} />
-                      <Divider />
-                    </React.Fragment>
-                  ))}
-                  <CartRecommendations />
-                </>
-              )}
-            </VStack>
-          </DrawerBody>
-
-          <DrawerFooter>
-            <VStack w="full" spacing={2}>
-              <DiscountCodeInput />
-              <Divider />
-              <ShopPayInstallments />
-              {cart && cart.lines && cart.lines.length > 0 && (
-                <Flex
-                  w="100%"
-                  justifyContent={"space-between"}
-                  fontSize="md"
-                  fontWeight={400}
-                >
-                  <Text>Taxes &amp; Shipping:</Text>
-                  <Text>Calculated at checkout</Text>
-                </Flex>
-              )}
-              <TotalCost cart={cart} />
-              <Button
-                fontSize={"2xl"}
-                size="lg"
-                onClick={handleCheckout}
+              </Stack>
+            </DrawerHeader>
+            <DrawerBody pl={[4]} pr={[4, 6]}>
+              <VStack
+                justifyContent={
+                  cart.lines.length === 0 ? "center" : "flex-start"
+                }
+                alignItems={cart.lines.length === 0 ? "center" : "flex-start"}
+                h="full"
                 w="full"
               >
-                Checkout
-              </Button>
-              <HStack w="full" justify={"space-around"}>
-                <Icon as={SiApplepay} boxSize={[6, 8]} />
-                <Icon as={SiGooglepay} boxSize={[8, 10]} />
-                <Icon as={SiMastercard} boxSize={[6, 8]} />
-                <Icon as={SiVisa} boxSize={[8, 10]} />
-                <Icon as={SiPaypal} boxSize={[4, 5]} />
-              </HStack>
-            </VStack>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
+                {cart.lines.length === 0 && <EmptyCart />}
+                {cart.lines.length > 0 && (
+                  <>
+                    {cart.lines.map((l: any) => (
+                      <React.Fragment key={l.node.id}>
+                        <CartLineItem product={l} removeItem={removeItem} />
+                        <Divider />
+                      </React.Fragment>
+                    ))}
+                    <CartRecommendations />
+                  </>
+                )}
+              </VStack>
+            </DrawerBody>
+
+            <DrawerFooter>
+              <VStack w="full" spacing={2}>
+                <DiscountCodeInput />
+                <Divider />
+                <ShopPayInstallments />
+                {cart && cart.lines && cart.lines.length > 0 && (
+                  <Flex
+                    w="100%"
+                    justifyContent={"space-between"}
+                    fontSize="md"
+                    fontWeight={400}
+                  >
+                    <Text>Taxes &amp; Shipping:</Text>
+                    <Text>Calculated at checkout</Text>
+                  </Flex>
+                )}
+                <TotalCost cart={cart} />
+                <Button
+                  fontSize={"2xl"}
+                  size="lg"
+                  onClick={handleCheckout}
+                  w="full"
+                >
+                  Checkout
+                </Button>
+                <HStack w="full" justify={"space-around"}>
+                  <Icon as={SiApplepay} boxSize={[6, 8]} />
+                  <Icon as={SiGooglepay} boxSize={[8, 10]} />
+                  <Icon as={SiMastercard} boxSize={[6, 8]} />
+                  <Icon as={SiVisa} boxSize={[8, 10]} />
+                  <Icon as={SiPaypal} boxSize={[4, 5]} />
+                </HStack>
+              </VStack>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
     </>
   );
 };

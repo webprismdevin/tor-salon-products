@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Container,
   Text,
@@ -120,7 +122,10 @@ const Footer = () => {
               <FooterLink href="/blog" text={"Blog"} />
               <FooterLink href="/professionals" text={"Professionals"} />
               <FooterLink href="/salon-finder" text={"Salon Finder"} />
-              <FooterLink href="https://faire.com/direct/torsalonproducts" text={"Wholesale"} />
+              <FooterLink
+                href="https://faire.com/direct/torsalonproducts"
+                text={"Wholesale"}
+              />
               <FooterLink href="/about" text={"About TOR"} />
             </Stack>
             <Stack>

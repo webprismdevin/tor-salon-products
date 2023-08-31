@@ -22,21 +22,18 @@ import {
   Divider,
   GridItem,
 } from "@chakra-ui/react";
+import { Button as Button2 } from "components/Button";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
 import React, { useState, useRef, useEffect, useContext } from "react";
 import formatter from "../../lib/formatter";
 import { GetStaticProps } from "next";
-import Product from "../../components/Product/Product";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { wrap } from "@popmotion/popcorn";
-import NextLink from "next/link";
 import { RatingStar } from "rating-star";
 import ReviewSubmit from "../../components/Product/ReviewSubmit";
 import SubscriptionPlan from "../../components/Product/SubscriptionPlan";
 import useAddToCart from "../../lib/useAddToCart";
-import AuthContext from "lib/auth-context";
-import { createHash } from "crypto";
 import {
   type StorefrontApiResponseOk,
   useShop,
@@ -48,7 +45,10 @@ import {
   ShopifyAnalyticsProduct,
   ShopifyAnalyticsPayload,
 } from "@shopify/hydrogen-react";
-import CartContext from "lib/CartContext";
+import { CartContext } from "../../app/cart-provider";
+import groq from "groq";
+import { MODULE_FRAGMENT, sanity } from "lib/sanity";
+import Modules from "components/Modules/Modules";
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -75,10 +75,9 @@ const returnCollection = (handle: string) => {
 };
 
 const ProductPage = ({
+  modules,
   handle,
   product,
-  collection,
-  collections,
   reviews,
   analytics,
 }: {
@@ -87,16 +86,16 @@ const ProductPage = ({
   collection: any;
   collections: any;
   reviews: any;
+  modules: [any] | null;
   analytics: ShopifyAnalyticsPayload;
 }) => {
-  const { user } = useContext(AuthContext);
   const [itemQty, setItemQty] = useState(1);
   const { addItemToCart } = useAddToCart();
   const { cart } = useContext(CartContext);
   const [activeVariant, setActiveVariant] = useState<VariantType>(() => {
     if (!product) return null;
 
-    const variant =  product.variants.edges.find(
+    const variant = product.variants.edges.find(
       (edge: any) => edge.node.availableForSale === true
     ).node;
 
@@ -146,7 +145,7 @@ const ProductPage = ({
         payload,
       });
 
-      console.log("pageview sent")
+      console.log("pageview sent");
     }
 
     addItemToCart(activeVariant.id, itemQty, subscriptionPlan);
@@ -275,19 +274,6 @@ const ProductPage = ({
                 ))}
               </Select>
             )}
-            <HStack
-              border={"1px solid black"}
-              alignSelf={["flex-end", "flex-start"]}
-              borderRadius={6}
-            >
-              <Button fontSize="2xl" variant="ghost" {...dec}>
-                -
-              </Button>
-              <Input w="50px" {...input} variant="ghost" textAlign="center" />
-              <Button fontSize="2xl" variant="ghost" {...inc}>
-                +
-              </Button>
-            </HStack>
             {/* subscriptions */}
             {product.sellingPlanGroups.edges.length > 0 && (
               <SubscriptionPlan
@@ -299,18 +285,29 @@ const ProductPage = ({
               />
             )}
             {/* end subscriptions */}
-            <Button
-              position={["fixed", "static"]}
-              bottom={[7, 0]}
-              right={[4, 0]}
-              zIndex={[2, 0]}
-              w={["70%", "full"]}
-              onClick={handleAddToCart}
-              isDisabled={!activeVariant?.availableForSale}
-              size="lg"
-            >
-              {activeVariant?.availableForSale ? "Add To Cart" : "Sold Out!"}
-            </Button>
+            <div className="flex gap-4">
+              <HStack
+                border={"1px solid black"}
+                alignSelf={["flex-end", "flex-start"]}
+                borderRadius={0}
+                height={"52px"}
+              >
+                <Button fontSize="2xl" variant="ghost" {...dec}>
+                  -
+                </Button>
+                <Input w="50px" {...input} variant="ghost" textAlign="center" />
+                <Button fontSize="2xl" variant="ghost" {...inc}>
+                  +
+                </Button>
+              </HStack>
+              <Button2
+                className="fixed w-[70%] md:w-full md:static bottom-7 md:bottom-0 right-4 md:right-0 z-2"
+                onClick={handleAddToCart}
+                isDisabled={!activeVariant?.availableForSale}
+              >
+                {activeVariant?.availableForSale ? "Add To Cart" : "Sold Out!"}
+              </Button2>
+            </div>
             <Box
               className="product_description_html_outer_container"
               dangerouslySetInnerHTML={{
@@ -405,92 +402,7 @@ const ProductPage = ({
           </Stack>
         </GridItem>
       </SimpleGrid>
-      {collection && (
-        <Box bg={collection.color?.value ? collection.color.value : "white"}>
-          <Flex flexDir={["column-reverse", "row"]}>
-            <Box
-              w={["full", "50%"]}
-              pl={[8, 20]}
-              pr={[8, 40]}
-              py={[20, 40]}
-              pos="relative"
-            >
-              <Image
-                src={collection.typeImage?.reference.image.url}
-                alt=""
-                pos="absolute"
-                top={[0, 10]}
-                opacity={0.1}
-                w="70%"
-                left={[0, 20]}
-                zIndex={0}
-              />
-              <Stack
-                direction={["column"]}
-                spacing={6}
-                pos="relative"
-                zIndex={1}
-              >
-                <Heading>{collection.title}</Heading>
-                <Text>{collection.description}</Text>
-                <Stack
-                  direction={"row"}
-                  textAlign="left"
-                  justify="flex-start"
-                  spacing={6}
-                >
-                  <Box w="120px">
-                    <Image
-                      mb={2}
-                      boxSize={6}
-                      src={collection?.benefitOneIcon?.reference.image?.url}
-                      alt={collection?.benefitOneText?.value}
-                    />
-                    <Text>{collection?.benefitOneText?.value}</Text>
-                  </Box>
-                  <Box w="120px">
-                    <Image
-                      mb={2}
-                      boxSize={6}
-                      src={collection?.benefitTwoIcon?.reference.image.url}
-                      alt={collection?.benefitTwoText?.value}
-                    />
-                    <Text>{collection?.benefitTwoText?.value}</Text>
-                  </Box>
-                  <Box w="120px">
-                    <Image
-                      mb={2}
-                      boxSize={6}
-                      src={collection?.benefitThreeIcon?.reference.image.url}
-                      alt={collection?.benefitThreeText?.value}
-                    />
-                    <Text>{collection?.benefitThreeText?.value}</Text>
-                  </Box>
-                </Stack>
-              </Stack>
-            </Box>
-            <AspectRatio ratio={1 / 1} w={["full", "50%"]}>
-              <Image src={collection?.image?.url} alt="" />
-            </AspectRatio>
-          </Flex>
-          <Container maxW="container.xl" centerContent py={20}>
-            <SimpleGrid templateColumns={"repeat(3, 1fr)"} w="full" gap={12}>
-              {collection.products.edges.map((p: any, i: number) => (
-                <Product product={p} key={i} />
-              ))}
-            </SimpleGrid>
-            <NextLink
-              href={returnCollection(collection.handle) as string}
-              passHref
-              legacyBehavior
-            >
-              <Button mt={[8]} variant="ghost">
-                See Collection
-              </Button>
-            </NextLink>
-          </Container>
-        </Box>
-      )}
+      <div>{modules && <Modules modules={modules} />}</div>
       {reviews && reviews.reviews.length > 0 && (
         <Container
           ref={reviewsSection}
@@ -654,7 +566,7 @@ export async function getStaticPaths() {
     }
   `;
 
-  const res = await graphQLClient.request(query) as any;
+  const res = (await graphQLClient.request(query)) as any;
 
   if (res.errors) {
     console.log(JSON.stringify(res.errors, null, 2));
@@ -681,6 +593,12 @@ export const getStaticProps: GetStaticProps = async (context) => {
       },
     }
   );
+
+  const sanityQuery = groq`*[_type == 'product' && store.slug.current == '${handle}'][0]{
+    ${MODULE_FRAGMENT}
+  }`;
+
+  const modules = await sanity.fetch(sanityQuery, { handle });
 
   // Shopify Request
   const productQuery = gql`{
@@ -855,126 +773,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
     }
   }`;
 
-  const res = await graphQLClient.request(productQuery) as any;
+  const res = (await graphQLClient.request(productQuery)) as any;
 
   if (res.errors) {
     console.log(JSON.stringify(res.errors, null, 2));
     throw Error("Unable to retrieve product. Please check logs");
-  }
-
-  let collectionQuery = gql`{
-    collection(handle: "${res.product.collectionToPull?.value}") {
-        handle
-        title
-        description
-        descriptionHtml
-        image {
-          url
-        }
-        products(first: 3, sortKey: BEST_SELLING) {
-          edges {
-            node {
-              handle
-              title
-              priceRange {
-                minVariantPrice {
-                  amount
-                }
-                maxVariantPrice {
-                  amount
-                }
-              }
-              compareAtPriceRange {
-                maxVariantPrice {
-                  amount
-                }
-              }
-              variants(first: 2){
-                edges {
-                  node {
-                    id
-                  }
-                }
-              }
-              images(first: 1) {
-                edges {
-                  node {
-                    url
-                  }
-                }
-              }
-            }
-          }
-        }
-        typeImage: metafield(namespace: "collection", key: "typeImage") {
-          reference {
-            ... on MediaImage {
-              image {
-                url
-              }
-            }
-          }
-        }
-        color: metafield(namespace: "collection", key: "color") {
-          value
-        }
-        benefitOneIcon: metafield(namespace: "collection", key: "benefit_1_icon") {
-          reference {
-            __typename
-            ... on MediaImage {
-              image {
-                url
-              }
-            }
-          }
-        }
-        benefitOneText: metafield(namespace: "collection", key: "benefit_1_text") {
-          value
-        }
-        benefitTwoIcon: metafield(namespace: "collection", key: "benefit_2_icon") {
-          reference {
-            __typename
-            ... on MediaImage {
-              image {
-                url
-              }
-            }
-          }
-        }
-        benefitTwoText: metafield(namespace: "collection", key: "benefit_2_text") {
-          value
-        }
-        benefitThreeIcon: metafield(namespace: "collection", key: "benefit_3_icon") {
-          reference {
-            __typename
-            ... on MediaImage {
-              image {
-                url
-              }
-            }
-          }
-        }
-        benefitThreeText: metafield(namespace: "collection", key: "benefit_3_text") {
-          value
-        }
-      }
-    }`;
-
-  const collectionRes = await graphQLClient.request(collectionQuery) as any;
-
-  if (collectionRes.errors) {
-    console.log(JSON.stringify(res.errors, null, 2));
-    throw Error("Unable to retrieve product. Please check logs");
-  }
-
-  function handleCollectionFilter() {
-    const filteredCollections = res.product.collections.edges.filter(
-      (n: any) => n.node.handle !== "home" && n.node.handle !== "homepage-body"
-    );
-
-    if (filteredCollections[0]) return filteredCollections[0].node;
-
-    return null;
   }
 
   const reviews = await fetch(
@@ -999,13 +802,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
         resourceId: res.product.id,
         products: [productAnalytics],
       },
+      modules: modules.modules,
       handle,
       key: handle,
       reviews: reviews.response,
       product: res.product,
-      collection: collectionRes.collection
-        ? collectionRes.collection
-        : handleCollectionFilter(),
     },
     revalidate: 10,
   };

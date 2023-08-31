@@ -1,3 +1,4 @@
+"use client";
 import React, { Fragment, Suspense, useEffect, useState } from "react";
 import { imageBuilder } from "lib/sanity";
 import Image from "next/image";
@@ -6,16 +7,19 @@ import { SanityImageAssetDocument } from "@sanity/client";
 import { useScroll, useTransform, motion } from "framer-motion";
 import { useRef } from "react";
 import PortableText from "components/PortableText/PortableText";
-import Slides from "./Slides";
+import Slides from "./Slides_v2/index";
 import graphClient from "lib/graph-client";
 import { collection_query } from "pages/collection/[handle]";
 import Product from "components/Product/Product";
 import dynamic from "next/dynamic";
-import ProductGrid from "./ProductGrid";
-
+import ProductGrid from "./ProductGrid_v2";
+import ProductCard from "./ProductGrid_v2/ProductCard";
+import { Button } from "components/Button";
 const ReviewCarousel = dynamic(() => import("./ReviewCarousel"));
 
 export default function Modules({ modules }: any) {
+  if (!modules) return <>No section modules to display</>;
+
   return (
     <React.Fragment>
       {modules.map((module: any) => {
@@ -34,8 +38,8 @@ export default function Modules({ modules }: any) {
             return <Collection key={module._key} data={module} />;
           case "component.reviewCarousel":
             return (
-              <Suspense key={module._key}>
-                <ReviewCarousel data={module} />
+              <Suspense>
+                <ReviewCarousel data={module} key={module._key} />
               </Suspense>
             );
           case "component.faq":
@@ -61,11 +65,14 @@ export type Hero = {
   };
   title: string;
   caption: string;
-  cta?: {
-    text: string;
-    to: string;
-    useRelativePath?: boolean;
-    relativeLink?: string;
+  cta?: CallToActionProps;
+  colorTheme?: {
+    background?: {
+      hex: string;
+    };
+    text?: {
+      hex: string;
+    };
   };
   layout?: "left" | "right" | "center";
   size?: "small" | "medium" | "large";
@@ -91,6 +98,10 @@ export function Hero({ data }: { data: Hero }) {
         layout === "center" && "justify-center text-center"
       }`}
       ref={ref}
+      style={{
+        backgroundColor: data.colorTheme?.background?.hex ?? "#ffffff",
+        color: data.colorTheme?.text?.hex ?? "#121212",
+      }}
     >
       <motion.div
         style={{ y }}
@@ -108,19 +119,14 @@ export function Hero({ data }: { data: Hero }) {
       <div
         className={`${
           layout === "right" && "text-right"
-        } z-1 relative self-center text-contrast max-w-prose`}
+        } z-1 relative self-center max-w-prose`}
       >
-        <p className="text-shadow text-xl font-bold lg:text-2xl">{caption}</p>
+        <p className="text-shadow text-xl lg:text-2xl">{caption}</p>
         <h2 className="text-shadow mb-4 font-heading text-4xl uppercase lg:text-6xl">
           {title}
         </h2>
-        {cta?.to && (
-          <Link
-            className="px-4 py-2 rounded bg-black text-white font-bold"
-            href={cta.to}
-          >
-            {cta.text}
-          </Link>
+        {data.cta && (
+          <CallToAction cta={data.cta} colorTheme={data.colorTheme} />
         )}
       </div>
     </div>
@@ -153,21 +159,40 @@ function Collection({ data }: any) {
   if (!products) return <></>;
 
   return (
-    <div className="flex flex-col gap-2 w-full py-4 md:py-8 text-center md:text-left">
+    <div
+      className="flex flex-col gap-2 w-full py-4 md:py-8 text-center md:text-left no-scrollbar"
+      style={{
+        background: data.colorTheme?.background?.hex ?? "#ffffff",
+        color: data.colorTheme?.text?.hex ?? "#121212",
+      }}
+    >
       <div className="px-9">
-        <h2 className="font-heading text-2xl md:text-3xl lg:text-4xl pb-4">
+        <h2
+          className="font-heading text-2xl md:text-3xl lg:text-4xl pb-4"
+          style={{
+            color: data.colorTheme?.text?.hex ?? "#121212",
+          }}
+        >
           {data.title}
         </h2>
         <p>{data.subtitle}</p>
       </div>
-      <div className="flex snap-x overflow-auto">
+      <div className="flex snap-x overflow-auto gap-4 md:gap-12">
         {products.map((product: any) => {
           return (
             <div
-              className="snap-start first:ml-8 last:mr-8"
+              className="snap-center first:ml-8 last:mr-8"
               key={product.node.id}
             >
-              <Product product={product} />
+              <ProductCard
+                product={{
+                  gid: product.node.id,
+                  title: product.node.title,
+                  featuredImage: product.node.images.edges[0].node.url,
+                  price: product.node.priceRange.minVariantPrice.amount,
+                  handle: product.node.handle,
+                }}
+              />
             </div>
           );
         })}
@@ -185,15 +210,22 @@ export function SanityProductCard({ product }: { product: any }) {
 }
 
 function TextWithImage({ data }: { data: any }) {
+  const layoutClass =
+    data.layout === "right"
+      ? "flex-col-reverse md:flex-row-reverse"
+      : "flex-col";
+
+  const sizeClass = data.size === "small" ? "md:max-h-[500px]" : "";
+
   return (
     <div
-      className={`flex w-full lg:flex-row ${
-        data.size === "small" ? "md:max-h-[500px]" : ""
-      } ${data.image ? "justify-between" : ""} ${
-        data.layout === "right"
-          ? "flex-col-reverse md:flex-row-reverse"
-          : "flex-col"
-      }`}
+      style={{
+        backgroundColor: data.colorTheme?.background?.hex ?? "#ffffff",
+        color: data.colorTheme?.text?.hex ?? "#121212",
+      }}
+      className={`flex w-full md:flex-row  ${
+        data.image ? "justify-between" : ""
+      } ${layoutClass} ${sizeClass}`}
       key={data._key}
     >
       <div
@@ -207,9 +239,9 @@ function TextWithImage({ data }: { data: any }) {
             {data.title}
           </p>
         </div>
-        <div className="mt-4 flex flex-col items-start">
+        <div className="mt-4 flex flex-col items-start gap-4">
           {data?.content && <PortableText blocks={data.content} />}
-          {data.cta && <CallToAction data={data} />}
+          {data.cta && <CallToAction cta={data.cta} colorTheme={data.colorTheme} />}
         </div>
       </div>
       {data.image && (
@@ -227,14 +259,44 @@ function TextWithImage({ data }: { data: any }) {
   );
 }
 
-function CallToAction({ data }: any) {
+export type CallToActionProps = {
+  text: string;
+  to: string;
+  useRelativePath?: boolean;
+  relativeLink?: string;
+};
+
+export type ColorThemeProps = {
+  background?: {
+    hex: string;
+  };
+  text?: {
+    hex: string;
+  };
+};
+
+export function CallToAction({
+  cta,
+  colorTheme,
+}: {
+  cta: CallToActionProps;
+  colorTheme?: ColorThemeProps;
+}) {
+  const { text, to, useRelativePath, relativeLink } = cta;
+
   return (
-    <div className="rounded bg-black px-6 py-3 text-white">
-      <Link
-        href={data.cta.useRelativePath ? data.cta.relativeLink : data.cta.to}
-      >
-        {data.cta.text}
-      </Link>
+    <div>
+      {cta?.text && (
+        <Button
+          style={{
+            backgroundColor: colorTheme?.text?.hex ?? "#121212",
+            color: colorTheme?.background?.hex ?? "#ffffff",
+          }}
+          href={useRelativePath ? relativeLink : to}
+        >
+          {text}
+        </Button>
+      )}
     </div>
   );
 }
@@ -253,8 +315,15 @@ function CollectionGrid({ data }: { data: any }) {
   }
 
   return (
-    <div id="collection-grid">
-      <div className="text-center px-8 md:px-12 md:mt-12 pb-4">
+    <div
+      id="collection-grid"
+      className={!data.title && !data.subtitle ? "" : "py-4 md:py-8"}
+      style={{
+        backgroundColor: data.colorTheme?.background?.hex ?? "#ffffff",
+        color: data.colorTheme?.text?.hex ?? "#121212",
+      }}
+    >
+      <div className="text-center px-8 md:px-12 pb-4">
         <h2 className="font-heading text-2xl md:text-3xl lg:text-4xl text-center pb-4">
           {data.title}
         </h2>
