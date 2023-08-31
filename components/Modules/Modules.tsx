@@ -65,12 +65,7 @@ export type Hero = {
   };
   title: string;
   caption: string;
-  cta?: {
-    text: string;
-    to: string;
-    useRelativePath?: boolean;
-    relativeLink?: string;
-  };
+  cta?: CallToActionProps;
   colorTheme?: {
     background?: {
       hex: string;
@@ -130,17 +125,8 @@ export function Hero({ data }: { data: Hero }) {
         <h2 className="text-shadow mb-4 font-heading text-4xl uppercase lg:text-6xl">
           {title}
         </h2>
-        {cta?.to && (
-          <Link
-            style={{
-              backgroundColor: data.colorTheme?.text?.hex ?? "#000000",
-              color: data.colorTheme?.background?.hex ?? "#ffffff",
-            }}
-            className="py-3 px-5 font-heading text-xl uppercase"
-            href={cta.to}
-          >
-            {cta.text}
-          </Link>
+        {data.cta && (
+          <CallToAction cta={data.cta} colorTheme={data.colorTheme} />
         )}
       </div>
     </div>
@@ -237,7 +223,7 @@ function TextWithImage({ data }: { data: any }) {
         backgroundColor: data.colorTheme?.background?.hex ?? "#ffffff",
         color: data.colorTheme?.text?.hex ?? "#121212",
       }}
-      className={`flex w-full lg:flex-row  ${
+      className={`flex w-full md:flex-row  ${
         data.image ? "justify-between" : ""
       } ${layoutClass} ${sizeClass}`}
       key={data._key}
@@ -255,7 +241,7 @@ function TextWithImage({ data }: { data: any }) {
         </div>
         <div className="mt-4 flex flex-col items-start gap-4">
           {data?.content && <PortableText blocks={data.content} />}
-          {data.cta && <Button href={data.cta?.to}>{data.cta?.text}</Button>}
+          {data.cta && <CallToAction cta={data.cta} colorTheme={data.colorTheme} />}
         </div>
       </div>
       {data.image && (
@@ -273,25 +259,43 @@ function TextWithImage({ data }: { data: any }) {
   );
 }
 
-function CallToAction({ data }: { data: any }) {
+export type CallToActionProps = {
+  text: string;
+  to: string;
+  useRelativePath?: boolean;
+  relativeLink?: string;
+};
+
+export type ColorThemeProps = {
+  background?: {
+    hex: string;
+  };
+  text?: {
+    hex: string;
+  };
+};
+
+export function CallToAction({
+  cta,
+  colorTheme,
+}: {
+  cta: CallToActionProps;
+  colorTheme?: ColorThemeProps;
+}) {
+  const { text, to, useRelativePath, relativeLink } = cta;
+
   return (
     <div>
-      {data.cta?.text && (
-        <div
-          className="rounded py-2 px-4 text-lg font-bold"
+      {cta?.text && (
+        <Button
           style={{
-            backgroundColor: data.colorTheme?.text?.hex ?? "#000000",
-            color: data.colorTheme?.background?.hex ?? "#ffffff",
+            backgroundColor: colorTheme?.text?.hex ?? "#121212",
+            color: colorTheme?.background?.hex ?? "#ffffff",
           }}
+          href={useRelativePath ? relativeLink : to}
         >
-          <Link
-            href={
-              data.cta.useRelativePath ? data.cta.relativeLink : data.cta.to
-            }
-          >
-            {data.cta.text}
-          </Link>
-        </div>
+          {text}
+        </Button>
       )}
     </div>
   );

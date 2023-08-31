@@ -40,9 +40,9 @@ export default async function RootLayout({
           <body>
             <Header menu={settings?.menu} />
             {children}
+            <Footer />
           </body>
         </CartProvider>
-        <Footer />
       </ThemeProvider>
     </html>
   );

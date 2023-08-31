@@ -2,6 +2,7 @@ import { Button } from "components/Button";
 import { imageBuilder } from "lib/sanity";
 import Image from "next/image";
 import Link from "next/link";
+import { CallToAction } from "../Modules";
 import { SlideProps } from "../Slides";
 
 export default function Slide({ slide }: { slide: SlideProps }) {
@@ -40,15 +41,7 @@ export default function Slide({ slide }: { slide: SlideProps }) {
         <h2 className="text-shadow mb-6 max-w-xl font-heading text-4xl uppercase md:text-5xl lg:text-6xl">
           {slide.title}
         </h2>
-        <Button
-          style={{
-            backgroundColor: colorTheme?.background?.hex ?? "#121212",
-            color: colorTheme?.text?.hex ?? "#ffffff",
-          }}
-          href={slide.cta?.to ?? "#"}
-        >
-          {slide.cta?.text ?? "Shop now"}
-        </Button>
+        <CallToAction cta={slide.cta} />
       </div>
     </div>
   );

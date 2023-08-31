@@ -9,6 +9,8 @@ export function Pagination({
   index: number;
   setPage: Dispatch<SetStateAction<[number, number]>>;
 }) {
+  if(length < 2) return null;
+
   return (
     <div className="flex w-full justify-center gap-4 mt-4 absolute bottom-6 z-10">
       {Array.from({ length }, (_, i) => (
