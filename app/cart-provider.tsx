@@ -1,12 +1,21 @@
 "use client";
 
-import { createContext, useState } from "react";
+import React, { createContext, useState } from "react";
 
 export const CartContext = createContext({
   cart: {
     id: "",
     checkoutUrl: "",
     lines: [],
+    status: "clean",
+    estimatedCost: {
+      totalAmount: {
+        amount: 0,
+      },
+      subtotalAmount: {
+        amount: 0,
+      },
+    }
   },
   setCart: (cart: any) => {},
 });

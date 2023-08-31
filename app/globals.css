@@ -42,3 +42,24 @@
   font-weight: 500;
   font-style: normal;
 }
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - 1rem));
+  }
+}
+
+.scroll {
+  animation: scroll 30s linear infinite;
+}
+
+.reverse {
+  animation-direction: reverse;
+}
+
+.text-shadow {
+  text-shadow: 5px 3px 6px rgba(0, 0, 0, 0.4);
+}

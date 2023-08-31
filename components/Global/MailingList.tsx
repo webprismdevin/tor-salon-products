@@ -1,3 +1,4 @@
+"use client";
 import {
   Box,
   Input,
@@ -12,7 +13,7 @@ import {
   Select,
 } from "@chakra-ui/react";
 import { motion, useAnimation } from "framer-motion";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiArrowRight } from "react-icons/fi";
 import { usePlausible } from "next-plausible";
@@ -34,28 +35,25 @@ export default function MailingList({ settings }: MailingListSettings) {
   const [email, setEmail] = useState("");
   const [hairType, setHairType] = useState("");
   const [formStatus, setStatus] = useState("clean");
-  const router = useRouter();
+  const pathname = usePathname();
   const plausible = usePlausible();
 
   const { hiddenRoutes } = settings;
 
   useEffect(() => {
-    const hideOnRoute = hiddenRoutes.includes(router.asPath);
-
     if (!popupShown) controls.start("initial");
 
     const interval = setInterval(async () => {
       const isSubbed = await window.localStorage.getItem("subscribed");
 
-      if (!popupShown && isSubbed !== "true" && !hideOnRoute) {
-        // console.log(popupShown);
+      if (!popupShown && isSubbed !== "true") {
         controls.start("animate");
         setShown(true);
       }
     }, settings.delay);
 
     return () => clearInterval(interval);
-  }, [popupShown, router.asPath]);
+  }, [popupShown]);
 
   const animationVariants = {
     initial: {

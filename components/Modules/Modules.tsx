@@ -1,20 +1,19 @@
 "use client";
 import React, { Fragment, Suspense, useEffect, useState } from "react";
-import { imageBuilder } from "lib/sanity";
+import { imageBuilder } from "../../lib/sanity";
 import Image from "next/image";
 import Link from "next/link";
 import { SanityImageAssetDocument } from "@sanity/client";
 import { useScroll, useTransform, motion } from "framer-motion";
 import { useRef } from "react";
-import PortableText from "components/PortableText/PortableText";
+import PortableText from "../PortableText/PortableText";
 import Slides from "./Slides_v2/index";
-import graphClient from "lib/graph-client";
-import { collection_query } from "pages/collection/[handle]";
-import Product from "components/Product/Product";
+import graphClient from "../../lib/graph-client";
+import { collection_query } from "../../pages/collection/[handle]";
 import dynamic from "next/dynamic";
 import ProductGrid from "./ProductGrid_v2";
 import ProductCard from "./ProductGrid_v2/ProductCard";
-import { Button } from "components/Button";
+import { Button } from "../Button";
 const ReviewCarousel = dynamic(() => import("./ReviewCarousel"));
 
 export default function Modules({ modules }: any) {
@@ -38,7 +37,7 @@ export default function Modules({ modules }: any) {
             return <Collection key={module._key} data={module} />;
           case "component.reviewCarousel":
             return (
-              <Suspense>
+              <Suspense fallback={<div>...</div>}>
                 <ReviewCarousel data={module} key={module._key} />
               </Suspense>
             );
@@ -191,6 +190,7 @@ function Collection({ data }: any) {
                   featuredImage: product.node.images.edges[0].node.url,
                   price: product.node.priceRange.minVariantPrice.amount,
                   handle: product.node.handle,
+                  variantId: product.node.variants.edges[0].node.id,
                 }}
               />
             </div>
@@ -198,14 +198,6 @@ function Collection({ data }: any) {
         })}
       </div>
     </div>
-  );
-}
-
-export function SanityProductCard({ product }: { product: any }) {
-  return (
-    <Link href={`/products/${product.handle}`}>
-      <p>{product.title}</p>
-    </Link>
   );
 }
 
@@ -241,7 +233,9 @@ function TextWithImage({ data }: { data: any }) {
         </div>
         <div className="mt-4 flex flex-col items-start gap-4">
           {data?.content && <PortableText blocks={data.content} />}
-          {data.cta && <CallToAction cta={data.cta} colorTheme={data.colorTheme} />}
+          {data.cta && (
+            <CallToAction cta={data.cta} colorTheme={data.colorTheme} />
+          )}
         </div>
       </div>
       {data.image && (

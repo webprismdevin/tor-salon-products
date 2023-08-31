@@ -1,7 +1,9 @@
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "components/Button";
-import { removeCents } from "lib/utils";
+import { Button } from "../../Button";
+import { removeCents } from "../../../lib/utils";
+import useAddToCart from "../../../lib/useAddToCart";
 
 export type ProductCardProps = {
   product: {
@@ -10,13 +12,16 @@ export type ProductCardProps = {
     featuredImage: string;
     price: number;
     handle: string;
+    variantId: string;
   };
 };
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const { addItemToCart } = useAddToCart();
+
   return (
-    <Link href={`/product/${product.handle}`}>
-      <div className="w-[260px] grid gap-3">
+    <div className="min-w-[140px] md:w-[260px] grid gap-3">
+      <Link href={`/product/${product.handle}`}>
         <Image
           src={product.featuredImage}
           alt={product.title}
@@ -27,12 +32,16 @@ export default function ProductCard({ product }: ProductCardProps) {
         <h3 className="text-center text-lg line-clamp-2 h-14">
           {product.title}
         </h3>
-        <Button width="full" variant="primary">
-          <Price price={product.price} />
-          &nbsp;|&nbsp;<span>Add To Cart</span>
-        </Button>
-      </div>
-    </Link>
+      </Link>
+      <Button
+        width="full"
+        variant="primary"
+        onClick={() => addItemToCart(product.variantId, 1, "")}
+      >
+        <Price price={product.price} />
+        &nbsp;|&nbsp;<span>Add <span className="hidden md:inline">To Cart</span></span>
+      </Button>
+    </div>
   );
 }
 

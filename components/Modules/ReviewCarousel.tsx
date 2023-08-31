@@ -1,4 +1,4 @@
-import Loader from "components/Loader";
+import Loader from "../../components/Loader";
 import { useScroll } from "framer-motion";
 import { RatingStar } from "rating-star";
 import { useEffect } from "react";
@@ -24,16 +24,16 @@ export default function ReviewCarousel({ data }: { data: any }) {
         <h1 className="text-2xl md:text-3xl lg:text-4xl">{data.title}</h1>
         <h2>{data.subtitle}</h2>
       </div>
-      <div className="flex overflow-x-scroll gap-8 mt-4 md:mt-8 lg:my-12 px-8">
+      <div className="flex overflow-x-scroll gap-8 mt-4 md:mt-8 lg:my-12 px-8 snap-x">
         {response?.reviews.map((review: any) => {
           return (
             <div
               key={review.id}
-              className="flex flex-col min-w-[280px] max-w-[280px] flex-1 border-2 rounded p-4"
+              className="flex flex-col min-w-[280px] max-w-[280px] flex-1 border-2 rounded p-4 snap-center`"
             >
               <div className="flex items-center gap-2 mb-2">
                 <RatingStar
-                  id={review.id}
+                  id={review.id.toString()}
                   rating={Number(review.score)}
                   size={16}
                   colors={{ stroke: "#000000", mask: "#000000" }}

@@ -2,8 +2,8 @@ import Head from "next/head";
 import { gql } from "graphql-request";
 import getCollections from "../../lib/get-collections";
 import { AnalyticsPageType } from "@shopify/hydrogen-react";
-import ProductCard from "components/Modules/ProductGrid_v2/ProductCard";
-import graphClient from "lib/graph-client";
+import ProductCard from "../../components/Modules/ProductGrid_v2/ProductCard";
+import graphClient from "../../lib/graph-client";
 
 export default function CollectionPage({
   handle,
@@ -46,6 +46,7 @@ export default function CollectionPage({
                 featuredImage: p.node.images.edges[0].node.url,
                 price: p.node.priceRange.minVariantPrice.amount,
                 handle: p.node.handle,
+                variantId: p.node.variants.edges[0].node.id,
               }}
             />
           </div>

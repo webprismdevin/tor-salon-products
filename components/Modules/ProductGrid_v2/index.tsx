@@ -1,5 +1,4 @@
-import { Heading } from "components/Heading";
-import { createElement } from "react";
+import { Heading } from "../../Heading";
 import ProductCard from "./ProductCard";
 
 export type ProductGridProps = {
@@ -23,6 +22,7 @@ export default function ProductGrid({ data }: ProductGridProps) {
               featuredImage: product.featuredImage,
               price: product.priceRange.minVariantPrice,
               handle: product.handle,
+              variantId: product.variantId,
             }}
           />
         );

@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -14,7 +18,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": "./",
+    "baseUrl": ".",
     "plugins": [
       {
         "name": "next"
@@ -25,6 +29,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "**/**/*.tsx",
     "./src/**/*",
     "pages/pages/[slug].tsx",
     "components/Global/NavBar.tsx.bak",
@@ -33,5 +38,8 @@
     "pages/index.tsx.bak",
     "pages/pages/[slug].tsx"
   ],
-  "exclude": ["node_modules", "cypress"]
+  "exclude": [
+    "node_modules",
+    "cypress"
+  ]
 }

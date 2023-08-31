@@ -40,7 +40,7 @@ import {
 import Header from "components/Header";
 import CartProvider from "app/cart-provider";
 
-const Banner = dynamic(() => import("../components/Global/Banner"));
+const Banner = dynamic(() => import("../components/Banner"));
 const Navigation = dynamic(() => import("../components/Global/Navigation"));
 const Follow = dynamic(() => import("../components/Global/Follow"), {
   ssr: false,

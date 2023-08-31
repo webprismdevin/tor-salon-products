@@ -1,7 +1,5 @@
-import { Button } from "components/Button";
 import { imageBuilder } from "lib/sanity";
 import Image from "next/image";
-import Link from "next/link";
 import { CallToAction } from "../Modules";
 import { SlideProps } from "../Slides";
 
@@ -10,7 +8,7 @@ export default function Slide({ slide }: { slide: SlideProps }) {
 
   return (
     <div
-      className="h-[700px] w-full relative overflow-hidden flex sm:p-4 md:p-24"
+      className="h-[700px] w-full relative overflow-hidden flex p-8 md:p-24"
       style={{
         justifyContent: slide?.contentJustify ?? "flex-start",
         alignItems: slide?.contentAlign ?? "center",

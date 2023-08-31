@@ -1,13 +1,15 @@
-import Footer from "components/Global/Footer";
-import Header from "components/Header";
-import { sanity, settingsQuery } from "lib/sanity";
-import { Metadata } from "next";
+import React from "react";
+import Footer from "../components/Global/Footer";
+import Header from "../components/Header";
+import { sanity, settingsQuery } from "../lib/sanity";
 import PlausibleProvider from "next-plausible";
 import CartProvider from "./cart-provider";
 import ThemeProvider from "./chakra-provider";
 import "./globals.css";
+import Banner from "components/Banner";
+import MailingList from "components/Global/MailingList";
 
-export async function getData() {
+async function getData() {
   const res = await sanity.fetch(settingsQuery);
 
   if (!res) {
@@ -17,11 +19,6 @@ export async function getData() {
 
   return res;
 }
-
-export const metadata: Metadata = {
-  title: "Home",
-  description: "Welcome to Next.js",
-};
 
 export default async function RootLayout({
   children,
@@ -38,9 +35,11 @@ export default async function RootLayout({
       <ThemeProvider>
         <CartProvider>
           <body>
+            <Banner data={settings?.banner} />
             <Header menu={settings?.menu} />
             {children}
             <Footer />
+            <MailingList settings={settings?.emailPopup} />
           </body>
         </CartProvider>
       </ThemeProvider>
