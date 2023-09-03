@@ -92,14 +92,9 @@ export default function CartRecommendations() {
             w="full"
             key={rec.id}
           >
-            {/* <Text>
-              {rec.title}{" "}
-              {rec.variants.edges[0].node.title !== "Default Title" && (
-                <span style={{ color: "gray" }}>
-                  {rec.variants.edges[0].node.title}
-                </span>
-              )}
-            </Text> */}
+            <Text>
+              {rec.title}
+            </Text>
             <Button
               variant="outline"
               onClick={() => handleAddToCart(rec)}
