@@ -4,7 +4,6 @@ import { gql } from "graphql-request";
 import { useContext, useEffect, useState } from "react";
 import formatter from "../../lib/formatter";
 import { CartContext } from "../../app/cart-provider";
-import { useRouter } from "next/router";
 import useAddToCart from "../../lib/useAddToCart";
 
 type RecommendationsResponse = {

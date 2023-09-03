@@ -587,8 +587,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   const defaults = await sanity.fetch(defaultsQuery);
 
-  console.log(defaults);
-
   const sanityQuery = groq`*[_type == 'product' && store.slug.current == '${handle}'][0]{
     ${MODULE_FRAGMENT}
   }`;

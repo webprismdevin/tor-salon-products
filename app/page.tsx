@@ -1,13 +1,15 @@
 import Modules from "components/Modules/Modules";
 import { MODULE_FRAGMENT, sanity } from "lib/sanity";
-import { Metadata } from "next";
 import { Suspense } from "react";
 
 async function getData() {
-  const res = await sanity.fetch(`*[_type == "home"][0]{
+  const res = await sanity.fetch(
+    `*[_type == "home"][0]{
     ...,
     ${MODULE_FRAGMENT}
-  }`);
+  }`,
+    { next: { revalidate: 60 } }
+  );
 
   if (!res) {
     // This will activate the closest `error.js` Error Boundary
