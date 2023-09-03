@@ -214,7 +214,7 @@ const ProductPage = ({
           >
             <Stack direction={"row"} justify={"space-between"}>
               <div>
-                <div className="h-6">
+                <div className="h-6 overflow-hidden">
                   <RatingStar
                     id={product.id.split("/")[4]}
                     rating={reviews.bottomline.average_score}
