@@ -1,10 +1,8 @@
 import Modules from "components/Modules/Modules";
 import { MODULE_FRAGMENT, sanity } from "lib/sanity";
-import { cache, Suspense } from "react";
+import { Suspense } from "react";
 
-export const revalidate = 60;
-
-const getData = cache(async () => {
+async function getData() {
   const res = await sanity.fetch(
     `*[_type == "home"][0]{
     ...,
@@ -18,7 +16,7 @@ const getData = cache(async () => {
   }
 
   return res;
-});
+}
 
 export async function generateMetadata() {
   const data = await getData();
