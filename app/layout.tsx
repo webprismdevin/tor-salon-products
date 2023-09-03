@@ -30,6 +30,8 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head>
+        <meta charSet="utf-8" />
+        <link rel="icon" href="/favicon.png" />
         <PlausibleProvider domain="torsalonproducts.com" />
       </head>
       <ThemeProvider>

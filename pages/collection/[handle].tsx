@@ -36,7 +36,7 @@ export default function CollectionPage({
           }}
         />
       </Head>
-      <div className="grid grid-cols-3 gap-4 md:gap-12 place-items-center mx-auto p-4 md:p-12">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-12 place-items-center mx-auto p-4 md:p-12">
         {data.products.edges.map((p: any) => (
           <div key={p.node.id}>
             <ProductCard

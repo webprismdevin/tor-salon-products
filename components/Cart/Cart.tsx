@@ -17,7 +17,6 @@ import {
   DrawerContent,
   DrawerCloseButton,
   Stack,
-  useToast,
   HStack,
 } from "@chakra-ui/react";
 import React, { useEffect, useContext, useState } from "react";
@@ -74,7 +73,6 @@ export type CartResponse = {
 export type RemoveItemCartResponse = {
   cartLinesRemove: CartResponse;
 };
-
 
 const Cart = ({ color }: { color?: string }) => {
   const { cart, setCart } = useContext(CartContext);
@@ -192,89 +190,88 @@ const Cart = ({ color }: { color?: string }) => {
           {cart.lines.length > 0 && cartQty}
         </div>
       </div>
-        <Drawer isOpen={isOpen} placement="right" onClose={onClose} size={"md"}>
-          <DrawerOverlay />
-          <DrawerContent>
-            <DrawerCloseButton />
-            <DrawerHeader>
-              <Stack spacing={2}>
-                <Text
-                  fontSize={"2xl"}
-                  textTransform={"uppercase"}
-                  fontWeight="bold"
-                >
-                  Your Cart
+      <Drawer isOpen={isOpen} placement="right" onClose={onClose} size={"md"}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>
+            <Stack spacing={2}>
+              <Text
+                fontSize={"2xl"}
+                textTransform={"uppercase"}
+                fontWeight="bold"
+              >
+                Your Cart
+              </Text>
+              <Divider />
+              <>
+                <Text fontSize={"md"}>
+                  Free U.S. shipping on orders of $100+
                 </Text>
+                <FreeShippingProgress cart={cart} />
                 <Divider />
+              </>
+            </Stack>
+          </DrawerHeader>
+          <DrawerBody pl={[4]} pr={[4, 6]}>
+            <VStack
+              justifyContent={cart.lines.length === 0 ? "center" : "flex-start"}
+              alignItems={cart.lines.length === 0 ? "center" : "flex-start"}
+              h="full"
+              w="full"
+            >
+              {cart.lines.length === 0 && <EmptyCart />}
+              {cart.lines.length > 0 && (
                 <>
-                  <Text fontSize={"md"}>
-                    Free U.S. shipping on orders of $100+
-                  </Text>
-                  <FreeShippingProgress cart={cart} />
-                  <Divider />
+                  {cart.lines.map((l: any) => (
+                    <React.Fragment key={l.node.id}>
+                      <CartLineItem product={l} removeItem={removeItem} />
+                      <Divider />
+                    </React.Fragment>
+                  ))}
+                  <CartRecommendations />
                 </>
-              </Stack>
-            </DrawerHeader>
-            <DrawerBody pl={[4]} pr={[4, 6]}>
-              <VStack
-                justifyContent={
-                  cart.lines.length === 0 ? "center" : "flex-start"
-                }
-                alignItems={cart.lines.length === 0 ? "center" : "flex-start"}
-                h="full"
+              )}
+            </VStack>
+          </DrawerBody>
+
+          <DrawerFooter>
+            <VStack w="full" spacing={2}>
+              <DiscountCodeInput />
+              <Divider />
+              <ShopPayInstallments />
+              {cart && cart.lines && cart.lines.length > 0 && (
+                <Flex
+                  w="100%"
+                  justifyContent={"space-between"}
+                  fontSize="md"
+                  fontWeight={400}
+                >
+                  <Text>Taxes &amp; Shipping:</Text>
+                  <Text>Calculated at checkout</Text>
+                </Flex>
+              )}
+              <TotalCost cart={cart} />
+              <Button
+                fontSize={"2xl"}
+                size="lg"
+                borderRadius={0}
+                onClick={handleCheckout}
                 w="full"
               >
-                {cart.lines.length === 0 && <EmptyCart />}
-                {cart.lines.length > 0 && (
-                  <>
-                    {cart.lines.map((l: any) => (
-                      <React.Fragment key={l.node.id}>
-                        <CartLineItem product={l} removeItem={removeItem} />
-                        <Divider />
-                      </React.Fragment>
-                    ))}
-                    <CartRecommendations />
-                  </>
-                )}
-              </VStack>
-            </DrawerBody>
-
-            <DrawerFooter>
-              <VStack w="full" spacing={2}>
-                <DiscountCodeInput />
-                <Divider />
-                <ShopPayInstallments />
-                {cart && cart.lines && cart.lines.length > 0 && (
-                  <Flex
-                    w="100%"
-                    justifyContent={"space-between"}
-                    fontSize="md"
-                    fontWeight={400}
-                  >
-                    <Text>Taxes &amp; Shipping:</Text>
-                    <Text>Calculated at checkout</Text>
-                  </Flex>
-                )}
-                <TotalCost cart={cart} />
-                <Button
-                  fontSize={"2xl"}
-                  size="lg"
-                  onClick={handleCheckout}
-                  w="full"
-                >
-                  Checkout
-                </Button>
-                <HStack w="full" justify={"space-around"}>
-                  <Icon as={SiApplepay} boxSize={[6, 8]} />
-                  <Icon as={SiGooglepay} boxSize={[8, 10]} />
-                  <Icon as={SiMastercard} boxSize={[6, 8]} />
-                  <Icon as={SiVisa} boxSize={[8, 10]} />
-                  <Icon as={SiPaypal} boxSize={[4, 5]} />
-                </HStack>
-              </VStack>
-            </DrawerFooter>
-          </DrawerContent>
-        </Drawer>
+                Checkout
+              </Button>
+              <HStack w="full" justify={"space-around"}>
+                <Icon as={SiApplepay} boxSize={[6, 8]} />
+                <Icon as={SiGooglepay} boxSize={[8, 10]} />
+                <Icon as={SiMastercard} boxSize={[6, 8]} />
+                <Icon as={SiVisa} boxSize={[8, 10]} />
+                <Icon as={SiPaypal} boxSize={[4, 5]} />
+              </HStack>
+            </VStack>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </>
   );
 };

@@ -178,12 +178,8 @@ function MyApp({ Component, pageProps }: AppProps) {
               {settings?.menu && <Header menu={settings.menu} />}
               <Component key={router.asPath} {...pagePropsWithAppAnalytics} />
             </CartProvider>
-            {/* <Follow /> */}
-            <Suspense fallback={"..."}>
-              <Footer />
-            </Suspense>
+            <Footer />
             <ColorModeScript initialColorMode={customTheme.initialColorMode} />
-            {process.env.NODE_ENV === "production" && (
               <Script
                 id="tawk_tag"
                 strategy="lazyOnload"
@@ -191,7 +187,6 @@ function MyApp({ Component, pageProps }: AppProps) {
                   __html: `var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();`,
                 }}
               />
-            )}
             {settings && (
               <Suspense fallback={`...`}>
                 <MailingList settings={settings.emailPopup} />

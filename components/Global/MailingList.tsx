@@ -45,10 +45,12 @@ export default function MailingList({ settings }: MailingListSettings) {
 
     const interval = setInterval(async () => {
       const isSubbed = await window.localStorage.getItem("subscribed");
+      const popupShown = await window.sessionStorage.getItem("popupShown");
 
       if (!popupShown && isSubbed !== "true") {
         controls.start("animate");
         setShown(true);
+        window.sessionStorage.setItem("popupShown", "true");
       }
     }, settings.delay);
 

@@ -1,7 +1,6 @@
+"use client";
 import Loader from "../../components/Loader";
-import { useScroll } from "framer-motion";
 import { RatingStar } from "rating-star";
-import { useEffect } from "react";
 import useSWR from "swr";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
@@ -15,8 +14,8 @@ export default function ReviewCarousel({ data }: { data: any }) {
   if (!data) {
     return <Loader />;
   }
-  if(error){
-    return <p>error...something went wrong :(</p>
+  if (error) {
+    return <p>error...something went wrong :(</p>;
   }
   return (
     <div className="my-4 md:my-8 lg:my-12">

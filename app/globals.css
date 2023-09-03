@@ -63,3 +63,13 @@
 .text-shadow {
   text-shadow: 5px 3px 6px rgba(0, 0, 0, 0.4);
 }
+/* Hide scrollbar for all elements */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Keep scrolling functionality for all elements */
+html {
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}

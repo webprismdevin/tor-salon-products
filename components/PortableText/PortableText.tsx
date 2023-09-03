@@ -1,3 +1,4 @@
+"use client";
 import BlockContent from "@sanity/block-content-to-react";
 // import type { Block as SanityBlock } from "@sanity/types";
 import AccordionBlock from "./Blocks/Accordion";

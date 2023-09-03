@@ -1,13 +1,12 @@
 //this is not the typical ATC function
+"use client";
 import { useContext } from "react";
 import addToCart, { AddToCartResponse } from "./Cart/addToCart";
 import { CartContext } from "../app/cart-provider";
 import { usePlausible } from "next-plausible";
-import AuthContext from "./auth-context";
 
 export default function useAddToCart() {
   const { cart, setCart } = useContext(CartContext);
-  const { user } = useContext(AuthContext);
   const plausible = usePlausible();
 
   const singleAddToCart = async (variantId: string) => {

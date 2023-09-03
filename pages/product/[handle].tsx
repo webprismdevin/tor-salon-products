@@ -25,7 +25,13 @@ import {
 import { Button as Button2 } from "components/Button";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
-import React, { useState, useRef, useEffect, useContext } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useContext,
+  Suspense,
+} from "react";
 import formatter from "../../lib/formatter";
 import { GetStaticProps } from "next";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
@@ -49,6 +55,7 @@ import { CartContext } from "../../app/cart-provider";
 import groq from "groq";
 import { MODULE_FRAGMENT, sanity } from "lib/sanity";
 import Modules from "components/Modules/Modules";
+import extractGID from "lib/extract-gid";
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -75,6 +82,7 @@ const returnCollection = (handle: string) => {
 };
 
 const ProductPage = ({
+  defaultModules,
   modules,
   handle,
   product,
@@ -87,6 +95,7 @@ const ProductPage = ({
   collections: any;
   reviews: any;
   modules: [any] | null;
+  defaultModules: [any] | null;
   analytics: ShopifyAnalyticsPayload;
 }) => {
   const [itemQty, setItemQty] = useState(1);
@@ -101,6 +110,8 @@ const ProductPage = ({
 
     return variant ?? null;
   });
+
+  const pageModules = modules ? modules : defaultModules;
 
   //subscription plans
   const [subscriptionPlan, setSubscriptionPlan] = useState("");
@@ -202,14 +213,26 @@ const ProductPage = ({
             spacing={6}
           >
             <Stack direction={"row"} justify={"space-between"}>
-              <Heading maxW={[480]}>{product.title}</Heading>
+              <div>
+                <div className="h-6">
+                  <RatingStar
+                    id={product.id.split("/")[4]}
+                    rating={reviews.bottomline.average_score}
+                    size={16}
+                  />
+                  <span className="text-gray-400">
+                    [{reviews.bottomline.total_review}]
+                  </span>
+                </div>
+                <Heading maxW={[480]}>{product.title}</Heading>
+              </div>
               <Stack>
                 {subscriptionPlan === "" ? (
-                  <Heading fontWeight={600}>
+                  <Heading fontWeight={600} size={["lg"]} textAlign="right">
                     {formatter.format(parseInt(activeVariant.priceV2.amount))}
                   </Heading>
                 ) : (
-                  <Heading fontWeight={600}>
+                  <Heading fontWeight={600} size={["lg"]} textAlign="right">
                     <span
                       style={{ textDecoration: "line-through", opacity: 0.6 }}
                     >
@@ -223,41 +246,12 @@ const ProductPage = ({
                   </Heading>
                 )}
                 {subscriptionPlan !== "" && (
-                  <Text textAlign={"right"} color="red">
-                    Save 5% on every order!
+                  <Text size={["sm"]} textAlign={"right"} color="red">
+                    Save 5%!
                   </Text>
                 )}
               </Stack>
             </Stack>
-            <Divider />
-            <HStack justify={"space-around"}>
-              <Stack
-                direction={["column", null, "column", "row"]}
-                align="center"
-                justify={"center"}
-                w={["100%", "50%"]}
-                cursor="pointer"
-                onClick={() =>
-                  reviewsSection.current?.scrollIntoView({
-                    behavior: "smooth",
-                  })
-                }
-                flexShrink={1}
-              >
-                <RatingStar
-                  id={product.id.split("/")[4]}
-                  rating={reviews.bottomline.average_score}
-                />
-                <Text>
-                  {reviews.bottomline.total_review} Review
-                  {reviews.bottomline.totalReviews === 1 ? "s" : ""}
-                </Text>
-              </Stack>
-              <Divider orientation="vertical" height={"60px"} px={[2, 0]} />
-              <Box w={["100%", "50%"]}>
-                <ReviewSubmit handle={product.title} gid={product.id} />
-              </Box>
-            </HStack>
             <Divider />
             {variants.length > 1 && (
               <Select
@@ -285,29 +279,13 @@ const ProductPage = ({
               />
             )}
             {/* end subscriptions */}
-            <div className="flex gap-4">
-              <HStack
-                border={"1px solid black"}
-                alignSelf={["flex-end", "flex-start"]}
-                borderRadius={0}
-                height={"52px"}
-              >
-                <Button fontSize="2xl" variant="ghost" {...dec}>
-                  -
-                </Button>
-                <Input w="50px" {...input} variant="ghost" textAlign="center" />
-                <Button fontSize="2xl" variant="ghost" {...inc}>
-                  +
-                </Button>
-              </HStack>
-              <Button2
-                className="fixed w-[70%] md:w-full md:static bottom-7 md:bottom-0 right-4 md:right-0 z-2"
-                onClick={handleAddToCart}
-                isDisabled={!activeVariant?.availableForSale}
-              >
-                {activeVariant?.availableForSale ? "Add To Cart" : "Sold Out!"}
-              </Button2>
-            </div>
+            <Button2
+              className="fixed w-[70%] md:w-full md:static bottom-7 md:bottom-0 right-4 left-4 md:right-0 z-50 py-3 px-4"
+              onClick={handleAddToCart}
+              isDisabled={!activeVariant?.availableForSale}
+            >
+              {activeVariant?.availableForSale ? "Add To Cart" : "Sold Out!"}
+            </Button2>
             <Box
               className="product_description_html_outer_container"
               dangerouslySetInnerHTML={{
@@ -402,22 +380,90 @@ const ProductPage = ({
           </Stack>
         </GridItem>
       </SimpleGrid>
-      <div>{modules && <Modules modules={modules} />}</div>
+      {pageModules && <Modules modules={pageModules} />}
+      <ReviewSection reviews={reviews} />
+    </>
+  );
+};
+
+function PhotoCarousel({ images }: any) {
+  const controls = useAnimation();
+
+  const [[page, direction], setPage] = useState([0, 0]);
+
+  const index = wrap(0, images.length, page);
+
+  const paginate = (newDirection: number) => {
+    setPage([page + newDirection, newDirection]);
+  };
+
+  return (
+    <Box
+      pos="sticky"
+      top={20}
+      minW={[300, "100%"]}
+      maxW={[300, "auto"]}
+      maxH={[300, "100%"]}
+      mx={["auto", 0]}
+    >
+      <AspectRatio ratio={1}>
+        <AnimatePresence mode="wait">
+          <MotionImage
+            key={images[index].node.url}
+            src={images[index].node.url}
+            alt={``}
+            objectFit="fill"
+            animate={{
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+          />
+        </AnimatePresence>
+      </AspectRatio>
+      {images.length > 1 && (
+        <>
+          <Box
+            cursor={"pointer"}
+            pos="absolute"
+            left={10}
+            bottom={[4, "50%"]}
+            onClick={() => paginate(-1)}
+          >
+            ←
+          </Box>
+          <Box
+            cursor={"pointer"}
+            pos="absolute"
+            right={10}
+            bottom={[4, "50%"]}
+            onClick={() => paginate(1)}
+          >
+            →
+          </Box>
+        </>
+      )}
+    </Box>
+  );
+}
+
+function ReviewSection({ reviews }: any) {
+  return (
+    <div>
       {reviews && reviews.reviews.length > 0 && (
         <Container
-          ref={reviewsSection}
+          // ref={reviewsSection}
           maxW="container.lg"
-          pt={40}
+          pt={20}
           pb={20}
-          centerContent
-          key={product.id.split("/")[4]}
         >
-          <Box w="full" py={12}>
+          <Box w="full" py={0}>
             <Heading>Reviews</Heading>
             <Divider mt={6} />
           </Box>
           {reviews.reviews.map((r: any) => (
-            <Stack key={r.id} spacing={2}>
+            <Stack key={r.id} spacing={2} my={2} bg="gray.50" p={[4, 8]}>
               <HStack>
                 <RatingStar id={r.id.toString()} rating={r.score} />
                 <Text>Verified Review</Text>
@@ -441,66 +487,7 @@ const ProductPage = ({
           ))}
         </Container>
       )}
-    </>
-  );
-};
-
-function PhotoCarousel({ images }: any) {
-  const controls = useAnimation();
-
-  const [[page, direction], setPage] = useState([0, 0]);
-
-  const index = wrap(0, images.length, page);
-
-  const paginate = (newDirection: number) => {
-    setPage([page + newDirection, newDirection]);
-  };
-
-  return (
-    <Box
-      pos="sticky"
-      top={20}
-      maxW={["100%"]}
-      minW={["100%"]}
-      maxH={["400px", "100%"]}
-    >
-      <AspectRatio ratio={1}>
-        <AnimatePresence mode="wait">
-          <MotionImage
-            key={images[index].node.url}
-            src={images[index].node.url}
-            alt={``}
-            objectFit="fill"
-            animate={{
-              opacity: 1,
-            }}
-            exit={{
-              opacity: 0,
-            }}
-          />
-        </AnimatePresence>
-      </AspectRatio>
-      {images.length > 1 && (
-        <>
-          <Box
-            pos="absolute"
-            left={10}
-            bottom={[4, "50%"]}
-            onClick={() => paginate(-1)}
-          >
-            ←
-          </Box>
-          <Box
-            pos="absolute"
-            right={10}
-            bottom={[4, "50%"]}
-            onClick={() => paginate(1)}
-          >
-            →
-          </Box>
-        </>
-      )}
-    </Box>
+    </div>
   );
 }
 
@@ -593,6 +580,14 @@ export const getStaticProps: GetStaticProps = async (context) => {
       },
     }
   );
+
+  const defaultsQuery = groq`*[_type == 'settings'][0]{
+    ${MODULE_FRAGMENT}
+  }`;
+
+  const defaults = await sanity.fetch(defaultsQuery);
+
+  console.log(defaults);
 
   const sanityQuery = groq`*[_type == 'product' && store.slug.current == '${handle}'][0]{
     ${MODULE_FRAGMENT}
@@ -781,9 +776,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
   }
 
   const reviews = await fetch(
-    `https://api-cdn.yotpo.com/v1/widget/bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l/products/${
-      res.product.id.split("/")[4]
-    }/reviews.json`
+    `https://api-cdn.yotpo.com/v1/widget/bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l/products/${extractGID(
+      res.product.id
+    )}/reviews.json`
   ).then((res) => res.json());
 
   const productAnalytics: ShopifyAnalyticsProduct = {
@@ -802,6 +797,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         resourceId: res.product.id,
         products: [productAnalytics],
       },
+      defaultModules: defaults.modules,
       modules: modules.modules,
       handle,
       key: handle,
