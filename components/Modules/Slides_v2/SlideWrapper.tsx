@@ -1,7 +1,7 @@
 "use client";
 
 import { wrap } from "@popmotion/popcorn";
-import { AnimatePresence, useCycle, motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { SlideProps } from "../Slides";
 import { Pagination } from "./Pagination";
@@ -16,8 +16,6 @@ export type SlidesProps = {
 export default function SlideWrapper({ data, children }: SlidesProps) {
   const [[page, direction], setPage] = useState([0, 0]);
   const index = wrap(0, data.slides.length, page);
-
-  console.log(children)
 
   return (
     <div className="relative">
