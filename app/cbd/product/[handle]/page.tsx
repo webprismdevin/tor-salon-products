@@ -4,7 +4,7 @@ import { imageBuilder, sanity } from "lib/sanity";
 import { getModules } from "lib/utils";
 import Image from "next/image";
 import { cache } from "react";
-import { CbdBuyButton } from "./cbdBuyButton";
+import { CbdBuyButton } from "./CbdBuyButton";
 import { Accordions } from "./Accordions";
 
 const getPage = cache(async (handle: string) => {
@@ -46,6 +46,7 @@ export default async function Page({ params }: { params: { handle: string } }) {
             <div className="flex flex-row justify-center gap-4">
               {page.icons.map((icon: any) => (
                 <Image
+                  key={icon._key}
                   src={imageBuilder(icon).url()}
                   width={64}
                   height={64}

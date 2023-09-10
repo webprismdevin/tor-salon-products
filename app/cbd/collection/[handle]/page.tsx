@@ -1,4 +1,4 @@
-import { CbdBuyButton } from "app/cbd/product/[handle]/cbdBuyButton";
+import { CbdBuyButton } from "app/cbd/product/[handle]/CbdBuyButton";
 import Card from "components/Card";
 import { Heading } from "components/Heading";
 import { imageBuilder, sanity } from "lib/sanity";
@@ -26,6 +26,7 @@ export default async function Page({ params }: { params: { handle: string } }) {
       </Heading>
       {data.collection.products.map((product: any) => (
         <Card
+          key={product._key}
           content={{
             title: product.title,
             imageUrl: imageBuilder(product.images[0]).url(),

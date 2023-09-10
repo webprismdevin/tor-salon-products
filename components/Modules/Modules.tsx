@@ -1,4 +1,4 @@
-import React, { Fragment, Suspense } from "react";
+import React, { Fragment } from "react";
 import { imageBuilder } from "../../lib/sanity";
 import Image from "next/image";
 import PortableText from "../PortableText/PortableText";
@@ -154,10 +154,10 @@ function Marquee({ data }: { data: any }) {
               <span className="font-heading text-4xl uppercase">{item}</span>
             </div>
             <div>
-              <img
+              <Image
                 src={imageBuilder(data.icon).url()}
-                width="36px"
-                height="36px"
+                width={36}
+                height={36}
                 alt="decorative icon"
                 loading="lazy"
               />
@@ -170,10 +170,10 @@ function Marquee({ data }: { data: any }) {
               <span className="font-heading text-4xl uppercase">{item}</span>
             </div>
             <div>
-              <img
+              <Image
                 src={imageBuilder(data.icon).url()}
-                width="36px"
-                height="36px"
+                width={36}
+                height={36}
                 alt="decorative icon"
                 loading="lazy"
               />
@@ -188,10 +188,10 @@ function Marquee({ data }: { data: any }) {
               <span className="font-heading text-4xl uppercase">{item}</span>
             </div>
             <div>
-              <img
+              <Image
                 src={imageBuilder(data.icon).url()}
-                width="36px"
-                height="36px"
+                width={36}
+                height={36}
                 alt="decorative icon"
                 loading="lazy"
               />
@@ -204,10 +204,10 @@ function Marquee({ data }: { data: any }) {
               <span className="font-heading text-4xl uppercase">{item}</span>
             </div>
             <div>
-              <img
+              <Image
                 src={imageBuilder(data.icon).url()}
-                width="36px"
-                height="36px"
+                width={36}
+                height={36}
                 alt="decorative icon"
                 loading="lazy"
               />

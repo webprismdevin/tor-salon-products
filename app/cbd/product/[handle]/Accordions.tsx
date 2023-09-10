@@ -9,7 +9,7 @@ export const Accordions = ({ data }: { data: any[] }) => {
   return (
     <div className="w-full">
       {data.map((item, index) => (
-        <div className="w-full text-left py-2 border-t-[1px] border-primary ">
+        <div key={item._key} className="w-full text-left py-2 border-t-[1px] border-primary">
           <Disclosure>
             {({ open }) => (
               <>

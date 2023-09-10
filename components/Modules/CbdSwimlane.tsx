@@ -5,7 +5,7 @@ import { imageBuilder } from "lib/sanity";
 import { collection_query } from "pages/collection/[handle]";
 import { useEffect, useState } from "react";
 import ProductCard from "./ProductGrid_v2/ProductCard";
-import { CbdBuyButton } from "../../app/cbd/product/[handle]/cbdBuyButton";
+import { CbdBuyButton } from "../../app/cbd/product/[handle]/CbdBuyButton";
 
 export type CollectionResponse = {
   collection: {
