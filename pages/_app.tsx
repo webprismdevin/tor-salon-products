@@ -34,8 +34,8 @@ import {
   type ShopifyPageViewPayload,
   ShopifyProvider,
 } from "@shopify/hydrogen-react";
-import Header from "components/Header";
-import CartProvider from "app/cart-provider";
+import Header from "../components/Header";
+import CartProvider from "../app/cart-provider";
 
 const Banner = dynamic(() => import("../components/Banner"));
 const Navigation = dynamic(() => import("../components/Global/Navigation"));

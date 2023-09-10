@@ -2,17 +2,13 @@ import {
   Heading,
   Box,
   Container,
-  Flex,
   Stack,
   Text,
   AspectRatio,
   Image,
   ImageProps,
   Select,
-  Button,
-  useNumberInput,
   HStack,
-  Input,
   SimpleGrid,
   Accordion,
   AccordionItem,
@@ -28,21 +24,16 @@ import { gql, GraphQLClient } from "graphql-request";
 import React, {
   useState,
   useRef,
-  useEffect,
   useContext,
-  Suspense,
 } from "react";
 import formatter from "../../lib/formatter";
 import { GetStaticProps } from "next";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { wrap } from "@popmotion/popcorn";
 import { RatingStar } from "rating-star";
-import ReviewSubmit from "../../components/Product/ReviewSubmit";
 import SubscriptionPlan from "../../components/Product/SubscriptionPlan";
 import useAddToCart from "../../lib/useAddToCart";
 import {
-  type StorefrontApiResponseOk,
-  useShop,
   AnalyticsPageType,
   sendShopifyAnalytics,
   AnalyticsEventName,
@@ -67,19 +58,6 @@ declare interface VariantType {
   title: string;
   availableForSale: boolean;
 }
-
-const returnCollection = (handle: string) => {
-  switch (handle) {
-    case "curly":
-      return "/type/curly";
-    case "medium-thick":
-      return "/type/medium-thick";
-    case "fine-thin":
-      return "/type/fine-thin";
-    default:
-      return `/collection/${handle}`;
-  }
-};
 
 const ProductPage = ({
   defaultModules,

@@ -1,11 +1,10 @@
 import { GetStaticProps } from "next";
 import Head from "next/head";
-import React, { Suspense, useEffect, useState } from "react";
-import { imageBuilder, MODULE_FRAGMENT, sanity } from "../../lib/sanity";
-import dynamic from "next/dynamic";
-import Modules from "components/Modules/Modules";
+import React from "react";
+import { MODULE_FRAGMENT, sanity } from "../../lib/sanity";
+import Modules from "../../components/Modules/Modules";
 
-export default function Page({ page, productImages, bottomline }: any) {
+export default function Page({ page }: any) {
   return (
     <div>
       <Head>
