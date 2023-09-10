@@ -33,10 +33,7 @@
     "**/**/**/*.tsx",
     "./src/**/*",
     "pages/pages/[slug].tsx",
-    "components/Global/NavBar.tsx.bak",
     ".next/types/**/*.ts",
-    "pages/index.tsx.bak",
-    "pages/index.tsx.bak",
     "pages/pages/[slug].tsx"
   ],
   "exclude": [
