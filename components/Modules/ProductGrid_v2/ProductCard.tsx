@@ -1,7 +1,7 @@
 import React from "react";
 import { removeCents } from "../../../lib/utils";
 import AddToCartButton from "./AddToCartButton";
-import Card from "components/Card";
+import Card from "../../Card";
 
 export type ProductCardProps = {
   product: {
