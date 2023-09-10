@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "components/Button";
-import useAddToCart from "lib/useAddToCart";
+import { Button } from "../../Button";
+import useAddToCart from "../../../lib/useAddToCart";
 
 export default function AddToCartButton({
   variantId,

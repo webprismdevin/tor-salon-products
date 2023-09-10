@@ -1,4 +1,4 @@
-import React, { Fragment, Suspense } from "react";
+import React, { Fragment } from "react";
 import { imageBuilder } from "../../lib/sanity";
 import Image from "next/image";
 import PortableText from "../PortableText/PortableText";
@@ -10,11 +10,12 @@ import CollectionGrid from "./CollectionGrid";
 import Collection from "./Collection";
 import Hero from "./Hero";
 import FAQs from "./FAQs";
+import CbdSwimlane from "./CbdSwimlane";
 const ReviewCarousel = dynamic(() => import("./ReviewCarousel"));
 
 export default function Modules({ modules }: any) {
-  if (!modules) return <>No section modules to display</>;
-  
+  if (!modules) return <div className="invisible">No modules to display</div>;
+
   return (
     <React.Fragment>
       {modules.map((module: any) => {
@@ -37,6 +38,8 @@ export default function Modules({ modules }: any) {
             return <FAQs key={module._key} data={module} />;
           case "component.productGrid":
             return <ProductGrid key={module._key} data={module} />;
+          case "component.cbdSwimlane":
+            return <CbdSwimlane key={module._key} data={module} />;
           default:
             return null;
         }
@@ -151,10 +154,10 @@ function Marquee({ data }: { data: any }) {
               <span className="font-heading text-4xl uppercase">{item}</span>
             </div>
             <div>
-              <img
+              <Image
                 src={imageBuilder(data.icon).url()}
-                width="36px"
-                height="36px"
+                width={36}
+                height={36}
                 alt="decorative icon"
                 loading="lazy"
               />
@@ -167,10 +170,10 @@ function Marquee({ data }: { data: any }) {
               <span className="font-heading text-4xl uppercase">{item}</span>
             </div>
             <div>
-              <img
+              <Image
                 src={imageBuilder(data.icon).url()}
-                width="36px"
-                height="36px"
+                width={36}
+                height={36}
                 alt="decorative icon"
                 loading="lazy"
               />
@@ -185,10 +188,10 @@ function Marquee({ data }: { data: any }) {
               <span className="font-heading text-4xl uppercase">{item}</span>
             </div>
             <div>
-              <img
+              <Image
                 src={imageBuilder(data.icon).url()}
-                width="36px"
-                height="36px"
+                width={36}
+                height={36}
                 alt="decorative icon"
                 loading="lazy"
               />
@@ -201,10 +204,10 @@ function Marquee({ data }: { data: any }) {
               <span className="font-heading text-4xl uppercase">{item}</span>
             </div>
             <div>
-              <img
+              <Image
                 src={imageBuilder(data.icon).url()}
-                width="36px"
-                height="36px"
+                width={36}
+                height={36}
                 alt="decorative icon"
                 loading="lazy"
               />

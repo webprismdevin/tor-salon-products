@@ -5,9 +5,6 @@ import {
   ColorModeScript,
   useToast,
 } from "@chakra-ui/react";
-//context
-import CartContext from "../lib/CartContext";
-import AuthContext from "../lib/auth-context";
 //next & react deps
 import Head from "next/head";
 import dynamic from "next/dynamic";
@@ -27,7 +24,7 @@ import themeConfig from "../lib/theme";
 import "../styles/globals.css";
 import "../app/globals.css";
 import "@fontsource/raleway/400.css";
-import AnalyticsScripts from "components/AnalyticsScripts";
+import AnalyticsScripts from "../components/AnalyticsScripts";
 
 import {
   sendShopifyAnalytics,
@@ -37,8 +34,8 @@ import {
   type ShopifyPageViewPayload,
   ShopifyProvider,
 } from "@shopify/hydrogen-react";
-import Header from "components/Header";
-import CartProvider from "app/cart-provider";
+import Header from "../components/Header";
+import CartProvider from "../app/cart-provider";
 
 const Banner = dynamic(() => import("../components/Banner"));
 const Navigation = dynamic(() => import("../components/Global/Navigation"));
@@ -180,13 +177,13 @@ function MyApp({ Component, pageProps }: AppProps) {
             </CartProvider>
             <Footer />
             <ColorModeScript initialColorMode={customTheme.initialColorMode} />
-              <Script
-                id="tawk_tag"
-                strategy="lazyOnload"
-                dangerouslySetInnerHTML={{
-                  __html: `var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();`,
-                }}
-              />
+            <Script
+              id="tawk_tag"
+              strategy="lazyOnload"
+              dangerouslySetInnerHTML={{
+                __html: `var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();`,
+              }}
+            />
             {settings && (
               <Suspense fallback={`...`}>
                 <MailingList settings={settings.emailPopup} />

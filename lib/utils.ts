@@ -1,4 +1,5 @@
 import extractGID from "./extract-gid";
+import { MODULE_FRAGMENT, sanity } from "./sanity";
 
 export async function getRating(gid: string) {
   const id = extractGID(gid);
@@ -21,3 +22,18 @@ export function removeCents(dollarAmount: number) {
   }
   return dollarAmount; // Return the original input if it doesn't end with .00
 }
+
+export const getModules = async (type: string, slug: string) => {
+  const res = await sanity.fetch(
+    `*[_type == "${type}" && slug.current == "${slug}"][0]{
+    ${MODULE_FRAGMENT}
+  }`
+  );
+
+  if (!res) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error("Failed to fetch data");
+  }
+
+  return res;
+};
