@@ -52,7 +52,10 @@ export default function CbdSwimlane({ data }: any) {
                   checkoutUrl={product.checkoutUrl}
                   handle={product.slug.current}
                 >
-                  ${product.priceRange.price} | Buy Now
+                  <div className="whitespace-nowrap font-heading text-lg md:text-xl">
+                    ${product.priceRange.price} | Buy&nbsp;
+                    <span className="hidden md:inline">Now</span>
+                  </div>
                 </CbdCheckout>
               </Card>
             </div>
