@@ -38,7 +38,7 @@ export default function CbdSwimlane({ data }: any) {
         {products.map((product: any) => {
           return (
             <div
-              className="snap-center first:ml-8 last:mr-8"
+              className="snap-center first:ml-8 last:pr-8"
               key={product._key}
             >
               <Card

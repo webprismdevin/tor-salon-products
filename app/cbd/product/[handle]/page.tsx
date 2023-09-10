@@ -51,8 +51,14 @@ export default async function Page({ params }: { params: { handle: string } }) {
         <div className="p-4 md:p-12 flex flex-col gap-8">
           <Heading as="h3">{title}</Heading>
           <div>{description}</div>
-          <CbdCheckout className="fixed bottom-4 left-4 right-4 z-50 md:static md:z-0" checkoutUrl={checkoutUrl} handle={params.handle}>
-            ${priceRange.price} | Buy Now
+          <CbdCheckout
+            className="fixed bottom-4 left-4 right-4 z-50 md:static md:z-0"
+            checkoutUrl={checkoutUrl}
+            handle={params.handle}
+          >
+            <div className="whitespace-nowrap font-heading text-2xl md:text-xl py-1 px-2 md:px-0 md:py-0">
+              ${priceRange.price} | Buy Now
+            </div>
           </CbdCheckout>
           {page.icons && (
             <div className="flex flex-row justify-center gap-4">
