@@ -15,7 +15,7 @@
     "cypress:open": "cypress open"
   },
   "dependencies": {
-    "@chakra-ui/react": "^2.4.3",
+    "@chakra-ui/react": "^2.8.1",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@fontsource/raleway": "^4.5.12",
@@ -34,7 +34,7 @@
     "dayjs": "^1.11.7",
     "formik": "^2.2.9",
     "framer": "^2.3.0",
-    "framer-motion": "^10.12.21",
+    "framer-motion": "^10.16.4",
     "graphql": "^16.6.0",
     "graphql-request": "^5.0.0",
     "groq": "^3.14.2",

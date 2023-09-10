@@ -1,4 +1,4 @@
-import { CbdBuyButton } from "app/cbd/product/[handle]/CbdBuyButton";
+import { CbdBuyButton } from "../../product/[handle]/CbdBuyButton";
 import Card from "components/Card";
 import { Heading } from "components/Heading";
 import { imageBuilder, sanity } from "lib/sanity";
