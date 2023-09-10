@@ -1,6 +1,6 @@
 "use client";
-import graphClient from "lib/graph-client";
-import { collection_query } from "pages/collection/[handle]";
+import graphClient from "../../lib/graph-client";
+import { collection_query } from "../../pages/collection/[handle]";
 import { useEffect, useState } from "react";
 import ProductCard from "./ProductGrid_v2/ProductCard";
 
