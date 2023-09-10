@@ -23,7 +23,6 @@ import { theme as defaultTheme, ThemeConfig } from "@chakra-ui/theme";
 import themeConfig from "../lib/theme";
 import "../styles/globals.css";
 import "../app/globals.css";
-import "@fontsource/raleway/400.css";
 import AnalyticsScripts from "../components/AnalyticsScripts";
 
 import {
@@ -38,10 +37,6 @@ import Header from "../components/Header";
 import CartProvider from "../app/cart-provider";
 
 const Banner = dynamic(() => import("../components/Banner"));
-const Navigation = dynamic(() => import("../components/Global/Navigation"));
-const Follow = dynamic(() => import("../components/Global/Follow"), {
-  ssr: false,
-});
 const Footer = dynamic(() => import("../components/Global/Footer"), {
   suspense: true,
 });
