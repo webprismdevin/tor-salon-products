@@ -2,8 +2,6 @@ import Modules from "../components/Modules/Modules";
 import { MODULE_FRAGMENT, sanity } from "../lib/sanity";
 import { cache, Suspense } from "react";
 
-export const revalidate = 60;
-
 const getData = cache(async () => {
   const res = await sanity.fetch(
     `*[_type == "home"][0]{
@@ -39,3 +37,5 @@ export default async function Page() {
     </div>
   );
 }
+
+export const revalidate = 600;

@@ -82,3 +82,5 @@ export default async function Page({ params }: { params: { handle: string } }) {
     </div>
   );
 }
+
+export const revalidate = 600;
