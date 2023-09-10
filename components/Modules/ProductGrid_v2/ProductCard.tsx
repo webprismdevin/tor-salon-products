@@ -1,8 +1,7 @@
 import React from "react";
-import Image from "next/image";
-import Link from "next/link";
 import { removeCents } from "../../../lib/utils";
 import AddToCartButton from "./AddToCartButton";
+import Card from "components/Card";
 
 export type ProductCardProps = {
   product: {
@@ -17,19 +16,13 @@ export type ProductCardProps = {
 
 export default function ProductCard({ product }: ProductCardProps) {
   return (
-    <div className="min-w-[140px] md:w-[260px] grid gap-3">
-      <Link href={`/product/${product.handle}`}>
-        <Image
-          src={product.featuredImage}
-          alt={product.title}
-          width={320}
-          height={320}
-          className="mx-auto aspect-square"
-        />
-        <h3 className="text-center text-lg line-clamp-2 h-14">
-          {product.title}
-        </h3>
-      </Link>
+    <Card
+      content={{
+        title: product.title,
+        imageUrl: product.featuredImage,
+        path: `/product/${product.handle}`,
+      }}
+    >
       <AddToCartButton variantId={product.variantId}>
         <Price price={product.price} />
         &nbsp;|&nbsp;
@@ -37,7 +30,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           Add <span className="hidden md:inline">To Cart</span>
         </span>
       </AddToCartButton>
-    </div>
+    </Card>
   );
 }
 

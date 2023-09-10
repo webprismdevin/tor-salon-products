@@ -19,6 +19,7 @@ const getData = cache(async () => {
 
   return res;
 });
+
 export async function generateMetadata() {
   const data = await getData();
 

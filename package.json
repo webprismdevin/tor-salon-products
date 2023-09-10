@@ -20,6 +20,7 @@
     "@emotion/styled": "^11.10.5",
     "@fontsource/raleway": "^4.5.12",
     "@formspark/use-formspark": "^0.1.39",
+    "@headlessui/react": "^1.7.17",
     "@next/bundle-analyzer": "^13.0.7",
     "@popmotion/popcorn": "^0.4.4",
     "@portabletext/react": "^2.0.0",

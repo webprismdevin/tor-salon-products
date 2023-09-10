@@ -10,11 +10,12 @@ import CollectionGrid from "./CollectionGrid";
 import Collection from "./Collection";
 import Hero from "./Hero";
 import FAQs from "./FAQs";
+import CbdSwimlane from "./CbdSwimlane";
 const ReviewCarousel = dynamic(() => import("./ReviewCarousel"));
 
 export default function Modules({ modules }: any) {
-  if (!modules) return <>No section modules to display</>;
-  
+  if (!modules) return <div className="invisible">No modules to display</div>;
+
   return (
     <React.Fragment>
       {modules.map((module: any) => {
@@ -37,6 +38,8 @@ export default function Modules({ modules }: any) {
             return <FAQs key={module._key} data={module} />;
           case "component.productGrid":
             return <ProductGrid key={module._key} data={module} />;
+          case "component.cbdSwimlane":
+            return <CbdSwimlane key={module._key} data={module} />;
           default:
             return null;
         }

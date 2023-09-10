@@ -9,8 +9,8 @@ export default function Page({ page, productImages, bottomline }: any) {
   return (
     <div>
       <Head>
-        <title>{page.seo.title ?? page.title}</title>
-        <meta name="description" content={page.description} />
+        <title>{page.seo?.title ?? page.title}</title>
+        <meta name="description" content={page?.description} />
       </Head>
       <Modules modules={page.modules} />
     </div>

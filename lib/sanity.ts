@@ -239,5 +239,13 @@ modules[]{
     },
     ${CTA_FRAGMENT}
   },
+  (_type == 'component.cbdSwimlane') => {
+    ...,
+    collection->{
+      products[]->{
+        ...
+      }
+    }
+  }
 }
 `;
