@@ -30,6 +30,7 @@
     "**/*.ts",
     "**/*.tsx",
     "**/**/*.tsx",
+    "**/**/**/*.tsx",
     "./src/**/*",
     "pages/pages/[slug].tsx",
     "components/Global/NavBar.tsx.bak",
