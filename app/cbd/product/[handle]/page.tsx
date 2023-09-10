@@ -19,6 +19,18 @@ const getPage = cache(async (handle: string) => {
   return res;
 });
 
+export async function generateMetadata({
+  params,
+}: {
+  params: { handle: string };
+}) {
+  const page = await getPage(params.handle);
+
+  return {
+    title: page.seo?.title ?? page.title,
+    description: page.seo?.description ?? page.description,
+  };
+}
 export default async function Page({ params }: { params: { handle: string } }) {
   const modules = await getModules("cbdProduct", params.handle);
   const page = await getPage(params.handle);

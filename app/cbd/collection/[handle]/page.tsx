@@ -14,6 +14,19 @@ const getCollection = async (handle: string) => {
   return { collection };
 };
 
+export async function generateMetadata({
+  params,
+}: {
+  params: { handle: string };
+}) {
+  const data = await getCollection(params.handle);
+
+  return {
+    title: data.collection.seo?.title ?? data.collection.title,
+    description: data.collection.seo?.description ?? data.collection.description,
+  };
+}
+
 export default async function Page({ params }: { params: { handle: string } }) {
   const data = await getCollection(params.handle);
 
