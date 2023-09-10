@@ -1,4 +1,4 @@
-import { imageBuilder } from "lib/sanity";
+import { imageBuilder } from "../../../lib/sanity";
 import Image from "next/image";
 import { CallToAction } from "../Modules";
 import { SlideProps } from "../Slides";

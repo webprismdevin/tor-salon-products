@@ -1,7 +1,7 @@
 import { SanityImageAssetDocument } from "@sanity/client";
 import { CallToAction, CallToActionProps } from "../Modules";
 import Image from "next/image";
-import { imageBuilder } from "lib/sanity";
+import { imageBuilder } from "../../../lib/sanity";
 import { Parallax } from "./Parallax";
 
 export type Hero = {

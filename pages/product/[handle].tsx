@@ -18,7 +18,7 @@ import {
   Divider,
   GridItem,
 } from "@chakra-ui/react";
-import { Button as Button2 } from "components/Button";
+import { Button as Button2 } from "../../components/Button";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
 import React, {
@@ -44,7 +44,7 @@ import {
 } from "@shopify/hydrogen-react";
 import { CartContext } from "../../app/cart-provider";
 import groq from "groq";
-import { MODULE_FRAGMENT, sanity } from "lib/sanity";
+import { MODULE_FRAGMENT, sanity } from "../../lib/sanity";
 import Modules from "components/Modules/Modules";
 import extractGID from "lib/extract-gid";
 

@@ -1,6 +1,6 @@
 import { Heading } from "components/Heading";
 import Modules from "components/Modules/Modules";
-import { imageBuilder, sanity } from "lib/sanity";
+import { imageBuilder, sanity } from "../../../../lib/sanity";
 import { getModules } from "lib/utils";
 import Image from "next/image";
 import { cache } from "react";
