@@ -7,6 +7,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 const nextConfig = {
+  basePath: ".",
   reactStrictMode: true,
   images: {
     // need to change first domain to project domain
