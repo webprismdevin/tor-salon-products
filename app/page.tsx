@@ -1,5 +1,5 @@
 import Modules from "components/Modules/Modules";
-import { MODULE_FRAGMENT, sanity } from "lib/sanity";
+import { MODULE_FRAGMENT, sanity } from "../lib/sanity";
 import { cache, Suspense } from "react";
 
 export const revalidate = 60;
