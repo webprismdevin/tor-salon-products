@@ -4,7 +4,7 @@ import { imageBuilder, sanity } from "../../../../lib/sanity";
 import { getModules } from "../../../../lib/utils";
 import Image from "next/image";
 import { cache } from "react";
-import { CbdBuyButton } from "./CbdBuyButton";
+import { CbdBuyButton } from "./cbdBuyButton";
 import { Accordions } from "./Accordions";
 
 const getPage = cache(async (handle: string) => {
