@@ -1,4 +1,4 @@
-import formatter from "lib/formatter";
+import formatter from "../lib/formatter";
 
 export function SanityPrice({ product }: { product: any }) {
   return (
