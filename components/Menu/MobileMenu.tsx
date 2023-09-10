@@ -17,18 +17,15 @@ import {
   AccordionPanel,
   AccordionIcon,
   Box,
-  Icon,
   Link,
 } from "@chakra-ui/react";
 import { useContext, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
-// import { AiOutlineMenu } from "react-icons/ai";
 import NextLink from "next/link";
 import MenuLink from "./MenuLink";
 import AuthContext from "../../lib/auth-context";
 import { MenuProps } from "../../types/app_types";
 import { CollectionLink } from "../../types/sanity";
-// import { Logo } from "components/Global/Navigation";
 
 const MobileMenu = ({ menu }: MenuProps) => {
   const {

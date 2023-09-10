@@ -1,7 +1,6 @@
 "use client";
 
 import { Disclosure } from "@headlessui/react";
-import { ChevronDown } from "components/MenuDesktop";
 
 export const Accordions = ({ data }: { data: any[] }) => {
   if(!data) return <></>
@@ -20,7 +19,7 @@ export const Accordions = ({ data }: { data: any[] }) => {
                       open ? "transform rotate-180" : ""
                     } inline-block transition-transform duration-200`}
                   >
-                    <ChevronDown />
+                    <NavArrowDown />
                   </div>
                 </Disclosure.Button>
                 <Disclosure.Panel className="pb-2">

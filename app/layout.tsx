@@ -6,8 +6,8 @@ import PlausibleProvider from "next-plausible";
 import CartProvider from "./cart-provider";
 import ThemeProvider from "./chakra-provider";
 import "./globals.css";
-import Banner from "components/Banner";
-import MailingList from "components/Global/MailingList";
+import Banner from "../components/Banner";
+import MailingList from "../components/Global/MailingList";
 
 async function getData() {
   const res = await sanity.fetch(settingsQuery);

@@ -1,6 +1,6 @@
 import { CbdBuyButton } from "../../product/[handle]/CbdBuyButton";
-import Card from "components/Card";
-import { Heading } from "components/Heading";
+import Card from "../../../../components/Card";
+import { Heading } from "../../../../components/Heading";
 import { imageBuilder, sanity } from "../../../../lib/sanity";
 
 const getCollection = async (handle: string) => {

@@ -1,4 +1,4 @@
-import Modules from "components/Modules/Modules";
+import Modules from "../components/Modules/Modules";
 import { MODULE_FRAGMENT, sanity } from "../lib/sanity";
 import { cache, Suspense } from "react";
 

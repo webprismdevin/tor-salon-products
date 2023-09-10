@@ -45,7 +45,7 @@ import {
 import { CartContext } from "../../app/cart-provider";
 import groq from "groq";
 import { MODULE_FRAGMENT, sanity } from "../../lib/sanity";
-import Modules from "components/Modules/Modules";
+import Modules from "../../components/Modules/Modules";
 import extractGID from "lib/extract-gid";
 
 const MotionImage = motion<ImageProps>(Image);
