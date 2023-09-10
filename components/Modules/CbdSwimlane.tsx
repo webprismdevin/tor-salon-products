@@ -1,7 +1,7 @@
 "use client";
 import Card from "../../components/Card";
 import { imageBuilder } from "../../lib/sanity";
-import { CbdBuyButton } from "../../app/cbd/product/[handle]/CbdBuyButton";
+import { CbdCheckout } from "../../app/cbd/product/[handle]/CbdCheckout";
 
 export type CollectionResponse = {
   collection: {
@@ -48,12 +48,12 @@ export default function CbdSwimlane({ data }: any) {
                   imageUrl: imageBuilder(product.images[0]).url(),
                 }}
               >
-                <CbdBuyButton
+                <CbdCheckout
                   checkoutUrl={product.checkoutUrl}
                   handle={product.slug.current}
                 >
                   ${product.priceRange.price} | Buy Now
-                </CbdBuyButton>
+                </CbdCheckout>
               </Card>
             </div>
           );

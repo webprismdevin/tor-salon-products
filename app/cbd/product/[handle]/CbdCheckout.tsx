@@ -3,7 +3,7 @@
 import { Button } from "../../../../components/Button";
 import { usePlausible } from "next-plausible";
 
-export const CbdBuyButton = ({
+export const CbdCheckout = ({
   checkoutUrl,
   handle,
   children,

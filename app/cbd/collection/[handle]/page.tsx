@@ -1,4 +1,4 @@
-import { CbdBuyButton } from "../../product/[handle]/CbdBuyButton";
+import { CbdCheckout } from "../../product/[handle]/CbdCheckout";
 import Card from "../../../../components/Card";
 import { Heading } from "../../../../components/Heading";
 import { imageBuilder, sanity } from "../../../../lib/sanity";
@@ -33,12 +33,12 @@ export default async function Page({ params }: { params: { handle: string } }) {
             path: `/cbd/product/${product.slug.current}`,
           }}
         >
-          <CbdBuyButton
+          <CbdCheckout
             checkoutUrl={product.checkoutUrl}
             handle={product.slug.current}
           >
             ${product.priceRange.price} | Buy Now
-          </CbdBuyButton>
+          </CbdCheckout>
         </Card>
       ))}
     </div>
