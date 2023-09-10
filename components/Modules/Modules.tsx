@@ -48,13 +48,41 @@ export default function Modules({ modules }: any) {
   );
 }
 
-function TextWithImage({ data }: { data: any }) {
-  const layoutClass =
-    data.layout === "right"
-      ? "flex-col-reverse md:flex-row-reverse"
-      : "flex-col";
+interface TextWithImageData {
+  _key: string;
+  layout?: "left" | "right" | "center" | null;
+  size?: "small" | null;
+  colorTheme?: ColorThemeProps;
+  image?: any;
+  caption?: string;
+  title: string;
+  content?: any; // Replace with the actual type if known
+  cta?: CallToActionProps;
+}
 
-  const sizeClass = data.size === "small" ? "md:max-h-[500px]" : "";
+interface TextWithImageProps {
+  data: TextWithImageData;
+}
+
+function TextWithImage({ data }: TextWithImageProps) {
+  const layoutClasses = {
+    left: "flex-col md:flex-row",
+    right: "flex-col-reverse md:flex-row-reverse",
+    center: "flex-col md:flex-row text-center",
+  };
+
+  const layoutClass = layoutClasses[data.layout!] || "";
+
+  const sizeClasses = {
+    small: "md:max-h-[500px]",
+    // Add more sizes here if needed
+    // medium: "some-other-class",
+    // large: "yet-another-class",
+  };
+
+  const sizeClass = sizeClasses[data.size!] || "";
+
+  const sectionWidth = data.image ? "w-full" : "max-w-2xl mx-auto"
 
   return (
     <div
@@ -62,23 +90,27 @@ function TextWithImage({ data }: { data: any }) {
         backgroundColor: data.colorTheme?.background?.hex ?? "#ffffff",
         color: data.colorTheme?.text?.hex ?? "#121212",
       }}
-      className={`flex w-full md:flex-row  ${
+      className={`flex w-full md:flex-row ${sectionWidth} ${
         data.image ? "justify-between" : ""
       } ${layoutClass} ${sizeClass}`}
       key={data._key}
     >
       <div
         className={`max-w-full grow-1 self-center ${
-          data.image ? "p-8 lg:p-24" : "p-4"
+          data.image ? "p-8 md:p-16 lg:p-24" : "p-4 md:p-8"
         } ${data.image ? "lg:max-w-[50%]" : "lg:max-w-screen-lg mx-auto"}`}
       >
-        <div className={`${data.image ?? "justify-center text-center"}`}>
+        <div className={"justify-center"}>
           <p className="font-heading text-base">{data.caption}</p>
           <p className="font-heading text-2xl md:text-3xl lg:text-4xl">
             {data.title}
           </p>
         </div>
-        <div className="mt-4 flex flex-col items-start gap-4">
+        <div
+          className={`mt-4 flex flex-col items-start gap-4 ${
+            data.image ?? "text-center"
+          }`}
+        >
           {data?.content && <PortableText blocks={data.content} />}
           {data.cta && (
             <CallToAction cta={data.cta} colorTheme={data.colorTheme} />

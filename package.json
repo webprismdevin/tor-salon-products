@@ -30,6 +30,7 @@
     "@shopify/hydrogen-react": "^2023.1.4",
     "@smakss/search": "^1.2.4",
     "@vercel/analytics": "^0.1.6",
+    "currency.js": "^2.0.4",
     "dayjs": "^1.11.7",
     "formik": "^2.2.9",
     "framer": "^2.3.0",

@@ -2,6 +2,7 @@
 import Card from "../../components/Card";
 import { imageBuilder } from "../../lib/sanity";
 import { CbdCheckout } from "../../app/cbd/product/[handle]/CbdCheckout";
+import { formatUSD } from "lib/utils";
 
 export type CollectionResponse = {
   collection: {
@@ -53,7 +54,7 @@ export default function CbdSwimlane({ data }: any) {
                   handle={product.slug.current}
                 >
                   <div className="whitespace-nowrap font-heading text-lg md:text-xl">
-                    ${product.priceRange.price} | Buy&nbsp;
+                    {formatUSD(product.priceRange.price)} | Buy&nbsp;
                     <span className="hidden md:inline">Now</span>
                   </div>
                 </CbdCheckout>

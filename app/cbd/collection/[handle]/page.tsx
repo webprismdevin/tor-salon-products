@@ -50,7 +50,7 @@ export default async function Page({ params }: { params: { handle: string } }) {
             handle={product.slug.current}
           >
             <div className="whitespace-nowrap font-heading text-lg md:text-xl">
-              ${product.priceRange.price} | Buy&nbsp;<span className="hidden md:inline">Now</span>
+              {product.priceRange.price} | Buy&nbsp;<span className="hidden md:inline">Now</span>
             </div>
           </CbdCheckout>
         </Card>

@@ -37,3 +37,7 @@ export const getModules = async (type: string, slug: string) => {
 
   return res;
 };
+
+export function formatUSD(number: number) {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(number);
+}

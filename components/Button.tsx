@@ -14,7 +14,7 @@ export const Button = ({
   [key: string]: any;
 }) => {
   const baseButtonClasses =
-    "py-2 px-3 md:py-3 md:px-5 font-heading md:text-xl uppercase cursor-pointer";
+    "py-3 px-5 text-lg md:py-3 md:px-5 font-heading md:text-xl uppercase cursor-pointer";
 
   const variants = {
     primary: `${baseButtonClasses} bg-primary text-contrast`,

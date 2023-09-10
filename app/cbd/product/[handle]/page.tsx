@@ -1,7 +1,7 @@
 import { Heading } from "../../../../components/Heading";
 import Modules from "../../../../components/Modules/Modules";
 import { imageBuilder, sanity } from "../../../../lib/sanity";
-import { getModules } from "../../../../lib/utils";
+import { formatUSD, getModules } from "../../../../lib/utils";
 import Image from "next/image";
 import { cache } from "react";
 import { CbdCheckout } from "./CbdCheckout";
@@ -57,7 +57,7 @@ export default async function Page({ params }: { params: { handle: string } }) {
             handle={params.handle}
           >
             <div className="whitespace-nowrap font-heading text-2xl md:text-xl py-1 px-2 md:px-0 md:py-0">
-              ${priceRange.price} | Buy Now
+              {formatUSD(priceRange.price)} | Buy Now
             </div>
           </CbdCheckout>
           {page.icons && (
