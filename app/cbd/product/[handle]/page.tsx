@@ -39,7 +39,7 @@ export default async function Page({ params }: { params: { handle: string } }) {
 
   return (
     <div>
-      <div className="grid grid-cols-1 md:grid-cols-2 max-w-screen-xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 md:max-w-screen-xl mx-auto px-4">
         <div className="max-w-[260px] md:max-w-none mx-auto">
           <Image
             src={imageBuilder(images[0]).url()}
@@ -48,10 +48,10 @@ export default async function Page({ params }: { params: { handle: string } }) {
             alt=""
           />
         </div>
-        <div className="p-8 md:p-12 flex flex-col gap-8">
+        <div className="p-4 md:p-12 flex flex-col gap-8">
           <Heading as="h3">{title}</Heading>
           <div>{description}</div>
-          <CbdCheckout checkoutUrl={checkoutUrl} handle={params.handle}>
+          <CbdCheckout className="fixed bottom-4 left-4 right-4 z-50 md:static md:z-0" checkoutUrl={checkoutUrl} handle={params.handle}>
             ${priceRange.price} | Buy Now
           </CbdCheckout>
           {page.icons && (

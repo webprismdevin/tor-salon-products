@@ -7,10 +7,12 @@ export const CbdCheckout = ({
   checkoutUrl,
   handle,
   children,
+  className,
 }: {
   checkoutUrl: string;
   handle: string;
   children?: React.ReactNode;
+  className?: string;
 }) => {
   const plausible = usePlausible();
 
@@ -21,8 +23,8 @@ export const CbdCheckout = ({
   };
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-50 md:static md:z-0 flex justify-center">
-      <Button className="w-full py-3 px-5 text-2xl" onClick={handleBuyNow}>
+    <div className={`${className} flex justify-center items-center`}>
+      <Button className="w-full py-2 px-3 text-2xl font-heading" onClick={handleBuyNow}>
         {children}
       </Button>
     </div>
