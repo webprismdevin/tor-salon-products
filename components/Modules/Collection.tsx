@@ -27,8 +27,6 @@ export default function Collection({ data }: any) {
     getProducts();
   }, []);
 
-  if (!products) return <></>;
-
   return (
     <div
       className="flex flex-col gap-2 w-full py-4 md:py-8 text-center md:text-left no-scrollbar"
@@ -49,7 +47,7 @@ export default function Collection({ data }: any) {
         <p>{data.subtitle}</p>
       </div>
       <div className="flex snap-x overflow-auto gap-4 md:gap-12">
-        {products.map((product: any) => {
+        {products && products.map((product: any) => {
           return (
             <div
               className="snap-center first:ml-8 last:mr-8"
@@ -68,7 +66,29 @@ export default function Collection({ data }: any) {
             </div>
           );
         })}
+        {
+          !products && (<>
+            <SkeletonCard/>
+            <SkeletonCard/>
+            <SkeletonCard/>
+            <SkeletonCard/>
+            <SkeletonCard/>
+          </>
+
+          )
+        }
       </div>
     </div>
   );
 }
+
+
+import React from 'react';
+
+const SkeletonCard: React.FC = () => {
+  return (
+    <div className="snap-center first:ml-8 last:mr-8">
+      <div style={{ backgroundColor: '#eee' }} className="w-[168px] h-[285px] md:w-[280px] md:h-[380px] animate-pulse rounded" />
+    </div>
+  );
+};
