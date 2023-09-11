@@ -15,7 +15,8 @@ export const CartContext = createContext({
       subtotalAmount: {
         amount: 0,
       },
-    }
+    },
+    discount: []
   },
   setCart: (cart: any) => {},
 });
