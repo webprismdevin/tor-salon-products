@@ -14,7 +14,7 @@ import {
 import { gql } from "graphql-request";
 import { useContext, useEffect, useState } from "react";
 import applyDiscountToCart from "../../lib/Cart/applyDiscountToCart";
-import CartContext from "../../lib/CartContext";
+import { CartContext } from "../../app/cart-provider";
 import graphClient from "../../lib/graph-client";
 
 export default function DiscountCodeInput() {
