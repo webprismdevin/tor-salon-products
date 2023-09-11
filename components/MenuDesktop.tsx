@@ -31,7 +31,7 @@ export default function MenuDesktop({ menu }: MenuProps) {
 function Shop() {
   return (
     <div className="flex items-center">
-      <span>Shop</span>
+      <span>Shop Hair</span>
       <ChevronDown />
     </div>
   );

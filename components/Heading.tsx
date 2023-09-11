@@ -10,14 +10,19 @@ export function Heading({
   children,
   as,
   className,
+  size,
 }: {
   children: React.ReactNode;
   as: "h1" | "h2" | "h3";
   className?: string;
+  size?: "h1" | "h2" | "h3";
 }) {
+
+  
+
   return createElement(
     as,
-    { className: `${headingSize[as]} font-heading ${className}` },
+    { className: `${headingSize[size ? size : as]} font-heading ${className}` },
     children
   );
 }

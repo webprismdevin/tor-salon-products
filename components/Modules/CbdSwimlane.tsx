@@ -16,6 +16,8 @@ export default function CbdSwimlane({ data }: any) {
   const { collection, title } = data;
   const { products } = collection;
 
+  console.log(products)
+
   return (
     <div
       className="flex flex-col gap-2 w-full py-4 md:py-8 text-center md:text-left no-scrollbar"
@@ -40,7 +42,7 @@ export default function CbdSwimlane({ data }: any) {
           return (
             <div
               className="snap-center first:ml-8 last:pr-8"
-              key={product._key}
+              key={product._id}
             >
               <Card
                 content={{

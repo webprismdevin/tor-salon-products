@@ -1,10 +1,8 @@
 import { GetStaticProps } from "next";
 import { Container, Box, Heading, AspectRatio, Image } from "@chakra-ui/react";
 import Head from "next/head";
-import BlockContent from "@sanity/block-content-to-react";
-import markdownStyles from "../../styles/markdown-styles.module.scss";
 import { imageBuilder } from "../../lib/sanity";
-import PortableText from "../../components/PortableText/PortableText";
+import RichContent from "components/RichContent";
 
 const BlogPost = ({ post }: any) => {
   return (
@@ -25,7 +23,7 @@ const BlogPost = ({ post }: any) => {
           <Heading as="h1" size="2xl">
             {post.title}
           </Heading>
-          <PortableText
+          <RichContent
             // colorTheme={post.colorTheme}
             blocks={post.body}
           />
@@ -88,7 +86,7 @@ export async function getStaticPaths() {
           slug: post.slug.current,
         },
       })) || [],
-    fallback: 'blocking',
+    fallback: "blocking",
   };
 }
 

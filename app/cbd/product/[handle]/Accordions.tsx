@@ -2,13 +2,26 @@
 
 import { Disclosure } from "@headlessui/react";
 
-export const Accordions = ({ data }: { data: any[] }) => {
-  if(!data) return <></>
+export type AccordionProps = {
+  data: [
+    {
+      _key: string;
+      title: string;
+      content: string;
+    }
+  ];
+};
+
+export const Accordions = ({ data }: AccordionProps) => {
+  if (!data) return <></>;
 
   return (
     <div className="w-full">
-      {data.map((item, index) => (
-        <div key={item._key} className="w-full text-left py-2 border-t-[1px] border-primary">
+      {data.map((item) => (
+        <div
+          key={item._key}
+          className="w-full text-left py-2 border-t-[1px] border-primary"
+        >
           <Disclosure>
             {({ open }) => (
               <>

@@ -75,7 +75,7 @@ const MobileMenu = ({ menu }: MenuProps) => {
               <MenuLink href="/" text="Home" />
               <Box w="full" mb={6}>
                 <Text fontWeight={600} mb={2}>
-                  Shop
+                  Shop Hair
                 </Text>
                 <Accordion w="full" allowToggle>
                   {menu &&
