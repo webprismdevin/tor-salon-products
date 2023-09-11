@@ -3,16 +3,14 @@ import Head from "next/head";
 import {
   Box,
   Stack,
-  Heading,
-  Text,
   AspectRatio,
   Image,
-  Link,
   SimpleGrid,
   GridItem,
 } from "@chakra-ui/react";
 import { imageBuilder } from "../lib/sanity";
-import NextLink from 'next/link';
+import { Heading } from "components/Heading";
+import Link from "next/link";
 
 const Posts = ({ posts }: any) => {
   return (
@@ -26,25 +24,41 @@ const Posts = ({ posts }: any) => {
       </Head>
       <SimpleGrid templateColumns={"repeat(3, 1fr)"}>
         {posts.map((post: any) => (
-          <GridItem colSpan={[3, 1]} key={post._id} className="blog_article" pos="relative">
-            <AspectRatio
-              position="relative"
-              zIndex={0}
-              ratio={3 / 3}
-              height={[200, 400]}
+          <GridItem
+            colSpan={[3, 1]}
+            key={post._id}
+            className="blog_article"
+            pos="relative"
+            justifySelf={"stretch"}
+          >
+            <Link
+              href={`/blog/${post.slug.current}`}
+              className="cursor-pointer"
             >
-              <Image
-                src={imageBuilder(post.mainImage).url()!}
-                alt="blog post photo"
-                objectFit="cover"
-              />
-            </AspectRatio>
+              <AspectRatio
+                position="relative"
+                zIndex={0}
+                ratio={3 / 3}
+                height={[200, 400]}
+              >
+                <Image
+                  src={imageBuilder(post.mainImage).url()!}
+                  alt="blog post photo"
+                  objectFit="cover"
+                />
+              </AspectRatio>
+            </Link>
             <Stack pos="relative" zIndex={1} p={[4, 8]} align="flex-start">
-              <Heading size="lg">{post.title}</Heading>
-              <Text mt={2}>{post.subtitle}</Text>
-              <NextLink href={`/blog/${post.slug.current}`} legacyBehavior>
-                <Link py={2} _hover={{textDecor: "none"}} borderBottom="1px solid black">Read more →</Link>
-              </NextLink>
+              <Link href={`/blog/${post.slug.current}`}>
+                <Heading as="h3">{post.title}</Heading>
+              </Link>
+              <p className="py-2 flex-1">{post.subtitle}</p>
+              <Link
+                href={`/blog/${post.slug.current}`}
+                className="py-2 border-b-2 border-black hover:decoration-none"
+              >
+                Read more →
+              </Link>
             </Stack>
           </GridItem>
         ))}

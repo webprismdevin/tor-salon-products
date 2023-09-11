@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 
-const { withPlausibleProxy } = require('next-plausible')
+const { withPlausibleProxy } = require("next-plausible");
 
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true'
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
 });
 
 const nextConfig = {
@@ -24,7 +24,7 @@ const nextConfig = {
   },
   // compiler: { emotion: true },
   experimental: {
-    // appDir: true,
+    serverActions: true,
     urlImports: [
       "https://framer.com/m/",
       "https://framerusercontent.com/",
@@ -32,7 +32,7 @@ const nextConfig = {
       "https://fonts.googleapis.com/",
       "https://ga.jspm.io/",
       "https://jspm.dev/",
-      "https://cdn.jsdelivr.net/"
+      "https://cdn.jsdelivr.net/",
     ],
   },
   async redirects(){
@@ -65,4 +65,4 @@ const nextConfig = {
 },
 }
 
-module.exports = withPlausibleProxy()(withBundleAnalyzer(nextConfig))
+module.exports = withPlausibleProxy()(withBundleAnalyzer(nextConfig));

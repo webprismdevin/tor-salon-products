@@ -5,9 +5,6 @@ import {
   ColorModeScript,
   useToast,
 } from "@chakra-ui/react";
-//context
-import CartContext from "../lib/CartContext";
-import AuthContext from "../lib/auth-context";
 //next & react deps
 import Head from "next/head";
 import dynamic from "next/dynamic";
@@ -15,10 +12,9 @@ import Script from "next/script";
 import { useRouter } from "next/router";
 import { Suspense, useEffect, useState } from "react";
 //libs
-import { sanity } from "../lib/sanity";
+import { sanity, settingsQuery } from "../lib/sanity";
 import useSWR from "swr";
 import applyDiscountToCart from "../lib/Cart/applyDiscountToCart";
-import useUser from "../lib/useUser";
 //analytics
 import { Analytics } from "@vercel/analytics/react";
 import PlausibleProvider from "next-plausible";
@@ -26,8 +22,8 @@ import PlausibleProvider from "next-plausible";
 import { theme as defaultTheme, ThemeConfig } from "@chakra-ui/theme";
 import themeConfig from "../lib/theme";
 import "../styles/globals.css";
-import "@fontsource/raleway/400.css";
-import AnalyticsScripts from "components/AnalyticsScripts";
+import "../app/globals.css";
+import AnalyticsScripts from "../components/AnalyticsScripts";
 
 import {
   sendShopifyAnalytics,
@@ -37,12 +33,10 @@ import {
   type ShopifyPageViewPayload,
   ShopifyProvider,
 } from "@shopify/hydrogen-react";
+import Header from "../components/Header";
+import CartProvider from "../app/cart-provider";
 
-const Banner = dynamic(() => import("../components/Global/Banner"));
-const Navigation = dynamic(() => import("../components/Global/Navigation"));
-const Follow = dynamic(() => import("../components/Global/Follow"), {
-  ssr: false,
-});
+const Banner = dynamic(() => import("../components/Banner"));
 const Footer = dynamic(() => import("../components/Global/Footer"), {
   suspense: true,
 });
@@ -82,28 +76,9 @@ const customTheme: ThemeConfig = extendTheme(defaultTheme, themeConfig);
 
 export const sanityFetcher = (query: string) => sanity.fetch(query);
 
-const settingsQuery = `*[ _type == "settings" ][0]
-{ 
-  ...,
-  menu { 
-    mega_menu[]{
-      ...,
-      _type == 'collectionGroup' => @{ 
-        collectionLinks[]-> 
-      },
-      _type != 'collectionGroup' => @
-    },
-    links[]{
-      _type == 'reference' => @->,
-      _type != 'reference' => @,
-    }
-  } 
-}`;
-
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [cart, setCart] = useState<any>({ id: null, lines: [] });
-  const [user, setUser, token, setToken] = useUser();
   const { data: settings, error } = useSWR(settingsQuery, sanityFetcher);
   const toast = useToast();
 
@@ -120,10 +95,10 @@ function MyApp({ Component, pageProps }: AppProps) {
     analytics,
   };
 
-  useEffect(() => {     
+  useEffect(() => {
     const handleRouteChange = () => {
       sendPageView(analytics);
-      console.log("pageview sent")
+      console.log("pageview sent");
     };
 
     router.events.on("routeChangeComplete", handleRouteChange);
@@ -132,7 +107,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     if (!isInit) {
       isInit = true;
       sendPageView(analytics);
-      console.log("pageview sent")
+      console.log("pageview sent");
     }
 
     return () => {
@@ -181,40 +156,29 @@ function MyApp({ Component, pageProps }: AppProps) {
       >
         <PlausibleProvider domain="torsalonproducts.com">
           <ChakraProvider theme={customTheme}>
-            <AuthContext.Provider value={{ user, setUser, token, setToken }}>
-                <Head>
-                  <meta name="theme-color" content="#ffffff" />
-                  <link rel="shortcut icon" href="/favicon.png" />
-                  <meta
-                    name="facebook-domain-verification"
-                    content="bk02y72cdwvcwzina508gmb7xv87g6"
-                  />
-                </Head>
-                <CartContext.Provider value={{ cart, setCart }}>
-                  {router.pathname !== "/wholesale" && settings && (
-                    <Banner data={settings.banner} />
-                  )}
-                  <Navigation menu={settings?.menu} />
-                  <Component
-                    key={router.asPath}
-                    {...pagePropsWithAppAnalytics}
-                  />
-                </CartContext.Provider>
-                {/* <Follow /> */}
-                <Suspense fallback={"..."}>
-                  <Footer />
-                </Suspense>
-            </AuthContext.Provider>
-            <ColorModeScript initialColorMode={customTheme.initialColorMode} />
-            {process.env.NODE_ENV === "production" && (
-              <Script
-                id="tawk_tag"
-                strategy="lazyOnload"
-                dangerouslySetInnerHTML={{
-                  __html: `var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();`,
-                }}
+            <Head>
+              <meta name="theme-color" content="#ffffff" />
+              <link rel="shortcut icon" href="/favicon.png" />
+              <meta
+                name="facebook-domain-verification"
+                content="bk02y72cdwvcwzina508gmb7xv87g6"
               />
-            )}
+            </Head>
+            <CartProvider>
+              {settings && <Banner data={settings.banner} />}
+              {/* <Navigation menu={settings?.menu} /> */}
+              {settings?.menu && <Header menu={settings.menu} />}
+              <Component key={router.asPath} {...pagePropsWithAppAnalytics} />
+            </CartProvider>
+            <Footer />
+            <ColorModeScript initialColorMode={customTheme.initialColorMode} />
+            <Script
+              id="tawk_tag"
+              strategy="lazyOnload"
+              dangerouslySetInnerHTML={{
+                __html: `var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();`,
+              }}
+            />
             {settings && (
               <Suspense fallback={`...`}>
                 <MailingList settings={settings.emailPopup} />

@@ -1,12 +1,7 @@
-import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Box,
-} from "@chakra-ui/react";
-import type { PortableTextBlock } from "@portabletext/types";
+"use client";
+import { Disclosure } from "@headlessui/react";
+import { NavArrowDown } from "app/cbd/product/[handle]/Accordions";
+import RichContent from "components/RichContent";
 import PortableText from "../PortableText";
 
 type Props = {
@@ -15,22 +10,30 @@ type Props = {
 
 export default function AccordionBlock({ node }: Props) {
   return (
-    <Accordion allowToggle my={8}>
-      {node?.groups?.map((group:any) => (
-        <AccordionItem key={group._key}>
-          <h2>
-            <AccordionButton>
-              <Box flex="1" textAlign="left">
-                {group.title}
-              </Box>
-              <AccordionIcon />
-            </AccordionButton>
-          </h2>
-          <AccordionPanel pb={4}>
-            <PortableText blocks={group.body} />
-          </AccordionPanel>
-        </AccordionItem>
+    <>
+      {node?.groups?.map((group: any) => (
+        <div key={group._key} className="w-full text-left py-2 border-t-[1px] border-primary">
+          <Disclosure>
+            {({ open }) => (
+              <>
+                <Disclosure.Button className="py-2 w-full flex justify-between">
+                  <h2 className={`text-left ${open && "font-bold"}`}>{group.title}</h2>
+                  <div
+                    className={`${
+                      open ? "transform rotate-180" : ""
+                    } inline-block transition-transform duration-200`}
+                  >
+                    <NavArrowDown />
+                  </div>
+                </Disclosure.Button>
+                <Disclosure.Panel className="pb-2">
+                  <RichContent blocks={group.body} />
+                </Disclosure.Panel>
+              </>
+            )}
+          </Disclosure>
+        </div>
       ))}
-    </Accordion>
+    </>
   );
 }

@@ -1,6 +1,6 @@
 import { gql } from "graphql-request";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { adminGraphClient } from "lib/shopify-client";
+import { adminGraphClient } from "../../lib/shopify-client";
 
 type Data = {};
 

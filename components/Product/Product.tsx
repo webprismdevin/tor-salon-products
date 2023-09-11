@@ -13,8 +13,8 @@ import {
   ShopifyAddToCartPayload,
   ShopifyAnalyticsProduct,
 } from "@shopify/hydrogen-react";
-import CartContext from "lib/CartContext";
-import useAddToCart from "lib/useAddToCart";
+import CartContext from "../../lib/CartContext";
+import useAddToCart from "../../lib/useAddToCart";
 import NextLink from "next/link";
 import { useContext } from "react";
 import formatter from "../../lib/formatter";

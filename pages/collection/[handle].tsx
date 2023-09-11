@@ -1,20 +1,9 @@
 import Head from "next/head";
-import { gql, GraphQLClient } from "graphql-request";
-import {
-  Container,
-  Heading,
-  Text,
-  Box,
-  Stack,
-  SimpleGrid,
-  AspectRatio,
-  Image,
-  Flex,
-} from "@chakra-ui/react";
+import { gql } from "graphql-request";
 import getCollections from "../../lib/get-collections";
-import ProductFeature from "../../components/ProductFeature";
-import Product from "../../components/Product/Product";
 import { AnalyticsPageType } from "@shopify/hydrogen-react";
+import ProductCard from "../../components/Modules/ProductGrid_v2/ProductCard";
+import graphClient from "../../lib/graph-client";
 
 export default function CollectionPage({
   handle,
@@ -47,73 +36,22 @@ export default function CollectionPage({
           }}
         />
       </Head>
-      <Flex
-        flexDir={["column-reverse", "row"]}
-        bg={data.color?.value ? data.color.value : "white"}
-      >
-        <Box w={["full", "50%"]} px={[8, 20]} py={[10, 20]} pos="relative">
-          <Stack direction={["column"]} spacing={6} pos="relative" zIndex={1}>
-            <Heading as="h1">{data.title}</Heading>
-            <Stack direction={"row"} justify="flex-start" spacing={6}>
-              <Stack align={"center"} textAlign="center" w="120px">
-                <Image
-                  mb={2}
-                  boxSize={6}
-                  src={data.benefitOneIcon?.reference.image?.url}
-                  alt={data.benefitOneText?.value}
-                />
-                <Text>{data.benefitOneText?.value}</Text>
-              </Stack>
-              <Stack align={"center"} textAlign="center" w="120px">
-                <Image
-                  mb={2}
-                  boxSize={6}
-                  src={data.benefitTwoIcon?.reference.image?.url}
-                  alt={data.benefitTwoText?.value}
-                />
-                <Text>{data.benefitTwoText?.value}</Text>
-              </Stack>
-              <Stack align={"center"} textAlign="center" w="120px">
-                <Image
-                  mb={2}
-                  boxSize={6}
-                  src={data.benefitThreeIcon?.reference.image?.url}
-                  alt={data.benefitThreeText?.value}
-                />
-                <Text>{data.benefitThreeText?.value}</Text>
-              </Stack>
-            </Stack>
-            <Box
-              maxW={600}
-              dangerouslySetInnerHTML={{
-                __html: data.descriptionHtml,
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-12 place-items-center mx-auto p-4 md:p-12">
+        {data.products.edges.map((p: any) => (
+          <div key={p.node.id}>
+            <ProductCard
+              product={{
+                gid: p.node.id,
+                title: p.node.title,
+                featuredImage: p.node.images.edges[0].node.url,
+                price: p.node.priceRange.minVariantPrice.amount,
+                handle: p.node.handle,
+                variantId: p.node.variants.edges[0].node.id,
               }}
             />
-          </Stack>
-        </Box>
-
-        <AspectRatio
-          ratio={[2 / 1]}
-          w={["full", "50%"]}
-          maxH={["200px", null, "100%"]}
-        >
-          <Image src={data.image?.url} alt="" />
-        </AspectRatio>
-      </Flex>
-      {data.collectionFeature && (
-        <ProductFeature reference={data.collectionFeature.reference} />
-      )}
-      <Container maxW="container.xl" pt={10} pb={20}>
-        <SimpleGrid
-          templateColumns={["repeat(1, 1fr)", null, null, "repeat(3, 1fr)"]}
-          w="full"
-          gap={12}
-        >
-          {data.products.edges.map((p: any) => (
-            <Product product={p} key={p.node.id} analytics={analytics} />
-          ))}
-        </SimpleGrid>
-      </Container>
+          </div>
+        ))}
+      </div>
     </>
   );
 }
@@ -132,19 +70,7 @@ export async function getStaticPaths() {
 export async function getStaticProps(context: any) {
   const handle = context.params.handle;
 
-  const graphQLClient = new GraphQLClient(
-    process.env.NEXT_PUBLIC_SHOPIFY_URL!,
-    {
-      headers: {
-        "X-Shopify-Storefront-Access-Token":
-          process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN!,
-      },
-    }
-  );
-
-  console.log(handle);
-
-  const res: any = await graphQLClient.request(collection_query, {
+  const res: any = await graphClient.request(collection_query, {
     handle: handle,
   });
 
@@ -176,66 +102,6 @@ export const collection_query = gql`
       descriptionHtml
       image {
         url
-      }
-      benefitOneIcon: metafield(
-        namespace: "collection"
-        key: "benefit_1_icon"
-      ) {
-        reference {
-          __typename
-          ... on MediaImage {
-            image {
-              url
-            }
-          }
-        }
-      }
-      benefitOneText: metafield(
-        namespace: "collection"
-        key: "benefit_1_text"
-      ) {
-        value
-      }
-      benefitTwoIcon: metafield(
-        namespace: "collection"
-        key: "benefit_2_icon"
-      ) {
-        reference {
-          __typename
-          ... on MediaImage {
-            image {
-              url
-            }
-          }
-        }
-      }
-      benefitTwoText: metafield(
-        namespace: "collection"
-        key: "benefit_2_text"
-      ) {
-        value
-      }
-      benefitThreeIcon: metafield(
-        namespace: "collection"
-        key: "benefit_3_icon"
-      ) {
-        reference {
-          __typename
-          ... on MediaImage {
-            image {
-              url
-            }
-          }
-        }
-      }
-      benefitThreeText: metafield(
-        namespace: "collection"
-        key: "benefit_3_text"
-      ) {
-        value
-      }
-      color: metafield(namespace: "collection", key: "color") {
-        value
       }
       products(first: 100) {
         edges {
@@ -275,4 +141,5 @@ export const collection_query = gql`
         }
       }
     }
-  }`;
+  }
+`;

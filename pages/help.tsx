@@ -1,9 +1,7 @@
 import {
   Box,
-  Heading,
   Text,
   Container,
-  Button,
   Accordion,
   AccordionItem,
   AccordionButton,
@@ -11,10 +9,9 @@ import {
   AccordionIcon,
   Link,
 } from "@chakra-ui/react";
-import groq from "@sanity/client";
 import { sanity } from "../lib/sanity";
 import Head from "next/head";
-import Modules from "components/Modules/Modules";
+import Modules from "../components/Modules/Modules";
 
 export default function FAQ({ data }: any) {
   if (!data) return null;
@@ -30,11 +27,6 @@ export default function FAQ({ data }: any) {
       </Head>
       <Box bg="brand.platinum" color="black" w="full">
         <Modules modules={data.page.modules} />
-        {/* <Container maxW="container.xl" py={20} centerContent>
-            <Heading size="2xl">{data.heading}</Heading>
-            <Text my={4} textAlign="center">{data.subheading}</Text>
-            <Button onClick={() => window.Tawk_API.maximize()}>Let&apos;s Chat</Button>
-          </Container> */}
       </Box>
       <Box w="full" py={20}>
         <Container maxW="container.md">

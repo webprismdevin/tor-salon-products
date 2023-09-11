@@ -1,24 +1,34 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { wrap } from "@popmotion/popcorn";
 import { useState } from "react";
-import { imageBuilder } from "lib/sanity";
+import { imageBuilder } from "../../lib/sanity";
 import Image from "next/image";
 import Link from "next/link";
 
-export interface Slide {
+export interface SlideProps {
   id: string;
   image: any;
-  image2?: any;
+  // image2?: any;
   title: string;
   caption: string;
   cta: {
     text: string;
     to: string;
   };
+  colorTheme: {
+    background: {
+      hex: string;
+    };
+    text: {
+      hex: string;
+    };
+  };
+  contentJustify?: "flex-start" | "center" | "flex-end";
+  contentAlign?: "flex-start" | "center" | "flex-end";
 }
 
 export default function Slides({ data }: { data: any }) {
-  const { slides }: { slides: Slide[] } = data;
+  const { slides }: { slides: SlideProps[] } = data;
 
   const [[page, direction], setPage] = useState([0, 0]);
   const index = wrap(0, slides.length, page);
@@ -26,8 +36,6 @@ export default function Slides({ data }: { data: any }) {
   const paginate = (newDirection: number) => {
     setPage([page + newDirection, newDirection]);
   };
-
-  // return <div>Send data</div>;
 
   return (
     <motion.div
@@ -43,9 +51,7 @@ export default function Slides({ data }: { data: any }) {
           transition={{ ease: [0.17, 0.67, 0.83, 0.67] }}
           custom={direction}
           key={page}
-          className={`relative grid h-full w-full grid-cols-1 bg-white ${
-            slides[index].image2 ? "lg:grid-cols-2" : ""
-          }`}
+          className={`relative grid h-full w-full grid-cols-1 bg-white`}
         >
           <div className="absolute z-10 grid h-full w-full place-items-center px-12">
             <div className="text-center">
@@ -61,9 +67,7 @@ export default function Slides({ data }: { data: any }) {
             </div>
           </div>
           <div
-            className={`h-full min-w-full max-w-full overflow-hidden ${
-              slides[index].image2 ? "lg:max-w-1/2" : ""
-            }`}
+            className={`h-full min-w-full max-w-full overflow-hidden`}
           >
             <Image
               src={imageBuilder(slides[index].image)
@@ -73,31 +77,11 @@ export default function Slides({ data }: { data: any }) {
                 .quality(80)
                 .url()}
               fill
-              sizes={slides[index].image2 ? "50vw" : "100vw"}
-              className={`min-h-full min-w-full object-cover ${
-                slides[index].image2 ? "" : "lg:min-w-full"
-              }`}
+              sizes={"100vw"}
+              className={`min-h-full min-w-full object-cover`}
               alt={slides[index].image?.alt}
             />
           </div>
-          {slides[index].image2 && (
-            <div className="max-w-1/2 hidden h-full overflow-hidden lg:block">
-              <Image
-                src={imageBuilder(slides[index].image2)
-                  .width(1200)
-                  .height(1200)
-                  .format("webp")
-                  .quality(80)
-                  .url()}
-                fill
-                sizes={"50vw"}
-                height={slides[index].image2.height}
-                width={slides[index].image2.width}
-                className="min-h-full object-cover"
-                alt={slides[index].image2?.alt}
-              />
-            </div>
-          )}
         </motion.div>
       </AnimatePresence>
       {/* back arrow */}

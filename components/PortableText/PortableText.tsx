@@ -1,3 +1,4 @@
+"use client";
 import BlockContent from "@sanity/block-content-to-react";
 // import type { Block as SanityBlock } from "@sanity/types";
 import AccordionBlock from "./Blocks/Accordion";
@@ -42,10 +43,10 @@ export default function PortableText({
   return (
     <BlockContent
       blocks={blocks}
-      // className={clsx('portableText', className)}
       renderContainerOnSingleChild
       projectId="c53k64ci"
       dataset="production"
+      
       serializers={{
         // Lists
         // list: ListBlock,

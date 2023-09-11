@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Flex,
   Box,
@@ -15,13 +17,11 @@ import {
   DrawerContent,
   DrawerCloseButton,
   Stack,
-  useToast,
   HStack,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import React, { useEffect, useContext, useState } from "react";
-import { AiOutlineShopping, AiOutlineShoppingCart } from "react-icons/ai";
-import CartContext from "../../lib/CartContext";
+import { AiOutlineShoppingCart } from "react-icons/ai";
+import { CartContext } from "../../app/cart-provider";
 import formatter from "../../lib/formatter";
 import FreeShippingProgress from "./FreeShipping";
 import { CartLineItem } from "../Cart/CartLineItem";
@@ -39,8 +39,6 @@ import {
   SiVisa,
 } from "react-icons/si";
 import { usePlausible } from "next-plausible";
-import AuthContext from "lib/auth-context";
-import { createHash } from "crypto";
 
 declare interface LineItemType {
   node: {
@@ -73,14 +71,12 @@ export type CartResponse = {
 };
 
 export type RemoveItemCartResponse = {
-  cartLinesRemove: CartResponse
+  cartLinesRemove: CartResponse;
 };
 
 const Cart = ({ color }: { color?: string }) => {
-  const { user } = useContext(AuthContext);
   const { cart, setCart } = useContext(CartContext);
   const [cartQty, setCartQty] = useState<number | null>(null);
-  const router = useRouter();
   const plausible = usePlausible();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -95,6 +91,7 @@ const Cart = ({ color }: { color?: string }) => {
     }
 
     if (cart.lines.length === 1) {
+      // @ts-ignore
       setCartQty(cart.lines[0].node.quantity);
     }
   }, [cart]);
@@ -184,37 +181,15 @@ const Cart = ({ color }: { color?: string }) => {
 
   return (
     <>
-      <Box
+      <div
         onClick={onOpen}
-        style={{
-          cursor: "pointer",
-          display: "inline-flex",
-          alignItems: "flex-start",
-          transition: "opacity 200ms ease",
-        }}
-        _hover={{
-          opacity: 0.4,
-        }}
-        transition={"opacity 200ms ease"}
+        className="cursor-pointer inline-flex items-start flex-start transition-opacity transition-duration-200 hover:opacity-40"
       >
-        <Icon
-          as={AiOutlineShopping}
-          style={{
-            display: "inline",
-          }}
-          boxSize={6}
-          color={color ? color : "black"}
-        />
-        <Text
-          fontSize={12}
-          mt={["-8px"]}
-          style={{
-            display: "inline",
-          }}
-        >
+        <div className="inline">Cart</div>
+        <div className="inline -mt-[8px] text-sm">
           {cart.lines.length > 0 && cartQty}
-        </Text>
-      </Box>
+        </div>
+      </div>
       <Drawer isOpen={isOpen} placement="right" onClose={onClose} size={"md"}>
         <DrawerOverlay />
         <DrawerContent>
@@ -229,15 +204,13 @@ const Cart = ({ color }: { color?: string }) => {
                 Your Cart
               </Text>
               <Divider />
-              {!router.asPath.includes("/offer") && (
-                <>
-                  <Text fontSize={"md"}>
-                    Free U.S. shipping on orders of $100+
-                  </Text>
-                  <FreeShippingProgress cart={cart} />
-                  <Divider />
-                </>
-              )}
+              <>
+                <Text fontSize={"md"}>
+                  Free U.S. shipping on orders of $100+
+                </Text>
+                <FreeShippingProgress cart={cart} />
+                <Divider />
+              </>
             </Stack>
           </DrawerHeader>
           <DrawerBody pl={[4]} pr={[4, 6]}>
@@ -282,6 +255,7 @@ const Cart = ({ color }: { color?: string }) => {
               <Button
                 fontSize={"2xl"}
                 size="lg"
+                borderRadius={0}
                 onClick={handleCheckout}
                 w="full"
               >
