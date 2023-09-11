@@ -45,18 +45,6 @@ const MobileMenu = ({ menu }: MenuProps) => {
     <>
       <div className="flex gap-4 md:hidden" onClick={menuOnOpen}>
         Menu
-        {/* <Icon
-          as={AiOutlineMenu}
-          onClick={menuOnOpen}
-          style={{
-            cursor: "pointer",
-          }}
-          boxSize={[6]}
-          _hover={{
-            opacity: 0.4,
-          }}
-          transition={"opacity 200ms ease"}
-        /> */}
       </div>
       <Drawer
         isOpen={menuIsOpen}

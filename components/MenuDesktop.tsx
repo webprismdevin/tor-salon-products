@@ -1,4 +1,3 @@
-import { Header } from "next/dist/lib/load-custom-routes";
 import Link from "next/link";
 import { Suspense } from "react";
 import { MenuProps } from "./Header";

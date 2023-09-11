@@ -3,14 +3,12 @@ import Head from "next/head";
 import {
   Box,
   Stack,
-  Text,
   AspectRatio,
   Image,
   SimpleGrid,
   GridItem,
 } from "@chakra-ui/react";
 import { imageBuilder } from "../lib/sanity";
-import NextLink from "next/link";
 import { Heading } from "components/Heading";
 import Link from "next/link";
 

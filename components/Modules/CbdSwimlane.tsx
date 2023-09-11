@@ -16,8 +16,6 @@ export default function CbdSwimlane({ data }: any) {
   const { collection, title } = data;
   const { products } = collection;
 
-  console.log(products)
-
   return (
     <div
       className="flex flex-col gap-2 w-full py-4 md:py-8 text-center md:text-left no-scrollbar"
