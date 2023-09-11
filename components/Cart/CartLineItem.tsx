@@ -1,25 +1,28 @@
 import {
-  Box, Text,
-  Button, Image,
+  Box,
+  Text,
+  Button,
+  Image,
   useNumberInput,
   HStack,
   Input,
   AspectRatio,
   CloseButton,
-  Stack
+  Stack,
 } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import updateCartItemQty from "../../lib/Cart/updateCartItemQty";
-import CartContext from "../../lib/CartContext";
+import { CartContext } from "../../app/cart-provider";
 import formatter from "../../lib/formatter";
 import { CartResponse } from "./Cart";
 
 export type UpdateItemQtyCartResponse = {
   cartLinesUpdate: CartResponse;
-}
+};
 
 export function CartLineItem({
-  product, removeItem,
+  product,
+  removeItem,
 }: {
   product: any;
   removeItem: any;
@@ -35,7 +38,8 @@ export function CartLineItem({
         <Image
           borderRadius={6}
           src={product.node.merchandise.image?.url}
-          alt={product.node.merchandise.product.title} />
+          alt={product.node.merchandise.product.title}
+        />
       </AspectRatio>
       <Stack spacing={6} flexGrow={1}>
         <Stack direction="row">
@@ -43,7 +47,9 @@ export function CartLineItem({
             <Text fontSize={[16, 18]} fontWeight="bold">
               {product.node.merchandise.product.title}
             </Text>
-            {product.node.sellingPlanAllocation && <Text>{product.node.sellingPlanAllocation.sellingPlan.name}</Text>}
+            {product.node.sellingPlanAllocation && (
+              <Text>{product.node.sellingPlanAllocation.sellingPlan.name}</Text>
+            )}
             {product.node.merchandise.title !== "Default Title" && (
               <Text mt={1} fontSize={[14, 16]}>
                 {product.node.merchandise.title}
@@ -53,7 +59,8 @@ export function CartLineItem({
           <CloseButton
             cursor={"pointer"}
             userSelect="none"
-            onClick={() => removeItem(product.node.id)} />
+            onClick={() => removeItem(product.node.id)}
+          />
         </Stack>
         <Stack direction="row" justify={"space-between"}>
           <ItemQty product={product} />
@@ -65,12 +72,13 @@ export function CartLineItem({
     </Stack>
   );
 }
-function ItemQty({ product }: { product: any; }) {
-  const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
-    step: 1,
-    min: 0,
-    defaultValue: product.node.quantity,
-  });
+function ItemQty({ product }: { product: any }) {
+  const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
+    useNumberInput({
+      step: 1,
+      min: 0,
+      defaultValue: product.node.quantity,
+    });
   const { cart, setCart } = useContext(CartContext);
 
   const inc = getIncrementButtonProps();
@@ -78,9 +86,13 @@ function ItemQty({ product }: { product: any; }) {
   const input = getInputProps({ readOnly: false });
 
   async function handleQtyUpdate(newQty: string) {
-    const resp = await updateCartItemQty(cart.id, product.node.id, parseInt(newQty)) as UpdateItemQtyCartResponse;
+    const resp = (await updateCartItemQty(
+      cart.id,
+      product.node.id,
+      parseInt(newQty)
+    )) as UpdateItemQtyCartResponse;
 
-    console.log(resp.cartLinesUpdate)
+    console.log(resp.cartLinesUpdate);
 
     setCart({
       ...cart,
@@ -101,7 +113,8 @@ function ItemQty({ product }: { product: any; }) {
         textAlign="center"
         w={[10]}
         {...input}
-        onBlur={(e) => handleQtyUpdate(e.target.value)} />
+        onBlur={(e) => handleQtyUpdate(e.target.value)}
+      />
       <Button size="sm" fontSize="md" {...inc} variant="ghost">
         +
       </Button>
