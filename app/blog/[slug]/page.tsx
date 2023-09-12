@@ -27,22 +27,6 @@ export async function generateMetadata({
 export default async function Page({ params }: { params: { slug: string } }) {
   const data = await getBlogPost(params.slug);
 
-  async function addSubscriber(formData: FormData) {
-    "use server";
-
-    const email = formData.get("email");
-
-    const response = await fetch("/api/addsubscriber", {
-      method: "POST",
-      body: JSON.stringify({
-        email,
-      }),
-    });
-
-    console.log(response)
-
-  }
-
   return (
     <div>
       <Image
