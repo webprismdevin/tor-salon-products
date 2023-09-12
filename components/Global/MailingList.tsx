@@ -104,7 +104,7 @@ export default function MailingList({ settings }: MailingListSettings) {
       color="white"
       animate={controls}
       variants={animationVariants}
-      maxW={["320px", "640px"]}
+      maxW={["100%", "640px"]}
     >
       <MotionBox
         whileHover={{

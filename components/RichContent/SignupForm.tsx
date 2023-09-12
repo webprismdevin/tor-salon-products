@@ -1,13 +1,14 @@
-"use client"
+"use client";
 import { Button } from "components/Button";
-import { Heading } from "components/Heading";
+import { usePlausible } from "next-plausible";
 import { FormEvent, useState } from "react";
 
-export default function SignupForm(props: any) {
+export default function SignupForm({ children }: { children: any }) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<
     "IDLE" | "LOADING" | "ERROR" | "SUCCESS"
   >("IDLE");
+  const plausible = usePlausible();
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -27,6 +28,7 @@ export default function SignupForm(props: any) {
     console.log(data.data);
 
     if (data.data.customerCreate?.userErrors?.length === 0) {
+      plausible("Subscribe", { props: { method: "blog" } });
       setStatus("SUCCESS");
       setEmail("");
       setTimeout(() => {
@@ -48,12 +50,11 @@ export default function SignupForm(props: any) {
 
   return (
     <div className="text-black px-6 py-6 mb-4 grid relative bg-black/10">
-      <Heading as="h3">{props.value.title}</Heading>
-      <p>{props.value.content}</p>
       <form onSubmit={onSubmit}>
+        <>{children}</>
         <div className="flex">
           <input
-            placeholder={props.value.placeholder}
+            placeholder={"Enter your email address"}
             className="w-full py-2 px-3 border-b-2 border-black mt-2 bg-transparent focus:bg-white"
             type="email"
             name="email"
