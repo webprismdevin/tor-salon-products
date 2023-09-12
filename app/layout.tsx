@@ -20,6 +20,8 @@ async function getData() {
   return res;
 }
 
+export const revalidate = 600;
+
 export default async function RootLayout({
   children,
 }: {
