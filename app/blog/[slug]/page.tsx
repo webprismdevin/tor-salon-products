@@ -37,7 +37,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
         className="w-full aspect-[16/3]"
         alt=""
       />
-      <div className="max-w-prose mx-auto grid gap-8 mt-8 md:mt-12 lg:mt-16">
+      <div className="max-w-prose mx-auto grid gap-8 mt-8 px-2 md:px-0 md:mt-12 lg:mt-16">
         <Heading as="h1" size="h3" className="text-center">
           {data.title}
         </Heading>

@@ -1,5 +1,7 @@
 import { PortableText, PortableTextComponents } from "@portabletext/react";
+import { Heading } from "components/Heading";
 import AccordionBlock from "components/PortableText/Blocks/Accordion";
+import SignupForm from "./SignupForm";
 
 export default function RichContent({ blocks }: any) {
   return <PortableText value={blocks} components={richContentComponents} />;
@@ -72,9 +74,14 @@ export const richContentComponents: PortableTextComponents = {
         <div>{props.value.text}</div>
       </div>
     ),
-    // signupForm: (props: any) => {
-    //   return <SignupForm {...props} />;
-    // },
+    signupForm: (props: any) => {
+      return (
+        <SignupForm>
+          <Heading as="h3">{props.value.title}</Heading>
+          <p>{props.value.content}</p>
+        </SignupForm>
+      );
+    },
   },
 };
 

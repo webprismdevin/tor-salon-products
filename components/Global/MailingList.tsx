@@ -13,7 +13,6 @@ import {
   Select,
 } from "@chakra-ui/react";
 import { motion, useAnimation } from "framer-motion";
-import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiArrowRight } from "react-icons/fi";
 import { usePlausible } from "next-plausible";
@@ -35,10 +34,7 @@ export default function MailingList({ settings }: MailingListSettings) {
   const [email, setEmail] = useState("");
   const [hairType, setHairType] = useState("");
   const [formStatus, setStatus] = useState("clean");
-  const pathname = usePathname();
   const plausible = usePlausible();
-
-  const { hiddenRoutes } = settings;
 
   useEffect(() => {
     if (!popupShown) controls.start("initial");
@@ -108,7 +104,7 @@ export default function MailingList({ settings }: MailingListSettings) {
       color="white"
       animate={controls}
       variants={animationVariants}
-      maxW={["320px", "640px"]}
+      maxW={["100%", "640px"]}
     >
       <MotionBox
         whileHover={{
