@@ -85,7 +85,7 @@ const ProductPage = ({
 
     const variant = product.variants.edges.find(
       (edge: any) => edge.node.availableForSale === true
-    ).node;
+    )?.node;
 
     return variant ?? null;
   });
@@ -173,7 +173,7 @@ const ProductPage = ({
         <meta property="product:condition" content="new" />
         <meta
           property="product:price:amount"
-          content={activeVariant.priceV2.amount}
+          content={activeVariant?.priceV2.amount}
         />
         <meta property="product:price:currency" content="USD" />
         <meta property="product:catalog_id" content="711750850270833" />
@@ -208,18 +208,18 @@ const ProductPage = ({
               <Stack>
                 {subscriptionPlan === "" ? (
                   <Heading fontWeight={600} size={["lg"]} textAlign="right">
-                    {formatter.format(parseInt(activeVariant.priceV2.amount))}
+                    {formatter.format(parseInt(activeVariant?.priceV2.amount))}
                   </Heading>
                 ) : (
                   <Heading fontWeight={600} size={["lg"]} textAlign="right">
                     <span
                       style={{ textDecoration: "line-through", opacity: 0.6 }}
                     >
-                      {formatter.format(parseInt(activeVariant.priceV2.amount))}
+                      {formatter.format(parseInt(activeVariant?.priceV2.amount))}
                     </span>{" "}
                     <span style={{ fontWeight: 400 }}>
                       {formatter.format(
-                        parseInt(activeVariant.priceV2.amount) * 0.95
+                        parseInt(activeVariant?.priceV2.amount) * 0.95
                       )}
                     </span>
                   </Heading>
@@ -235,7 +235,7 @@ const ProductPage = ({
             {variants.length > 1 && (
               <Select
                 minW={"200px"}
-                value={activeVariant.id}
+                value={activeVariant?.id}
                 onChange={(e) => {
                   handleActiveVariantChange(e.target.value);
                 }}
