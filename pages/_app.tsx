@@ -172,18 +172,18 @@ function MyApp({ Component, pageProps }: AppProps) {
             </CartProvider>
             <Footer />
             <ColorModeScript initialColorMode={customTheme.initialColorMode} />
-            <Script
+            {/* <Script
               strategy="lazyOnload"
               id="shopify-chat-client"
               src={`https://cdn.shopify.com/shopifycloud/shopify_chat/storefront/shopifyChatV1.js?api_env=production&amp;c=black&amp;i=chat_bubble&amp;p=bottom_right&amp;s=icon&amp;shop_id=GyYJbarWb0rkz6DeTBx77Epcx9tSOCyWSRmR3-AgxX8&amp;t=chat_with_us&amp;v=1&amp;vp=lowest&amp;shop=tor-salon-products.myshopify.com`}
-            />
-            {/* <Script
+            /> */}
+            <Script
               id="tawk_tag"
               strategy="lazyOnload"
               dangerouslySetInnerHTML={{
                 __html: `var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();`,
               }}
-            /> */}
+            />
             {settings && (
               <Suspense fallback={`...`}>
                 <MailingList settings={settings.emailPopup} />

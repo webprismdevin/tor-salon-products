@@ -23,6 +23,9 @@ export default function Header({ menu }: HeaderProps) {
         TOR
       </Link>
       <div className="col-span-1 flex justify-end items-center gap-4">
+        <div>
+          <SearchV2 />
+        </div>
         <a
           href="https://account.torsalonproducts.com"
           target="_blank"
@@ -33,6 +36,54 @@ export default function Header({ menu }: HeaderProps) {
         <Cart />
       </div>
     </div>
+  );
+}
+
+export function SearchV2() {
+  return (
+    <>
+      <div className="relative text-gray-600 focus-within:text-gray-400">
+        <span className="absolute inset-y-0 left-0 flex items-center pl-2">
+          <button
+            type="submit"
+            className="p-1 focus:outline-none focus:shadow-outline"
+          >
+            <IconSearch />
+          </button>
+        </span>
+        <form action="/search">
+          <input
+            type="search"
+            name="q"
+            className="py-2 text-sm text-white bg-transparent rounded-md pl-10 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
+            placeholder="Search..."
+            autoComplete="off"
+          />
+        </form>
+      </div>
+    </>
+  );
+}
+
+export function IconSearch() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24px"
+      height="24px"
+      viewBox="0 0 24 24"
+      fill="none"
+      strokeWidth="1.5"
+      color="#000000"
+    >
+      <path
+        stroke="#000000"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="m17 17 4 4M3 11a8 8 0 1 0 16 0 8 8 0 0 0-16 0Z"
+      ></path>
+    </svg>
   );
 }
 

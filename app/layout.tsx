@@ -48,11 +48,6 @@ export default async function RootLayout({
           </body>
         </CartProvider>
       </ThemeProvider>
-      <Script
-        strategy="lazyOnload"
-        id="shopify-chat-client"
-        src={`https://cdn.shopify.com/shopifycloud/shopify_chat/storefront/shopifyChatV1.js?api_env=production&amp;c=black&amp;i=chat_bubble&amp;p=bottom_right&amp;s=icon&amp;shop_id=GyYJbarWb0rkz6DeTBx77Epcx9tSOCyWSRmR3-AgxX8&amp;t=chat_with_us&amp;v=1&amp;vp=lowest&amp;shop=tor-salon-products.myshopify.com`}
-      />
     </html>
   );
 }
