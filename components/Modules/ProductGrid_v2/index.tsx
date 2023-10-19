@@ -1,18 +1,25 @@
+"use client"
 import { Heading } from "../../Heading";
-import ProductCard from "./ProductCard";
+import ProductCard, { ProductCardProps } from "./ProductCard";
 
 export type ProductGridProps = {
-  data: any;
+  data: {
+    caption?: string;
+    title: string;
+    products: [ProductCardProps];
+  };
 };
 
 export default function ProductGrid({ data }: ProductGridProps) {
   return (
     <div className="grid col-span-2 md:grid-cols-3 gap-4 md:gap-12 place-items-center mx-auto p-4 md:p-12">
       <div className="col-span-2 md:col-span-3 w-full text-left grid gap-4">
-        <p>{data.caption}</p>
+        <p>{data?.caption}</p>
         <Heading as="h2">{data.title}</Heading>
       </div>
       {data.products.map((product: any) => {
+        console.log(product)
+
         return (
           <ProductCard
             key={product.gid}
