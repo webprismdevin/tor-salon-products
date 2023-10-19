@@ -7,11 +7,17 @@ import graphClient from "lib/graph-client";
 async function searchProducts(query: string) {
   if (!query) return undefined;
 
-  const response = await graphClient.request(GRAPHQL_QUERY, {
+  const response:SearchResults = await graphClient.request(GRAPHQL_QUERY, {
     searchTerm: query,
   });
 
   return response;
+}
+
+type SearchResults = {
+  products: {
+    edges: [any]
+  }
 }
 
 export default async function Page({ searchParams }: { searchParams: any }) {
