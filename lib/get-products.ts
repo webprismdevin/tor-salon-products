@@ -79,8 +79,6 @@ export default async function getProducts() {
     throw Error("Unable to retrieve Shopify Products. Please check logs");
   }
 
-  console.log(res);
-
   return res;
 }
 

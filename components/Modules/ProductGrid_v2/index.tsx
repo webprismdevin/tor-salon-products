@@ -18,8 +18,6 @@ export default function ProductGrid({ data }: ProductGridProps) {
         <Heading as="h2">{data.title}</Heading>
       </div>
       {data.products.map((product: any) => {
-        console.log(product)
-
         return (
           <ProductCard
             key={product.gid}

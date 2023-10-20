@@ -84,7 +84,5 @@ export default async function updateCartItemQty(
 
   const response = await graphClient.request(mutation, variables);
 
-  console.log(response)
-
   return response;
 }

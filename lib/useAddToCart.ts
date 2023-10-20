@@ -42,8 +42,6 @@ export default function useAddToCart() {
       status: "dirty",
       lines: response.cartLinesAdd.cart.lines,
     });
-
-    console.log(response.cartLinesAdd.cart.lines);
   };
 
   const instantCheckout = async (variantId: string) => {

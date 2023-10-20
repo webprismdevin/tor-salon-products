@@ -60,7 +60,6 @@ const Product = ({
         payload,
       });
 
-      console.log("add to cart sent", payload);
     }
 
     addItemToCart(prod.variants.edges[0].node.id, 1, "");
