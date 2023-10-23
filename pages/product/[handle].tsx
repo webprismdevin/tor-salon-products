@@ -191,15 +191,7 @@ const ProductPage = ({
             <Stack direction={"row"} justify={"space-between"}>
               <div>
                 <div className="h-6 overflow-hidden">
-                <div className="loox-rating" data-fetch data-id={extractGID(product.id)}></div>
-                  {/* <RatingStar
-                    id={product.id.split("/")[4]}
-                    rating={product.avg_rating.value}
-                    size={16}
-                  />
-                  <span className="text-gray-400">
-                    [{product.bottomline.total_review}]
-                  </span> */}
+                  <div className="loox-rating" data-fetch data-id={extractGID(product.id)} />
                 </div>
                 <Heading maxW={[480]}>{product.title}</Heading>
               </div>
