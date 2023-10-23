@@ -191,14 +191,15 @@ const ProductPage = ({
             <Stack direction={"row"} justify={"space-between"}>
               <div>
                 <div className="h-6 overflow-hidden">
-                  <RatingStar
+                <div className="loox-rating" data-fetch data-id={extractGID(product.id)}></div>
+                  {/* <RatingStar
                     id={product.id.split("/")[4]}
-                    rating={reviews.bottomline.average_score}
+                    rating={product.avg_rating.value}
                     size={16}
                   />
                   <span className="text-gray-400">
-                    [{reviews.bottomline.total_review}]
-                  </span>
+                    [{product.bottomline.total_review}]
+                  </span> */}
                 </div>
                 <Heading maxW={[480]}>{product.title}</Heading>
               </div>
@@ -360,13 +361,17 @@ const ProductPage = ({
       </SimpleGrid>
       {pageModules && <Modules modules={pageModules} />}
       <div
-        className="w-full"
+        className="w-full container mx-auto"
         key={product.id}
         id="looxReviews"
         data-product-id={extractGID(product.id)}
       ></div>
-      <Script key={product.id} src="https://loox.io/widget/loox.js?shop=tor-salon-products.myshopify.com" />
-      {/* <ReviewSection reviews={reviews} /> */}
+      <Script
+        id={product.id}
+        strategy="lazyOnload"
+        key={product.id}
+        src="https://loox.io/widget/loox.js?shop=tor-salon-products.myshopify.com"
+      />
     </>
   );
 };
@@ -588,6 +593,12 @@ export const getStaticProps: GetStaticProps = async (context) => {
       description
       tags
       productType
+      avg_rating: metafield(namespace: "loox", key: "avg_rating") {
+        value
+      }
+      num_reviews: metafield(namespace: "loox", key: "num_reviews") {
+        value
+      }
       sellingPlanGroups(first: 100) {
         edges {
           node {
@@ -758,11 +769,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
     throw Error("Unable to retrieve product. Please check logs");
   }
 
-  const reviews = await fetch(
-    `https://api-cdn.yotpo.com/v1/widget/bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l/products/${extractGID(
-      res.product.id
-    )}/reviews.json`
-  ).then((res) => res.json());
+  // const reviews = await fetch(
+  //   `https://api-cdn.yotpo.com/v1/widget/bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l/products/${extractGID(
+  //     res.product.id
+  //   )}/reviews.json`
+  // ).then((res) => res.json());
 
   const productAnalytics: ShopifyAnalyticsProduct = {
     productGid: res.product.id,
@@ -784,7 +795,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       modules: modules.modules,
       handle,
       key: handle,
-      reviews: reviews.response,
+      // reviews: reviews.response,
       product: res.product,
     },
     revalidate: 10,
