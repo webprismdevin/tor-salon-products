@@ -193,6 +193,12 @@ function MyApp({ Component, pageProps }: AppProps) {
         </PlausibleProvider>
         <AnalyticsScripts />
         <Analytics />
+        <Script
+          id={"looxScript"}
+          strategy="lazyOnload"
+          key={router.asPath}
+          src="https://loox.io/widget/loox.js?shop=tor-salon-products.myshopify.com"
+        />
       </ShopifyProvider>
     </>
   );

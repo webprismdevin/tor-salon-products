@@ -360,12 +360,12 @@ const ProductPage = ({
         id="looxReviews"
         data-product-id={extractGID(product.id)}
       ></div>
-      <Script
+      {/* <Script
         id={product.id}
         strategy="lazyOnload"
         key={product.id}
         src="https://loox.io/widget/loox.js?shop=tor-salon-products.myshopify.com"
-      />
+      /> */}
     </>
   );
 };

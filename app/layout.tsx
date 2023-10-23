@@ -48,6 +48,11 @@ export default async function RootLayout({
           </body>
         </CartProvider>
       </ThemeProvider>
+      <Script
+        id={"looxScript"}
+        strategy="lazyOnload"
+        src="https://loox.io/widget/loox.js?shop=tor-salon-products.myshopify.com"
+      />
     </html>
   );
 }

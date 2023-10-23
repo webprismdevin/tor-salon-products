@@ -47,48 +47,49 @@ export default function Collection({ data }: any) {
         <p>{data.subtitle}</p>
       </div>
       <div className="flex snap-x overflow-auto gap-4 md:gap-12">
-        {products && products.map((product: any) => {
-          return (
-            <div
-              className="snap-center first:ml-8 last:mr-8"
-              key={product.node.id}
-            >
-              <ProductCard
-                product={{
-                  gid: product.node.id,
-                  title: product.node.title,
-                  featuredImage: product.node.images.edges[0].node.url,
-                  price: product.node.priceRange.minVariantPrice.amount,
-                  handle: product.node.handle,
-                  variantId: product.node.variants.edges[0].node.id,
-                }}
-              />
-            </div>
-          );
-        })}
-        {
-          !products && (<>
-            <SkeletonCard/>
-            <SkeletonCard/>
-            <SkeletonCard/>
-            <SkeletonCard/>
-            <SkeletonCard/>
+        {products &&
+          products.map((product: any) => {
+            return (
+              <div
+                className="snap-center first:ml-8 last:mr-8"
+                key={product.node.id}
+              >
+                <ProductCard
+                  product={{
+                    gid: product.node.id,
+                    title: product.node.title,
+                    featuredImage: product.node.images.edges[0].node.url,
+                    price: product.node.priceRange.minVariantPrice.amount,
+                    handle: product.node.handle,
+                    variantId: product.node.variants.edges[0].node.id,
+                  }}
+                />
+              </div>
+            );
+          })}
+        {!products && (
+          <>
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
           </>
-
-          )
-        }
+        )}
       </div>
     </div>
   );
 }
 
-
-import React from 'react';
+import React from "react";
 
 const SkeletonCard: React.FC = () => {
   return (
     <div className="snap-center first:ml-8 last:mr-8">
-      <div style={{ backgroundColor: '#eee' }} className="w-[168px] h-[285px] md:w-[280px] md:h-[380px] animate-pulse rounded" />
+      <div
+        style={{ backgroundColor: "#eee" }}
+        className="w-[168px] h-[285px] md:w-[280px] md:h-[380px] animate-pulse rounded"
+      />
     </div>
   );
 };
