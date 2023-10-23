@@ -191,7 +191,9 @@ const ProductPage = ({
             <Stack direction={"row"} justify={"space-between"}>
               <div>
                 <div className="h-6 overflow-hidden">
-                  <div className="loox-rating" data-fetch data-id={extractGID(product.id)} />
+                  <a href="#looxReviews">
+                    <div className="loox-rating" data-fetch data-id={extractGID(product.id)} />
+                  </a>
                 </div>
                 <Heading maxW={[480]}>{product.title}</Heading>
               </div>
