@@ -22,11 +22,7 @@ import {
 import { Button as Button2 } from "../../components/Button";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
-import React, {
-  useState,
-  useRef,
-  useContext,
-} from "react";
+import React, { useState, useRef, useContext } from "react";
 import formatter from "../../lib/formatter";
 import { GetStaticProps } from "next";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
@@ -48,6 +44,7 @@ import groq from "groq";
 import { MODULE_FRAGMENT, sanity } from "../../lib/sanity";
 import Modules from "../../components/Modules/Modules";
 import extractGID from "../../lib/extract-gid";
+import Script from "next/script";
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -215,7 +212,9 @@ const ProductPage = ({
                     <span
                       style={{ textDecoration: "line-through", opacity: 0.6 }}
                     >
-                      {formatter.format(parseInt(activeVariant?.priceV2.amount))}
+                      {formatter.format(
+                        parseInt(activeVariant?.priceV2.amount)
+                      )}
                     </span>{" "}
                     <span style={{ fontWeight: 400 }}>
                       {formatter.format(
@@ -360,7 +359,14 @@ const ProductPage = ({
         </GridItem>
       </SimpleGrid>
       {pageModules && <Modules modules={pageModules} />}
-      <ReviewSection reviews={reviews} />
+      <div
+        className="w-full"
+        key={product.id}
+        id="looxReviews"
+        data-product-id={extractGID(product.id)}
+      ></div>
+      <Script key={product.id} src="https://loox.io/widget/loox.js?shop=tor-salon-products.myshopify.com" />
+      {/* <ReviewSection reviews={reviews} /> */}
     </>
   );
 };
