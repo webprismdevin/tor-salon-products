@@ -1,7 +1,6 @@
 import React from "react";
 import { removeCents } from "../../../lib/utils";
 import AddToCartButton from "./AddToCartButton";
-import Card from "../../Card";
 import extractGID from "../../../lib/extract-gid";
 import Link from "next/link";
 import Image from "next/image";

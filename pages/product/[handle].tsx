@@ -192,7 +192,11 @@ const ProductPage = ({
               <div>
                 <div className="h-6 overflow-hidden">
                   <a href="#looxReviews">
-                    <div className="loox-rating" data-fetch data-id={extractGID(product.id)} />
+                    <div
+                      className="loox-rating"
+                      data-fetch
+                      data-id={extractGID(product.id)}
+                    />
                   </a>
                 </div>
                 <Heading maxW={[480]}>{product.title}</Heading>
@@ -360,12 +364,11 @@ const ProductPage = ({
         id="looxReviews"
         data-product-id={extractGID(product.id)}
       ></div>
-      {/* <Script
-        id={product.id}
-        strategy="lazyOnload"
-        key={product.id}
-        src="https://loox.io/widget/loox.js?shop=tor-salon-products.myshopify.com"
-      /> */}
+      {process.env.NODE_ENV === "development" && (
+        <div className="text-center">
+          Loox review widget will appear here in production
+        </div>
+      )}
     </>
   );
 };

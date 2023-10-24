@@ -54,7 +54,7 @@ export function SearchV2() {
             <IconSearch />
           </button>
         </span>
-        <form className="hidden md:inline-flex">
+        <form action={"/search"} className="hidden md:inline-flex">
           <input
             type="search"
             name="q"
