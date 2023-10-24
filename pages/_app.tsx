@@ -35,6 +35,7 @@ import {
 } from "@shopify/hydrogen-react";
 import Header from "../components/Header";
 import CartProvider from "../app/cart-provider";
+import SendPageView from "app/SendPageView";
 
 const Banner = dynamic(() => import("../components/Banner"));
 const Footer = dynamic(() => import("../components/Global/Footer"), {
@@ -164,26 +165,30 @@ function MyApp({ Component, pageProps }: AppProps) {
                 content="bk02y72cdwvcwzina508gmb7xv87g6"
               />
             </Head>
-            <CartProvider>
-              {settings && <Banner data={settings.banner} />}
-              {/* <Navigation menu={settings?.menu} /> */}
-              {settings?.menu && <Header menu={settings.menu} />}
-              <Component key={router.asPath} {...pagePropsWithAppAnalytics} />
-            </CartProvider>
-            <Footer />
-            <ColorModeScript initialColorMode={customTheme.initialColorMode} />
-            <Script
-              id="tawk_tag"
-              strategy="lazyOnload"
-              dangerouslySetInnerHTML={{
-                __html: `var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();`,
-              }}
-            />
-            {settings && (
-              <Suspense fallback={`...`}>
-                <MailingList settings={settings.emailPopup} />
-              </Suspense>
-            )}
+            <SendPageView>
+              <CartProvider>
+                {settings && <Banner data={settings.banner} />}
+                {/* <Navigation menu={settings?.menu} /> */}
+                {settings?.menu && <Header menu={settings.menu} />}
+                <Component key={router.asPath} {...pagePropsWithAppAnalytics} />
+              </CartProvider>
+              <Footer />
+              <ColorModeScript
+                initialColorMode={customTheme.initialColorMode}
+              />
+              <Script
+                id="tawk_tag"
+                strategy="lazyOnload"
+                dangerouslySetInnerHTML={{
+                  __html: `var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/622337bb1ffac05b1d7d1403/1ftcp3dfu';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();`,
+                }}
+              />
+              {settings && (
+                <Suspense fallback={`...`}>
+                  <MailingList settings={settings.emailPopup} />
+                </Suspense>
+              )}
+            </SendPageView>
           </ChakraProvider>
         </PlausibleProvider>
         <AnalyticsScripts />

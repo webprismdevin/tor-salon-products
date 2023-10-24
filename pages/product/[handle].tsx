@@ -26,6 +26,7 @@ import React, {
   useState,
   useRef,
   useContext,
+  useEffect,
 } from "react";
 import formatter from "../../lib/formatter";
 import { GetStaticProps } from "next";
@@ -149,6 +150,10 @@ const ProductPage = ({
   if (!product) return null;
 
   const seoTitle = `${product.title} | TOR Salon Products`;
+
+  useEffect(() => {
+    fetch(`/api/event/ViewContent?location=${window.location.pathname}&id=${product.id}`)
+  }, []);
 
   return (
     <>

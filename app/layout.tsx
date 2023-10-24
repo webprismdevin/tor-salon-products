@@ -8,6 +8,7 @@ import ThemeProvider from "./chakra-provider";
 import "./globals.css";
 import Banner from "../components/Banner";
 import MailingList from "../components/Global/MailingList";
+import SendPageView from "./SendPageView";
 
 async function getData() {
   const res = await sanity.fetch(settingsQuery);
@@ -38,13 +39,15 @@ export default async function RootLayout({
       </head>
       <ThemeProvider>
         <CartProvider>
-          <body>
-            <Banner data={settings?.banner} />
-            <Header menu={settings?.menu} />
-            {children}
-            <Footer />
-            <MailingList settings={settings?.emailPopup} />
-          </body>
+          <SendPageView>
+            <body>
+              <Banner data={settings?.banner} />
+              <Header menu={settings?.menu} />
+              {children}
+              <Footer />
+              <MailingList settings={settings?.emailPopup} />
+            </body>
+          </SendPageView>
         </CartProvider>
       </ThemeProvider>
     </html>
