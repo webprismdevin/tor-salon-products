@@ -92,8 +92,6 @@ function ItemQty({ product }: { product: any }) {
       parseInt(newQty)
     )) as UpdateItemQtyCartResponse;
 
-    console.log(resp.cartLinesUpdate);
-
     setCart({
       ...cart,
       status: "clean",

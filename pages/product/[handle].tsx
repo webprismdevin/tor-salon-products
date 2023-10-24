@@ -22,11 +22,7 @@ import {
 import { Button as Button2 } from "../../components/Button";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
-import React, {
-  useState,
-  useRef,
-  useContext,
-} from "react";
+import React, { useState, useRef, useContext } from "react";
 import formatter from "../../lib/formatter";
 import { GetStaticProps } from "next";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
@@ -48,6 +44,7 @@ import groq from "groq";
 import { MODULE_FRAGMENT, sanity } from "../../lib/sanity";
 import Modules from "../../components/Modules/Modules";
 import extractGID from "../../lib/extract-gid";
+import Script from "next/script";
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -85,7 +82,7 @@ const ProductPage = ({
 
     const variant = product.variants.edges.find(
       (edge: any) => edge.node.availableForSale === true
-    ).node;
+    )?.node;
 
     return variant ?? null;
   });
@@ -173,7 +170,7 @@ const ProductPage = ({
         <meta property="product:condition" content="new" />
         <meta
           property="product:price:amount"
-          content={activeVariant.priceV2.amount}
+          content={activeVariant?.priceV2.amount}
         />
         <meta property="product:price:currency" content="USD" />
         <meta property="product:catalog_id" content="711750850270833" />
@@ -194,32 +191,33 @@ const ProductPage = ({
             <Stack direction={"row"} justify={"space-between"}>
               <div>
                 <div className="h-6 overflow-hidden">
-                  <RatingStar
-                    id={product.id.split("/")[4]}
-                    rating={reviews.bottomline.average_score}
-                    size={16}
-                  />
-                  <span className="text-gray-400">
-                    [{reviews.bottomline.total_review}]
-                  </span>
+                  <a href="#looxReviews">
+                    <div
+                      className="loox-rating"
+                      data-fetch
+                      data-id={extractGID(product.id)}
+                    />
+                  </a>
                 </div>
                 <Heading maxW={[480]}>{product.title}</Heading>
               </div>
               <Stack>
                 {subscriptionPlan === "" ? (
                   <Heading fontWeight={600} size={["lg"]} textAlign="right">
-                    {formatter.format(parseInt(activeVariant.priceV2.amount))}
+                    {formatter.format(parseInt(activeVariant?.priceV2.amount))}
                   </Heading>
                 ) : (
                   <Heading fontWeight={600} size={["lg"]} textAlign="right">
                     <span
                       style={{ textDecoration: "line-through", opacity: 0.6 }}
                     >
-                      {formatter.format(parseInt(activeVariant.priceV2.amount))}
+                      {formatter.format(
+                        parseInt(activeVariant?.priceV2.amount)
+                      )}
                     </span>{" "}
                     <span style={{ fontWeight: 400 }}>
                       {formatter.format(
-                        parseInt(activeVariant.priceV2.amount) * 0.95
+                        parseInt(activeVariant?.priceV2.amount) * 0.95
                       )}
                     </span>
                   </Heading>
@@ -235,7 +233,7 @@ const ProductPage = ({
             {variants.length > 1 && (
               <Select
                 minW={"200px"}
-                value={activeVariant.id}
+                value={activeVariant?.id}
                 onChange={(e) => {
                   handleActiveVariantChange(e.target.value);
                 }}
@@ -360,7 +358,17 @@ const ProductPage = ({
         </GridItem>
       </SimpleGrid>
       {pageModules && <Modules modules={pageModules} />}
-      <ReviewSection reviews={reviews} />
+      <div
+        className="w-full container mx-auto"
+        key={product.id}
+        id="looxReviews"
+        data-product-id={extractGID(product.id)}
+      ></div>
+      {process.env.NODE_ENV === "development" && (
+        <div className="text-center">
+          Loox review widget will appear here in production
+        </div>
+      )}
     </>
   );
 };
@@ -582,6 +590,12 @@ export const getStaticProps: GetStaticProps = async (context) => {
       description
       tags
       productType
+      avg_rating: metafield(namespace: "loox", key: "avg_rating") {
+        value
+      }
+      num_reviews: metafield(namespace: "loox", key: "num_reviews") {
+        value
+      }
       sellingPlanGroups(first: 100) {
         edges {
           node {
@@ -752,11 +766,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
     throw Error("Unable to retrieve product. Please check logs");
   }
 
-  const reviews = await fetch(
-    `https://api-cdn.yotpo.com/v1/widget/bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l/products/${extractGID(
-      res.product.id
-    )}/reviews.json`
-  ).then((res) => res.json());
+  // const reviews = await fetch(
+  //   `https://api-cdn.yotpo.com/v1/widget/bz5Tc1enx8u57VXYMgErAGV7J82jXdFXoIImJx6l/products/${extractGID(
+  //     res.product.id
+  //   )}/reviews.json`
+  // ).then((res) => res.json());
 
   const productAnalytics: ShopifyAnalyticsProduct = {
     productGid: res.product.id,
@@ -778,7 +792,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       modules: modules.modules,
       handle,
       key: handle,
-      reviews: reviews.response,
+      // reviews: reviews.response,
       product: res.product,
     },
     revalidate: 10,

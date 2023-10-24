@@ -137,8 +137,6 @@ const Cart = ({ color }: { color?: string }) => {
 
     localCartData = await createCart();
 
-    console.log(localCartData);
-
     setCart({
       id: localCartData.cartCreate.cart.id,
       checkoutUrl: localCartData.cartCreate.cart.checkoutUrl,
@@ -157,8 +155,6 @@ const Cart = ({ color }: { color?: string }) => {
       cart.id,
       lineItemId
     )) as RemoveItemCartResponse;
-
-    console.log(resp.cartLinesRemove);
 
     setCart({
       ...cart,

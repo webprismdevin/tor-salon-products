@@ -19,6 +19,15 @@ export default function ReviewCarousel({ data }: { data: any }) {
   }
   return (
     <div className="my-4 md:my-8 lg:my-12">
+      {/* <div id="loox-default-carousel">
+        <div
+          className="loox-v2-carousel-container"
+          id="LOOX-V2_CAROUSEL-card"
+          data-slide-type="card"
+        >
+        </div>
+        {process.env.NODE_ENV === "development" && (<div className="text-center">Loox review widget will appear here in production</div>)}
+      </div> */}
       <div className="text-center">
         <h1 className="text-2xl md:text-3xl lg:text-4xl">{data.title}</h1>
         <h2>{data.subtitle}</h2>

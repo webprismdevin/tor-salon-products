@@ -25,8 +25,6 @@ export default function SignupForm({ children }: { children: any }) {
     // Handle response if necessary
     const data = await response.json();
 
-    console.log(data.data);
-
     if (data.data.customerCreate?.userErrors?.length === 0) {
       plausible("Subscribe", { props: { method: "blog" } });
       setStatus("SUCCESS");
