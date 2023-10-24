@@ -8,6 +8,7 @@ import ThemeProvider from "./chakra-provider";
 import "./globals.css";
 import Banner from "../components/Banner";
 import MailingList from "../components/Global/MailingList";
+import Script from "next/script";
 import SendPageView from "./SendPageView";
 
 async function getData() {
@@ -50,6 +51,11 @@ export default async function RootLayout({
           </SendPageView>
         </CartProvider>
       </ThemeProvider>
+      <Script
+        id={"looxScript"}
+        strategy="lazyOnload"
+        src="https://loox.io/widget/loox.js?shop=tor-salon-products.myshopify.com"
+      />
     </html>
   );
 }

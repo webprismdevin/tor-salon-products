@@ -64,39 +64,7 @@ export default async function getProducts() {
             description
             handle
             products(first: 100) {
-              edges {
-                node {
-                  id
-                  title
-                  description
-                  handle
-                  variants(first: 1) {
-                    edges {
-                      node {
-                        id
-                      }
-                    }
-                  }
-                  images(first: 2) {
-                    edges {
-                      node {
-                        altText
-                        transformedSrc
-                      }
-                    }
-                  }
-                  priceRange {
-                    maxVariantPrice {
-                      amount
-                    }
-                  }
-                  compareAtPriceRange {
-                    maxVariantPrice {
-                      amount
-                    }
-                  }
-                }
-              }
+              ${PRODUCTS_FRAGMENT}
             }
           }
         }
@@ -111,7 +79,47 @@ export default async function getProducts() {
     throw Error("Unable to retrieve Shopify Products. Please check logs");
   }
 
-  console.log(res);
-
   return res;
 }
+
+export const PRODUCTS_FRAGMENT = gql`
+  edges {
+    node {
+      id
+      title
+      description
+      handle
+      variants(first: 1) {
+        edges {
+          node {
+            id
+          }
+        }
+      }
+      images(first: 2) {
+        edges {
+          node {
+            altText
+            transformedSrc
+            url
+          }
+        }
+      }
+      priceRange {
+        maxVariantPrice {
+          amount
+        }
+        minVariantPrice {
+          amount
+        }
+      }
+      compareAtPriceRange {
+        maxVariantPrice {
+          amount
+        }
+        minVariantPrice {
+          amount
+        }
+      }
+    }
+  }`;

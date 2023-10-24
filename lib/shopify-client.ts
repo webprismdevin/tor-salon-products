@@ -2,11 +2,10 @@ import { createStorefrontClient } from "@shopify/hydrogen-react";
 import { GraphQLClient } from "graphql-request";
 
 const client = createStorefrontClient({
-  publicStorefrontToken: "a37e8b74cb52b6e0609c948c43bb0a5c",
-  storeDomain: "tor-salon-products.myshopify.com",
-  storefrontApiVersion: process.env.SHOPIFY_API_VERSION!,
+  privateStorefrontToken: process.env.SHOPIFY_PAS,
+  storeDomain: "https://tor-salon-products.myshopify.com",
+  storefrontApiVersion: process.env.NEXT_PUBLIC_SHOPIFY_API_VER,
 });
-
 export const getStorefrontApiUrl = client.getStorefrontApiUrl;
 export const getPrivateTokenHeaders = client.getPrivateTokenHeaders;
 
