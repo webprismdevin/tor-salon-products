@@ -7,7 +7,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const test_event_code = "TEST43390";
+  // const test_event_code = "TEST43390";
 
   if (req.method === "GET") {
     // Handle GET request
@@ -33,7 +33,7 @@ export default async function handler(
             },
           },
         ],
-        test_event_code: test_event_code ?? null,
+        // test_event_code: test_event_code ?? null,
       });
 
         console.log(pageViewBody);
@@ -78,7 +78,7 @@ export default async function handler(
             },
           },
         ],
-        test_event_code: test_event_code ?? null,
+        // test_event_code: test_event_code ?? null,
       });
 
       //   console.log(viewContentBody);
@@ -123,7 +123,7 @@ export default async function handler(
             },
           },
         ],
-        test_event_code: test_event_code ?? null,
+        // test_event_code: test_event_code ?? null,
       });
 
       //   console.log(addToCartBody);
