@@ -175,6 +175,8 @@ const ProductPage = ({
   useEffect(() => {
     if (!product) return;
 
+    if (!sessionID) return;
+
     const eventID = getEventId("ViewContent", sessionID);
 
     fetch(
@@ -188,6 +190,7 @@ const ProductPage = ({
         fbc ? `&fbc=${fbc}` : ""
       }`
     );
+
     if (window.fbq) {
       window.fbq(
         "track",
