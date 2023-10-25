@@ -56,9 +56,6 @@ export default function Account() {
   useEffect(() => {
     if (!token) return
 
-    //check if token is still valid
-    console.log(token)
-
     getUser(token?.customerAccessToken.accessToken);
   }, [token]);
 
@@ -126,10 +123,6 @@ export default function Account() {
 
 function Name({ firstName }: { firstName: string }) {
   const [name, setName] = useState(firstName || "");
-
-  useEffect(() => {
-    console.log(name);
-  }, [name]);
 
   return (
     <Box>

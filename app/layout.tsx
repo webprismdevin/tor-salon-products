@@ -10,6 +10,7 @@ import Banner from "../components/Banner";
 import MailingList from "../components/Global/MailingList";
 import Script from "next/script";
 import SendPageView from "./SendPageView";
+import AnalyticsScripts from "components/AnalyticsScripts";
 
 async function getData() {
   const res = await sanity.fetch(settingsQuery);
@@ -23,6 +24,13 @@ async function getData() {
 }
 
 export const revalidate = 600;
+
+declare global {
+  interface Window {
+    Tawk_API: any;
+    fbq: any;
+  }
+}
 
 export default async function RootLayout({
   children,
@@ -51,6 +59,7 @@ export default async function RootLayout({
           </SendPageView>
         </CartProvider>
       </ThemeProvider>
+      <AnalyticsScripts />
       <Script
         id={"looxScript"}
         strategy="lazyOnload"

@@ -22,8 +22,7 @@ import {
 import { Button as Button2 } from "../../components/Button";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
-import React, { useState, useRef, useContext   useEffect,
-} from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import formatter from "../../lib/formatter";
 import { GetStaticProps } from "next";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
@@ -45,7 +44,9 @@ import groq from "groq";
 import { MODULE_FRAGMENT, sanity } from "../../lib/sanity";
 import Modules from "../../components/Modules/Modules";
 import extractGID from "../../lib/extract-gid";
-import Script from "next/script";
+import useFbq from "lib/useFbq";
+import useSessionId from "lib/useSessionId";
+import getEventId from "lib/getEventId";
 
 const MotionImage = motion<ImageProps>(Image);
 
@@ -78,6 +79,8 @@ const ProductPage = ({
   const [itemQty, setItemQty] = useState(1);
   const { addItemToCart } = useAddToCart();
   const { cart } = useContext(CartContext);
+  const [fbp, fbc] = useFbq();
+  const [sessionID] = useSessionId();
   const [activeVariant, setActiveVariant] = useState<VariantType>(() => {
     if (!product) return null;
 
@@ -92,9 +95,6 @@ const ProductPage = ({
 
   //subscription plans
   const [subscriptionPlan, setSubscriptionPlan] = useState("");
-
-  //refs
-  const reviewsSection = useRef<HTMLDivElement | null>(null);
 
   //quantity handling
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
@@ -133,7 +133,34 @@ const ProductPage = ({
         payload,
       });
 
-      console.log("pageview sent");
+    }
+
+    const eventID = getEventId("AddToCart", sessionID);
+
+    fetch(
+      `/api/event/AddToCart?location=${window.location.pathname}&content_name=${
+        product.title
+      }&content_ids=${extractGID(
+        activeVariant.id
+      )}&content_type=product&value=${
+        activeVariant.priceV2.amount
+      }&event_id=${eventID}${fbp ? `&fbp=${fbp}` : ""}${
+        fbc !== null ? `&fbc=${fbc}` : ""
+      }`
+    );
+
+    if (window.fbq) {
+      window.fbq(
+        "track",
+        "AddToCart",
+        {
+          content_ids: [extractGID(activeVariant.id)],
+          content_type: "product",
+          content_name: product.title,
+          value: activeVariant.priceV2.amount,
+        },
+        { eventID: eventID }
+      );
     }
 
     addItemToCart(activeVariant.id, itemQty, subscriptionPlan);
@@ -149,7 +176,33 @@ const ProductPage = ({
   const seoTitle = `${product.title} | TOR Salon Products`;
 
   useEffect(() => {
-    fetch(`/api/event/ViewContent?location=${window.location.pathname}&id=${product.id}`)
+    const eventID = getEventId("ViewContent", sessionID);
+
+    fetch(
+      `/api/event/ViewContent?location=${
+        window.location.pathname
+      }&content_ids=${extractGID(activeVariant.id)}&content_name=${
+        product.title
+      }&content_type=product&content_category=${product.productType}&value=${
+        activeVariant?.priceV2.amount
+      }&event_id=${eventID}${fbp ? `&fbp=${fbp}` : ""}${
+        fbc ? `&fbc=${fbc}` : ""
+      }`
+    );
+    if (window.fbq) {
+      window.fbq(
+        "track",
+        "ViewContent",
+        {
+          content_ids: [extractGID(activeVariant.id)],
+          content_type: "product",
+          content_name: product.title,
+          content_category: product.productType,
+          value: activeVariant?.priceV2.amount,
+        },
+        { eventID: eventID }
+      );
+    }
   }, []);
 
   return (

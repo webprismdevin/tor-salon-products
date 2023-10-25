@@ -48,6 +48,7 @@ const MailingList = dynamic(() => import("../components/Global/MailingList"), {
 declare global {
   interface Window {
     Tawk_API: any;
+    fbq: any;
   }
 }
 
@@ -99,7 +100,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     const handleRouteChange = () => {
       sendPageView(analytics);
-      console.log("pageview sent");
     };
 
     router.events.on("routeChangeComplete", handleRouteChange);
@@ -108,7 +108,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     if (!isInit) {
       isInit = true;
       sendPageView(analytics);
-      console.log("pageview sent");
     }
 
     return () => {
@@ -131,7 +130,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     const queryObj = new URLSearchParams(queryString);
 
     if (queryObj.get("discount") && cart && cart.id) {
-      console.log(cart.id);
       applyDiscountToCart(cart.id, queryObj.get("discount")!).then((res) => {
         if (res.cartDiscountCodesUpdate.cart.discountCodes.length > 0) {
           toast({

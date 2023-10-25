@@ -39,6 +39,8 @@ import {
   SiVisa,
 } from "react-icons/si";
 import { usePlausible } from "next-plausible";
+import extractGID from "lib/extract-gid";
+import useFbq from "lib/useFbq";
 
 declare interface LineItemType {
   node: {
@@ -78,6 +80,7 @@ const Cart = ({ color }: { color?: string }) => {
   const { cart, setCart } = useContext(CartContext);
   const [cartQty, setCartQty] = useState<number | null>(null);
   const plausible = usePlausible();
+  const [fbq, fbc] = useFbq();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -165,14 +168,26 @@ const Cart = ({ color }: { color?: string }) => {
   }
 
   async function handleCheckout() {
+    // const lineItemIds = cart.lines.map((lineItem) =>
+    //   // @ts-ignore
+    //   extractGID(lineItem.node.merchandise.id)
+    // );
+
+    // const response = await fetch(
+    //   `/api/event/InitiateCheckout?location=${window.location.pathname}&num_items=${cartQty}&value=${cart.estimatedCost.totalAmount.amount}&content_ids=${lineItemIds}&content_type=product&fbq=${fbq}&fbc=${fbc}`
+    // );
+
     if (process.env.NODE_ENV === "production") {
       plausible("Checkout");
-
       window.location.href = cart.checkoutUrl;
     }
     if (process.env.NODE_ENV === "development") {
       window.location.href = cart.checkoutUrl;
     }
+
+    // if (response.status === 200) {
+    //   window.location.href = cart.checkoutUrl;
+    // }
   }
 
   return (

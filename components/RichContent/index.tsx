@@ -62,8 +62,6 @@ export const richContentComponents: PortableTextComponents = {
   },
   types: {
     blockAccordion: ({ value }) => {
-      console.log(value);
-
       return <AccordionBlock node={value} />;
     },
     blockCallout: (props) => (
