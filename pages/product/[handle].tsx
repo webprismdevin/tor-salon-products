@@ -202,7 +202,7 @@ const ProductPage = ({
         { eventID: eventID }
       );
     }
-  }, []);
+  }, [fbp, sessionID, product]);
 
   if (!product) return null;
 
