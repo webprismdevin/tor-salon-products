@@ -6,7 +6,7 @@ export default function AnalyticsScripts() {
     <>
       {/* Shopify Collabs */}
       <Script src="https://dttrk.com/shopify/track.js?shop=tor-salon-products.myshopify.com" />
-      <Script>
+      <Script id="fbPixelInit">
         {`!function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 n.callMethod.apply(n,arguments):n.queue.push(arguments)};

@@ -132,7 +132,6 @@ const ProductPage = ({
         eventName: AnalyticsEventName.ADD_TO_CART,
         payload,
       });
-
     }
 
     const eventID = getEventId("AddToCart", sessionID);
@@ -171,11 +170,11 @@ const ProductPage = ({
     setActiveVariant(cv[0].node);
   }
 
-  if (!product) return null;
-
-  const seoTitle = `${product.title} | TOR Salon Products`;
+  const seoTitle = `${product?.title} | TOR Salon Products`;
 
   useEffect(() => {
+    if (!product) return;
+
     const eventID = getEventId("ViewContent", sessionID);
 
     fetch(
@@ -204,6 +203,8 @@ const ProductPage = ({
       );
     }
   }, []);
+
+  if (!product) return null;
 
   return (
     <>
