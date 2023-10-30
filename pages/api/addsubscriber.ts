@@ -7,25 +7,27 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const { email, hairType } = JSON.parse(req.body) ?? req.body;
+  const { email, hairType, tags } = JSON.parse(req.body) ?? req.body;
 
   console.log(email, hairType);
 
-  const mutation = gql`mutation customerCreate($input: CustomerInput!) {
-        customerCreate(input: $input) {
-          customer {
-            id
-            email
-            phone
-            taxExempt
-            acceptsMarketing
-          }
-          userErrors {
-            field
-            message
-          }
+  const mutation = gql`
+    mutation customerCreate($input: CustomerInput!) {
+      customerCreate(input: $input) {
+        customer {
+          id
+          email
+          phone
+          taxExempt
+          acceptsMarketing
         }
-    }`;
+        userErrors {
+          field
+          message
+        }
+      }
+    }
+  `;
 
   const variables = {
     input: {
@@ -41,16 +43,16 @@ export default async function handler(
   };
 
   const adminGraphClient = new GraphQLClient(
-    'https://tor-salon-products.myshopify.com/admin/api/2022-07/graphql.json' as string,
+    "https://tor-salon-products.myshopify.com/admin/api/2022-07/graphql.json" as string,
     {
       headers: {
-        'X-Shopify-Access-Token': process.env.SHOPIFY_ADMIN_API_PASSWORD as string,
+        "X-Shopify-Access-Token": process.env
+          .SHOPIFY_ADMIN_API_PASSWORD as string,
       },
     }
   );
 
-  const response = await adminGraphClient.request(mutation, variables) as any;
-  
+  const response = (await adminGraphClient.request(mutation, variables)) as any;
 
   if (response.errors) {
     console.log(JSON.stringify(response.errors, null, 2));

@@ -26,6 +26,8 @@ import { AnimatePresence, motion, useCycle } from "framer-motion";
 import NextImage from "next/legacy/image";
 import NextLink from "next/link";
 import useAddToCart from "../../lib/useAddToCart";
+import { useState } from "react";
+import { stat } from "fs";
 
 type Props = {
   blocks: any[];
@@ -46,7 +48,6 @@ export default function PortableText({
       renderContainerOnSingleChild
       projectId="c53k64ci"
       dataset="production"
-      
       serializers={{
         // Lists
         // list: ListBlock,
@@ -66,14 +67,71 @@ export default function PortableText({
           blockImages: (props: any) => (
             <ImagesBlock centered={true} {...props} />
           ),
+          signupForm: (props: any) => <EmailSignupFrom {...props.node} />,
           customHtml: (props: any) => (
-            <Box w="full" className="customHtml" dangerouslySetInnerHTML={{ __html: props.node.html }} />
-          )
+            <Box
+              w="full"
+              className="customHtml"
+              dangerouslySetInnerHTML={{ __html: props.node.html }}
+            />
+          ),
         },
       }}
     />
   );
 }
+
+const EmailSignupFrom = (props: any) => {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState("clean"); // clean | loading | success | error
+
+  const submitForm = async () => {
+    setStatus("loading");
+
+    const response = await fetch("/api/new-subscriber", {
+      method: "POST",
+      body: JSON.stringify({
+        email,
+        tags: props.tags.length > 0 ? [...props.tags] : [],
+      }),
+    });
+
+    if (response.ok) {
+      setStatus("success");
+      resetForm();
+    } else {
+      setStatus("error");
+    }
+  };
+
+  const resetForm = () => {
+    setTimeout(() => {
+      setEmail("");
+      setStatus("clean");
+    }, 2000);
+  };
+
+  return (
+    <div
+      className={`border-b-2 border-black ${
+        status === "loading" ? "animate-pulse" : ""
+      } ${status === "success" ? "text-green-500" : ""} ${
+        status === "error" ? "text-red-500" : ""
+      }`}
+    >
+      <input
+        type="email"
+        placeholder={props.placeholder ?? "Enter your email address"}
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="w-60 py-2 px-4 "
+      />
+      <button onClick={submitForm}>
+        Subscribe{status === "success" && <span>d!</span>}
+      </button>
+    </div>
+  );
+};
 
 type ProductAnnotationProps = PortableTextBlock & {
   colorTheme?: SanityColorTheme;
@@ -98,14 +156,14 @@ export const ProductAnnotation = ({
 
   const product = productWithVariant.product.store;
   const hasVariant = productWithVariant.variant;
-  
+
   const variant = hasVariant
-      ? productWithVariant.variant.store
-      : productWithVariant.product.store;
+    ? productWithVariant.variant.store
+    : productWithVariant.product.store;
 
   const variantId = hasVariant
-      ? productWithVariant.variant?.store?.gid
-      : productWithVariant.product.store.variants[0].store.gid
+    ? productWithVariant.variant?.store?.gid
+    : productWithVariant.product.store.variants[0].store.gid;
 
   return (
     <Box
@@ -115,7 +173,12 @@ export const ProductAnnotation = ({
       onMouseEnter={() => cycleOpen()}
       onMouseLeave={() => cycleOpen()}
     >
-      <chakra.span bg={colorTheme?.background.hex} px={colorTheme ? 1 : 0}  textDecor={colorTheme ? "none" : "underline"} textDecorationStyle={"dashed"}>
+      <chakra.span
+        bg={colorTheme?.background.hex}
+        px={colorTheme ? 1 : 0}
+        textDecor={colorTheme ? "none" : "underline"}
+        textDecorationStyle={"dashed"}
+      >
         {children[0]}
       </chakra.span>
       <AnimatePresence>
@@ -135,13 +198,23 @@ export const ProductAnnotation = ({
           >
             <Stack spacing={6}>
               <AspectRatio ratio={1 / 1} w={198}>
-                <NextImage src={variant.previewImageUrl ? variant.previewImageUrl : product.previewImageUrl} layout="fill" loading="eager" />
+                <NextImage
+                  src={
+                    variant.previewImageUrl
+                      ? variant.previewImageUrl
+                      : product.previewImageUrl
+                  }
+                  layout="fill"
+                  loading="eager"
+                />
               </AspectRatio>
               <Box>
                 <NextLink href={`/product/${product.slug.current}`}>
                   <Link fontWeight={500}>{product.title}</Link>
                 </NextLink>
-                {productWithVariant.variant && <Text color={"blackAlpha.600"}>{variant.title}</Text>}
+                {productWithVariant.variant && (
+                  <Text color={"blackAlpha.600"}>{variant.title}</Text>
+                )}
                 <Text>
                   {productWithVariant.variant ? (
                     <span>${variant.price}</span>
