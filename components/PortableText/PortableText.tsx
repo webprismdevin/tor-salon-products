@@ -113,7 +113,7 @@ const EmailSignupFrom = (props: any) => {
 
   return (
     <div
-      className={`border-b-2 border-black ${
+      className={`flex flex-col lg:flex-row gap-2 place-items-start ${
         status === "loading" ? "animate-pulse" : ""
       } ${status === "success" ? "text-green-500" : ""} ${
         status === "error" ? "text-red-500" : ""
@@ -124,10 +124,13 @@ const EmailSignupFrom = (props: any) => {
         placeholder={props.placeholder ?? "Enter your email address"}
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="w-60 py-2 px-4 "
+        className="flex-1 py-2 px-4 border-b-2 border-black"
       />
-      <button onClick={submitForm}>
-        Subscribe{status === "success" && <span>d!</span>}
+      <button
+        className="flex-0 py-2 px-4 bg-black text-white hover:bg-transparent hover:text-black border-b-2 border-black"
+        onClick={submitForm}
+      >
+        {props.buttonText ?? "Subscribe"}
       </button>
     </div>
   );
