@@ -42,3 +42,4 @@ yarn-error.log*
 /sanity/node_modules
 .vscode
 public/sitemap-0.xml
+env.local

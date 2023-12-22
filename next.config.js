@@ -38,7 +38,7 @@ const nextConfig = {
   async redirects(){
     return [{
       source: '/product/gift-cards',
-      destination: '/gift-card',
+      destination: '/gift-cards',
       permanent: true
     }, {
       source: '/offer/try-tor',
