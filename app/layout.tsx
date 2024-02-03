@@ -7,10 +7,11 @@ import CartProvider from "./cart-provider";
 import ThemeProvider from "./chakra-provider";
 import "./globals.css";
 import Banner from "../components/Banner";
-import MailingList from "../components/Global/MailingList";
+// import MailingList from "../components/Global/MailingList";
 import Script from "next/script";
 import SendPageView from "./SendPageView";
 import AnalyticsScripts from "components/AnalyticsScripts";
+import { useLoadScript } from "@shopify/hydrogen-react";
 
 async function getData() {
   const res = await sanity.fetch(settingsQuery);
@@ -54,7 +55,7 @@ export default async function RootLayout({
               <Header menu={settings?.menu} />
               {children}
               <Footer />
-              <MailingList settings={settings?.emailPopup} />
+              {/* <MailingList settings={settings?.emailPopup} /> */}
             </body>
           </SendPageView>
         </CartProvider>
@@ -64,6 +65,11 @@ export default async function RootLayout({
         id={"looxScript"}
         strategy="lazyOnload"
         src="https://loox.io/widget/loox.js?shop=tor-salon-products.myshopify.com"
+      />
+      <Script
+        id={"klaviyoScript"}
+        strategy="lazyOnload"
+        src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=WbxSmN"
       />
     </html>
   );

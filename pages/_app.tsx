@@ -197,6 +197,11 @@ function MyApp({ Component, pageProps }: AppProps) {
           key={router.asPath}
           src="https://loox.io/widget/loox.js?shop=tor-salon-products.myshopify.com"
         />
+        <Script
+          id={"klaviyoScript"}
+          strategy="lazyOnload"
+          src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=WbxSmN"
+        />
       </ShopifyProvider>
     </>
   );
