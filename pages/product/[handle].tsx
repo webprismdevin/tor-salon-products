@@ -293,8 +293,8 @@ const ProductPage = ({
             </Stack>
             <Divider />
             {variants.length > 1 && (
-              <Select
-                minW={"200px"}
+              <select
+                className={"min-w-[200px] border border-black/20 py-2 px-2"}
                 value={activeVariant?.id}
                 onChange={(e) => {
                   handleActiveVariantChange(e.target.value);
@@ -302,11 +302,19 @@ const ProductPage = ({
               >
                 {variants.map((v: { node: VariantType }) => (
                   <option key={v.node.id} value={v.node.id}>
-                    Size: {v.node.title}
+                    {v.node.title}
                   </option>
                 ))}
-              </Select>
+              </select>
             )}
+            {/* end subscriptions */}
+            <Button2
+              className="fixed w-[70%] md:w-full md:static bottom-7 md:bottom-0 right-4 left-4 md:right-0 z-50 py-3 px-4"
+              onClick={handleAddToCart}
+              isDisabled={!activeVariant?.availableForSale}
+            >
+              {activeVariant?.availableForSale ? "Add To Cart" : "Sold Out!"}
+            </Button2>
             {/* subscriptions */}
             {product.sellingPlanGroups.edges.length > 0 && (
               <SubscriptionPlan
@@ -317,14 +325,6 @@ const ProductPage = ({
                 }
               />
             )}
-            {/* end subscriptions */}
-            <Button2
-              className="fixed w-[70%] md:w-full md:static bottom-7 md:bottom-0 right-4 left-4 md:right-0 z-50 py-3 px-4"
-              onClick={handleAddToCart}
-              isDisabled={!activeVariant?.availableForSale}
-            >
-              {activeVariant?.availableForSale ? "Add To Cart" : "Sold Out!"}
-            </Button2>
             <Box
               className="product_description_html_outer_container"
               dangerouslySetInnerHTML={{

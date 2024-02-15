@@ -1,10 +1,4 @@
-import {
-  Box,
-  Stack,
-  useRadio,
-  HStack,
-  useRadioGroup,
-} from "@chakra-ui/react";
+import { Box, Stack, useRadio, HStack, useRadioGroup } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 declare interface SellingPlan {
@@ -69,7 +63,7 @@ function SubscriptionOptions({
 }: any) {
   return (
     <select
-      className="py-3 px-3 border-2 border-black"
+      className="border border-black/20 py-2 px-2"
       onChange={(e) => setSubscriptionPlan(e.target.value)}
     >
       {subscriptionOptions.map((option: SellingPlan) => (
@@ -91,22 +85,12 @@ function RadioCard(props: any) {
     <label className="flex-1">
       <input {...input} />
       <Box
-        textAlign="center"
         {...checkbox}
-        w="full"
-        cursor="pointer"
-        borderWidth="1px"
-        boxShadow="md"
         _checked={{
-          bg: "gray.600",
-          color: "white",
-          borderColor: "gray.600",
+          bg: "gray.200",
+          borderColor: "gray.200",
         }}
-        // _focus={{
-        //   boxShadow: "outline",
-        // }}
-        px={5}
-        py={2}
+        className="text-center cursor-pointer border border-black/20 py-1 px-3"
       >
         {props.children}
       </Box>
